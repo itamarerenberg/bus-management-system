@@ -8,6 +8,7 @@ namespace dotNet5781_00_1038_0685
         static void Main(string[] args)
         {
             Welcom1038();
+            Welcom0685();
             Console.ReadLine();
         }
 
