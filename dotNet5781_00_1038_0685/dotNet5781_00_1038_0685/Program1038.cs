@@ -3,7 +3,7 @@ using System.Dynamic;
 
 namespace dotNet5781_00_1038_0685
 {
-    partial class Program1038
+    partial class Program
     {
         static void Main(string[] args)
         {
