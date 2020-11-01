@@ -10,7 +10,7 @@ namespace dotNet5781_01_1038_0685
 {
     class Bus
     {
-        public string Id { get { return Id; } private set{ Id = value; }}
+        public string Id { get { return Id; } private set{ Id = value.Trim(); }}
         public DateTime Start_date { get { return Start_date; } private set { Start_date = value; } }
         public DateTime Last_treat_date { get { return Last_treat_date; } private set { Last_treat_date = value; } }
         public int Sum_km { get { return Sum_km; } private set { Sum_km = value; } }
@@ -21,6 +21,20 @@ namespace dotNet5781_01_1038_0685
         //construcror
         public Bus(string id, DateTime date, int km = 0, int fuel = 0)
         {
+            if (date.Year < 2018 && id.Length == 7)
+            {
+                id = id.Insert(2, "-");
+                id = id.Insert(6, "-");
+            }
+            else if (date.Year >= 2018 && id.Length == 8)
+            {
+                id = id.Insert(3, "-");
+                id = id.Insert(6, "-");
+            }
+            else
+            {
+                id = "0000000";
+            }
             Id = id;
             Start_date = date;
             Sum_km = km;
