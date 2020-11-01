@@ -30,21 +30,26 @@ namespace dotNet5781_01_1038_0685
             get { return p_id; }
             set { p_id = value; }
         }
-        public bool ride(int sum_km)
+        public bool Ride(int sum_km)
         {
-            if (true)
+            if (!danger && km >= sum_km)
             {
 
             }
             return false;
         }
-        public void refulling()
+        public void Refulling()
         {
             fuel = 1200;
         }
-        public void treatment()
+        public void Treatment()
         {
-
+            last_treat_date = DateTime.Now;
+            danger = false;
+        }
+         public bool Equals(Bus b)
+        {
+            return Id == b.Id;
         }
     }
 }
