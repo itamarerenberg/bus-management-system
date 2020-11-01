@@ -29,6 +29,28 @@ namespace dotNet5781_01_1038_0685
                     return false;
                 }
             }
+
+            if(start == new DateTime())
+            {
+                start = DateTime.Now;
+            }
+
+            if(start.Year >= 2018)
+            {
+                if(id.Length != 8)
+                {
+                    return false;
+                }
+            }
+
+            else
+            {
+                if(id.Length != 7)
+                {
+                    return false;
+                }
+            }
+
             temp_bus = new Bus(id, start, km, fuel);
             busList.Add(temp_bus);
             return true;
@@ -47,7 +69,7 @@ namespace dotNet5781_01_1038_0685
             return false;
         }
 
-        public bool maintenance(string id, bool maintenance_kind)//maintenance_kind: true - refeul, false - treat
+        public bool Maintenance(string id, bool maintenance_kind)//maintenance_kind: true - refeul, false - treat
         {
             Bus temp_bus;
             for (int i = 0; i < busList.Count; i++)
