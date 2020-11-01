@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_01_1038_0685
 {
-    
-    class Program
+    class Bus_company
     {
-        static void Main(string[] args)
-        {
-        }
     }
 }
