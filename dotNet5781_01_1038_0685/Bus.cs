@@ -10,42 +10,43 @@ namespace dotNet5781_01_1038_0685
 {
     class Bus
     {
-        private string p_id;
-        private DateTime date;
-        private DateTime last_treat_date;
-        private int km;
-        private int fuel;
-        private bool danger;
+        public string Id { get { return Id; } private set{ Id = value; }}
+        public DateTime Start_date { get { return Start_date; } private set { Start_date = value; } }
+        public DateTime Last_treat_date { get { return Last_treat_date; } private set { Last_treat_date = value; } }
+        public int Sum_km { get { return Sum_km; } private set { Sum_km = value; } }
+        public int Last_treat_km { get { return Last_treat_km; } private set { Last_treat_km = value; } }
+        public int Fuel { get { return Fuel; } private set { Fuel = value; } }
+        public bool Danger { get { return Danger; } private set { Danger = value; } }
 
+        //construcror
         public Bus(string id, DateTime date, int km = 0, int fuel = 0)
         {
-            p_id = id;
-            this.date = date;
-            this.km = km;
-            this.fuel = fuel;
-            danger = false;
+            Id = id;
+            Start_date = date;
+            Sum_km = km;
+            Fuel = fuel;
+            Danger = false;
         }
-        public string Id
-        {
-            get { return p_id; }
-            set { p_id = value; }
-        }
-        public bool Ride(int sum_km)
-        {
-            if (!danger && km >= sum_km)
-            {
 
+        public bool Ride(int km)
+        {
+            if (!Danger && Fuel >= km)
+            {
+                Sum_km += km;
+                Fuel -= km;
+                return true;
             }
             return false;
         }
-        public void Refulling()
+        public void Refuel()
         {
-            fuel = 1200;
+            Fuel = 1200;
         }
         public void Treatment()
         {
-            last_treat_date = DateTime.Now;
-            danger = false;
+            Last_treat_date = DateTime.Now;
+            Last_treat_km = Sum_km;
+            Danger = false;
         }
          public bool Equals(Bus b)
         {
