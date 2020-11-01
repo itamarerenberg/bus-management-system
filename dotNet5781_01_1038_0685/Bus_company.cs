@@ -9,16 +9,16 @@ namespace dotNet5781_01_1038_0685
     class Bus_company
     {
         List<Bus> busList;
-        Bus_company(Bus[] b_arr)
+        public Bus_company(Bus[] b_arr)
         {
             busList = new List<Bus>(b_arr);
         }
-        Bus_company()
+        public Bus_company()
         {
             busList = new List<Bus>(0);
         }
 
-        public bool NewBus(string id, int km, DateTime start = new DateTime(), DateTime lastTreat = new DateTime(), int fuel = 1200)
+        public bool NewBus(string id, DateTime start, DateTime lastTreat = new DateTime(), int fuel = 1200, int km = 0)
         {
             Bus temp_bus;
             for (int i = 0; i < busList.Count; i++)
@@ -28,11 +28,6 @@ namespace dotNet5781_01_1038_0685
                 {
                     return false;
                 }
-            }
-
-            if(start == new DateTime())
-            {
-                start = DateTime.Now;
             }
 
             if(start.Year >= 2018)
