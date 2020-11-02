@@ -20,7 +20,10 @@ namespace dotNet5781_01_1038_0685
         {
             bool exit = false;
             Bus_company bus_Company = new Bus_company();
-            Console.WriteLine(@"0: add new bus\n1: take a ride\n2: maintenance\n3: print buses's status\n -1: exit");
+            Console.WriteLine(@"0 : add new bus
+1 : take a ride\n2: maintenance
+3 : print buses's status
+-1: exit");
             MyEnum choice;
             string id;
             do
@@ -41,6 +44,10 @@ namespace dotNet5781_01_1038_0685
                         if(!bus_Company.NewBus(id, dt))
                         {
                             Console.WriteLine("Error: bus alredy exist, or id length dosen't fit the start date");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Done!");
                         }
                         break;
                     case MyEnum.RIDE:
