@@ -16,9 +16,9 @@ namespace dotNet5781_01_1038_0685
     }
     class Program
     {
-       // Str_to_
         static void Main(string[] args)
         {
+            bool exit = false;
             Bus_company bus_Company = new Bus_company();
             Console.WriteLine(@"0: add new bus\n1: take a ride\n2: maintenance\n3: print buses's status\n -1: exit");
             MyEnum choice;
@@ -38,7 +38,6 @@ namespace dotNet5781_01_1038_0685
                         Console.WriteLine("enter bus's start date");
                         DateTime dt;
                         DateTime.TryParse(Console.ReadLine(), out dt);
-                        Console.WriteLine(dt);
                         if(!bus_Company.NewBus(id, dt))
                         {
                             Console.WriteLine("Error: bus alredy exist, or id length dosen't fit the start date");
@@ -53,22 +52,34 @@ namespace dotNet5781_01_1038_0685
                         }
                         else
                         {
-                            Console.WriteLine("can't execute this ride");
+                            Console.WriteLine("can't execute this ride: not enough feull or need a treatment");
                         }
                         break;
                     case MyEnum.MAINTENANCE:
-
+                        Console.WriteLine("Enter bus's id:");
+                        id = Console.ReadLine();
+                        Console.WriteLine("enter 1 to refuel or 2 for treatment: ");
+                        int kind = Console.Read();
+                        if(bus_Company.Maintenance(id, kind == 1 ? true : false))
+                        {
+                            Console.WriteLine("Done!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: Bus dosen't exist");
+                        }
                         break;
                     case MyEnum.BUS_STATUS:
+                        bus_Company.print_stat();
                         break;
                     case MyEnum.EXIT:
                         Console.WriteLine("bay bay!");
-                        return;
+                        exit = true;
                         break;
                     default:
                         break;
                 }
-            } while (true);
+            } while (!exit);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace dotNet5781_01_1038_0685
             busList = new List<Bus>(0);
         }
 
-        public bool NewBus(string id, DateTime start, DateTime lastTreat = new DateTime(), int fuel = 1200, int km = 0)
+        Bus find_bus(string id)
         {
             Bus temp_bus;
             for (int i = 0; i < busList.Count; i++)
@@ -26,18 +27,26 @@ namespace dotNet5781_01_1038_0685
                 temp_bus = busList[i];
                 if (temp_bus.Id == id)
                 {
-                    return false;
+                    return temp_bus;
                 }
             }
+            return null;
+        }
+        public bool NewBus(string id, DateTime start, DateTime lastTreat = new DateTime(), int fuel = 1200, int km = 0)
+        {
 
-            if(start.Year >= 2018)
+            if(find_bus(id) != null)//check if the bus allredy exist and return false if so
+            {
+                return false;
+            }
+
+            if(start.Year >= 2018)//check if the id fit the manifactur year and return false if not
             {
                 if(id.Length != 8)
                 {
                     return false;
                 }
             }
-
             else
             {
                 if(id.Length != 7)
@@ -46,8 +55,7 @@ namespace dotNet5781_01_1038_0685
                 }
             }
 
-            temp_bus = new Bus(id, start, km, fuel);
-            busList.Add(temp_bus);
+            busList.Add(new Bus(id, start, km, fuel));//add the new bus
             return true;
         }
 
@@ -88,7 +96,19 @@ namespace dotNet5781_01_1038_0685
 
         private void help_func(Bus bus)
         {
-            Console.WriteLine("bus: {0} km: {1}", bus.Id, bus.Sum_km - bus.Last_treat_km);
+            //print the id in format xx-xxx-xx or xxx-xx-xxx
+            string id = bus.Id;
+            if(id.Length == 8)
+            {
+                id = id.Insert(5, "-");
+                id = id.Insert(3, "-");
+            }
+            else
+            {
+                id = id.Insert(5, "-");
+                id = id.Insert(2, "-");
+            }
+            Console.WriteLine("bus: {0} km: {1}", id, bus.Km);
         }
 
         public void print_stat()

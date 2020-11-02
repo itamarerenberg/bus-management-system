@@ -10,43 +10,37 @@ namespace dotNet5781_01_1038_0685
 {
     class Bus
     {
-        public string Id { get { return Id; } private set{ Id = value.Trim(); }}
-        public DateTime Start_date { get { return Start_date; } private set { Start_date = value; } }
-        public DateTime Last_treat_date { get { return Last_treat_date; } private set { Last_treat_date = value; } }
-        public int Sum_km { get { return Sum_km; } private set { Sum_km = value; } }
-        public int Last_treat_km { get { return Last_treat_km; } private set { Last_treat_km = value; } }
-        public int Fuel { get { return Fuel; } private set { Fuel = value; } }
-        public bool Danger { get { return Danger; } private set { Danger = value; } }
+        public string Id { get; private set; }
+        public DateTime Start_date { get; private set; }
+        public DateTime Last_treat_date { get; private set; }
+        public int Km { get; private set; }
+        public int Fuel { get; private set; }
+        public bool Danger { get; private set; }
 
         //construcror
         public Bus(string id, DateTime date, int km = 0, int fuel = 0)
         {
-            if (date.Year < 2018 && id.Length == 7)
-            {
-                id = id.Insert(2, "-");
-                id = id.Insert(6, "-");
-            }
-            else if (date.Year >= 2018 && id.Length == 8)
-            {
-                id = id.Insert(3, "-");
-                id = id.Insert(6, "-");
-            }
-            else
-            {
-                id = "0000000";
-            }
             Id = id;
             Start_date = date;
-            Sum_km = km;
+            Km = km;
             Fuel = fuel;
             Danger = false;
         }
 
+        TimeSpan Time_dif(DateTime dt1, DateTime dt2)
+        {
+            int days = (dt1.Year - dt2.Year) * 365;//years difrence
+            days += (dt1.Month - dt2.Month) * 30;//Month dif
+            days += (dt1.Day - dt1.Day);
+            return new TimeSpan(days, 0, 0, 0);
+        }
+
         public bool Ride(int km)
         {
-            if (!Danger && Fuel >= km)
+            
+            if (!(Time_dif(Last_treat_date, DateTime.Now) > new TimeSpan(365, 0, 0, 0) || Km + km >= 20000) && Fuel >= km)
             {
-                Sum_km += km;
+                Km += km;
                 Fuel -= km;
                 return true;
             }
@@ -59,12 +53,8 @@ namespace dotNet5781_01_1038_0685
         public void Treatment()
         {
             Last_treat_date = DateTime.Now;
-            Last_treat_km = Sum_km;
+            Km = 0;
             Danger = false;
-        }
-         public bool Equals(Bus b)
-        {
-            return Id == b.Id;
         }
     }
 }
