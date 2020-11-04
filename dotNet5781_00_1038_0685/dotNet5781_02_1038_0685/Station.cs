@@ -18,11 +18,11 @@ namespace dotNet5781_02_1038_0685
         private const int MAX_LAT = 90;
         private const int MIN_LON = -180;
         private const int MAX_LON = 180;
-        private int id;
-        public int Id
+        private int stationCode;
+        public int StationCode
         {
-            get => this.id;
-            private set
+            get => this.stationCode;
+            protected set
             {
                 if (0 < value || value > SIXDIGITS)
                 {
@@ -30,13 +30,13 @@ namespace dotNet5781_02_1038_0685
                 }
                 else
                 {
-                    this.id = value;
+                    this.stationCode = value;
                 }
             }
         }
 
         private Point loc;
-        public Point Loc
+        protected Point Loc
         {
             get => loc;
             set
@@ -52,6 +52,18 @@ namespace dotNet5781_02_1038_0685
             }
         }
 
-        private string address { get; set; }
+        protected string Address { get; set; }
+
+        public Station(int code, double latitude, double longitude, string address = "")
+        {
+            StationCode = code;
+            Loc = new Point{ Latitude = latitude, Longitude = longitude };//*Point is astruct
+            Address = address;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Station code: {0}, {1}°N {2}°E", stationCode, loc.Latitude, loc.Longitude);
+        }
     }
 }
