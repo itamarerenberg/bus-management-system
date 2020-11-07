@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusLine.cs" />
+    <Compile Include="myEnums.cs" />
     <Compile Include="LineStation.cs" />
     <Compile Include="Station.cs" />
     <Compile Include="Program.cs" />

@@ -24,7 +24,7 @@ namespace dotNet5781_02_1038_0685
             get => this.stationCode;
             protected set
             {
-                if (0 < value || value > SIXDIGITS)
+                if (value < 0 || value > SIXDIGITS)
                 {
                     throw new ArgumentException("unvalid id");
                 }
