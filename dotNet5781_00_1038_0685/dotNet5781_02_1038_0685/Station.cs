@@ -11,7 +11,7 @@ namespace dotNet5781_02_1038_0685
         public double Latitude { get; set; }
         public double Longitude { get; set; }
     }
-    class Station : IComparable
+    class Station
     {
         private const int SIXDIGITS = 1000000;
         private const int MIN_LAT = -90;
@@ -66,23 +66,23 @@ namespace dotNet5781_02_1038_0685
             return string.Format("Station code: {0}, {1}°N {2}°E", stationCode, loc.Latitude, loc.Longitude);
         }
 
-        public int CompareTo(Object s)//posibol error change to int
+        public override bool Equals(Object s)//posibol error change to int
         {
             if (s is Station)
             {
                 if (((Station)s).StationCode == this.StationCode)
                 {
-                    return 0;
+                    return true;
                 }
             }
             if(s is int)
             {
                 if ((int)s == this.StationCode)
                 {
-                    return 0;
+                    return true;
                 }
             }
-            return -1;
+            return true;
         }
     }
 }
