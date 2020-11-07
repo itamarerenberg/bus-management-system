@@ -9,9 +9,9 @@ namespace dotNet5781_02_1038_0685
     class LineStation : Station
     {
         //fields
-        public double Distance { get; set; }
+        public double Distance { get ; set; }
 
-        public TimeSpan RideTime { get; set; }
+        public TimeSpan RideTime { get { return new TimeSpan(0, (int)Distance, 0); } set { }}
 
         //construcor
         public LineStation(int code, double latiude, double longitude, double distance, TimeSpan rideTime, string address = "")
