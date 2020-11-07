@@ -66,13 +66,23 @@ namespace dotNet5781_02_1038_0685
             return string.Format("Station code: {0}, {1}°N {2}°E", stationCode, loc.Latitude, loc.Longitude);
         }
 
-        public bool CompareTo(Station s)//posibol error change to int
+        public int CompareTo(Object s)//posibol error change to int
         {
-            if(s.StationCode == this.StationCode)
+            if (s is Station)
             {
-                return true;
+                if (((Station)s).StationCode == this.StationCode)
+                {
+                    return 0;
+                }
             }
-            return false;
+            if(s is int)
+            {
+                if ((int)s == this.StationCode)
+                {
+                    return 0;
+                }
+            }
+            return -1;
         }
     }
 }
