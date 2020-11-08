@@ -32,6 +32,12 @@ namespace dotNet5781_02_1038_0685
             return output;
         }
 
+        /// <summary>
+        /// adding a station to the line in any place 
+        /// </summary>
+        /// <param name="station">object of type LineStation</param>
+        /// <param name="distance">the distance from the next station </param>
+        /// <param name="code">the code of the next station</param>
         public void Add_station(LineStation station, double distance = -1, int code = -1)
         {
             if (code != -1)
@@ -50,6 +56,11 @@ namespace dotNet5781_02_1038_0685
             Stations.Add(station);
         }
         
+        /// <summary>
+        /// removing a station from the line
+        /// </summary>
+        /// <param name="code">station code</param>
+        /// <param name="distance">fill the new distance after removing</param>
         public void Remove_station(int code, int distance = -1)
         {
             for (int i = 0; i < Stations.Count; i++)
@@ -72,10 +83,28 @@ namespace dotNet5781_02_1038_0685
                 }
             }  
         }
-        public bool Station_in_the_line(Station station)
+        /// <summary>
+        /// return if the station is in the line
+        /// </summary>
+        /// <param name="stationCode"></param>
+        /// <returns></returns>
+        public bool Station_in_the_line(int stationCode)
         {
-            return (Stations.Contains(station));
+            foreach (Station item in Stations)
+            {
+                if(item.StationCode == stationCode)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
+        /// <summary>
+        /// calculate the distance between 2 given stations
+        /// </summary>
+        /// <param name="station1"></param>
+        /// <param name="station2"></param>
+        /// <returns>the distance between the provided stations</returns>
         public double Get_distance(LineStation station1, LineStation station2)
         {
             int index1 = Stations.IndexOf(station1);
@@ -95,6 +124,12 @@ namespace dotNet5781_02_1038_0685
             }
             return sum;
         }
+        /// <summary>
+        /// calculate the ride time between 2 given stations
+        /// </summary>
+        /// <param name="station1"></param>
+        /// <param name="station2"></param>
+        /// <returns>the ride time between the provided stations</returns>
         public TimeSpan Get_time(LineStation station1, LineStation station2)
         {
             int index1 = Stations.IndexOf(station1);
@@ -114,6 +149,12 @@ namespace dotNet5781_02_1038_0685
             }
             return sum;
         }
+        /// <summary>
+        /// creat a new subline 
+        /// </summary>
+        /// <param name="station1"></param>
+        /// <param name="station2"></param>
+        /// <returns></returns>
         public BusLine Sub_line(LineStation station1, LineStation station2)
         {
             int index1 = Stations.IndexOf(station1);
@@ -130,16 +171,23 @@ namespace dotNet5781_02_1038_0685
 
             return new BusLine(0, subList.ToArray(), this.Area);
         }
-        
         public int CompareTo(object bl)
         {
             if(!(bl is BusLine))
             {
-                throw new InvalidCastException("error");//**
+                throw new InvalidCastException(string.Format($"you cannot compare type BusLine to type {bl.GetType()}"));
             }
-            if (Get_time())
+            if (Get_time(this.FirstStation, this.LastStation) == Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
             {
-
+                return 0;
+            }
+            else if (Get_time(this.FirstStation, this.LastStation) > Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
+            {
+                return 1;
+            }
+            else 
+            {
+                return -1;
             }
         }
     }
