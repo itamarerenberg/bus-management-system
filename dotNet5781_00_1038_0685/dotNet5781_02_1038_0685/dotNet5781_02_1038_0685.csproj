@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusLine.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="lines.cs" />
     <Compile Include="myEnums.cs" />
     <Compile Include="LineStation.cs" />
     <Compile Include="Station.cs" />
