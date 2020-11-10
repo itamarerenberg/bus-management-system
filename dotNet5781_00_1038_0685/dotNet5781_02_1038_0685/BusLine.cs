@@ -38,7 +38,7 @@ namespace dotNet5781_02_1038_0685
         /// <param name="station">object of type LineStation</param>
         /// <param name="distance">the distance from the next station </param>
         /// <param name="code">the code of the next station</param>
-        public void Add_station(LineStation station, double distance = -1, int code = -1)
+        public void Add_station(LineStation station, double distance = -1, int code = -1)//enumerator.moveNext
         {
             if (code != -1)
             {
@@ -125,12 +125,25 @@ namespace dotNet5781_02_1038_0685
             return sum;
         }
         /// <summary>
-        /// calculate the ride time between 2 given stations
+        /// calculateing the time ride of all line by default (no parameters required) 
+        /// </summary>
+        /// <returns>the time ride of all line</returns>
+        public TimeSpan Get_time()
+        {
+            TimeSpan sum = new TimeSpan();
+            for (int i = 0 + 1; i <= Stations.Count; i++)
+            {
+                sum += Stations[i].RideTime;
+            }
+            return sum;
+        }
+        /// <summary>
+        /// calculating the ride time between 2 given stations
         /// </summary>
         /// <param name="station1"></param>
         /// <param name="station2"></param>
         /// <returns>the ride time between the provided stations</returns>
-        public TimeSpan Get_time(LineStation station1, LineStation station2)
+        public TimeSpan Get_time(LineStation station1 , LineStation station2)
         {
             int index1 = Stations.IndexOf(station1);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
@@ -150,12 +163,12 @@ namespace dotNet5781_02_1038_0685
             return sum;
         }
         /// <summary>
-        /// creat a new subline 
+        /// creating a new subline by the range between 2 given stations
         /// </summary>
         /// <param name="station1"></param>
         /// <param name="station2"></param>
-        /// <returns></returns>
-        public BusLine Sub_line(LineStation station1, LineStation station2)
+        /// <returns>new subline by the range between 2 provided stations</returns>
+        public BusLine Sub_line(LineStation station1 , LineStation station2)
         {
             int index1 = Stations.IndexOf(station1);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
@@ -171,24 +184,33 @@ namespace dotNet5781_02_1038_0685
 
             return new BusLine(0, subList.ToArray(), this.Area);
         }
-        public int CompareTo(object bl)
+        //public int CompareTo(object bl)
+        //{
+        //    if(!(bl is BusLine))
+        //    {
+        //        throw new InvalidCastException(string.Format($"you cannot compare type BusLine to type {bl.GetType()}"));
+        //    }
+        //    if (Get_time(this.FirstStation, this.LastStation) == Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
+        //    {
+        //        return 0;
+        //    }
+        //    else if (Get_time(this.FirstStation, this.LastStation) > Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
+        //    {
+        //        return 1;
+        //    }
+        //    else 
+        //    {
+        //        return -1;
+        //    }
+        //}
+        public int CompareTo(object obj)
         {
-            if(!(bl is BusLine))
+            BusLine bl = obj as BusLine;
+            if (bl == null)
             {
                 throw new InvalidCastException(string.Format($"you cannot compare type BusLine to type {bl.GetType()}"));
             }
-            if (Get_time(this.FirstStation, this.LastStation) == Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
-            {
-                return 0;
-            }
-            else if (Get_time(this.FirstStation, this.LastStation) > Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
-            {
-                return 1;
-            }
-            else 
-            {
-                return -1;
-            }
+            return this.Get_time().CompareTo(bl.Get_time());
         }
     }
 }
