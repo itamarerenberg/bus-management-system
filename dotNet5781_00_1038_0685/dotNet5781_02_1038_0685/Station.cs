@@ -20,13 +20,15 @@ namespace dotNet5781_02_1038_0685
             return !(a == b);
         }
     }
-    public struct Stations_in_use
+    public struct Station_in_use
     {
-        int Code { get; set; }
-
+        public int Code { get; set; }
+        public Point Loc { get; set; }
+        public int Count;
     }
     class Station
     {
+        private static List<Station_in_use> Stations_rep;
         private const int SIXDIGITS = 1000000;
         private const int MIN_LAT = -90;
         private const int MAX_LAT = 90;
@@ -77,6 +79,23 @@ namespace dotNet5781_02_1038_0685
             //else if(temp_st.loc != loc{ latitude, longitude})
         }
 
+        ~Station()
+        {
+            int index = Stations_rep.FindIndex((Station_in_use siu) => siu.Code == StationCode);
+            if(Stations_rep[index].Count <= 1)
+            {
+                Stations_rep.RemoveAt(index);
+            }
+            else
+            {
+                int code = Stations_rep[index].Code;
+                Point loc= Stations_rep[index].Loc;
+                int count = Stations_rep[index].Count - 1;
+                Stations_rep.RemoveAt(index);
+                Stations_rep.Add((Station_in_use));
+
+            }
+        }
         public override string ToString()
         {
             return string.Format("Station code: {0}, {1}°N {2}°E", stationCode, loc.Latitude, loc.Longitude);
