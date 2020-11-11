@@ -20,9 +20,13 @@ namespace dotNet5781_02_1038_0685
             return !(a == b);
         }
     }
+    public struct Stations_in_use
+    {
+        int Code { get; set; }
+
+    }
     class Station
     {
-        private static List<Station> AllStations;
         private const int SIXDIGITS = 1000000;
         private const int MIN_LAT = -90;
         private const int MAX_LAT = 90;
@@ -66,13 +70,9 @@ namespace dotNet5781_02_1038_0685
 
         public Station(int code, double latitude, double longitude, string address = "")
         {
-            Station temp_st = AllStations.Find((Station st) => st.StationCode == code);
-            if (temp_st == null)
-            {
-                StationCode = code;
-                Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
-                Address = address;
-            }
+            StationCode = code;
+            Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
+            Address = address;
             //this = temp_st;
             //else if(temp_st.loc != loc{ latitude, longitude})
         }

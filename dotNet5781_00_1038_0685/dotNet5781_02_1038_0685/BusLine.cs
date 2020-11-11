@@ -7,8 +7,14 @@ using System.Collections;
 
 namespace dotNet5781_02_1038_0685
 {
+    struct Count_stations
+    {
+        LineStation Station { get; set; }
+        int count;
+    }
     class BusLine : IComparable
     { //fields
+        public static List<Count_stations> Stations_in_use;
         public int LineNum { get; private set; }
         public LineStation FirstStation { get =>  Stations[0];  private set { Stations.Insert(0, value); } }
         public LineStation LastStation { get =>  Stations[Stations.Count - 1]; private set { Stations[Stations.Count - 1] = value; } }
@@ -18,7 +24,7 @@ namespace dotNet5781_02_1038_0685
         //constructor
         public BusLine(int lineNum, List<LineStation> stations, Areas area = Areas.General)
         {
-
+            
             LineNum = lineNum;
             Stations = new List<LineStation>(stations);
         }

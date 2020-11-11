@@ -9,8 +9,7 @@ namespace dotNet5781_02_1038_0685
 {
     class Lines : IEnumerable<BusLine>
     {
-        private List<BusLine> lines_list { get; set; }
-        private List<Station> stations { get; set; }
+        public List<BusLine> lines_list { get;  private set; }
 
         /// <summary>
         /// constract a new "lines" 
@@ -19,10 +18,6 @@ namespace dotNet5781_02_1038_0685
         public Lines(BusLine[] lines)
         {
             lines_list = new List<BusLine>(lines);
-            foreach(BusLine line in lines_list)
-            {
-                foreach(Station st in line.)
-            }
         }
 
         /// <summary>
