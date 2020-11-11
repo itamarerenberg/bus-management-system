@@ -10,9 +10,19 @@ namespace dotNet5781_02_1038_0685
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        static public bool operator ==(Point a, Point b)
+        {
+            return ((a.Latitude == b.Latitude) && (a.Longitude == b.Longitude));
+        }
+        static public bool operator !=(Point a, Point b)
+        {
+            return !(a == b);
+        }
     }
     class Station
     {
+        private static List<Station> AllStations;
         private const int SIXDIGITS = 1000000;
         private const int MIN_LAT = -90;
         private const int MAX_LAT = 90;
@@ -56,9 +66,15 @@ namespace dotNet5781_02_1038_0685
 
         public Station(int code, double latitude, double longitude, string address = "")
         {
-            StationCode = code;
-            Loc = new Point{ Latitude = latitude, Longitude = longitude };//*Point is astruct
-            Address = address;
+            Station temp_st = AllStations.Find((Station st) => st.StationCode == code);
+            if (temp_st == null)
+            {
+                StationCode = code;
+                Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
+                Address = address;
+            }
+            this = temp_st;
+            //else if(temp_st.loc != loc{ latitude, longitude})
         }
 
         public override string ToString()

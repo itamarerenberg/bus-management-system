@@ -10,18 +10,31 @@ namespace dotNet5781_02_1038_0685
     class Lines : IEnumerable<BusLine>
     {
         private List<BusLine> lines_list { get; set; }
+        private List<Station> stations { get; set; }
 
+        /// <summary>
+        /// constract a new "lines" 
+        /// </summary>
+        /// <param name="lines">save the list as the data base of lines</param>
         public Lines(BusLine[] lines)
         {
             lines_list = new List<BusLine>(lines);
+            foreach(BusLine line in lines_list)
+            {
+                foreach(Station st in line.)
+            }
         }
 
-        public void add_line(BusLine bl)
+        /// <summary>
+        /// add bl to the end of the container
+        /// </summary>
+        /// <param name="new_line"></param>
+        public void add_line(BusLine new_line)
         {
             int count = 0;
             foreach(BusLine item in lines_list)
             {
-                if (item.LineNum == bl.LineNum)
+                if (item.LineNum == new_line.LineNum)
                 {
                     if(count  == 1)
                     {
@@ -30,10 +43,16 @@ namespace dotNet5781_02_1038_0685
                     count++;
                 }
             }
-            lines_list.Add(bl);
+            lines_list.Add(new_line);
         }
 
-        public List<BusLine> which_stops_by(int stCode)
+        /// <summary>
+        /// find all the lines which stops at the station with the code "stCode"
+        /// </summary>
+        /// <param name="stCode"></param>
+        /// <returns>a list of all the lines which stops at the station with the code "stCode"</returns>
+        /// <exception cref="NotExist"> throw if no line stop at station with the code "stCode"</exception>
+        public List<BusLine> which_stops_at(int stCode)
         {
             List<BusLine> desired_lines = new List<BusLine>();
             foreach(BusLine item in lines_list)
@@ -45,11 +64,14 @@ namespace dotNet5781_02_1038_0685
             }
             if(desired_lines.Count == 0)
             {
-                throw new DontExist("no line includes this station");
+                throw new NotExist("no line includes this station");
             }
             return desired_lines;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns>a list of all the lines sortet acording the ride time of the line</returns>
         public List<BusLine> sorted_list()
         {
             lines_list.Sort();
@@ -58,8 +80,15 @@ namespace dotNet5781_02_1038_0685
 
         public BusLine this[int lineCode]
         {
-            get => lines_list[lines_list.FindIndex((BusLine bl) => bl.LineNum == lineCode)]; 
-            set => lines_list[lines_list.FindIndex((BusLine bl) => bl.LineNum == lineCode)] = value;
+            get
+            {
+                int index = lines_list.FindIndex((BusLine bl) => bl.LineNum == lineCode);
+                if(index == -1)
+                {
+                    throw new NotExist("line do not exist");
+                }
+                return lines_list[index];
+            }
         }
 
         public IEnumerator<BusLine> GetEnumerator()

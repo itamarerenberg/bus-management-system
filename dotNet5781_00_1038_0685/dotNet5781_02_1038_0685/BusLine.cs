@@ -18,6 +18,7 @@ namespace dotNet5781_02_1038_0685
         //constructor
         public BusLine(int lineNum, LineStation[] stations, Areas area = Areas.General)
         {
+
             LineNum = lineNum;
             Stations = new List<LineStation>(stations);
         }
