@@ -73,7 +73,7 @@ namespace dotNet5781_02_1038_0685
                 Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
                 Address = address;
             }
-            this = temp_st;
+            //this = temp_st;
             //else if(temp_st.loc != loc{ latitude, longitude})
         }
 
@@ -82,23 +82,5 @@ namespace dotNet5781_02_1038_0685
             return string.Format("Station code: {0}, {1}°N {2}°E", stationCode, loc.Latitude, loc.Longitude);
         }
 
-        public override bool Equals(Object s)//posibol error change to int
-        {
-            if (s is Station)
-            {
-                if (((Station)s).StationCode == this.StationCode)
-                {
-                    return true;
-                }
-            }
-            if(s is int)
-            {
-                if ((int)s == this.StationCode)
-                {
-                    return true;
-                }
-            }
-            return true;
-        }
     }
 }

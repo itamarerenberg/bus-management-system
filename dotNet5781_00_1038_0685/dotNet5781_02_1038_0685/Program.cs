@@ -19,13 +19,27 @@ namespace dotNet5781_02_1038_0685
             Random r = new Random(DateTime.Now.Millisecond);
             return r.NextDouble() * (max - min) + min;
         }
-        //public LineStation  Rand_station()
-        //{
-        //    Random r = new Random(DateTime.Now.Millisecond);
+        /// <summary>
+        /// generating a LineStation from random values
+        /// </summary>
+        /// <returns>a random LinStation</returns>
+        public static LineStation Rand_station()
+        {
+            Random r = new Random(DateTime.Now.Millisecond);
+            Double distance = Rand_double(1, 60);
+            return new LineStation(r.Next(999999), Rand_double(31, 33.3), Rand_double(34.3, 35.5), distance, new TimeSpan(0, (int)distance, 0));
+        }
+        static int code = 0;
+        public static BusLine Rand_BusLine(int stationNum)
+        {
+            List<LineStation> stations = new List<LineStation>();
+            for (int i = 0; i < stationNum; i++)
+            {
+                stations.Add(Rand_station());
+            }
+            return new BusLine(++code, stations, 0);
+        }
 
-        //    LineStation ls = new LineStation()
-        //}
-        
         static void Main(string[] args)
         {
             TimeSpan time = new TimeSpan(756789);
