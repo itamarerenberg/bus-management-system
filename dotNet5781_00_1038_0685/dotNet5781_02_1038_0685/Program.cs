@@ -42,14 +42,12 @@ namespace dotNet5781_02_1038_0685
 
         static void Main(string[] args)
         {
-            TimeSpan time = new TimeSpan(756789);
-            LineStation LStation1 = new LineStation(11111, Rand_double(31, 33.3), Rand_double(34.3, 35.5), 5, time);
-            //LineStation LStation2 = new LineStation(22222, Rand_double(31, 33.3), Rand_double(34.3, 35.5), 5, time);
-            //LineStation[] arr = { LStation1, LStation2 };
-            //BusLine busLine = new BusLine(667, arr);
-            //Console.WriteLine(busLine.ToString());
-
-            // BusLine line = new BusLine()
+            BusLine[] linesArr = { Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8) };
+            Lines lines = new Lines(linesArr);
+            for (int i = 0; i < 5; i++)
+            {
+                Random r = new Random(DateTime.Now.Millisecond);
+                lines.add_line(new BusLine(++code, lines.))
 
         }
     }
