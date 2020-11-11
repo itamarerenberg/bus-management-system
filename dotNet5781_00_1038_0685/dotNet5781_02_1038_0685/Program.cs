@@ -37,17 +37,77 @@ namespace dotNet5781_02_1038_0685
             {
                 stations.Add(Rand_station());
             }
-            return new BusLine(++code, stations, 0);
+            return new BusLine(++code, stations, ((Areas)code - 1));
         }
 
         static void Main(string[] args)
         {
+            // creating busLines
             BusLine[] linesArr = { Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8) };
             Lines lines = new Lines(linesArr);
             for (int i = 0; i < 5; i++)
             {
+                List<LineStation> bl = new List<LineStation>();
                 Random r = new Random(DateTime.Now.Millisecond);
-                lines.add_line(new BusLine(++code, lines.))
+                for (int j = 0; j < 8; i++)
+                {
+                    bl.Add(new LineStation(lines.lines_list[i].Stations[((int)r.Next(8))]));
+                }
+                lines.add_line(new BusLine(++code, bl, 0));
+            }
+            //-----------------------------------------------------
+            Console.WriteLine("Please, make your choice:");
+            Console.WriteLine("ADD_BUS_LINE, ADD_STATION, DELETE_BUS_LINE, DELETE_STATION, FIND_LINES_IN_THE_STATION, FIND_RIDE_BETWEEN_2_STATIONS, PRINT_ALL_LINES,PRINT_ALL_STATIONS, EXIT");
+            MyEnum2 choice;
+            bool exit = false;
+            do
+            {
+                bool success = Enum.TryParse(Console.ReadLine(), out choice);
+                if (!success)
+                {
+                    continue;
+                }
+                switch (choice)
+                {
+                    case MyEnum2.ADD_BUS_LINE:
+                        Console.WriteLine("enter bus's id:");
+
+                        break;
+                    case MyEnum2.ADD_STATION:
+                        Console.WriteLine("enter bus's id: ");
+
+                        break;
+                    case MyEnum2.DELETE_BUS_LINE:
+                        Console.WriteLine("Enter bus's id:");
+
+                        break;
+                    case MyEnum2.DELETE_STATION:
+                        
+                        break;
+                    case MyEnum2.FIND_LINES_IN_THE_STATION:
+                        Console.WriteLine("Enter bus's id:");
+
+                        break;
+                    case MyEnum2.FIND_RIDE_BETWEEN_2_STATIONS:
+                        Console.WriteLine("Enter bus's id:");
+
+                        break;
+                    case MyEnum2.PRINT_ALL_LINES:
+                        Console.WriteLine("Enter bus's id:");
+
+                        break;
+                    case MyEnum2.PRINT_ALL_STATIONS:
+                        Console.WriteLine("Enter bus's id:");
+
+                        break;
+                    case MyEnum2.EXIT:
+                        Console.WriteLine("bay bay!");
+                        exit = true;
+                        break;
+                    default:
+                        break;
+                }
+            } while (!exit);
 
         }
     }

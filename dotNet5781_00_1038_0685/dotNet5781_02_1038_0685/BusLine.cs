@@ -19,7 +19,7 @@ namespace dotNet5781_02_1038_0685
         public LineStation FirstStation { get =>  Stations[0];  private set { Stations.Insert(0, value); } }
         public LineStation LastStation { get =>  Stations[Stations.Count - 1]; private set { Stations[Stations.Count - 1] = value; } }
         public Areas Area { get; private set; }
-        private List<LineStation> Stations { get; set; }
+        public List<LineStation> Stations { get; private set; }
     
         //constructor
         public BusLine(int lineNum, List<LineStation> stations, Areas area = Areas.General)
@@ -189,7 +189,7 @@ namespace dotNet5781_02_1038_0685
             }
             List<LineStation> subList = Stations.GetRange(index1, index2 - index1 + 1);
 
-            return new BusLine(0, subList.ToArray(), this.Area);
+            return new BusLine(0, subList, this.Area);
         }
         //public int CompareTo(object bl)
         //{
