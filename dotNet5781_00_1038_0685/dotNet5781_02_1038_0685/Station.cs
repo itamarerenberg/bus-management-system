@@ -26,20 +26,35 @@ namespace dotNet5781_02_1038_0685
         public Point Loc { get; set; }
         public int Count;
     }
-    class Station
+    public class Station
     {
+        #region static lists
+        private static List<int> usedcodes = new List<int>();
         private static List<Station_in_use> Stations_rep;
+        #endregion
+
+        #region CONSTANTS
         private const int SIXDIGITS = 1000000;
         private const int MIN_LAT = -90;
         private const int MAX_LAT = 90;
         private const int MIN_LON = -180;
         private const int MAX_LON = 180;
+        #endregion
+
+        #region private fields
         private int stationCode;
+        #endregion
+
+        #region propertys
         public int StationCode
         {
             get => this.stationCode;
             protected set
             {
+                if(usedcodes.Contains(value))
+                {
+                    throw new ArgumentException("this code allready whas taken");
+                }
                 if (value < 0 || value > SIXDIGITS)
                 {
                     throw new ArgumentException("unvalid id");
@@ -47,6 +62,7 @@ namespace dotNet5781_02_1038_0685
                 else
                 {
                     this.stationCode = value;
+                    usedcodes.Add(this.stationCode);
                 }
             }
         }
@@ -69,6 +85,7 @@ namespace dotNet5781_02_1038_0685
         }
 
         protected string Address { get; set; }
+        #endregion
 
         public Station(int code, double latitude, double longitude, string address = "")
         {
