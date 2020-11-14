@@ -164,11 +164,11 @@ namespace dotNet5781_02_1038_0685
         /// <param name="station1"></param>
         /// <param name="station2"></param>
         /// <returns>the ride time between the provided stations</returns>
-        public TimeSpan Get_time(LineStation station1 , LineStation station2)
+        public TimeSpan Get_time(int station1Code , int station2Code)
         {
-            int index1 = Stations.IndexOf(station1);
+            int index1 = Stations.FindIndex(stl => stl.Code == station1Code);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
-            int index2 = Stations.IndexOf(station2);
+            int index2 = Stations.FindIndex(stl => stl.Code == station2Code);
             if (index2 == -1) { throw new KeyNotFoundException("error: the station 2 is not exist!"); }
             if (index1 > index2)//swap func
             {

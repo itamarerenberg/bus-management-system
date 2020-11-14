@@ -161,14 +161,24 @@ namespace dotNet5781_02_1038_0685
                         try
                         {
                             List<BusLine> lbl = lines.Which_stops_at(station1, station2);
-                            lbl.Sort((b => b.Get_time(station1, station2)));
+
+                            if(lbl.Count == 0)
+                            {
+                                Console.WriteLine("");
+                            }
+
+                            lbl.Sort((b1, b2) => b1.Get_time(station1, station2).CompareTo(b2.Get_time(station1, station2)));
+                            foreach (var item in lbl)
+                            {
+                                Console.WriteLine($"line {item.LineNum}: {item.Get_time(station1, station2)} minutes");
+                            }
                             Dictionary<int, TimeSpan> tempDic = new Dictionary<int, TimeSpan> { };
                             foreach (BusLine bl in lines)
                             {
                                 if (bl.Station_in_the_line(station1) && bl.Station_in_the_line(station2))
                                 {
                                     int key = bl.LineNum;
-                                    TimeSpan value = bl.Get_time(bl.Get_station_by_code(station1), bl.Get_station_by_code(station2));
+                                    TimeSpan value = bl.Get_time(station1, station2);
                                     tempDic.Add(key, value);
                                 }
                             }
