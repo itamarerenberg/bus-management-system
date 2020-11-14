@@ -33,7 +33,7 @@ namespace dotNet5781_02_1038_0685
                 {
                     if(count  == 1)
                     {
-                        throw new LineAlreadyExist("the line allready appears twice in the colection");
+                        throw new LineAlreadyExist("the line already appears twice in the colection");
                     }
                     count++;
                 }
@@ -66,7 +66,7 @@ namespace dotNet5781_02_1038_0685
 
         /// <summary>
         /// </summary>
-        /// <returns>a list of all the lines sortet acording the ride time of the line</returns>
+        /// <returns>a list of all the lines sorted according to the ride time of the line</returns>
         public List<BusLine> sorted_list()
         {
             lines_list.Sort();
@@ -80,7 +80,7 @@ namespace dotNet5781_02_1038_0685
                 int index = lines_list.FindIndex((BusLine bl) => bl.LineNum == lineCode);
                 if(index == -1)
                 {
-                    throw new NotExist("line do not exist");
+                    throw new NotExist("the line is not exist");
                 }
                 return lines_list[index];
             }
@@ -95,6 +95,14 @@ namespace dotNet5781_02_1038_0685
         {
             return this.GetEnumerator();
         }
-
+        public override string ToString()
+        {
+            string output = "";
+            foreach (BusLine item in lines_list)
+            {
+                output += item.ToString() + "\n";
+            }
+            return output;
+        }
     }
 }

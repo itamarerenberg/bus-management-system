@@ -25,9 +25,23 @@ namespace dotNet5781_02_1038_0685
         /// <returns>a random LinStation</returns>
         public static LineStation Rand_station()
         {
-            Random r = new Random(DateTime.Now.Millisecond);
-            Double distance = Rand_double(1, 60);
-            return new LineStation(r.Next(999999), Rand_double(31, 33.3), Rand_double(34.3, 35.5), distance, new TimeSpan(0, (int)distance, 0));
+            do
+            {
+                try
+                {
+                    Random r = new Random(DateTime.Now.Millisecond);
+                    Double distance = Rand_double(1, 60);
+                    return new LineStation(r.Next(999999), Rand_double(31, 33.3), Rand_double(34.3, 35.5), distance, new TimeSpan(0, (int)distance, 0));
+                }
+                catch(ArgumentException)
+                {
+                    continue;
+                }
+                catch (Exception)
+                {
+                    throw;
+                } 
+            } while (true);
         }
         static int code = 0;
         public static BusLine Rand_BusLine(int stationNum)
@@ -49,15 +63,19 @@ namespace dotNet5781_02_1038_0685
             {
                 List<LineStation> bl = new List<LineStation>();
                 Random r = new Random(DateTime.Now.Millisecond);
-                for (int j = 0; j < 8; i++)
+                for (int j = 0; j < 8; j++)
                 {
-                    bl.Add(new LineStation(lines.lines_list[i].Stations[((int)r.Next(8))]));
+                    bl.Add(lines.lines_list[i].Stations[((int)r.Next(8))]);
                 }
                 lines.add_line(new BusLine(++code, bl, 0));
             }
             //-----------------------------------------------------
             Console.WriteLine("Please, make your choice:");
-            Console.WriteLine("ADD_BUS_LINE, ADD_STATION, DELETE_BUS_LINE, DELETE_STATION, FIND_LINES_IN_THE_STATION, FIND_RIDE_BETWEEN_2_STATIONS, PRINT_ALL_LINES,PRINT_ALL_STATIONS, EXIT");
+            for (int i = 0; i < 8; i++)
+            {
+                Console.WriteLine("\n" + i + " - " + Enum.GetName(typeof(MyEnum2), i));
+            }
+            Console.WriteLine("\nfor exit press -1");
             MyEnum2 choice;
             bool exit = false;
             do
@@ -89,11 +107,43 @@ namespace dotNet5781_02_1038_0685
 
                         break;
                     case MyEnum2.FIND_RIDE_BETWEEN_2_STATIONS:
-                        Console.WriteLine("Enter bus's id:");
+                        Console.WriteLine("Enter the origin's station number and destenation's station number");
+                        if (!int.TryParse(Console.ReadLine(), out int station1))
+                        {
+                            Console.WriteLine("please enter a number");
+                        }
+                        if (!int.TryParse(Console.ReadLine(), out int station2))
+                        {
+                            Console.WriteLine("please enter a number");
+                        }
+                        try
+                        {
+                            Dictionary<int, TimeSpan> tempDic = new Dictionary<int, TimeSpan> { };
+                            foreach (BusLine bl in lines)
+                            {
+                                if (bl.Station_in_the_line(station1) && bl.Station_in_the_line(station2))
+                                {
+                                    int key = bl.LineNum;
+                                    TimeSpan value = bl.Get_time(bl.Get_station_by_code(station1), bl.Get_station_by_code(station2));
+                                    tempDic.Add(key, value);
+                                }
+                            }
+                            var dic = from i in tempDic orderby i.Value ascending select i;
+
+                            foreach (var item in dic)
+                            {
+                                Console.WriteLine($"line {item.Key}: {item.Value.TotalMinutes} minutes");
+                            }
+                        }
+                        catch (Exception msg)
+                        {
+                            Console.WriteLine(msg);
+                            break;
+                        }
 
                         break;
                     case MyEnum2.PRINT_ALL_LINES:
-                        Console.WriteLine("Enter bus's id:");
+                        Console.WriteLine(lines);
 
                         break;
                     case MyEnum2.PRINT_ALL_STATIONS:

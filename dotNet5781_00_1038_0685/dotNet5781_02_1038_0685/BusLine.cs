@@ -34,9 +34,9 @@ namespace dotNet5781_02_1038_0685
             string output = string.Format("Line number : {0} \narea : {1} \nstations: " , LineNum, Area);
             for (int i = 0; i < Stations.Count; i++)
             {
-                output += string.Format("\n{0} - {1}", i + 1, Stations[i].StationCode);
+                output += string.Format("   {0} - {1}", i + 1, Stations[i].StationCode);
             }
-            return output;
+            return output + "\n";
         }
 
         /// <summary>
@@ -105,6 +105,22 @@ namespace dotNet5781_02_1038_0685
                 }
             }
             return false;
+        }
+        /// <summary>
+        /// find the station by its code number
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns>return a LineStation</returns>
+        public LineStation Get_station_by_code(int code)
+        {
+            if (Station_in_the_line(code))
+            {
+                return this.Stations.Find(s => s.StationCode == code);
+            }
+            else
+            {
+                throw new NotExist("the station is not exist");
+            }
         }
         /// <summary>
         /// calculate the distance between 2 given stations

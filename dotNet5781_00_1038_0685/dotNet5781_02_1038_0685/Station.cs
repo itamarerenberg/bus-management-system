@@ -53,11 +53,11 @@ namespace dotNet5781_02_1038_0685
             {
                 if(usedcodes.Contains(value))
                 {
-                    throw new ArgumentException("this code allready whas taken");
+                    throw new ArgumentException("this code is already taken");
                 }
                 if (value < 0 || value > SIXDIGITS)
                 {
-                    throw new ArgumentException("unvalid id");
+                    throw new ArgumentException("invalid id");
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace dotNet5781_02_1038_0685
                 Point loc= Stations_rep[index].Loc;
                 int count = Stations_rep[index].Count - 1;
                 Stations_rep.RemoveAt(index);
-                Stations_rep.Add((Station_in_use));
+                //Stations_rep.Add((Station_in_use));
 
             }
         }
