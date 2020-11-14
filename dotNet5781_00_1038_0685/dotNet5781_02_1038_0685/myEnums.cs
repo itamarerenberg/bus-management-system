@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_1038_0685
 {
-    enum Areas
+    public enum Areas
     {
         General,North,South,Center,Jerusalem
     }

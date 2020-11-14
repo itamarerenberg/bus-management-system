@@ -12,9 +12,8 @@ namespace dotNet5781_02_1038_0685
         LineStation Station { get; set; }
         int count;
     }
-    class BusLine : IComparable
+    public class BusLine : IComparable
     { //fields
-        public static List<Count_stations> Stations_in_use;
         public int LineNum { get; private set; }
         public LineStation FirstStation { get =>  Stations[0];  private set { Stations.Insert(0, value); } }
         public LineStation LastStation { get =>  Stations[Stations.Count - 1]; private set { Stations[Stations.Count - 1] = value; } }
@@ -24,9 +23,12 @@ namespace dotNet5781_02_1038_0685
         //constructor
         public BusLine(int lineNum, List<LineStation> stations, Areas area = Areas.General)
         {
-            
             LineNum = lineNum;
             Stations = new List<LineStation>(stations);
+            foreach (var item in stations)
+            {
+                item.base_station.Add_line(this);
+            }
         }
         //methods
         public override string ToString()
@@ -34,7 +36,7 @@ namespace dotNet5781_02_1038_0685
             string output = string.Format("Line number : {0} \narea : {1} \nstations: " , LineNum, Area);
             for (int i = 0; i < Stations.Count; i++)
             {
-                output += string.Format("   {0} - {1}", i + 1, Stations[i].StationCode);
+                output += string.Format("   {0} - {1}", i + 1, Stations[i].Code);
             }
             return output + "\n";
         }
@@ -51,7 +53,7 @@ namespace dotNet5781_02_1038_0685
             {
                 for (int i = 0; i < Stations.Count; i++)
                 {
-                    if (Stations[i].StationCode == code)
+                    if (Stations[i].Code == code)
                     {
                         Stations[i].Distance = distance;
                         Stations.Insert(i, station);
@@ -72,7 +74,7 @@ namespace dotNet5781_02_1038_0685
         {
             for (int i = 0; i < Stations.Count; i++)
             {
-                if (Stations[i].StationCode == code)
+                if (Stations[i].Code == code)
                 {
                     if (i < Stations.Count - 1)
                     {
@@ -97,9 +99,9 @@ namespace dotNet5781_02_1038_0685
         /// <returns></returns>
         public bool Station_in_the_line(int stationCode)
         {
-            foreach (Station item in Stations)
+            foreach (LineStation item in Stations)
             {
-                if(item.StationCode == stationCode)
+                if(item.Code == stationCode)
                 {
                     return true;
                 }
@@ -115,7 +117,7 @@ namespace dotNet5781_02_1038_0685
         {
             if (Station_in_the_line(code))
             {
-                return this.Stations.Find(s => s.StationCode == code);
+                return this.Stations.Find(s => s.Code == code);
             }
             else
             {

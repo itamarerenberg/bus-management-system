@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_1038_0685
 {
-    class LineStation
+    public class LineStation
     {
-        private Station base_station;
+        public Station base_station { get; private set; }
+        public int Code { get => base_station.StationCode; }
         //fields
         public double Distance { get ; set; }
 

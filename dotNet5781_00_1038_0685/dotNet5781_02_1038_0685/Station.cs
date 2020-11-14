@@ -76,7 +76,7 @@ namespace dotNet5781_02_1038_0685
             }
         }
 
-        private List<Lines> Pass_here
+        private List<BusLine> Pass_here
         {
             get => this.pass_here;
             set => pass_here = value;
@@ -112,9 +112,12 @@ namespace dotNet5781_02_1038_0685
             usedcodes.Add(this);
         }
 
-        void Add_line(BusLine bl)
+        public void Add_line(BusLine bl)
         {
-            pass_here.Add(bl);
+            if (!pass_here.Contains(bl))
+            {
+                pass_here.Add(bl);
+            }        
         }
 
         public override string ToString()
