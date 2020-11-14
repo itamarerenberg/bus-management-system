@@ -11,11 +11,15 @@ namespace dotNet5781_02_1038_0685
     {
         public List<BusLine> Lines_list { get;  private set; }
 
+        public Lines()
+        {
+            Lines_list = new List<BusLine>();
+        }
         /// <summary>
         /// constract a new "lines" 
         /// </summary>
         /// <param name="lines">save the list as the data base of lines</param>
-        public Lines(BusLine[] lines)
+        public Lines(List<BusLine> lines)
         {
             Lines_list = new List<BusLine>(lines);
         }
@@ -58,6 +62,28 @@ namespace dotNet5781_02_1038_0685
                 }
             }
             if(desired_lines.Count == 0)
+            {
+                throw new NotExist("no line includes this station");
+            }
+            return desired_lines;
+        }
+        /// <summary>
+        /// find all the lines which stops at the station with the code "stCode"
+        /// </summary>
+        /// <param name="stCode"></param>
+        /// <returns>a list of all the lines which stops at the station with the code "stCode"</returns>
+        /// <exception cref="NotExist"> throw if no line stop at station with the code "stCode"</exception>
+        public List<BusLine> Which_stops_at(int stCode1, int stCode2)
+        {
+            List<BusLine> desired_lines = new List<BusLine>();
+            foreach (BusLine item in Lines_list)
+            {
+                if (item.Station_in_the_line(stCode1) && item.Station_in_the_line(stCode2))
+                {
+                    desired_lines.Add(item);
+                }
+            }
+            if (desired_lines.Count == 0)
             {
                 throw new NotExist("no line includes this station");
             }

@@ -74,26 +74,27 @@ namespace dotNet5781_02_1038_0685
         /// <param name="num">the requested number of busLines </param>
         public static void Rand_cross_lines(Lines arr, int num)
         {
+            int k = 0;
             if (arr.Lines_list.Count > 0)// return the lines number of shortest line
             {
-                int j = arr.Lines_list[0].Stations.Count;
+                k = arr.Lines_list[0].Stations.Count;
                 foreach (var item in arr.Lines_list)
                 {
-                    if (item.Stations.Count() < j)
+                    if (item.Stations.Count() < k)
                     {
-                        j = item.Stations.Count();
+                        k = item.Stations.Count();
                     }
                 } 
             }
             else
             {
-                int j = 0;
+                k = 0;
             }
             for (int i = 0; i < num; i++)
             {
                 List<LineStation> bl = new List<LineStation>();
                 Random r = new Random(DateTime.Now.Millisecond);
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < k; j++)
                 {
                     bl.Add(arr.Lines_list[i].Stations[((int)r.Next(8))]);
                 }
@@ -103,9 +104,8 @@ namespace dotNet5781_02_1038_0685
 
         static void Main(string[] args)
         {
-            // creating busLines
-            BusLine[] busLines = { };
-            Lines lines = new Lines(busLines);
+            
+            Lines lines = new Lines();
             Rand_lines(lines, 8, 8);
             Rand_cross_lines(lines, 5);
 
@@ -149,16 +149,19 @@ namespace dotNet5781_02_1038_0685
                         break;
                     case MyEnum2.FIND_RIDE_BETWEEN_2_STATIONS:
                         Console.WriteLine("Enter the origin's station number and destenation's station number");
-                        if (!int.TryParse(Console.ReadLine(), out int station1))
+                        int station1, station2;
+                        while (!int.TryParse(Console.ReadLine(), out station1))
                         {
                             Console.WriteLine("please enter a number");
                         }
-                        if (!int.TryParse(Console.ReadLine(), out int station2))
+                        while (!int.TryParse(Console.ReadLine(), out station2))
                         {
                             Console.WriteLine("please enter a number");
                         }
                         try
                         {
+                            List<BusLine> lbl = lines.Which_stops_at(station1, station2);
+                            lbl.Sort((b => b.Get_time(station1, station2)));
                             Dictionary<int, TimeSpan> tempDic = new Dictionary<int, TimeSpan> { };
                             foreach (BusLine bl in lines)
                             {

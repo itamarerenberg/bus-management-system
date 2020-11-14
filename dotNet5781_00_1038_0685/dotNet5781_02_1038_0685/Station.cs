@@ -110,6 +110,7 @@ namespace dotNet5781_02_1038_0685
             Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
             Address = address;
             usedcodes.Add(this);
+            pass_here = new List<BusLine>();
         }
 
         public void Add_line(BusLine bl)
