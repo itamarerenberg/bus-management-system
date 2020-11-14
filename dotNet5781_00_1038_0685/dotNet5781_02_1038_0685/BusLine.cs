@@ -7,11 +7,6 @@ using System.Collections;
 
 namespace dotNet5781_02_1038_0685
 {
-    struct Count_stations
-    {
-        LineStation Station { get; set; }
-        int count;
-    }
     public class BusLine : IComparable
     { //fields
         public int LineNum { get; private set; }
@@ -87,6 +82,7 @@ namespace dotNet5781_02_1038_0685
                             Stations[i + 1].Distance = distance;
                         }
                     }
+
                     Stations.RemoveAt(i);
                     return;
                 }

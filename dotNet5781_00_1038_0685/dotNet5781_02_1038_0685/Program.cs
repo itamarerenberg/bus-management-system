@@ -64,7 +64,7 @@ namespace dotNet5781_02_1038_0685
         {
             for (int i = 0; i < num; i++)
             {
-                arr.add_line(Rand_BusLine(numOfStation));
+                arr.Add_line(Rand_BusLine(numOfStation));
             }
         }
         /// <summary>
@@ -74,10 +74,10 @@ namespace dotNet5781_02_1038_0685
         /// <param name="num">the requested number of busLines </param>
         public static void Rand_cross_lines(Lines arr, int num)
         {
-            if (arr.lines_list.Count > 0)// return the lines number of shortest line
+            if (arr.Lines_list.Count > 0)// return the lines number of shortest line
             {
-                int j = arr.lines_list[0].Stations.Count;
-                foreach (var item in arr.lines_list)
+                int j = arr.Lines_list[0].Stations.Count;
+                foreach (var item in arr.Lines_list)
                 {
                     if (item.Stations.Count() < j)
                     {
@@ -95,9 +95,9 @@ namespace dotNet5781_02_1038_0685
                 Random r = new Random(DateTime.Now.Millisecond);
                 for (int j = 0; j < 5; j++)
                 {
-                    bl.Add(arr.lines_list[i].Stations[((int)r.Next(8))]);
+                    bl.Add(arr.Lines_list[i].Stations[((int)r.Next(8))]);
                 }
-                arr.add_line(new BusLine(++code, bl, 0));
+                arr.Add_line(new BusLine(++code, bl, 0));
             }
         }
 

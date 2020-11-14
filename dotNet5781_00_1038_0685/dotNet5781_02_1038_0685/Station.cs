@@ -114,10 +114,7 @@ namespace dotNet5781_02_1038_0685
 
         public void Add_line(BusLine bl)
         {
-            if (!pass_here.Contains(bl))
-            {
-                pass_here.Add(bl);
-            }        
+            pass_here.Add(bl);
         }
 
         public override string ToString()

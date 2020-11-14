@@ -9,7 +9,7 @@ namespace dotNet5781_02_1038_0685
 {
     class Lines : IEnumerable<BusLine>
     {
-        public List<BusLine> lines_list { get;  private set; }
+        public List<BusLine> Lines_list { get;  private set; }
 
         /// <summary>
         /// constract a new "lines" 
@@ -17,17 +17,17 @@ namespace dotNet5781_02_1038_0685
         /// <param name="lines">save the list as the data base of lines</param>
         public Lines(BusLine[] lines)
         {
-            lines_list = new List<BusLine>(lines);
+            Lines_list = new List<BusLine>(lines);
         }
 
         /// <summary>
         /// add bl to the end of the container
         /// </summary>
         /// <param name="new_line"></param>
-        public void add_line(BusLine new_line)
+        public void Add_line(BusLine new_line)
         {
             int count = 0;
-            foreach(BusLine item in lines_list)
+            foreach(BusLine item in Lines_list)
             {
                 if (item.LineNum == new_line.LineNum)
                 {
@@ -38,7 +38,7 @@ namespace dotNet5781_02_1038_0685
                     count++;
                 }
             }
-            lines_list.Add(new_line);
+            Lines_list.Add(new_line);
         }
 
         /// <summary>
@@ -47,10 +47,10 @@ namespace dotNet5781_02_1038_0685
         /// <param name="stCode"></param>
         /// <returns>a list of all the lines which stops at the station with the code "stCode"</returns>
         /// <exception cref="NotExist"> throw if no line stop at station with the code "stCode"</exception>
-        public List<BusLine> which_stops_at(int stCode)
+        public List<BusLine> Which_stops_at(int stCode)
         {
             List<BusLine> desired_lines = new List<BusLine>();
-            foreach(BusLine item in lines_list)
+            foreach(BusLine item in Lines_list)
             {
                 if(item.Station_in_the_line(stCode))
                 {
@@ -67,28 +67,28 @@ namespace dotNet5781_02_1038_0685
         /// <summary>
         /// </summary>
         /// <returns>a list of all the lines sorted according to the ride time of the line</returns>
-        public List<BusLine> sorted_list()
+        public List<BusLine> Sorted_list()
         {
-            lines_list.Sort();
-            return lines_list;
+            Lines_list.Sort();
+            return Lines_list;
         }
 
         public BusLine this[int lineCode]
         {
             get
             {
-                int index = lines_list.FindIndex((BusLine bl) => bl.LineNum == lineCode);
+                int index = Lines_list.FindIndex((BusLine bl) => bl.LineNum == lineCode);
                 if(index == -1)
                 {
                     throw new NotExist("the line is not exist");
                 }
-                return lines_list[index];
+                return Lines_list[index];
             }
         }
 
         public IEnumerator<BusLine> GetEnumerator()
         {
-            return lines_list.GetEnumerator();
+            return Lines_list.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -98,7 +98,7 @@ namespace dotNet5781_02_1038_0685
         public override string ToString()
         {
             string output = "";
-            foreach (BusLine item in lines_list)
+            foreach (BusLine item in Lines_list)
             {
                 output += item.ToString() + "\n";
             }
