@@ -53,33 +53,74 @@ namespace dotNet5781_02_1038_0685
             }
             return new BusLine(++code, stations, ((Areas)code - 1));
         }
+        /// <summary>
+        /// generating a "Lines" from random values
+        /// </summary>
+        /// <param name="arr">an existing "Lines"</param>
+        /// <param name="num">the requested number of busLines </param>
+        /// <param name="numOfStation"></param>
+        /// <returns>the </returns>
+        public static void Rand_lines(Lines arr, int num, int numOfStation)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                arr.add_line(Rand_BusLine(numOfStation));
+            }
+        }
+        /// <summary>
+        /// add to a "Lines" busLines that cross the existing busLines 
+        /// </summary>
+        /// <param name="arr">an existing "Lines"</param>
+        /// <param name="num">the requested number of busLines </param>
+        public static void Rand_cross_lines(Lines arr, int num)
+        {
+            if (arr.lines_list.Count > 0)// return the lines number of shortest line
+            {
+                int j = arr.lines_list[0].Stations.Count;
+                foreach (var item in arr.lines_list)
+                {
+                    if (item.Stations.Count() < j)
+                    {
+                        j = item.Stations.Count();
+                    }
+                } 
+            }
+            else
+            {
+                int j = 0;
+            }
+            for (int i = 0; i < num; i++)
+            {
+                List<LineStation> bl = new List<LineStation>();
+                Random r = new Random(DateTime.Now.Millisecond);
+                for (int j = 0; j < 5; j++)
+                {
+                    bl.Add(arr.lines_list[i].Stations[((int)r.Next(8))]);
+                }
+                arr.add_line(new BusLine(++code, bl, 0));
+            }
+        }
 
         static void Main(string[] args)
         {
             // creating busLines
-            BusLine[] linesArr = { Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8), Rand_BusLine(8) };
-            Lines lines = new Lines(linesArr);
-            for (int i = 0; i < 5; i++)
-            {
-                List<LineStation> bl = new List<LineStation>();
-                Random r = new Random(DateTime.Now.Millisecond);
-                for (int j = 0; j < 8; j++)
-                {
-                    bl.Add(lines.lines_list[i].Stations[((int)r.Next(8))]);
-                }
-                lines.add_line(new BusLine(++code, bl, 0));
-            }
+            BusLine[] busLines = { };
+            Lines lines = new Lines(busLines);
+            Rand_lines(lines, 8, 8);
+            Rand_cross_lines(lines, 5);
+
             //-----------------------------------------------------
-            Console.WriteLine("Please, make your choice:");
+            
             for (int i = 0; i < 8; i++)
             {
                 Console.WriteLine("\n" + i + " - " + Enum.GetName(typeof(MyEnum2), i));
             }
-            Console.WriteLine("\nfor exit press -1");
+            Console.WriteLine("\nfor exit press -1\n");
             MyEnum2 choice;
             bool exit = false;
             do
             {
+                Console.WriteLine("Please, make your choice:");
                 bool success = Enum.TryParse(Console.ReadLine(), out choice);
                 if (!success)
                 {
@@ -128,11 +169,18 @@ namespace dotNet5781_02_1038_0685
                                     tempDic.Add(key, value);
                                 }
                             }
-                            var dic = from i in tempDic orderby i.Value ascending select i;
-
-                            foreach (var item in dic)
+                            if (tempDic.Count != 0)
                             {
-                                Console.WriteLine($"line {item.Key}: {item.Value.TotalMinutes} minutes");
+                                var dic = from i in tempDic orderby i.Value ascending select i;
+
+                                foreach (var item in dic)
+                                {
+                                    Console.WriteLine($"line {item.Key}: {item.Value.TotalMinutes} minutes");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("station are not exist or they aren't on the same line");
                             }
                         }
                         catch (Exception msg)
@@ -147,7 +195,6 @@ namespace dotNet5781_02_1038_0685
 
                         break;
                     case MyEnum2.PRINT_ALL_STATIONS:
-                        Console.WriteLine("Enter bus's id:");
 
                         break;
                     case MyEnum2.EXIT:
