@@ -22,8 +22,23 @@ namespace dotNet5781_02_1038_0685
     }
     public class Station
     {
-        #region static lists
-        private static List<int> usedcodes = new List<int>();
+        #region static
+        #region fildes
+        private static List<Station> usedcodes = new List<Station>();
+        #endregion
+
+        #region fanctions
+        public static Station get_station(int code)
+        {
+            Station temp = usedcodes.Find((Station st) => st.StationCode == code);
+            if (temp == null)
+            {
+                throw new ArgumentException("this station do not exist");
+            }
+            return temp;
+        }  
+        #endregion
+
         #endregion
 
         #region CONSTANTS
@@ -36,6 +51,7 @@ namespace dotNet5781_02_1038_0685
 
         #region private fields
         private int stationCode;
+        private List<BusLine> pass_here;
         #endregion
 
         #region propertys
@@ -44,7 +60,7 @@ namespace dotNet5781_02_1038_0685
             get => this.stationCode;
             protected set
             {
-                if (usedcodes.Contains(value))
+                if (usedcodes.Exists((Station st) => st.StationCode == value))
                 {
                     throw new ArgumentException("this code allready whas taken");
                 }
@@ -55,10 +71,17 @@ namespace dotNet5781_02_1038_0685
                 else
                 {
                     this.stationCode = value;
-                    usedcodes.Add(this.stationCode);
+                    usedcodes.Add(this);
                 }
             }
         }
+
+        private List<Lines> Pass_here
+        {
+            get => this.pass_here;
+            set => pass_here = value;
+        }
+
 
         private Point loc;
         protected Point Loc
@@ -80,11 +103,18 @@ namespace dotNet5781_02_1038_0685
         protected string Address { get; set; }
         #endregion
 
+        
         public Station(int code, double latitude, double longitude, string address = "")
         {
             StationCode = code;
             Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
             Address = address;
+            usedcodes.Add(this);
+        }
+
+        void Add_line(BusLine bl)
+        {
+            pass_here.Add(bl);
         }
 
         public override string ToString()

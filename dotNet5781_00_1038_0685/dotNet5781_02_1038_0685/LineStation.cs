@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_1038_0685
 {
-    class LineStation : Station
+    class LineStation
     {
+        private Station base_station;
         //fields
         public double Distance { get ; set; }
 
         public TimeSpan RideTime { get { return new TimeSpan(0, (int)Distance, 0); } set { }}
 
         //construtcor
-        public LineStation(int code, double latiude, double longitude, double distance, TimeSpan rideTime, string address = "")
-            : base(code, latiude, longitude, address)
+        public LineStation(int code, double distance, TimeSpan rideTime)    
         {
             Distance = distance;
             RideTime = rideTime;
+            base_station = Station.get_station(code);
         }
         //copy construcrot
         public LineStation(LineStation other)
