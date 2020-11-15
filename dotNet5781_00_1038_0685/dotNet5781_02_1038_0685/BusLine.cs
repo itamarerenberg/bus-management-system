@@ -67,27 +67,16 @@ namespace dotNet5781_02_1038_0685
         /// <param name="distance">fill the new distance after removing</param>
         public void Remove_station(int code, int distance = -1)
         {
-            for (int i = 0; i < Stations.Count; i++)
+            int index = Stations.FindIndex(st => st.Code == code);
+            LineStation st1 = Stations[index];
+            if (index != Stations.Count - 1)
             {
-                if (Stations[i].Code == code)
-                {
-                    if (i < Stations.Count - 1)
-                    {
-                        if (distance != -1)
-                        {
-                            Stations[i + 1].Distance += Stations[i].Distance;
-                        }
-                        else
-                        {
-                            Stations[i + 1].Distance = distance;
-                        }
-                    }
-
-                    Stations.RemoveAt(i);
-                    return;
-                }
-            }  
+                LineStation st2 = Stations[index + 1];
+                st2.Distance = distance == -1 ? st1.Distance + st2.Distance : distance;
+            }
+            Stations.Remove(st1);
         }
+
         /// <summary>
         /// return if the station is in the line
         /// </summary>
@@ -205,25 +194,6 @@ namespace dotNet5781_02_1038_0685
 
             return new BusLine(0, subList, this.Area);
         }
-        //public int CompareTo(object bl)
-        //{
-        //    if(!(bl is BusLine))
-        //    {
-        //        throw new InvalidCastException(string.Format($"you cannot compare type BusLine to type {bl.GetType()}"));
-        //    }
-        //    if (Get_time(this.FirstStation, this.LastStation) == Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
-        //    {
-        //        return 0;
-        //    }
-        //    else if (Get_time(this.FirstStation, this.LastStation) > Get_time(((BusLine)bl).FirstStation, ((BusLine)bl).LastStation))
-        //    {
-        //        return 1;
-        //    }
-        //    else 
-        //    {
-        //        return -1;
-        //    }
-        //}
         public int CompareTo(object obj)
         {
             BusLine bl = obj as BusLine;

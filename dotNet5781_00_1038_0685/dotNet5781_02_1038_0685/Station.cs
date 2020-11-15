@@ -24,13 +24,13 @@ namespace dotNet5781_02_1038_0685
     {
         #region static
         #region fildes
-        private static List<Station> usedcodes = new List<Station>();
+        public static List<Station> exists_stations = new List<Station>();
         #endregion
 
         #region fanctions
         public static Station get_station(int code)
         {
-            Station temp = usedcodes.Find((Station st) => st.StationCode == code);
+            Station temp = exists_stations.Find((Station st) => st.StationCode == code);
             if (temp == null)
             {
                 throw new ArgumentException("this station do not exist");
@@ -60,7 +60,7 @@ namespace dotNet5781_02_1038_0685
             get => this.stationCode;
             protected set
             {
-                if (usedcodes.Exists((Station st) => st.StationCode == value))
+                if (exists_stations.Exists((Station st) => st.StationCode == value))
                 {
                     throw new ArgumentException("this code has already been taken");
                 }
@@ -71,12 +71,12 @@ namespace dotNet5781_02_1038_0685
                 else
                 {
                     this.stationCode = value;
-                    usedcodes.Add(this);
+                    exists_stations.Add(this);
                 }
             }
         }
 
-        private List<BusLine> Pass_here
+        public List<BusLine> Pass_here
         {
             get => this.pass_here;
             set => pass_here = value;
@@ -109,7 +109,7 @@ namespace dotNet5781_02_1038_0685
             StationCode = code;
             Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
             Address = address;
-            usedcodes.Add(this);
+            exists_stations.Add(this);
             pass_here = new List<BusLine>();
         }
 

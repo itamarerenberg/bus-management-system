@@ -45,6 +45,11 @@ namespace dotNet5781_02_1038_0685
             Lines_list.Add(new_line);
         }
 
+        public void Remove_line(int line_num)
+        {
+            Lines_list.RemoveAll(bl => bl.LineNum == line_num);
+        }
+
         /// <summary>
         /// find all the lines which stops at the station with the code "stCode"
         /// </summary>
