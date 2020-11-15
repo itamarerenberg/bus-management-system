@@ -315,7 +315,7 @@ namespace dotNet5781_02_1038_0685
                     case MyEnum2.PRINT_ALL_STATIONS:
                         foreach (var st in Station.exists_stations)
                         {
-                            Console.Write(st + " : ");
+                            Console.Write(st.StationCode + " : ");
                             foreach (var line in st.Pass_here)
                             {
                                 Console.Write(line.LineNum + ", ");

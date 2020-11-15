@@ -109,7 +109,6 @@ namespace dotNet5781_02_1038_0685
             StationCode = code;
             Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
             Address = address;
-            exists_stations.Add(this);
             pass_here = new List<BusLine>();
         }
 
