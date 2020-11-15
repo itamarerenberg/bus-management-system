@@ -109,8 +109,18 @@ namespace dotNet5781_02_1038_0685
             Rand_lines(lines, 8, 8);
             Rand_cross_lines(lines, 5);
 
+            try
+            {
+                new Station(1, 1, 1);
+                new Station(1, 1, 1);
+            }
+            catch (Exception msg)
+            {
+                Console.WriteLine(msg.Message);
+            }
+
             //-----------------------------------------------------
-            
+
             for (int i = 0; i < 8; i++)
             {
                 Console.WriteLine("\n" + i + " - " + Enum.GetName(typeof(MyEnum2), i));
@@ -162,34 +172,14 @@ namespace dotNet5781_02_1038_0685
                         {
                             List<BusLine> lbl = lines.Which_stops_at(station1, station2);
 
-                            if(lbl.Count == 0)
+                            if (lbl.Count != 0)
                             {
-                                Console.WriteLine("");
-                            }
-
-                            lbl.Sort((b1, b2) => b1.Get_time(station1, station2).CompareTo(b2.Get_time(station1, station2)));
-                            foreach (var item in lbl)
-                            {
-                                Console.WriteLine($"line {item.LineNum}: {item.Get_time(station1, station2)} minutes");
-                            }
-                            Dictionary<int, TimeSpan> tempDic = new Dictionary<int, TimeSpan> { };
-                            foreach (BusLine bl in lines)
-                            {
-                                if (bl.Station_in_the_line(station1) && bl.Station_in_the_line(station2))
+                                lbl.Sort((b1, b2) => b1.Get_time(station1, station2).CompareTo(b2.Get_time(station1, station2)));
+                                foreach (var item in lbl)
                                 {
-                                    int key = bl.LineNum;
-                                    TimeSpan value = bl.Get_time(station1, station2);
-                                    tempDic.Add(key, value);
-                                }
-                            }
-                            if (tempDic.Count != 0)
-                            {
-                                var dic = from i in tempDic orderby i.Value ascending select i;
-
-                                foreach (var item in dic)
-                                {
-                                    Console.WriteLine($"line {item.Key}: {item.Value.TotalMinutes} minutes");
-                                }
+                                    Console.WriteLine($"line {item.LineNum}: " +
+                                        $"{item.Get_time(station1, station2).Hours} hours and {item.Get_time(station1, station2).Hours} minutes");
+                                } 
                             }
                             else
                             {
@@ -198,7 +188,7 @@ namespace dotNet5781_02_1038_0685
                         }
                         catch (Exception msg)
                         {
-                            Console.WriteLine(msg);
+                            Console.WriteLine(msg.Message);
                             break;
                         }
 

@@ -62,7 +62,7 @@ namespace dotNet5781_02_1038_0685
             {
                 if (usedcodes.Exists((Station st) => st.StationCode == value))
                 {
-                    throw new ArgumentException("this code allready whas taken");
+                    throw new ArgumentException("this code has already been taken");
                 }
                 if (value < 0 || value > SIXDIGITS)
                 {
