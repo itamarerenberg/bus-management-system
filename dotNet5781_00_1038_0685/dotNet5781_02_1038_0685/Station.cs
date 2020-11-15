@@ -58,7 +58,7 @@ namespace dotNet5781_02_1038_0685
         public int StationCode
         {
             get => this.stationCode;
-            protected set
+            private set
             {
                 if (exists_stations.Exists((Station st) => st.StationCode == value))
                 {

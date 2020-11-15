@@ -33,9 +33,9 @@ namespace dotNet5781_02_1038_0685
                     Double distance = Rand_double(1, 60);
                     if (code != -1)
                     {
-                        return new LineStation(new Station(r.Next(999999), Rand_double(31, 33.3), Rand_double(34.3, 35.5)), distance, new TimeSpan(0, (int)distance, 0)); 
+                        return new LineStation(new Station(code, Rand_double(31, 33.3), Rand_double(34.3, 35.5)), distance, new TimeSpan(0, (int)distance, 0)); 
                     }
-                    return new LineStation(new Station(code, Rand_double(31, 33.3), Rand_double(34.3, 35.5)), distance, new TimeSpan(0, (int)distance, 0));
+                    return new LineStation(new Station(r.Next(999999), Rand_double(31, 33.3), Rand_double(34.3, 35.5)), distance, new TimeSpan(0, (int)distance, 0));
                 }
                 catch(ArgumentException)
                 {
@@ -57,9 +57,9 @@ namespace dotNet5781_02_1038_0685
             }
             if (line_num != -1)
             {
-                return new BusLine(++code, stations, ((Areas)code - 1)); 
+                return new BusLine(line_num, stations, ((Areas)code - 1)); 
             }
-            return new BusLine(line_num, stations, ((Areas)code - 1));
+            return new BusLine(++code, stations, ((Areas)code - 1));
         }
         /// <summary>
         /// generating a "Lines" from random values
