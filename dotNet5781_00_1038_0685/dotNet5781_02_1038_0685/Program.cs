@@ -122,6 +122,8 @@ namespace dotNet5781_02_1038_0685
                             Console.WriteLine("please enter a number");
                         }
                         lines.Remove_line(line_number);
+                        Console.WriteLine($"line {line_number} reemoved succesfuly");
+                        Console.ReadLine();
                         break;
                     #endregion
                     #region DELETE_STATION
@@ -150,6 +152,7 @@ namespace dotNet5781_02_1038_0685
                         }
 
                         bl.Remove_station(st_code);//the new distance between the stations befor and after this station will be by defult the same distance as before
+                        Console.WriteLine($"station {st_code} removed from line {line_number} succesfuly");
                         Console.ReadLine();
                         break;
                     #endregion
@@ -163,7 +166,7 @@ namespace dotNet5781_02_1038_0685
                         try
                         {
                             List<BusLine> lbl = Station.get_station(st_code).Pass_here;
-                            Console.WriteLine($"the lines which stops at station{st_code} are: ");
+                            Console.WriteLine($"the lines which stops at station {st_code} are: ");
                             foreach (var item in lbl)
                             {
                                 Console.Write(item.LineNum + ", ");
