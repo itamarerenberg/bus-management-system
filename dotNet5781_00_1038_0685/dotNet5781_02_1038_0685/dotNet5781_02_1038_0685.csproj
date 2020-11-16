@@ -46,8 +46,9 @@
     <Compile Include="BusLine.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Lines.cs" />
-    <Compile Include="myEnums.cs" />
+    <Compile Include="MyEnums.cs" />
     <Compile Include="LineStation.cs" />
+    <Compile Include="MyRand.cs" />
     <Compile Include="Station.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -11,18 +11,17 @@ namespace dotNet5781_02_1038_0685
     {
         public List<BusLine> Lines_list { get;  private set; }
 
+        #region constructors
         public Lines()
         {
             Lines_list = new List<BusLine>();
         }
-        /// <summary>
-        /// constract a new "lines" 
-        /// </summary>
-        /// <param name="lines">save the list as the data base of lines</param>
+
         public Lines(List<BusLine> lines)
         {
             Lines_list = new List<BusLine>(lines);
-        }
+        } 
+        #endregion
 
         /// <summary>
         /// add bl to the end of the container
@@ -131,7 +130,7 @@ namespace dotNet5781_02_1038_0685
             string output = "";
             foreach (BusLine item in Lines_list)
             {
-                output += item.ToString() + "\n";
+                output += $"{item} \n";
             }
             return output;
         }

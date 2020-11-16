@@ -33,7 +33,7 @@ namespace dotNet5781_02_1038_0685
             Station temp = exists_stations.Find((Station st) => st.StationCode == code);
             if (temp == null)
             {
-                throw new ArgumentException("this station do not exist");
+                throw new ArgumentException("this station does not exist");
             }
             return temp;
         }  
@@ -103,7 +103,7 @@ namespace dotNet5781_02_1038_0685
         protected string Address { get; set; }
         #endregion
 
-        
+        #region constructor
         public Station(int code, double latitude, double longitude, string address = "")
         {
             StationCode = code;
@@ -111,7 +111,9 @@ namespace dotNet5781_02_1038_0685
             Address = address;
             pass_here = new List<BusLine>();
         }
+        #endregion
 
+        #region methods
         public void Add_line(BusLine bl)
         {
             pass_here.Add(bl);
@@ -120,7 +122,8 @@ namespace dotNet5781_02_1038_0685
         public override string ToString()
         {
             return string.Format("Station code: {0}, {1}°N {2}°E", stationCode, loc.Latitude, loc.Longitude);
-        }
+        } 
+        #endregion
 
     }
 }

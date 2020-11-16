@@ -8,34 +8,30 @@ using System.Collections;
 namespace dotNet5781_02_1038_0685
 {
     public class BusLine : IComparable
-    { //fields
+    {
+        #region fields
         public int LineNum { get; private set; }
-        public LineStation FirstStation { get =>  Stations[0];  private set { Stations.Insert(0, value); } }
-        public LineStation LastStation { get =>  Stations[Stations.Count - 1]; private set { Stations[Stations.Count - 1] = value; } }
+        public LineStation FirstStation { get => Stations[0]; private set { Stations.Insert(0, value); } }
+        public LineStation LastStation { get => Stations[Stations.Count - 1]; private set { Stations[Stations.Count - 1] = value; } }
         public Areas Area { get; private set; }
-        public List<LineStation> Stations { get; private set; }
-    
-        //constructor
+        public List<LineStation> Stations { get; private set; } 
+        #endregion
+
+        #region constructor
         public BusLine(int lineNum, List<LineStation> stations, Areas area = Areas.General)
         {
             LineNum = lineNum;
+            Area = area;
             Stations = new List<LineStation>(stations);
             foreach (var item in stations)
             {
                 item.base_station.Add_line(this);
             }
         }
-        //methods
-        public override string ToString()
-        {
-            string output = string.Format("Line number : {0} \narea : {1} \nstations: " , LineNum, Area);
-            for (int i = 0; i < Stations.Count; i++)
-            {
-                output += string.Format("   {0} - {1}", i + 1, Stations[i].Code);
-            }
-            return output + "\n";
-        }
+        #endregion
 
+        #region methods
+       
         /// <summary>
         /// adding a station to the line in any place 
         /// </summary>
@@ -59,7 +55,7 @@ namespace dotNet5781_02_1038_0685
             }
             Stations.Add(station);
         }
-        
+
         /// <summary>
         /// removing a station from the line
         /// </summary>
@@ -86,7 +82,7 @@ namespace dotNet5781_02_1038_0685
         {
             foreach (LineStation item in Stations)
             {
-                if(item.Code == stationCode)
+                if (item.Code == stationCode)
                 {
                     return true;
                 }
@@ -153,7 +149,7 @@ namespace dotNet5781_02_1038_0685
         /// <param name="station1"></param>
         /// <param name="station2"></param>
         /// <returns>the ride time between the provided stations</returns>
-        public TimeSpan Get_time(int station1Code , int station2Code)
+        public TimeSpan Get_time(int station1Code, int station2Code)
         {
             int index1 = Stations.FindIndex(stl => stl.Code == station1Code);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
@@ -178,7 +174,7 @@ namespace dotNet5781_02_1038_0685
         /// <param name="station1"></param>
         /// <param name="station2"></param>
         /// <returns>new subline by the range between 2 provided stations</returns>
-        public BusLine Sub_line(LineStation station1 , LineStation station2)
+        public BusLine Sub_line(LineStation station1, LineStation station2)
         {
             int index1 = Stations.IndexOf(station1);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
@@ -199,9 +195,19 @@ namespace dotNet5781_02_1038_0685
             BusLine bl = obj as BusLine;
             if (bl == null)
             {
-                throw new InvalidCastException(string.Format($"you cannot compare type BusLine to type {bl.GetType()}"));
+                throw new InvalidCastException($"you cannot compare type BusLine to type {bl.GetType()}");
             }
-            return this.Get_time().CompareTo(bl.Get_time());
+            return this.Get_time().CompareTo(bl.Get_time()); 
         }
+        public override string ToString()
+        {
+            string output = $"Line number : {LineNum}\narea : {Area}\nstations: ";
+            for (int i = 0; i < Stations.Count; i++)
+            {
+                output += $"   {i + 1} - {Stations[i].Code,-6}";
+            }
+            return output + "\n";
+        }
+        #endregion
     }
 }

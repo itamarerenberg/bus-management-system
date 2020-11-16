@@ -10,7 +10,6 @@ namespace dotNet5781_02_1038_0685
     {
         public LineAlreadyExist(string massege) : base(massege){}
     }
-
     class NotExist : Exception
     {
         public NotExist(string massege) : base(massege){}
