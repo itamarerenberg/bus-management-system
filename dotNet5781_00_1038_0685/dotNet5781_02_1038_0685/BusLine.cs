@@ -14,7 +14,8 @@ namespace dotNet5781_02_1038_0685
         public LineStation FirstStation { get => Stations[0]; private set { Stations.Insert(0, value); } }
         public LineStation LastStation { get => Stations[Stations.Count - 1]; private set { Stations[Stations.Count - 1] = value; } }
         public Areas Area { get; private set; }
-        public List<LineStation> Stations { get; private set; } 
+        private List<LineStation> stations;
+        public List<LineStation> Stations{ get => this.stations.FindAll(ls => true); private set => this.stations = value; } 
         #endregion
 
         #region constructor
@@ -44,16 +45,16 @@ namespace dotNet5781_02_1038_0685
             {
                 for (int i = 0; i < Stations.Count; i++)
                 {
-                    if (Stations[i].Code == code)
+                    if (stations[i].Code == code)
                     {
-                        Stations[i].Distance = distance;
-                        Stations.Insert(i, station);
+                        stations[i].Distance = distance;
+                        stations.Insert(i, station);
                         return;
                     }
                 }
                 throw new KeyNotFoundException("error: the station code is not exist");
             }
-            Stations.Add(station);
+            stations.Add(station);
         }
 
         /// <summary>
@@ -63,14 +64,14 @@ namespace dotNet5781_02_1038_0685
         /// <param name="distance">fill the new distance after removing</param>
         public void Remove_station(int code, int distance = -1)
         {
-            int index = Stations.FindIndex(st => st.Code == code);
-            LineStation st1 = Stations[index];
-            if (index != Stations.Count - 1)
+            int index = stations.FindIndex(st => st.Code == code);
+            LineStation st1 = stations[index];
+            if (index != stations.Count - 1)
             {
-                LineStation st2 = Stations[index + 1];
+                LineStation st2 = stations[index + 1];
                 st2.Distance = distance == -1 ? st1.Distance + st2.Distance : distance;
             }
-            Stations.Remove(st1);
+            stations.Remove(st1);
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace dotNet5781_02_1038_0685
         /// <returns></returns>
         public bool Station_in_the_line(int stationCode)
         {
-            foreach (LineStation item in Stations)
+            foreach (LineStation item in stations)
             {
                 if (item.Code == stationCode)
                 {
@@ -98,7 +99,7 @@ namespace dotNet5781_02_1038_0685
         {
             if (Station_in_the_line(code))
             {
-                return this.Stations.Find(s => s.Code == code);
+                return this.stations.Find(s => s.Code == code);
             }
             else
             {
@@ -113,9 +114,9 @@ namespace dotNet5781_02_1038_0685
         /// <returns>the distance between the provided stations</returns>
         public double Get_distance(LineStation station1, LineStation station2)
         {
-            int index1 = Stations.IndexOf(station1);
+            int index1 = stations.IndexOf(station1);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
-            int index2 = Stations.IndexOf(station2);
+            int index2 = stations.IndexOf(station2);
             if (index2 == -1) { throw new KeyNotFoundException("error: the station 2 is not exist!"); }
             if (index1 > index2)//swap func
             {
@@ -126,7 +127,7 @@ namespace dotNet5781_02_1038_0685
             double sum = 0;
             for (int i = index1 + 1; i <= index2; i++)
             {
-                sum += Stations[i].Distance;
+                sum += stations[i].Distance;
             }
             return sum;
         }
@@ -137,9 +138,9 @@ namespace dotNet5781_02_1038_0685
         public TimeSpan Get_time()
         {
             TimeSpan sum = new TimeSpan();
-            for (int i = 0 + 1; i <= Stations.Count; i++)
+            for (int i = 0 + 1; i <= stations.Count; i++)
             {
-                sum += Stations[i].RideTime;
+                sum += stations[i].RideTime;
             }
             return sum;
         }
@@ -151,9 +152,9 @@ namespace dotNet5781_02_1038_0685
         /// <returns>the ride time between the provided stations</returns>
         public TimeSpan Get_time(int station1Code, int station2Code)
         {
-            int index1 = Stations.FindIndex(stl => stl.Code == station1Code);
+            int index1 = stations.FindIndex(stl => stl.Code == station1Code);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
-            int index2 = Stations.FindIndex(stl => stl.Code == station2Code);
+            int index2 = stations.FindIndex(stl => stl.Code == station2Code);
             if (index2 == -1) { throw new KeyNotFoundException("error: the station 2 is not exist!"); }
             if (index1 > index2)//swap func
             {
@@ -164,7 +165,7 @@ namespace dotNet5781_02_1038_0685
             TimeSpan sum = new TimeSpan();
             for (int i = index1 + 1; i <= index2; i++)
             {
-                sum += Stations[i].RideTime;
+                sum += stations[i].RideTime;
             }
             return sum;
         }
@@ -176,9 +177,9 @@ namespace dotNet5781_02_1038_0685
         /// <returns>new subline by the range between 2 provided stations</returns>
         public BusLine Sub_line(LineStation station1, LineStation station2)
         {
-            int index1 = Stations.IndexOf(station1);
+            int index1 = stations.IndexOf(station1);
             if (index1 == -1) { throw new KeyNotFoundException("error: the station 1 is not exist!"); }
-            int index2 = Stations.IndexOf(station2);
+            int index2 = stations.IndexOf(station2);
             if (index2 == -1) { throw new KeyNotFoundException("error: the station 2 is not exist!"); }
             if (index1 > index2)//swap func
             {
@@ -186,7 +187,7 @@ namespace dotNet5781_02_1038_0685
                 index2 = index1 - index2;
                 index1 -= index2;
             }
-            List<LineStation> subList = Stations.GetRange(index1, index2 - index1 + 1);
+            List<LineStation> subList = stations.GetRange(index1, index2 - index1 + 1);
 
             return new BusLine(0, subList, this.Area);
         }
@@ -202,9 +203,9 @@ namespace dotNet5781_02_1038_0685
         public override string ToString()
         {
             string output = $"Line number : {LineNum}\narea : {Area}\nstations: ";
-            for (int i = 0; i < Stations.Count; i++)
+            for (int i = 0; i < stations.Count; i++)
             {
-                output += $"   {i + 1} - {Stations[i].Code,-6}";
+                output += $"   {i + 1} - {stations[i].Code,-6}";
             }
             return output + "\n";
         }

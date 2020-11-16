@@ -78,7 +78,7 @@ namespace dotNet5781_02_1038_0685
 
         public List<BusLine> Pass_here
         {
-            get => this.pass_here;
+            get => this.pass_here.FindAll(l => true);
             set => pass_here = value;
         }
 

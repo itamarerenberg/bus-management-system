@@ -9,7 +9,8 @@ namespace dotNet5781_02_1038_0685
 {
     class Lines : IEnumerable<BusLine>
     {
-        public List<BusLine> Lines_list { get;  private set; }
+        private List<BusLine> lines_list; 
+        public List<BusLine> Lines_list { get => this.lines_list.FindAll(bl => true); private set => this.lines_list = value; }
 
         #region constructors
         public Lines()
@@ -30,7 +31,7 @@ namespace dotNet5781_02_1038_0685
         public void Add_line(BusLine new_line)
         {
             int count = 0;
-            foreach(BusLine item in Lines_list)
+            foreach(BusLine item in lines_list)
             {
                 if (item.LineNum == new_line.LineNum)
                 {
@@ -41,12 +42,12 @@ namespace dotNet5781_02_1038_0685
                     count++;
                 }
             }
-            Lines_list.Add(new_line);
+            lines_list.Add(new_line);
         }
 
         public void Remove_line(int line_num)
         {
-            Lines_list.RemoveAll(bl => bl.LineNum == line_num);
+            lines_list.RemoveAll(bl => bl.LineNum == line_num);
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace dotNet5781_02_1038_0685
         public List<BusLine> Which_stops_at(int stCode)
         {
             List<BusLine> desired_lines = new List<BusLine>();
-            foreach(BusLine item in Lines_list)
+            foreach(BusLine item in lines_list)
             {
                 if(item.Station_in_the_line(stCode))
                 {
@@ -80,7 +81,7 @@ namespace dotNet5781_02_1038_0685
         public List<BusLine> Which_stops_at(int stCode1, int stCode2)
         {
             List<BusLine> desired_lines = new List<BusLine>();
-            foreach (BusLine item in Lines_list)
+            foreach (BusLine item in lines_list)
             {
                 if (item.Station_in_the_line(stCode1) && item.Station_in_the_line(stCode2))
                 {
@@ -99,7 +100,7 @@ namespace dotNet5781_02_1038_0685
         /// <returns>a list of all the lines sorted according to the ride time of the line</returns>
         public List<BusLine> Sorted_list()
         {
-            Lines_list.Sort();
+            lines_list.Sort();
             return Lines_list;
         }
 
@@ -112,7 +113,7 @@ namespace dotNet5781_02_1038_0685
                 {
                     throw new NotExist("the line is not exist");
                 }
-                return Lines_list[index];
+                return lines_list[index];
             }
         }
 
@@ -128,7 +129,7 @@ namespace dotNet5781_02_1038_0685
         public override string ToString()
         {
             string output = "";
-            foreach (BusLine item in Lines_list)
+            foreach (BusLine item in lines_list)
             {
                 output += $"{item} \n";
             }
