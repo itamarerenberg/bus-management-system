@@ -24,5 +24,10 @@ namespace dotNet5781_03a_1038_0685
         {
             InitializeComponent();
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
