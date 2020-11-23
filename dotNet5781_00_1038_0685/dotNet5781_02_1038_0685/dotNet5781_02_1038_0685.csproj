@@ -49,7 +49,7 @@
     <Compile Include="MyEnums.cs" />
     <Compile Include="LineStation.cs" />
     <Compile Include="MyRand.cs" />
-    <Compile Include="Point.cs" />
+    <Compile Include="LocPoint.cs" />
     <Compile Include="Station.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

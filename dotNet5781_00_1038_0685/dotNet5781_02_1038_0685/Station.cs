@@ -69,8 +69,8 @@ namespace dotNet5781_02_1038_0685
         }
 
 
-        private Point loc;
-        protected Point Loc
+        private LocPoint loc;
+        public LocPoint Loc
         {
             get => loc;
             set
@@ -93,7 +93,7 @@ namespace dotNet5781_02_1038_0685
         public Station(int code, double latitude, double longitude, string address = "")
         {
             StationCode = code;
-            Loc = new Point { Latitude = latitude, Longitude = longitude };//*Point is astruct
+            Loc = new LocPoint { Latitude = latitude, Longitude = longitude };//*LocPoint is astruct
             Address = address;
             pass_here = new List<BusLine>();
         }

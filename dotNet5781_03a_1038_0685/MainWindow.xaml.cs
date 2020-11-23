@@ -51,7 +51,18 @@ namespace dotNet5781_03a_1038_0685
         {
             currentDisplayBusLine = lines[index];
             UpGrid.DataContext = currentDisplayBusLine;
-            lbBusLineStations.DataContext = currentDisplayBusLine.Stations;
+            List<int> stsCode = new List<int>();
+            currentDisplayBusLine.Stations.ForEach(st => stsCode.Add(st.Code));
+            lbStationsCode.DataContext = stsCode;
+
+            List<LocPoint> stsLoc = new List<LocPoint>();
+            currentDisplayBusLine.Stations.ForEach(st => stsLoc.Add(st.base_station.Loc));
+            lbLoc.DataContext = stsLoc;
+
+            List<TimeSpan> stsRD = new List<TimeSpan>();
+            currentDisplayBusLine.Stations.ForEach(st => stsRD.Add(st.RideTime));
+            lbRideTime.DataContext = stsRD;
+
         }
     }
 }
