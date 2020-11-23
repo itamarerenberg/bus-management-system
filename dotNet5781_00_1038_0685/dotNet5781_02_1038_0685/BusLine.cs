@@ -13,7 +13,7 @@ namespace dotNet5781_02_1038_0685
         public int LineNum { get; private set; }
         public LineStation FirstStation { get => Stations[0]; private set { Stations.Insert(0, value); } }
         public LineStation LastStation { get => Stations[Stations.Count - 1]; private set { Stations[Stations.Count - 1] = value; } }
-        public Areas Area { get; private set; }
+        public Areas Area { get; set; }
         private List<LineStation> stations;
         public List<LineStation> Stations{ get => this.stations.FindAll(ls => true); private set => this.stations = value; } 
         #endregion

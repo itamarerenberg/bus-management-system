@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_1038_0685
 {
-    class Lines : IEnumerable<BusLine>
+    public class Lines : IEnumerable<BusLine>
     {
         private List<BusLine> lines_list; 
         public List<BusLine> Lines_list { get => this.lines_list.FindAll(bl => true); private set => this.lines_list = value; }

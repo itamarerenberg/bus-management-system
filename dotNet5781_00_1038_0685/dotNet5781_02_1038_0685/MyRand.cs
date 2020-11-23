@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_1038_0685
 {
-    static class MyRand
+    public static class MyRand
     {
         private static readonly Random r = new Random(DateTime.Now.Millisecond);
 

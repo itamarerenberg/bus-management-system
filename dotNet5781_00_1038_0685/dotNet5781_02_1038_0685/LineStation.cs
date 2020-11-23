@@ -23,5 +23,9 @@ namespace dotNet5781_02_1038_0685
             RideTime = rideTime;
             base_station = station;
         }
+        public override string ToString()
+        {
+            return base_station.ToString() + RideTime;
+        }
     }
 }

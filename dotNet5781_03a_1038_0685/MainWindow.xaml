@@ -6,22 +6,23 @@
         xmlns:local="clr-namespace:dotNet5781_03a_1038_0685"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Name="MainGrid">
-        <Grid Name="upGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Width="auto">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="9*"/>
-            </Grid.RowDefinitions >
+    <Grid Name="MainGrid" HorizontalAlignment="Right" Margin="0,0,-0.4,0" Width="794">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="31*"/>
+        </Grid.RowDefinitions>
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions >
-            <TextBox Grid.Column="0" HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" Text="Bus line number:" VerticalAlignment="Stretch"  Width="199" Grid.ColumnSpan="2" FontSize="20" Margin="0,0,198.333,0"/>
-            <ComboBox x:Name = "CbBusLine" HorizontalAlignment="Stretch" Margin="198,0,0.8,0.4" VerticalAlignment="Stretch" Grid.ColumnSpan="2"/>
-            <TextBox x:Name="Area" Grid.Column="2" HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" Text="Area" VerticalAlignment="Stretch" Width="198" TextChanged="TextBox_TextChanged" FontSize="20"/>
-            <TextBox Grid.Column="3" HorizontalAlignment="Stretch" Height="42"  TextWrapping="Wrap" Text="{Binding Path= Area}" VerticalAlignment="Stretch" Width="199" Grid.ColumnSpan="2" FontSize="20"/>
+            <TextBox Grid.Column="0" HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" Text="Bus line number:" VerticalAlignment="Stretch"  Width="199" Grid.ColumnSpan="2" FontSize="20" Margin="0,0,198.333,0" TextAlignment="Center"/>
+            <ComboBox x:Name = "cbBusLines" HorizontalAlignment="Stretch" Margin="198,0,0.8,0.4" VerticalAlignment="Stretch" Grid.ColumnSpan="2" SelectionChanged="cbBusLines_SelectionChanged" FontSize="20"/>
+            <TextBox x:Name="Area" Grid.Column="2" HorizontalAlignment="Stretch" Height="42" TextWrapping="Wrap" Text="Area" VerticalAlignment="Stretch" Width="198" TextChanged="TextBox_TextChanged" FontSize="20" TextAlignment="Center"/>
+            <TextBox Grid.Column="3" HorizontalAlignment="Stretch" Height="42"  TextWrapping="Wrap" Text="{Binding Path = Area}" VerticalAlignment="Stretch" Width="199" Grid.ColumnSpan="2" FontSize="20" TextAlignment="Center"/>
         </Grid>
+        <ListBox x:Name="lbBusLineStations" HorizontalAlignment="Left" Height="260" Margin="73,53,0,0" Grid.Row="1" VerticalAlignment="Top" Width="615" ItemsSource="{Binding}"/>
     </Grid>
 </Window>

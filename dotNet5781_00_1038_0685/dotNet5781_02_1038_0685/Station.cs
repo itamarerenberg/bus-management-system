@@ -107,7 +107,7 @@ namespace dotNet5781_02_1038_0685
 
         public override string ToString()
         {
-            return string.Format("Station code: {0}, {1}°N {2}°E", stationCode, loc.Latitude, loc.Longitude);
+            return $"Station code: {stationCode,-10}{loc.Latitude + "°N",-23}{loc.Longitude + "°E",-23}";
         } 
         #endregion
 
