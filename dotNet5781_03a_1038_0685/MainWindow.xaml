@@ -15,14 +15,15 @@
             <RowDefinition Height="4*"/>
             <RowDefinition Height="31*"/>
         </Grid.RowDefinitions>
-        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Width="auto">
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Width="auto" Background="White">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions >
-            <TextBox Grid.Column="0" HorizontalAlignment="Stretch" Text="Bus line number:" VerticalAlignment="Stretch" Grid.ColumnSpan="2" FontSize="20" TextAlignment="Left"/>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Stretch" Text="Bus line number:" VerticalAlignment="Stretch" Grid.ColumnSpan="2" FontSize="20" TextAlignment="Left" Background="White"/>
             <ComboBox x:Name = "cbBusLines" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Grid.ColumnSpan="1" SelectionChanged="cbBusLines_SelectionChanged" FontSize="20" Grid.Column="1">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
@@ -32,8 +33,8 @@
                     </LinearGradientBrush>
                 </ComboBox.Background>
             </ComboBox>
-            <TextBox x:Name="Area" Grid.Column="2" HorizontalAlignment="Stretch" Text="Area" VerticalAlignment="Stretch" TextChanged="TextBox_TextChanged" FontSize="20" TextAlignment="Center" Background="#FFFFFEFE"/>
-            <TextBox Grid.Column="3" HorizontalAlignment="Stretch"  TextWrapping="Wrap" Text="{Binding Path = Area}" VerticalAlignment="Stretch" Grid.ColumnSpan="1" FontSize="20" TextAlignment="Center"/>
+            <TextBlock x:Name="Area" Grid.Column="3" HorizontalAlignment="Stretch" Text="Area: " VerticalAlignment="Stretch" FontSize="20" Background="#FFFFFEFE" TextAlignment="Right"/>
+            <TextBlock Grid.Column="4" HorizontalAlignment="Stretch"  TextWrapping="Wrap" Text="{Binding Path = Area}" VerticalAlignment="Stretch" Grid.ColumnSpan="1" FontSize="20" TextAlignment="Center" Background="White"/>
         </Grid>
         <Canvas x:Name="midle" Grid.Row="1">
             <Canvas.Background>
