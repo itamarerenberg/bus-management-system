@@ -43,7 +43,7 @@ namespace dotNet5781_01_1038_0685
                 }
                 switch (choice)
                 {
-                case MyEnum.NEW_BUS:
+                    case MyEnum.NEW_BUS:
                         Console.WriteLine("enter bus licens's num: ");
                         licensNum = Console.ReadLine();
                         Console.WriteLine("enter start service date(yy:mm:dd): ");
@@ -57,8 +57,8 @@ namespace dotNet5781_01_1038_0685
                         bus_Company.Add_new_bus(licensNum, startDate);
 
                         Console.WriteLine("Done!");
-                    break;
-                case MyEnum.RIDE:
+                        break;
+                    case MyEnum.RIDE:
                         Console.WriteLine("enter bus licens's num: ");
                         licensNum = Console.ReadLine();
 
@@ -83,7 +83,7 @@ namespace dotNet5781_01_1038_0685
                         }
 
                         break;
-                case MyEnum.MAINTENANCE:
+                    case MyEnum.MAINTENANCE:
                         Console.WriteLine("enter bus licens's num: ");
                         licensNum = Console.ReadLine();
 
