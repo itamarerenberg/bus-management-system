@@ -9,112 +9,81 @@ namespace dotNet5781_01_1038_0685
 {
     class Bus_company
     {
-        List<Bus> busList;
-        public Bus_company(Bus[] b_arr)
+        #region fildes end propertys
+
+        private List<Bus> buss;
+        public List<Bus> Buss { get => this.buss.FindAll(b => true); private set { this.buss = value; } }
+
+        //indexer//
+        /// <returns>bus with the LicensNum == _licensNum</returns>
+        /// <exception cref="buss not exist">if ther is no buss with (LicensNum == _licensNum)</exception>
+        public Bus this[string _licensNum]
         {
-            busList = new List<Bus>(b_arr);
+            get
+            {
+                if (!buss.Exists(b => b.LicensNum == _licensNum))
+                {
+                    throw new ArgumentException("buss not exist");
+                }
+
+                return buss.Find(b => b.LicensNum == _licensNum);
+            }
         }
+
+        #endregion
+
+        #region constractors
+
+        /// <summary>
+        /// initialize Bus_compeny with _buss as its "Bus"'s colection
+        /// </summary>
+        /// <param name="_buss">the list of the buss in the new Bus_compeny</param>
+        public Bus_company(List<Bus> _buss)
+        {
+            this.buss = _buss;
+        }
+
+        /// <summary>
+        /// initialize Bus_compeny with empty colection of "Bus"s
+        /// </summary>
         public Bus_company()
         {
-            busList = new List<Bus>(0);
+            this.buss = new List<Bus>();
         }
 
-        Bus find_bus(string id)
+        #endregion
+
+        #region methods
+
+        /// <summary>
+        /// create a new "Bus" with {LicensNum = _licensNum, StartDate = _startDate, Km = _km, General_km = _general_km, LastTretDate = _lastTretDate}
+        /// and add it to the bus's colection
+        /// </summary>
+        /// <param name="_licensNum"></param>
+        /// <param name="_startDate"></param>
+        /// <param name="_km">(defult = 0)</param>
+        /// <param name="_general_km">(defult = 0)</param>
+        /// <param name="_lastTretDate">(defult = new DateTime())</param>
+        public void Add_new_bus(string _licensNum, DateTime _startDate, double _km = 0, double _general_km = 0, double _fule_in_km = 1200, DateTime _lastTretDate = new DateTime())
         {
-            Bus temp_bus;
-            for (int i = 0; i < busList.Count; i++)
-            {
-                temp_bus = busList[i];
-                if (temp_bus.Id == id)
-                {
-                    return temp_bus;
-                }
-            }
-            return null;
+            buss.Add(new Bus(_licensNum, _startDate, _km, _general_km, _fule_in_km, _lastTretDate));
         }
-        public bool NewBus(string id, DateTime start, DateTime lastTreat = new DateTime(), int fuel = 1200, int km = 0)
+
+        /// <summary>
+        /// add "_new_bus" to the bus's colection
+        /// </summary>
+        public void Add_new_bus(Bus _new_bus)
         {
-
-            if(find_bus(id) != null)//check if the bus allredy exist and return false if so
-            {
-                return false;
-            }
-
-            if(start.Year >= 2018)//check if the id fit the manifactur year and return false if not
-            {
-                if(id.Length != 8)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if(id.Length != 7)
-                {
-                    return false;
-                }
-            }
-
-            busList.Add(new Bus(id, start, km, fuel));//add the new bus
-            return true;
+            buss.Add(_new_bus);
         }
 
-        public bool Ride(string id, int km)
+        public override string ToString()
         {
-            for(int i = 0; i < busList.Count; i++)
-            {
-                Bus temp_bus = busList[i];
-                if(temp_bus.Id == id)
-                {
-                    return temp_bus.Ride(km);
-                }
-            }
-            return false;
+            string str = "";
+            buss.ForEach(b => str += b.ToString() + '\n');
+            return str;
         }
 
-        public bool Maintenance(string id, bool maintenance_kind)//maintenance_kind: true - refeul, false - treat
-        {
-            Bus temp_bus;
-            for (int i = 0; i < busList.Count; i++)
-            {
-                temp_bus = busList[i];
-                if (temp_bus.Id == id)
-                {
-                    if(maintenance_kind)
-                    {
-                        temp_bus.Refuel();
-                    }
-                    else
-                    {
-                        temp_bus.Treatment();
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private void help_func(Bus bus)
-        {
-            //print the id in format xx-xxx-xx or xxx-xx-xxx
-            string id = bus.Id;
-            if(id.Length == 8)
-            {
-                id = id.Insert(5, "-");
-                id = id.Insert(3, "-");
-            }
-            else
-            {
-                id = id.Insert(5, "-");
-                id = id.Insert(2, "-");
-            }
-            Console.WriteLine("bus: {0} km: {1}", id, bus.Km);
-        }
-
-        public void print_stat()
-        {
-                busList.ForEach(help_func);
-        }
-
+        #endregion
     }
 }

@@ -12,20 +12,24 @@ namespace dotNet5781_01_1038_0685
     {
         #region fildes end properteys
 
-        private int licensNum;/*filde*/
+        private string licensNum;/*filde*/
         readonly DateTime StartDate;/*filde*/
         public double Fule_in_km { get; private set; }/*property*/
         public double General_km { get; private set; }/*property*/
         public double Km { get; private set; }/*property*/
         public DateTime lastTretDate { get; private set; }/*property*/
-        public int LicensNum/*property*/
-        { 
+        public string LicensNum/*property*/
+        {
             get => this.licensNum;
-            set 
+            set
             {
-                if(this.StartDate >= new DateTime(2018,0,0))//if the StartTime is after or equals 1/1/2018 then confirm that the number length is 8
+                if(!int.TryParse(value, out int a))//confirm that all carecters in value is digites
                 {
-                    if(licensNum.ToString().Length != 8)
+                    throw new ArgumentException("licensNum must contin only digites");
+                }
+                if (this.StartDate >= new DateTime(2018, 0, 0))//if the StartTime is after or equals 1/1/2018 then confirm that the number length is 8
+                {
+                    if (licensNum.Length != 8)
                     {
                         throw new ArgumentException("the length of the licen's num must be suitible to the year of the bus");
                     }
@@ -46,12 +50,13 @@ namespace dotNet5781_01_1038_0685
 
         #region constractor
 
-        public Bus(int _licensNum, DateTime _startDate, int _km = 0, int _general_km = 0, DateTime _lastTretDate = new DateTime())
+        public Bus(string _licensNum, DateTime _startDate, double _km = 0, double _general_km = 0, double _fule_in_km = 1200, DateTime _lastTretDate = new DateTime())
         {
             this.licensNum = _licensNum;
             this.StartDate = _startDate;
             this.Km = _km;
             this.General_km = _general_km;
+            this.Fule_in_km = _fule_in_km;
             this.lastTretDate = _lastTretDate;
         }
 
@@ -59,22 +64,22 @@ namespace dotNet5781_01_1038_0685
 
         #region methods
 
-        public bool ride(int km)
+        public bool ride(double km)
         {
             //check if the last treatment was less then one year
-            if(DateTime.Now - lastTretDate > new TimeSpan(365,0,0,0))
+            if (DateTime.Now - lastTretDate > new TimeSpan(365, 0, 0, 0))
             {
                 return false;
             }
 
             //check if this ride will cose to pass the 20,000km from last treatment
-            if(Km + km > 20000)
+            if (Km + km > 20000)
             {
                 return false;
             }
 
             //check if ther is enough fule for the ride
-            if(Fule_in_km < km)
+            if (Fule_in_km < km)
             {
                 return false;
             }
@@ -87,7 +92,7 @@ namespace dotNet5781_01_1038_0685
             return true;
         }
 
-        public void refule(int fule_in_km = 1200)
+        public void refule(double fule_in_km = 1200)
         {
             Fule_in_km += fule_in_km;
         }
