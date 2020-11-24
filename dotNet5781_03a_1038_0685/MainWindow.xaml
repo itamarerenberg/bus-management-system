@@ -6,8 +6,12 @@
         xmlns:local="clr-namespace:dotNet5781_03a_1038_0685"
         mc:Ignorable="d"
         Title="bus's lines" Height="450" Width="800" WindowStyle="ThreeDBorderWindow" Icon="bus-stop-emoji.png">
+    <Window.Background>
+        <ImageBrush/>
+    </Window.Background>
     <Grid Name="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Width="auto">
         <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="31*"/>
         </Grid.RowDefinitions>
@@ -19,11 +23,27 @@
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions >
             <TextBox Grid.Column="0" HorizontalAlignment="Stretch" Text="Bus line number:" VerticalAlignment="Stretch" Grid.ColumnSpan="2" FontSize="20" TextAlignment="Left"/>
-            <ComboBox x:Name = "cbBusLines" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Grid.ColumnSpan="1" SelectionChanged="cbBusLines_SelectionChanged" FontSize="20" Grid.Column="1"/>
-            <TextBox x:Name="Area" Grid.Column="2" HorizontalAlignment="Stretch" Text="Area" VerticalAlignment="Stretch" TextChanged="TextBox_TextChanged" FontSize="20" TextAlignment="Center"/>
+            <ComboBox x:Name = "cbBusLines" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Grid.ColumnSpan="1" SelectionChanged="cbBusLines_SelectionChanged" FontSize="20" Grid.Column="1">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FF080101" Offset="1"/>
+                        <GradientStop Color="#FF9A1B1B" Offset="0.959"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+            </ComboBox>
+            <TextBox x:Name="Area" Grid.Column="2" HorizontalAlignment="Stretch" Text="Area" VerticalAlignment="Stretch" TextChanged="TextBox_TextChanged" FontSize="20" TextAlignment="Center" Background="#FFFFFEFE"/>
             <TextBox Grid.Column="3" HorizontalAlignment="Stretch"  TextWrapping="Wrap" Text="{Binding Path = Area}" VerticalAlignment="Stretch" Grid.ColumnSpan="1" FontSize="20" TextAlignment="Center"/>
         </Grid>
-        <Grid x:Name="downGrid" Grid.Row="1">
+        <Canvas x:Name="midle" Grid.Row="1">
+            <Canvas.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FF1D1DC7" Offset="1"/>
+                </LinearGradientBrush>
+            </Canvas.Background>
+        </Canvas>
+        <Grid x:Name="downGrid" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10*"/>
                 <ColumnDefinition Width="20*"/>
@@ -36,10 +56,10 @@
             <TextBox Grid.Column="0" Grid.Row="0" Text="station cote"/>
             <TextBox Grid.Column="1" Grid.Row="0" Text="location"/>
             <TextBox Grid.Column="2" Grid.Row="0" Text="Ride Time"/>
-            
-            <ListBox x:Name="lbStationsCode" Grid.Row="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="1" VerticalAlignment="Stretch" ItemsSource="{Binding}"/>
-            <ListBox x:Name="lbLoc" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="1" VerticalAlignment="Stretch" ItemsSource="{Binding}"/>
-            <ListBox x:Name="lbRideTime" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="1" VerticalAlignment="Stretch" ItemsSource="{Binding}"/>
+
+            <ListBox x:Name="lbStationsCode" Grid.Row="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="1" VerticalAlignment="Stretch" ItemsSource="{Binding}" Background="#FF96AC98"/>
+            <ListBox x:Name="lbLoc" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="1" VerticalAlignment="Stretch" ItemsSource="{Binding}" Background="#FF96AC98"/>
+            <ListBox x:Name="lbRideTime" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="1" VerticalAlignment="Stretch" ItemsSource="{Binding}" Background="#FF96AC98"/>
         </Grid>
     </Grid>
 </Window>
