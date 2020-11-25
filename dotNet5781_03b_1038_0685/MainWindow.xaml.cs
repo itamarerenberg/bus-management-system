@@ -20,9 +20,13 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class MainWindow : Window
     {
+       public List<Bus> Buses;
+
         public MainWindow()
         {
             InitializeComponent();
+            Buses = RandBus.ListRB(10);
+            TestGrid.ItemsSource = Buses;
         }
     }
 }
