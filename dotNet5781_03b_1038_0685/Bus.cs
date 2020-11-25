@@ -15,7 +15,8 @@ namespace dotNet5781_03b_1038_0685
 
         private string licensNum="";/*filde*/
         private string licensNumForm="";/*filde*/
-        readonly DateTime StartDate;/*filde*/
+        readonly DateTime startDate;/*filde*/
+        public DateTime StartDate { get => startDate; }
         public StatEnum Status {get;set;}
         public double Fule_in_km { get; private set; }/*property*/
         public double SumKm { get; private set; }/*property*/
@@ -31,12 +32,12 @@ namespace dotNet5781_03b_1038_0685
                     throw new ArgumentException("licensNum must contain only digites");
                 }
 
-                if (this.StartDate >= new DateTime(2018, 1, 1) && value.Length != 8)//if the StartTime is after or equals 1/1/2018 and the number length is not 8
+                if (this.startDate >= new DateTime(2018, 1, 1) && value.Length != 8)//if the StartTime is after or equals 1/1/2018 and the number length is not 8
                 {
                     throw new ArgumentException("the length of the licen's num must be suitible to the year of the bus");
                 }
 
-                if (this.StartDate < new DateTime(2018, 1, 1) && value.Length != 7)//if the StartTime is before 1/1/2018 and the number length is not 7
+                if (this.startDate < new DateTime(2018, 1, 1) && value.Length != 7)//if the StartTime is before 1/1/2018 and the number length is not 7
                 {
                     throw new ArgumentException("the length of the licen's num must be suitible to the year of the bus");
                 }
@@ -72,7 +73,7 @@ namespace dotNet5781_03b_1038_0685
 
         public Bus(string _licensNum, DateTime _startDate, double kmAfterTreat = 0, double sumKm = 0, double _fule_in_km = 1200, DateTime _lastTretDate = new DateTime(), StatEnum status = 0)
         {
-            this.StartDate = _startDate;
+            this.startDate = _startDate;
             this.LicensNum = _licensNum;
             this.KmAfterTreat = kmAfterTreat;
             this.SumKm = sumKm;

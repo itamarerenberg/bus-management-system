@@ -25,7 +25,7 @@ namespace dotNet5781_03b_1038_0685
         public MainWindow()
         {
             InitializeComponent();
-            Buses = RandBus.ListRB(10);
+            Buses = RandBus.ListRB(20);
             TestGrid.ItemsSource = Buses;
         }
     }
