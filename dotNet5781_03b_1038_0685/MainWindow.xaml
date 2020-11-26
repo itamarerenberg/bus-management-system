@@ -5,9 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dotNet5781_03b_1038_0685"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" >
     <Grid>
-        <DataGrid x:Name="TestGrid" HorizontalAlignment="Left" Height="330" Margin="43,57,0,0" VerticalAlignment="Top" Width="683"/>
+        <DataGrid x:Name="TestGrid" HorizontalAlignment="Left"  Margin="40,40,100,100" VerticalAlignment="Top" AutoGeneratingColumn="TestGrid_AutoGeneratingColumn" >
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="set a ride" x:Name="SetARideButton" Click="SetARideButton_Click" >
 
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="Add_Bus" Content="Button" HorizontalAlignment="Left" Height="60" Margin="661,53,0,0" VerticalAlignment="Top" Width="99" Click="Button_Click"/>
     </Grid>
 </Window>

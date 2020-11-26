@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,13 +21,29 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class MainWindow : Window
     {
-       public List<Bus> Buses;
-
+        public static List<Bus> Buses { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             Buses = RandBus.ListRB(20);
             TestGrid.ItemsSource = Buses;
+        }
+
+        private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
+        }
+
+        private void SetARideButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(sender.ToString());
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Window addBusWindow = new AddBusWindow();
+            addBusWindow.Show();
+
         }
     }
 }
