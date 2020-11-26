@@ -7,14 +7,24 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" >
     <Grid>
-        <DataGrid x:Name="TestGrid" HorizontalAlignment="Left"  Margin="40,40,100,100" VerticalAlignment="Top" AutoGeneratingColumn="TestGrid_AutoGeneratingColumn" >
+        <DataGrid x:Name="TestGrid" HorizontalAlignment="Left" Margin="40,40,100,100" VerticalAlignment="Top" AutoGeneratingColumn="TestGrid_AutoGeneratingColumn" IsReadOnly="True">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <EventSetter Event="MouseDoubleClick" Handler="RowDoubleClick"/>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="set a ride" x:Name="SetARideButton" Click="SetARideButton_Click" >
-
-                            </Button>
+                            <Button Content="set a ride" x:Name="SetARideButton" Click="SetARideButton_Click" ></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="fuel" x:Name="FuelButton" Click="FuelButton_Click" ></Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

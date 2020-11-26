@@ -58,7 +58,7 @@ namespace dotNet5781_03b_1038_0685
         [DisplayName("km after treatment")]
         public double KmAfterTreat { get; set; }
         [DisplayName("Last treatment Date")]
-        public DateTime LastTreatDate { get; set; }
+        public DateTime LastTreatDate { get;  set; } 
 
         #endregion
 

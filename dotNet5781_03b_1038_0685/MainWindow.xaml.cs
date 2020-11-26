@@ -25,7 +25,7 @@ namespace dotNet5781_03b_1038_0685
         public MainWindow()
         {
             InitializeComponent();
-            Buses = RandBus.ListRB(20);
+            Buses = RandBus.ListRB(10);
             TestGrid.ItemsSource = Buses;
         }
 
@@ -42,8 +42,20 @@ namespace dotNet5781_03b_1038_0685
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Window addBusWindow = new AddBusWindow();
-            addBusWindow.Show();
+            addBusWindow.ShowDialog();
+            TestGrid.Items.Refresh();
+        }
+
+        private void FuelButton_Click(object sender, RoutedEventArgs e)
+        {
 
         }
+
+        private void RowDoubleClick(object sender, RoutedEventArgs e)
+        {
+            var row = (DataGridRow)sender;
+            MessageBox.Show(Buses[row.GetIndex()].LicensNum);
+        }
+
     }
 }

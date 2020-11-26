@@ -23,8 +23,8 @@ namespace dotNet5781_03b_1038_0685
         public AddBusWindow()
         {
             InitializeComponent();
-            this.statComboBox.ItemsSource = Enum.GetValues(typeof(StatEnum));
             bus = new Bus();
+            this.statComboBox.ItemsSource = Enum.GetValues(typeof(StatEnum));
             this.DataContext = bus;
         }
 
@@ -43,22 +43,16 @@ namespace dotNet5781_03b_1038_0685
                 //sumKmTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
                 //kmAfterTreatTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
                 //fule_in_kmTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                bus = new Bus(licensNumTextBox.Text, startDateDatePicker.DisplayDate, double.Parse(kmAfterTreatTextBox.Text)
+                , double.Parse(sumKmTextBox.Text), double.Parse(fule_in_kmTextBox.Text), lastTreatDateDatePicker.DisplayDate,
+                (StatEnum)statComboBox.SelectedItem);
                 MainWindow.Buses.Add(bus);
-                bus = new Bus();
-                this.DataContext = bus;
             } 
             catch (Exception ex)
             { 
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void Window_Loaded_1(object sender, RoutedEventArgs e)
-        {
-
-            System.Windows.Data.CollectionViewSource busViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("busViewSource")));
-            // Load data by setting the CollectionViewSource.Source property:
-            // busViewSource.Source = [generic data source]
+            this.Close();
         }
     }
 }
