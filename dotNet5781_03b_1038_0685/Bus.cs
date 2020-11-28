@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Threading;
 namespace dotNet5781_03b_1038_0685
 {
     public enum StatEnum {READY,IS_TRAVELING,IN_FULLING,IN_TREATMENT }
@@ -106,11 +106,11 @@ namespace dotNet5781_03b_1038_0685
 
             return true;
         }
-
         public void Refule(double fule_in_km = 1200)
         {
             Fule_in_km += fule_in_km;
-            Stat = StatEnum.READY;
+            Stat = StatEnum.IN_FULLING;
+            new Thread(() => { Thread.Sleep(12000); Stat = StatEnum.READY; });
         }
 
         public void Treatment()
