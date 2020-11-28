@@ -7,9 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" >
     <Grid>
-        <DataGrid x:Name="TestGrid" HorizontalAlignment="Left" Margin="40,40,100,100" VerticalAlignment="Top" AutoGeneratingColumn="TestGrid_AutoGeneratingColumn" IsReadOnly="True">
+        <DataGrid x:Name="TestGrid" HorizontalAlignment="Left" Margin="40,40,100,100" VerticalAlignment="Top" AutoGeneratingColumn="TestGrid_AutoGeneratingColumn" IsReadOnly="True" MinWidth="300" MinHeight="100" >
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=DataGridRow.SumKm, Path=Text}" Value="">
+                            <Setter Property="Foreground"  Value="Green"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                     <EventSetter Event="MouseDoubleClick" Handler="RowDoubleClick"/>
                 </Style>
             </DataGrid.RowStyle>

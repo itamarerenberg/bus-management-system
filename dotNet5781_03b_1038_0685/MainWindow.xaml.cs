@@ -21,17 +21,22 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static List<Bus> Buses { get; set; }
+       
         public MainWindow()
         {
             InitializeComponent();
-            Buses = RandBus.ListRB(10);
-            TestGrid.ItemsSource = Buses;
+            RandBus.Buses = RandBus.ListRB(10);
+            TestGrid.ItemsSource = RandBus.Buses;
         }
 
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
+            //var row = (DataGridRow)sender;
+            //if (RandBus.Buses[row.GetIndex()].Stat == StatEnum.READY)
+            //{
+            //    row.Background;
+            //}
         }
 
         private void SetARideButton_Click(object sender, RoutedEventArgs e)
@@ -54,7 +59,7 @@ namespace dotNet5781_03b_1038_0685
         private void RowDoubleClick(object sender, RoutedEventArgs e)
         {
             var row = (DataGridRow)sender;
-            MessageBox.Show(Buses[row.GetIndex()].LicensNum);
+            MessageBox.Show(RandBus.Buses[row.GetIndex()].LicensNum);
         }
 
     }

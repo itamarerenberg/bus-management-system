@@ -46,7 +46,7 @@ namespace dotNet5781_03b_1038_0685
                 bus = new Bus(licensNumTextBox.Text, startDateDatePicker.DisplayDate, double.Parse(kmAfterTreatTextBox.Text)
                 , double.Parse(sumKmTextBox.Text), double.Parse(fule_in_kmTextBox.Text), lastTreatDateDatePicker.DisplayDate,
                 (StatEnum)statComboBox.SelectedItem);
-                MainWindow.Buses.Add(bus);
+                RandBus.Buses.Add(bus);
             } 
             catch (Exception ex)
             { 

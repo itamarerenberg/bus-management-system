@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_03b_1038_0685
 {
+
     public static class RandBus
     {
+        public static List<Bus> Buses { get; set; }
+
         private static readonly Random r = new Random(DateTime.Now.Millisecond);
 
         /// <summary>
