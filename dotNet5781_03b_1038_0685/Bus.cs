@@ -110,7 +110,7 @@ namespace dotNet5781_03b_1038_0685
         {
             Fule_in_km += fule_in_km;
             Stat = StatEnum.IN_FULLING;
-            new Thread(() => { Thread.Sleep(12000); Stat = StatEnum.READY; });
+            new Thread(() => { Thread.Sleep(1200); Stat = StatEnum.READY; });
         }
 
         public void Treatment()
