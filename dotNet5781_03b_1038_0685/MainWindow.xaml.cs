@@ -33,16 +33,10 @@ namespace dotNet5781_03b_1038_0685
                 while (true) 
                 {
                     Thread.Sleep(1000);
-                    Dispatcher.BeginInvoke((Action)( () => Refresh_data()));
+                    Dispatcher.BeginInvoke((Action)( () => TestGrid.Items.Refresh()));
                 } 
             }).Start();
         }
-
-        private void Refresh_data()
-        {
-            TestGrid.Items.Refresh();
-        }
-
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
