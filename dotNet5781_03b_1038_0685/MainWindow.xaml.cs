@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace dotNet5781_03b_1038_0685
 {
@@ -27,6 +28,19 @@ namespace dotNet5781_03b_1038_0685
             InitializeComponent();
             RandBus.Buses = RandBus.ListRB(10);
             TestGrid.ItemsSource = RandBus.Buses;
+            new Thread(() =>
+            {
+                while (true) 
+                {
+                    Thread.Sleep(1000);
+                    Dispatcher.BeginInvoke((Action)( () => Refresh_data()));
+                } 
+            }).Start();
+        }
+
+        private void Refresh_data()
+        {
+            TestGrid.Items.Refresh();
         }
 
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

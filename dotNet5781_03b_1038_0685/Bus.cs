@@ -105,7 +105,7 @@ namespace dotNet5781_03b_1038_0685
             SumKm += km;
             Stat = StatEnum.IS_TRAVELING;
             int time = (int)((km / new Random().Next(20, 50)) * 6000);
-             new Thread(()=> { Thread.Sleep(time); Stat = StatEnum.READY; }).Start();
+            new Thread(()=> { Thread.Sleep(time); Stat = StatEnum.READY; }).Start();
 
         }
 
