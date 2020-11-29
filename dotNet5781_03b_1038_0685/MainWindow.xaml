@@ -35,6 +35,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="Add_Bus" Content="Button" HorizontalAlignment="Left" Height="60" Margin="661,53,0,0" VerticalAlignment="Top" Width="99" Click="Button_Click"/>
+        <Button x:Name="Add_Bus" Content="Button" HorizontalAlignment="Left" Height="60" Margin="661,53,0,0" VerticalAlignment="Top" Width="99" Click="Add_Bus_Button_Click"/>
+        
     </Grid>
 </Window>

@@ -32,6 +32,7 @@ namespace dotNet5781_03b_1038_0685
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
+            
             //var row = (DataGridRow)sender;
             //if (RandBus.Buses[row.GetIndex()].Stat == StatEnum.READY)
             //{
@@ -41,19 +42,24 @@ namespace dotNet5781_03b_1038_0685
 
         private void SetARideButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(sender.ToString());
+            Bus busForRide = (Bus)((Button)e.Source).DataContext;
+            RideWindow RWindow = new RideWindow(busForRide);
+            RWindow.ShowDialog();
+            TestGrid.Items.Refresh();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Add_Bus_Button_Click(object sender, RoutedEventArgs e)
         {
-            Window addBusWindow = new AddBusWindow();
+            AddBusWindow addBusWindow = new AddBusWindow();
             addBusWindow.ShowDialog();
             TestGrid.Items.Refresh();
         }
 
         private void FuelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Bus row = (Bus)((Button)e.Source).DataContext;
+            row.Refule();
+            TestGrid.Items.Refresh();
         }
 
         private void RowDoubleClick(object sender, RoutedEventArgs e)

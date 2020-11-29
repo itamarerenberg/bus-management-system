@@ -79,38 +79,41 @@ namespace dotNet5781_03b_1038_0685
 
         #region methods
 
-        public bool Ride(double km)
+        public void Ride(double km)
         {
             //check if the last treatment was less then one year
             if (DateTime.Now - LastTreatDate > new TimeSpan(365, 0, 0, 0))
             {
-                return false;
+                throw new ArgumentException("passed more than a year from the last treatment");
             }
-
-            //check if this ride will cose to pass the 20,000km from last treatment
+            
+            //crheck if this ride will cose to pass the 20,000km from last treatment
             if (KmAfterTreat + km > 20000)
             {
-                return false;
+                throw new ArgumentException("the bus need a 20,000's treatment");
             }
 
             //check if there is enough fule for the ride
             if (Fule_in_km < km)
             {
-                return false;
+                throw new ArgumentException("there is not enough fuel for this ride");
             }
 
             //update the km end the fule
             Fule_in_km -= km;
             KmAfterTreat += km;
             SumKm += km;
+            Stat = StatEnum.IS_TRAVELING;
+            int time = (int)((km / new Random().Next(20, 50)) * 6000);
+             new Thread(()=> { Thread.Sleep(time); Stat = StatEnum.READY; }).Start();
 
-            return true;
         }
+
         public void Refule(double fule_in_km = 1200)
         {
             Fule_in_km += fule_in_km;
             Stat = StatEnum.IN_FULLING;
-            new Thread(() => { Thread.Sleep(1200); Stat = StatEnum.READY; });
+            new Thread(() => { Thread.Sleep(1200); Stat = StatEnum.READY; }).Start();
         }
 
         public void Treatment()

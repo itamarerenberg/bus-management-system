@@ -23,34 +23,23 @@ namespace dotNet5781_03b_1038_0685
         public AddBusWindow()
         {
             InitializeComponent();
-            bus = new Bus();
-            this.statComboBox.ItemsSource = Enum.GetValues(typeof(StatEnum));
-            this.DataContext = bus;
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
+            statComboBox.ItemsSource = Enum.GetValues(typeof(StatEnum));
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             try 
             {
-                //licensNumTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-                //startDateDatePicker.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-                //lastTreatDateDatePicker.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-                //sumKmTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-                //kmAfterTreatTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-                //fule_in_kmTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                // try to generate bus from the input details
                 bus = new Bus(licensNumTextBox.Text, startDateDatePicker.DisplayDate, double.Parse(kmAfterTreatTextBox.Text)
                 , double.Parse(sumKmTextBox.Text), double.Parse(fule_in_kmTextBox.Text), lastTreatDateDatePicker.DisplayDate,
                 (StatEnum)statComboBox.SelectedItem);
-                RandBus.Buses.Add(bus);
+                
+                RandBus.Buses.Add(bus);//add the bus to the bus's list
             } 
             catch (Exception ex)
             { 
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "ERORR");
             }
             this.Close();
         }
