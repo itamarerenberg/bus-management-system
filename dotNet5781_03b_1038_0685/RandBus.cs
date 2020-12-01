@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace dotNet5781_03b_1038_0685
 
     public static class RandBus
     {
-        public static List<Bus> Buses { get; set; }
+        public static ObservableCollection<Bus> Buses { get; set; }
 
         private static readonly Random r = new Random(DateTime.Now.Millisecond);
 
@@ -34,9 +35,9 @@ namespace dotNet5781_03b_1038_0685
 
             return new Bus(r.Next(10000000, 99999999).ToString(), SDate ,Km ,r.Next(40000, 100000),Fuel, Time);
         }
-        public static List<Bus> ListRB(int num, double fuel = -1, double km = -1, TimeSpan time = new TimeSpan())
+        public static ObservableCollection<Bus> ListRB(int num, double fuel = -1, double km = -1, TimeSpan time = new TimeSpan())
         {
-            List<Bus> list = new List<Bus> { };
+            ObservableCollection<Bus> list = new ObservableCollection<Bus> { };
             for (int i = 0; i < num; i++)
             {
                 list.Add(RB(fuel, km, time));

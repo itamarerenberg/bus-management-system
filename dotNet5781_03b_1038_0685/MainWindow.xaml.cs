@@ -28,14 +28,14 @@ namespace dotNet5781_03b_1038_0685
             InitializeComponent();
             RandBus.Buses = RandBus.ListRB(10);
             TestGrid.ItemsSource = RandBus.Buses;
-            new Thread(() =>
-            {
-                while (true) 
-                {
-                    Thread.Sleep(1000);
-                    Dispatcher.BeginInvoke((Action)( () => TestGrid.Items.Refresh()));
-                } 
-            }).Start();
+            //new Thread(() =>
+            //{
+            //    while (true) 
+            //    {
+            //        Thread.Sleep(1000);
+            //        Dispatcher.BeginInvoke((Action)( () => TestGrid.Items.Refresh()));
+            //    } 
+            //}).Start();
         }
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
@@ -53,21 +53,28 @@ namespace dotNet5781_03b_1038_0685
             Bus busForRide = (Bus)((Button)e.Source).DataContext;
             RideWindow RWindow = new RideWindow(busForRide);
             RWindow.ShowDialog();
-            TestGrid.Items.Refresh();
+            //TestGrid.Items.Refresh();
         }
 
         private void Add_Bus_Button_Click(object sender, RoutedEventArgs e)
         {
             AddBusWindow addBusWindow = new AddBusWindow();
             addBusWindow.ShowDialog();
-            TestGrid.Items.Refresh();
+            //TestGrid.Items.Refresh();
         }
 
         private void FuelButton_Click(object sender, RoutedEventArgs e)
         {
-            Bus row = (Bus)((Button)e.Source).DataContext;
-            row.Refule();
-            TestGrid.Items.Refresh();
+            try
+            {
+                Bus row = (Bus)((Button)e.Source).DataContext;
+                row.Refule();
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.Message, "ERROR");
+            }
+            //TestGrid.Items.Refresh();
         }
 
         private void RowDoubleClick(object sender, RoutedEventArgs e)
@@ -76,5 +83,9 @@ namespace dotNet5781_03b_1038_0685
             MessageBox.Show(RandBus.Buses[row.GetIndex()].LicensNum);
         }
 
+        private void Add_Random_Bus_Button_Click(object sender, RoutedEventArgs e)
+        {
+            RandBus.Buses.Add(RandBus.RB());
+        }
     }
 }

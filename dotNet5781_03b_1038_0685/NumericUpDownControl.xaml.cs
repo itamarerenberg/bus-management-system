@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,24 +19,38 @@ namespace dotNet5781_03b_1038_0685
     /// <summary>
     /// Interaction logic for NumericUpDownControl.xaml
     /// </summary>
-    public partial class NumericUpDownControl : UserControl
+    public partial class NumericUpDownControl : INotifyPropertyChanged
     {
         public MessageBoxResult Result;
         private double? num = null;
-        public double? Value 
-        { 
-            get { return num; } 
-            set { 
+        private bool needsRefuel;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public double? Value
+        {
+            get { return num; }
+            set
+            {
                 if (value > MaxValue)
                 {
                     num = MaxValue;
-                    if (value < 1200)
+                    if (value <= 1200)
                     {
                         Result = MessageBox.Show($"this bus cannot rides over {MaxValue} km!\ndo you want to refuel the bus", "ERORR", MessageBoxButton.YesNo);
-                        
+                        if (Result == MessageBoxResult.Yes)
+                        {
+                            NeedsRefuel = true;
+                        }
+                        else
+                        {
+                            NeedsRefuel = false;
+                        }
                     }
                     else
+                    {
                         MessageBox.Show("a bus cannot rides over 1200 km!", "ERORR");
+                    }
                 }
                 else if (value < MinValue)
                 {
@@ -43,27 +58,34 @@ namespace dotNet5781_03b_1038_0685
                     MessageBox.Show("enter a positive number", "ERORR");
                 }
                 else num = value;
-                txtNum.Text = num == null ? "" : num.ToString(); 
+                txtNum.Text = num == null ? "" : num.ToString();
             }
         }
         public double MinValue { get; set; }
         public double MaxValue { get; set; }
+        public bool NeedsRefuel { get => needsRefuel;
+            set 
+            {
+                needsRefuel = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NeedsRefuel"));
+            }
+        }
         public NumericUpDownControl()
-        { 
-            InitializeComponent(); 
+        {
+            InitializeComponent();
         }
         private void cmdUp_Click(object sender, RoutedEventArgs e) { Value++; }
         private void cmdDown_Click(object sender, RoutedEventArgs e) { Value--; }
-        private void txtNum_TextChanged(object sender, TextChangedEventArgs e) 
+        private void txtNum_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (txtNum == null || txtNum.Text == "" || txtNum.Text == "-")
             {
                 Value = null;
-                return; 
-            } 
-            if (!double.TryParse(txtNum.Text, out double val)) 
+                return;
+            }
+            if (!double.TryParse(txtNum.Text, out double val))
                 txtNum.Text = Value.ToString();
-            else Value = val; 
+            else Value = val;
         }
     }
 }

@@ -9,12 +9,22 @@ using System.Threading.Tasks;
 using System.Threading;
 namespace dotNet5781_03b_1038_0685
 {
-    public enum StatEnum {READY,IS_TRAVELING,IN_FULLING,IN_TREATMENT }
-    public class Bus
+    public enum StatEnum {READY,IS_TRAVELING,IN_REFUELING,IN_TREATMENT }
+    public class Bus : INotifyPropertyChanged
     {
-        #region fildes end properties
-        private string licensNum;/*filde*/
-        readonly DateTime startDate;/*filde*/
+        #region privates fildes
+        private string licensNum;
+        private StatEnum stat;
+        private double fule_in_km;
+        private double sumKm;
+        private double kmAfterTreat;
+        private DateTime lastTreatDate;
+        readonly DateTime startDate;
+        #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #region properties
         [DisplayName("license number")]
         public string LicensNum
         {
@@ -45,20 +55,51 @@ namespace dotNet5781_03b_1038_0685
                     value = value.Insert(2, "-");
                 }
                 this.licensNum = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicensNum"));
             }
         }
         [DisplayName("Start Date")]
         public DateTime StartDate { get => startDate; }
         [DisplayName("Status")]
-        public StatEnum Stat {get;set;}
+        public StatEnum Stat { get => stat; 
+            set
+            {
+                stat = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stat"));
+            }
+        }
         [DisplayName("fuel status(km)")]
-        public double Fule_in_km { get; set; }
+        public double Fule_in_km { get => fule_in_km;
+            set 
+            {
+                fule_in_km = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Fule_in_km"));
+            }
+        }
         [DisplayName("total km")]
-        public double SumKm { get; set; }
+        public double SumKm { get => sumKm;
+            set
+            {
+                sumKm = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SumKm"));
+            }
+        }
         [DisplayName("km after treatment")]
-        public double KmAfterTreat { get; set; }
+        public double KmAfterTreat { get => kmAfterTreat;
+            set
+            {
+                kmAfterTreat = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("KmAfterTreat"));
+            }
+        }
         [DisplayName("Last treatment Date")]
-        public DateTime LastTreatDate { get;  set; } 
+        public DateTime LastTreatDate { get => lastTreatDate;
+            set
+            {
+                lastTreatDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastTreatDate"));
+            }
+        }
 
         #endregion
 
@@ -81,12 +122,27 @@ namespace dotNet5781_03b_1038_0685
 
         public void Ride(double km)
         {
+            if (this.Stat == StatEnum.IN_REFUELING)
+            {
+                throw new ArgumentException("the bus is refeuling, please wait!");
+
+            }
+            if (this.Stat == StatEnum.IN_TREATMENT)
+            {
+                throw new ArgumentException("the bus is in treatment, please wait!");
+
+            }
+            if (this.Stat == StatEnum.IS_TRAVELING)
+            {
+                throw new ArgumentException("the bus is already on the ride!");
+
+            }
             //check if the last treatment was less then one year
             if (DateTime.Now - LastTreatDate > new TimeSpan(365, 0, 0, 0))
             {
                 throw new ArgumentException("passed more than a year from the last treatment");
             }
-            
+
             //crheck if this ride will cose to pass the 20,000km from last treatment
             if (KmAfterTreat + km > 20000)
             {
@@ -105,22 +161,36 @@ namespace dotNet5781_03b_1038_0685
             SumKm += km;
             Stat = StatEnum.IS_TRAVELING;
             int time = (int)((km / new Random().Next(20, 50)) * 6000);
-            new Thread(()=> { Thread.Sleep(time); Stat = StatEnum.READY; }).Start();
+            new Thread(() => { Thread.Sleep(time); Stat = StatEnum.READY; }).Start();
 
         }
 
-        public void Refule(double fule_in_km = 1200)
+        public void Refule()
         {
-            Fule_in_km += fule_in_km;
-            Stat = StatEnum.IN_FULLING;
-            new Thread(() => { Thread.Sleep(1200); Stat = StatEnum.READY; }).Start();
+            if (Stat == StatEnum.READY)
+            {
+                Stat = StatEnum.IN_REFUELING;
+                new Thread(() => { Thread.Sleep(12000); Stat = StatEnum.READY; Fule_in_km = 1200; }).Start(); 
+            }
+            else
+            {
+                throw new ArgumentException("you cannot refuel the bus while driving or treatmenting");
+            }
         }
 
         public void Treatment()
         {
-            LastTreatDate = DateTime.Now;
-            KmAfterTreat = 0;
-            Stat = StatEnum.READY;
+            if (stat == StatEnum.READY)
+            {
+                LastTreatDate = DateTime.Now;
+                KmAfterTreat = 0;
+                Stat = StatEnum.IN_TREATMENT;
+                new Thread(() => { Thread.Sleep(144000); Stat = StatEnum.READY; }).Start(); 
+            }
+            else
+            {
+                throw new ArgumentException("you cannot treatment the bus while driving or refueling");
+            }
         }
 
         public override string ToString()
@@ -129,6 +199,5 @@ namespace dotNet5781_03b_1038_0685
         }
 
         #endregion
-
     }
 }
