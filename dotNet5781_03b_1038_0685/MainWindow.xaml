@@ -37,14 +37,13 @@
                     <GridViewColumn Width="auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="set a ride" x:Name="SetARideButton" Click="SetARideButton_Click" ></Button>
-                            </DataTemplate>
+                               
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="fuel" x:Name="FuelButton" Click="FuelButton_Click" ></Button>
+                                
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

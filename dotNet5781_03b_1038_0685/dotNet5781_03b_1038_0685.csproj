@@ -98,9 +98,6 @@
     <Compile Include="AddBusWindow.xaml.cs">
       <DependentUpon>AddBusWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BusDetails.xaml.cs">
-      <DependentUpon>BusDetails.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NumericUpDownControl.xaml.cs">
       <DependentUpon>NumericUpDownControl.xaml</DependentUpon>
     </Compile>
@@ -108,11 +105,10 @@
     <Compile Include="RideWindow.xaml.cs">
       <DependentUpon>RideWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
     <Page Include="AddBusWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BusDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,6 +133,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Window1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -157,6 +157,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\DataSources\Bus.datasource" />
+    <None Include="Properties\DataSources\RandBus.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
