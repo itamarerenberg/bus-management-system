@@ -5,15 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dotNet5781_03b_1038_0685"
         mc:Ignorable="d"
-        Title="BusDetails" Height="450" Width="800" Loaded="Window_Loaded_1">
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="55*"/>
-            <RowDefinition Height="109*"/>
-            <RowDefinition Height="99*"/>
-            <RowDefinition Height="157*"/>
-        </Grid.RowDefinitions>
-
+        Title="BusDetails" Height="450" Width="800">
+    <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        
     </Grid>
-
 </Window>

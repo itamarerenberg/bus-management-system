@@ -26,7 +26,7 @@ namespace dotNet5781_03b_1038_0685
         {
             InitializeComponent();
             RandBus.Buses = RandBus.ListRB(10);
-            TestGrid.ItemsSource = RandBus.Buses;
+            main_list.ItemsSource = RandBus.Buses;
             //new Thread(() =>
             //{
             //    while (true) 
