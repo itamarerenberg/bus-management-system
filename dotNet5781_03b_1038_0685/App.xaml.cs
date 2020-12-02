@@ -13,5 +13,6 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

@@ -22,7 +22,6 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class MainWindow : Window
     {
-       
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +36,7 @@ namespace dotNet5781_03b_1038_0685
             //    } 
             //}).Start();
         }
+
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;

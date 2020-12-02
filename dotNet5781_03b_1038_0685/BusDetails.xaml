@@ -6,70 +6,14 @@
         xmlns:local="clr-namespace:dotNet5781_03b_1038_0685"
         mc:Ignorable="d"
         Title="BusDetails" Height="450" Width="800" Loaded="Window_Loaded_1">
-    <Window.Resources>
-        <CollectionViewSource x:Key="busViewSource" d:DesignSource="{d:DesignInstance {x:Type local:Bus}, CreateList=True}"/>
-    </Window.Resources>
-    <Grid DataContext="{StaticResource busViewSource}" Margin="0,0,-0.4,0" Height="420" VerticalAlignment="Bottom">
-        <ListView x:Name="busListView" ItemsSource="{Binding}" Margin="57,32,101,99" SelectionMode="Single">
-            <ListView.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn x:Name="fule_in_kmColumn" Header="fuel status(km)" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Fule_in_km}" Margin="6,-1,-6,-1"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn x:Name="kmAfterTreatColumn" Header="km after treatment" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding KmAfterTreat}" Margin="-6,-1"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn x:Name="lastTreatDateColumn" Header="Last treatment Date" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding LastTreatDate}" Margin="-6,-1"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn x:Name="licensNumColumn" Header="license number" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding LicensNum}" Margin="-6,-1"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn x:Name="startDateColumn" Header="Start Date" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding StartDate}" Margin="-6,-1"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn x:Name="statColumn" Header="Status" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Stat}" Margin="-6,-1"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn x:Name="sumKmColumn" Header="total km" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding SumKm}" Margin="-6,-1"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55*"/>
+            <RowDefinition Height="109*"/>
+            <RowDefinition Height="99*"/>
+            <RowDefinition Height="157*"/>
+        </Grid.RowDefinitions>
+
     </Grid>
+
 </Window>

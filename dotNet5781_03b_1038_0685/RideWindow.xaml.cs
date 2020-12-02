@@ -62,13 +62,5 @@ namespace dotNet5781_03b_1038_0685
 
         }
 
-        private void kmNumUpDown_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (kmNumUpDown.NeedsRefuel)
-            {
-                RefuelBus();
-            }
-        }
-
     }
 }
