@@ -41,11 +41,7 @@ namespace dotNet5781_03b_1038_0685
         {
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
             
-            //var row = (DataGridRow)sender;
-            //if (RandBus.Buses[row.GetIndex()].Stat == StatEnum.READY)
-            //{
-            //    row.Background;
-            //}
+
         }
 
         private void SetARideButton_Click(object sender, RoutedEventArgs e)
@@ -79,8 +75,10 @@ namespace dotNet5781_03b_1038_0685
 
         private void RowDoubleClick(object sender, RoutedEventArgs e)
         {
-            var row = (DataGridRow)sender;
-            MessageBox.Show(RandBus.Buses[row.GetIndex()].LicensNum);
+
+            Bus selectedBus = (Bus)((ListViewItem)sender).Content;
+            BusDetails busDetails = new BusDetails(selectedBus);
+            busDetails.ShowDialog();
         }
 
         private void Add_Random_Bus_Button_Click(object sender, RoutedEventArgs e)

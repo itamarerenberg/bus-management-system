@@ -1,12 +1,12 @@
-﻿<Window x:Class="dotNet5781_03b_1038_0685.Window1"
+﻿<Window x:Class="dotNet5781_03b_1038_0685.BusDetails"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dotNet5781_03b_1038_0685"
         mc:Ignorable="d"
-        Title="Window1" Height="471.399" Width="545.105">
-    <Grid x:Name="Details" Grid.Column="0" VerticalAlignment="Stretch" Width="">
+        Height="471.399" Width="545.105" >
+    <Grid x:Name="Details" Grid.Column="0" VerticalAlignment="Stretch" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="267*"/>
             <ColumnDefinition Width="130*"/>
@@ -21,22 +21,22 @@
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
         <Label Content="start date:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="25" Grid.ColumnSpan="2" Margin="0,0,125.667,38.333" Grid.RowSpan="2" />
-        <TextBlock x:Name="start_date" Grid.Column="1" Margin="0.333,0,-0.333,38.333" Grid.RowSpan="2"/>
+        <TextBlock x:Name="start_date" Text="{Binding StartDate}" Grid.Column="1" Margin="0.333,0,-0.333,38.333" Grid.RowSpan="2"/>
 
         <Label Grid.Row="1" Content="ststus:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="25" Grid.ColumnSpan="2" Margin="0,0.333,125.667,0.333" />
-        <TextBlock Grid.Row="1" x:Name="stat" Grid.Column="1" Margin="0.333,0.333,-0.333,0.333"/>
+        <TextBlock Grid.Row="1" x:Name="stat" Grid.Column="1" Text="{Binding Stat}" Margin="0.333,0.333,-0.333,0.333"/>
 
         <Label Grid.Row="1" Content="fule state:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="25" Grid.ColumnSpan="2" Margin="0,38.333,125.667,0.333" Grid.RowSpan="2" />
-        <TextBlock Grid.Row="1" x:Name="fule_state" Grid.Column="1" Margin="0.333,38.333,-0.333,0.333" Grid.RowSpan="2"/>
+        <TextBlock Grid.Row="1" x:Name="fule_state" Text="{Binding Fule_in_km}" Grid.Column="1" Margin="0.333,38.333,-0.333,0.333" Grid.RowSpan="2"/>
 
         <Label Grid.Row="2" Content="kilometraz:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="25" Grid.ColumnSpan="2" Margin="0,37.667,125.667,38" Grid.RowSpan="3" />
-        <TextBlock Grid.Row="2" x:Name="sum_km" Grid.Column="1" Margin="0.333,37.667,-0.333,38" Grid.RowSpan="3"/>
+        <TextBlock Grid.Row="2" x:Name="sum_km" Text="{Binding SumKm}" Grid.Column="1" Margin="0.333,37.667,-0.333,38" Grid.RowSpan="3"/>
 
         <Label Grid.Row="3" Content="km from last treatment:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="25" Grid.ColumnSpan="2" Margin="0,36.667,125.667,0" Grid.RowSpan="2" />
-        <TextBlock Grid.Row="3" x:Name="Km_After_Treat" Grid.Column="1" Margin="0.333,36.667,-0.333,0" Grid.RowSpan="2"/>
+        <TextBlock Grid.Row="3" x:Name="Km_After_Treat" Text="{Binding KmAfterTreat}" Grid.Column="1" Margin="0.333,36.667,-0.333,0" Grid.RowSpan="2"/>
 
         <Label Grid.Row="4" Content="last treatment was in:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="25" Grid.ColumnSpan="2" Margin="0,37.667,125.667,0.333" Grid.RowSpan="2" />
-        <TextBlock Grid.Row="4" x:Name="last_Treat_Date" Grid.Column="1" Margin="0.333,37.667,-0.333,0.333" Grid.RowSpan="2"/>
+        <TextBlock Grid.Row="4" x:Name="last_Treat_Date" Text="{Binding LastTreatDate}" Grid.Column="1" Margin="0.333,37.667,-0.333,0.333" Grid.RowSpan="2"/>
 
         <Grid Grid.Row="6" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

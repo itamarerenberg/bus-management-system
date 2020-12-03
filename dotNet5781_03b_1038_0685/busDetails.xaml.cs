@@ -17,11 +17,14 @@ namespace dotNet5781_03b_1038_0685
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class BusDetails : Window
     {
-        public Window1()
+        public BusDetails(Bus bus)
         {
             InitializeComponent();
+            this.DataContext = bus;
+            this.Title = $"bus number: {bus.LicensNum}";
+
         }
 
         private void SetARideButton_Click(object sender, RoutedEventArgs e)
