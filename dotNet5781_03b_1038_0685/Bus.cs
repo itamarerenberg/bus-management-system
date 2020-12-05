@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 using System.Threading;
 namespace dotNet5781_03b_1038_0685
 {
-    public enum StatEnum {READY,IS_TRAVELING,IN_REFUELING,IN_TREATMENT }
+    public enum StatEnum {READY, IS_TRAVELING, IN_REFUELING, IN_TREATMENT, NEED_TREATMENT }
     public class Bus : INotifyPropertyChanged
     {
+        static readonly double time_refuling = 12;
+        static readonly double time_treatment = 14;
         #region privates fildes
         private string licensNum;
         private StatEnum stat;
@@ -101,6 +103,39 @@ namespace dotNet5781_03b_1038_0685
             }
         }
 
+        private double seconds_until_ready;
+        /// <summary>
+        /// telling for how long the buss status will nod be "ready"
+        /// </summary>
+        public double Seconds_until_ready
+        {
+            get => seconds_until_ready;
+            private set
+            {
+                if (value == 0)
+                {
+                    seconds_until_ready = 0;
+                    Stat = StatEnum.READY;
+                }
+                else
+                {
+                    seconds_until_ready = value;
+                    new Thread(() =>
+                    {
+                        while (seconds_until_ready > 0)
+                        {
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Seconds_until_ready"));
+                            Thread.Sleep(1000);
+                            seconds_until_ready -= 1;//subtruct 1 from Seconds_until_ready   
+                        }
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Seconds_until_ready"));
+                        Stat = StatEnum.READY;
+                    }).Start();
+                }
+            }
+        }
+
+
         #endregion
 
         #region constractors
@@ -138,8 +173,9 @@ namespace dotNet5781_03b_1038_0685
 
             }
             //check if the last treatment was less then one year
-            if (DateTime.Now - LastTreatDate > new TimeSpan(365, 0, 0, 0))
+            if (Stat == StatEnum.NEED_TREATMENT || DateTime.Now - LastTreatDate > new TimeSpan(365, 0, 0, 0))
             {
+                Stat = StatEnum.NEED_TREATMENT;
                 throw new ArgumentException("passed more than a year from the last treatment");
             }
 
@@ -160,8 +196,8 @@ namespace dotNet5781_03b_1038_0685
             KmAfterTreat += km;
             SumKm += km;
             Stat = StatEnum.IS_TRAVELING;
-            int time = (int)((km / new Random().Next(20, 50)) * 6000);
-            new Thread(() => { Thread.Sleep(time); Stat = StatEnum.READY; }).Start();
+            double time = (int)((km / new Random().Next(20, 50)) * 6);
+            Seconds_until_ready = time;
 
         }
 
@@ -170,7 +206,8 @@ namespace dotNet5781_03b_1038_0685
             if (Stat == StatEnum.READY)
             {
                 Stat = StatEnum.IN_REFUELING;
-                new Thread(() => { Thread.Sleep(12000); Stat = StatEnum.READY; Fule_in_km = 1200; }).Start(); 
+                Seconds_until_ready = time_refuling;
+                Fule_in_km = 1200;
             }
             else
             {
@@ -180,12 +217,12 @@ namespace dotNet5781_03b_1038_0685
 
         public void Treatment()
         {
-            if (stat == StatEnum.READY)
+            if (stat == StatEnum.READY || Stat == StatEnum.NEED_TREATMENT)
             {
                 LastTreatDate = DateTime.Now;
                 KmAfterTreat = 0;
                 Stat = StatEnum.IN_TREATMENT;
-                new Thread(() => { Thread.Sleep(144000); Stat = StatEnum.READY; }).Start(); 
+                Seconds_until_ready = time_treatment;
             }
             else
             {
