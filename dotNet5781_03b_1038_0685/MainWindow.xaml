@@ -7,29 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" >
     <Grid>
-        <!--<DataGrid x:Name="TestGrid" HorizontalAlignment="Left" Margin="40,40,100,100" VerticalAlignment="Top" AutoGeneratingColumn="TestGrid_AutoGeneratingColumn" IsReadOnly="True" MinWidth="300" MinHeight="100" >
-            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <EventSetter Event="MouseDoubleClick" Handler="RowDoubleClick"/>
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="set a ride" x:Name="SetARideButton" Click="SetARideButton_Click" ></Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="fuel" x:Name="FuelButton" Click="FuelButton_Click" ></Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>-->
         <ListView x:Name ="main_list" ItemsSource="{Binding}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
@@ -54,6 +31,5 @@
         </ListView>
         <Button x:Name="Add_Bus" Content="add a bus" HorizontalAlignment="Left" Height="49" Margin="617,362,0,0" VerticalAlignment="Top" Width="149" Click="Add_Bus_Button_Click"/>
         <Button Content="Add a random Bus" HorizontalAlignment="Left" Height="49" Margin="466,362,0,0" VerticalAlignment="Top" Width="149" Click="Add_Random_Bus_Button_Click"/>
-
     </Grid>
 </Window>
