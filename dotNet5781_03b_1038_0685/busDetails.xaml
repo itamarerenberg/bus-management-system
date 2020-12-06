@@ -40,7 +40,7 @@
         <TextBlock Grid.Row="4" x:Name="last_Treat_Date" Text="{Binding LastTreatDate}" Grid.Column="1" Margin="0.333,37.667,-0.333,0.333" Grid.RowSpan="2"/>
 
         <Label Grid.Row="5" Content="ready in:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="25" Grid.ColumnSpan="2" Margin="0,37.667,125.667,0.333" Grid.RowSpan="2" />
-        <TextBlock Grid.Row="5" x:Name="ready_in" Text="{Binding Seconds_until_ready}" Grid.Column="1" Margin="0.333,37.667,-0.333,0.333" Grid.RowSpan="2"/>
+        <TextBlock Grid.Row="5" x:Name="ready_in" Text="{Binding Time_until_ready}" Grid.Column="1" Margin="0.333,37.667,-0.333,0.333" Grid.RowSpan="2"/>
 
         <Grid Grid.Row="7" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

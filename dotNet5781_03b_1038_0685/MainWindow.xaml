@@ -47,8 +47,8 @@
             <ListView.View>
                 <GridView x:Name="usergridview">
                     <GridViewColumn x:Name="lisenceNum"  Header="lisence number" Width="auto" DisplayMemberBinding="{Binding LicensNum}" />
-                    <GridViewColumn x:Name="status"  Header="status" Width="auto" DisplayMemberBinding="{Binding Stat}" />
-                    <GridViewColumn x:Name="ready_in"  Header="ready in" Width="auto" DisplayMemberBinding="{Binding Seconds_until_ready}" />
+                    <GridViewColumn x:Name="status"  Header="             status            " Width="auto" DisplayMemberBinding="{Binding Stat}"/>
+                    <GridViewColumn x:Name="ready_in"  Header="ready in" Width="auto" DisplayMemberBinding="{Binding Time_until_ready}" />
                 </GridView>
             </ListView.View>
         </ListView>

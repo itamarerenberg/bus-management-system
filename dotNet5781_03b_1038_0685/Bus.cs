@@ -12,8 +12,8 @@ namespace dotNet5781_03b_1038_0685
     public enum StatEnum {READY, IS_TRAVELING, IN_REFUELING, IN_TREATMENT, NEED_TREATMENT }
     public class Bus : INotifyPropertyChanged
     {
-        static readonly double time_refuling = 12;
-        static readonly double time_treatment = 14;
+        static readonly TimeSpan time_refuling = new TimeSpan(0, 0, seconds: 12);
+        static readonly TimeSpan time_treatment = new TimeSpan(0,0, seconds: 14);
         #region privates fildes
         private string licensNum;
         private StatEnum stat;
@@ -103,32 +103,32 @@ namespace dotNet5781_03b_1038_0685
             }
         }
 
-        private double seconds_until_ready;
+        private TimeSpan time_until_ready;
         /// <summary>
         /// telling for how long the buss status will nod be "ready"
         /// </summary>
-        public double Seconds_until_ready
+        public TimeSpan Time_until_ready
         {
-            get => seconds_until_ready;
+            get => time_until_ready;
             private set
             {
-                if (value == 0)
+                if (value == new TimeSpan(0))
                 {
-                    seconds_until_ready = 0;
+                    time_until_ready = new TimeSpan(0, 0, 0);
                     Stat = StatEnum.READY;
                 }
                 else
                 {
-                    seconds_until_ready = value;
+                    time_until_ready = value;
                     new Thread(() =>
                     {
-                        while (seconds_until_ready > 0)
+                        while (time_until_ready > new TimeSpan(0,0,0))
                         {
-                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Seconds_until_ready"));
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));
                             Thread.Sleep(1000);
-                            seconds_until_ready -= 1;//subtruct 1 from Seconds_until_ready   
+                            time_until_ready = new TimeSpan(hours:0, minutes:0, seconds: (int)time_until_ready.TotalSeconds - 1);//subtruct 1 from Seconds_until_ready   
                         }
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Seconds_until_ready"));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));
                         Stat = StatEnum.READY;
                     }).Start();
                 }
@@ -196,8 +196,8 @@ namespace dotNet5781_03b_1038_0685
             KmAfterTreat += km;
             SumKm += km;
             Stat = StatEnum.IS_TRAVELING;
-            double time = (int)((km / new Random().Next(20, 50)) * 6);
-            Seconds_until_ready = time;
+            int time = (int)((km / new Random().Next(20, 50)) * 6);
+            Time_until_ready = new TimeSpan(0,0,time);
 
         }
 
@@ -206,7 +206,7 @@ namespace dotNet5781_03b_1038_0685
             if (Stat == StatEnum.READY)
             {
                 Stat = StatEnum.IN_REFUELING;
-                Seconds_until_ready = time_refuling;
+                Time_until_ready = time_refuling;
                 Fule_in_km = 1200;
             }
             else
@@ -222,7 +222,7 @@ namespace dotNet5781_03b_1038_0685
                 LastTreatDate = DateTime.Now;
                 KmAfterTreat = 0;
                 Stat = StatEnum.IN_TREATMENT;
-                Seconds_until_ready = time_treatment;
+                Time_until_ready = time_treatment;
             }
             else
             {
@@ -236,5 +236,7 @@ namespace dotNet5781_03b_1038_0685
         }
 
         #endregion
+
+        
     }
 }
