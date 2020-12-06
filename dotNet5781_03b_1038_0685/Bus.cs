@@ -68,6 +68,7 @@ namespace dotNet5781_03b_1038_0685
             {
                 stat = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stat"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));
             }
         }
         [DisplayName("fuel status(km)")]
@@ -125,16 +126,31 @@ namespace dotNet5781_03b_1038_0685
                         while (time_until_ready > new TimeSpan(0,0,0))
                         {
                             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));
                             Thread.Sleep(1000);
                             time_until_ready = new TimeSpan(hours:0, minutes:0, seconds: (int)time_until_ready.TotalSeconds - 1);//subtruct 1 from Seconds_until_ready   
                         }
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));
                         Stat = StatEnum.READY;
                     }).Start();
                 }
             }
         }
 
+        public string Display_stat { 
+            get
+            {
+                if(stat == StatEnum.READY || stat == StatEnum.NEED_TREATMENT)
+                {
+                    return stat.ToString();
+                }
+                else
+                {
+                    return stat.ToString() + " " + time_until_ready;
+                }
+            } 
+        }
 
         #endregion
 
@@ -196,7 +212,7 @@ namespace dotNet5781_03b_1038_0685
             KmAfterTreat += km;
             SumKm += km;
             Stat = StatEnum.IS_TRAVELING;
-            int time = (int)((km / new Random().Next(20, 50)) * 6);
+            int time = (int)((km / new Random().Next(20, 50)) * 6);//in seconds
             Time_until_ready = new TimeSpan(0,0,time);
 
         }

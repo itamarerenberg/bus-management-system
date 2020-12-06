@@ -31,9 +31,15 @@ namespace dotNet5781_03b_1038_0685
             try 
             {
                 // try to generate bus from the input details
-                bus = new Bus(licensNumTextBox.Text, startDateDatePicker.DisplayDate, double.Parse(kmAfterTreatTextBox.Text)
-                , double.Parse(sumKmTextBox.Text), double.Parse(fule_in_kmTextBox.Text), lastTreatDateDatePicker.DisplayDate,
-                (StatEnum)statComboBox.SelectedItem);
+                string ln = licensNumTextBox.Text;
+                DateTime sd = startDateDatePicker.DisplayDate;
+                double kmat = double.TryParse(kmAfterTreatTextBox.Text, out kmat) ? kmat : 0,
+                       skm = double.TryParse(sumKmTextBox.Text, out skm) ? skm : 0,
+                       fikm = double.TryParse(fule_in_kmTextBox.Text, out fikm) ? fikm : 0;
+                DateTime ltd = lastTreatDateDatePicker.DisplayDate;
+                StatEnum st = statComboBox.SelectedItem == null ? StatEnum.READY : (StatEnum)statComboBox.SelectedItem;
+
+                bus = new Bus(ln, sd, kmat, skm, fikm, ltd, st);
                 
                 RandBus.Buses.Add(bus);//add the bus to the bus's list
             } 
