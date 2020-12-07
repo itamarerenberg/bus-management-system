@@ -22,6 +22,7 @@ namespace dotNet5781_03b_1038_0685
         private double kmAfterTreat;
         private DateTime lastTreatDate;
         readonly DateTime startDate;
+        private TimeSpan time_until_ready;
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -100,11 +101,14 @@ namespace dotNet5781_03b_1038_0685
             set
             {
                 lastTreatDate = value;
+                if (DateTime.Now - lastTreatDate > new TimeSpan(365, 0, 0, 0))
+                {
+                    Stat = StatEnum.NEED_TREATMENT;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastTreatDate"));
             }
         }
 
-        private TimeSpan time_until_ready;
         /// <summary>
         /// telling for how long the buss status will nod be "ready"
         /// </summary>
@@ -132,7 +136,7 @@ namespace dotNet5781_03b_1038_0685
                         }
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));
-                        Stat = StatEnum.READY;
+                        Stat = (DateTime.Now - lastTreatDate > new TimeSpan(365, 0, 0, 0))? StatEnum.NEED_TREATMENT : StatEnum.READY;
                     }).Start();
                 }
             }
@@ -158,13 +162,13 @@ namespace dotNet5781_03b_1038_0685
         public Bus() { }
         public Bus(string _licensNum, DateTime _startDate, double kmAfterTreat = 0, double sumKm = 0, double _fule_in_km = 1200, DateTime _lastTreatDate = new DateTime(), StatEnum status = 0)
         {
+            Stat = status;
             this.startDate = _startDate;
             this.LicensNum = _licensNum;
             this.KmAfterTreat = kmAfterTreat;
             this.SumKm = sumKm;
             this.Fule_in_km = _fule_in_km;
             this.LastTreatDate = _lastTreatDate;
-            Stat = status;
         }
 
         #endregion
@@ -219,7 +223,7 @@ namespace dotNet5781_03b_1038_0685
 
         public void Refule()
         {
-            if (Stat == StatEnum.READY)
+            if (Stat == StatEnum.READY || Stat == StatEnum.NEED_TREATMENT)
             {
                 Stat = StatEnum.IN_REFUELING;
                 Time_until_ready = time_refuling;

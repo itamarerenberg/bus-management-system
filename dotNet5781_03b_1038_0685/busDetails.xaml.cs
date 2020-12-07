@@ -24,7 +24,6 @@ namespace dotNet5781_03b_1038_0685
             InitializeComponent();
             this.DataContext = bus;
             this.Title = $"bus number: {bus.LicensNum}";
-
         }
 
         private void SetARideButton_Click(object sender, RoutedEventArgs e)
@@ -32,7 +31,6 @@ namespace dotNet5781_03b_1038_0685
             Bus busForRide = (Bus)((Button)e.Source).DataContext;
             RideWindow RWindow = new RideWindow(busForRide);
             RWindow.ShowDialog();
-            //TestGrid.Items.Refresh();
         }
 
         private void FuelButton_Click(object sender, RoutedEventArgs e)
@@ -41,12 +39,12 @@ namespace dotNet5781_03b_1038_0685
             {
                 Bus row = (Bus)((Button)e.Source).DataContext;
                 row.Refule();
+                this.Close();
             }
             catch (Exception msg)
             {
                 MessageBox.Show(msg.Message, "ERROR");
             }
-            //TestGrid.Items.Refresh();
         }
     }
 }

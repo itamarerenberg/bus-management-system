@@ -109,6 +109,7 @@
     <Compile Include="busDetails.xaml.cs">
       <DependentUpon>busDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Status_to_visibility.cs" />
     <Page Include="AddBusWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -23,69 +23,37 @@ namespace dotNet5781_03b_1038_0685
     {
         public MessageBoxResult Result;
         private double? num = null;
-        private bool needsRefuel;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public double? Value
-        {
-            get { return num; }
+        public double? Num { get => num;
             set
             {
-                if (value > MaxValue)
-                {
-                    num = MaxValue;
-                    if (value <= 1200)
-                    {
-                        Result = MessageBox.Show($"this bus cannot rides over {MaxValue} km!\ndo you want to refuel the bus", "ERORR", MessageBoxButton.YesNo);
-                        if (Result == MessageBoxResult.Yes)
-                        {
-                            NeedsRefuel = true;
-                        }
-                        else
-                        {
-                            NeedsRefuel = false;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("a bus cannot rides over 1200 km!", "ERORR");
-                    }
-                }
-                else if (value < MinValue)
-                {
-                    num = MinValue;
-                    MessageBox.Show("enter a positive number", "ERORR");
-                }
-                else num = value;
-                txtNum.Text = num == null ? "" : num.ToString();
+                num = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Num"));
             }
+
         }
+       
         public double MinValue { get; set; }
         public double MaxValue { get; set; }
-        public bool NeedsRefuel { get => needsRefuel;
-            set 
-            {
-                needsRefuel = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NeedsRefuel"));
-            }
-        }
         public NumericUpDownControl()
         {
             InitializeComponent();
         }
-        private void cmdUp_Click(object sender, RoutedEventArgs e) { Value++; }
-        private void cmdDown_Click(object sender, RoutedEventArgs e) { Value--; }
+        private void cmdUp_Click(object sender, RoutedEventArgs e) { Num++; }
+        private void cmdDown_Click(object sender, RoutedEventArgs e) { Num--; }
         private void txtNum_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (txtNum == null || txtNum.Text == "" || txtNum.Text == "-")
             {
-                Value = null;
+                Num = null;
                 return;
             }
             if (!double.TryParse(txtNum.Text, out double val))
-                txtNum.Text = Value.ToString();
-            else Value = val;
+                txtNum.Text = Num.ToString();
+            else Num = val;
         }
+
     }
 }

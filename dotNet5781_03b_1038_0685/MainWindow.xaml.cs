@@ -85,5 +85,19 @@ namespace dotNet5781_03b_1038_0685
         {
             RandBus.Buses.Add(RandBus.RB());
         }
+
+        private void treat_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Bus busForTreat = (Bus)((Button)e.Source).DataContext;
+                Bus row = (Bus)((Button)e.Source).DataContext;
+                busForTreat.Treatment();
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.Message, "ERROR");
+            }
+        }
     }
 }

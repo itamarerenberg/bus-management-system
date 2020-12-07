@@ -20,47 +20,84 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class RideWindow : Window
     {
-        public Bus busForRide;
+        public Bus BusForRide;
         public MessageBoxResult Result;
-        public RideWindow(Bus bus)
+        public RideWindow(Bus busForRide)
         {
             InitializeComponent();
-            busForRide = bus;
+            BusForRide = busForRide;
+            this.DataContext = BusForRide;
             kmNumUpDown.MaxValue = busForRide.Fule_in_km;
-            if (kmNumUpDown.NeedsRefuel)
-                RefuelBus();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                busForRide.Ride((double)kmNumUpDown.Value);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "ERORR");
-            }
-            this.Close();
-        }
         public void RefuelBus()
         {
-            SetRideButton.IsEnabled = false;
             ProgBar.Visibility = Visibility.Visible;
             RefuleMsg.Visibility = Visibility.Visible;
-            busForRide.Refule();
-            for (int i = 0; i < 120; i++)
+            kmNumUpDown.IsEnabled = false;
+            BusForRide.Refule();
+
+            new Thread(() => 
             {
-            new Thread(() => {
-                Thread.Sleep(100);
-                ProgBar.Value++;
+                for (int i = 0; i < 120; i++)
+                {
+                    Thread.Sleep(100);
+                    ProgBar.Value++;
+                }
             }).Start();
-            }
-            SetRideButton.IsEnabled = true;
             ProgBar.Visibility = Visibility.Hidden;
             RefuleMsg.Visibility = Visibility.Hidden;
-
+            kmNumUpDown.IsEnabled = true;
         }
 
+        private void kmNumUpDown_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var input = sender as NumericUpDownControl;
+            if (input.Num > input.MaxValue)
+            {
+                if (input.Num <= 1200)
+                {
+                    Result = MessageBox.Show($"this bus cannot rides over {input.MaxValue} km!\ndo you want to refuel the bus?", "ERORR", MessageBoxButton.YesNo);
+                    if (Result == MessageBoxResult.Yes)
+                    {
+                        RefuelBus();
+                    }
+                    else
+                    {
+                        input.Num = input.MaxValue;
+                        input.txtNum.Text = input.Num.ToString();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("a bus cannot rides over 1200 km!", "ERORR");
+                    input.Num = 0;
+                    input.txtNum.Text = input.Num.ToString();
+                }
+            }
+            else if (input.Num < input.MinValue)
+            {
+                input.Num = input.MinValue;
+                MessageBox.Show("enter a positive number", "ERORR");
+            }
+            else
+                input.txtNum.Text = input.Num == null ? "" : input.Num.ToString();
+        }
+
+        private void kmNumUpDown_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                try
+                {
+                    BusForRide.Ride((double)kmNumUpDown.Num);
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "ERORR");
+                }
+            }
+        }
     }
 }

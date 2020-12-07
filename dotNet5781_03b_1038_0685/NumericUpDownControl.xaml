@@ -9,7 +9,7 @@
     <StackPanel Orientation="Horizontal">
         <RepeatButton x:Name="cmdDown" Margin="1" Content="˅" Click="cmdDown_Click"  Width="25" Height="25" Interval="30"/>
         <TextBox x:Name="txtNum" Margin="1" Width="44" Height="25" Text="0" TextChanged="txtNum_TextChanged" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <RepeatButton x:Name="cmdUp" Margin="1,1,1,0.8" Content="˄" Click="cmdUp_Click"  Width="25" Height="25" Interval="30"/>
+            <RepeatButton x:Name="cmdUp" Margin="1,1,1,0.8" Content="˄" Click="cmdUp_Click"  Width="25" Height="25" Interval="30"/>
     </StackPanel>
 
 </UserControl>
