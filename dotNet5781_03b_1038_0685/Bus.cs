@@ -12,8 +12,8 @@ namespace dotNet5781_03b_1038_0685
     public enum StatEnum {READY, IS_TRAVELING, IN_REFUELING, IN_TREATMENT, NEED_TREATMENT }
     public class Bus : INotifyPropertyChanged
     {
-        static readonly TimeSpan time_refuling = new TimeSpan(0, 0, seconds: 12);
-        static readonly TimeSpan time_treatment = new TimeSpan(0,0, seconds: 14);
+        static readonly TimeSpan time_refuling = TimeSpan.FromSeconds(12);
+        static readonly TimeSpan time_treatment = TimeSpan.FromSeconds(144);
         #region privates fildes
         private string licensNum;
         private StatEnum stat;
@@ -147,11 +147,11 @@ namespace dotNet5781_03b_1038_0685
             {
                 if(stat == StatEnum.READY || stat == StatEnum.NEED_TREATMENT)
                 {
-                    return stat.ToString();
+                    return stat.ToString().Replace("_"," ").ToLower() + " ";
                 }
                 else
                 {
-                    return stat.ToString() + " " + time_until_ready;
+                    return stat.ToString().Replace("_", " ").ToLower() + " " + time_until_ready;
                 }
             } 
         }
@@ -180,17 +180,14 @@ namespace dotNet5781_03b_1038_0685
             if (this.Stat == StatEnum.IN_REFUELING)
             {
                 throw new ArgumentException("the bus is refeuling, please wait!");
-
             }
             if (this.Stat == StatEnum.IN_TREATMENT)
             {
                 throw new ArgumentException("the bus is in treatment, please wait!");
-
             }
             if (this.Stat == StatEnum.IS_TRAVELING)
             {
                 throw new ArgumentException("the bus is already on the ride!");
-
             }
             //check if the last treatment was less then one year
             if (Stat == StatEnum.NEED_TREATMENT || DateTime.Now - LastTreatDate > new TimeSpan(365, 0, 0, 0))
@@ -254,9 +251,6 @@ namespace dotNet5781_03b_1038_0685
         {
             return $"license's num: {LicensNum},    km: {KmAfterTreat}";
         }
-
         #endregion
-
-        
     }
 }

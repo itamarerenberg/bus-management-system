@@ -27,11 +27,13 @@
             <ListView.View>
                 <GridView x:Name="usergridview">
                     <GridViewColumn x:Name="lisenceNum"  Header="lisence number" Width="auto" DisplayMemberBinding="{Binding LicensNum}" />
-                    <GridViewColumn x:Name="status"  Header="                    status                   "  Width="auto" DisplayMemberBinding="{Binding Display_stat}"/>
-                    <GridViewColumn x:Name="treatCol" Width="auto">
+                    <GridViewColumn x:Name="status"  Header="status"  Width="auto">
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button x:Name="treat" Content="treat" Click="treat_Click" Visibility="{Binding Path= Stat, Converter = {StaticResource status_to_visibility}}" />
+                            <DataTemplate >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Display_stat}" VerticalAlignment="Center" ></TextBlock>
+                                    <Button x:Name="treat" Content="treat" Click="treat_Click" Visibility="{Binding Path= Stat, Converter = {StaticResource status_to_visibility}}" />
+                                </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

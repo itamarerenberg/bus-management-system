@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -18,10 +20,11 @@ namespace dotNet5781_03b_1038_0685
     /// <summary>
     /// Interaction logic for RideWindow.xaml
     /// </summary>
-    public partial class RideWindow : Window
+    public partial class RideWindow : Window 
     {
         public Bus BusForRide;
         public MessageBoxResult Result;
+
         public RideWindow(Bus busForRide)
         {
             InitializeComponent();
@@ -30,25 +33,6 @@ namespace dotNet5781_03b_1038_0685
             kmNumUpDown.MaxValue = busForRide.Fule_in_km;
         }
 
-        public void RefuelBus()
-        {
-            ProgBar.Visibility = Visibility.Visible;
-            RefuleMsg.Visibility = Visibility.Visible;
-            kmNumUpDown.IsEnabled = false;
-            BusForRide.Refule();
-
-            new Thread(() => 
-            {
-                for (int i = 0; i < 120; i++)
-                {
-                    Thread.Sleep(100);
-                    ProgBar.Value++;
-                }
-            }).Start();
-            ProgBar.Visibility = Visibility.Hidden;
-            RefuleMsg.Visibility = Visibility.Hidden;
-            kmNumUpDown.IsEnabled = true;
-        }
 
         private void kmNumUpDown_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -60,7 +44,8 @@ namespace dotNet5781_03b_1038_0685
                     Result = MessageBox.Show($"this bus cannot rides over {input.MaxValue} km!\ndo you want to refuel the bus?", "ERORR", MessageBoxButton.YesNo);
                     if (Result == MessageBoxResult.Yes)
                     {
-                        RefuelBus();
+                        BusForRide.Refule();
+                        start_progresbar("refueling... please wait!");
                     }
                     else
                     {
@@ -95,9 +80,37 @@ namespace dotNet5781_03b_1038_0685
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "ERORR");
+                    if (ex.Message == "passed more than a year from the last treatment"|| ex.Message == "the bus need a 20,000's treatment")
+                    {
+                        Result = MessageBox.Show(ex.Message + "\ndo you want to treat the bus?", "ERORR", MessageBoxButton.YesNo);
+                        if (Result == MessageBoxResult.Yes)
+                        {
+                            BusForRide.Treatment();
+                            start_progresbar("the bus is in Treatment... please wait!");
+                        }
+                    }
                 }
             }
         }
+        private void start_progresbar( string str)
+        {
+            kmNumUpDown.IsEnabled = false;
+            ProgBarMsg.Content = str;
+            ProgBarMsg.Visibility = Visibility.Visible;
+            ProgBar.Visibility = Visibility.Visible;
+
+            Duration duration = new Duration(BusForRide.Time_until_ready);
+            DoubleAnimation doubleanimation = new DoubleAnimation(ProgBar.Maximum, duration);
+            doubleanimation.FillBehavior = FillBehavior.Stop;
+            doubleanimation.Completed += (s, e) =>
+            {
+                ProgBarMsg.Visibility = Visibility.Collapsed;
+                ProgBar.Visibility = Visibility.Collapsed;
+                kmNumUpDown.IsEnabled = true;
+                ProgBar.Value = 0;
+            };
+            ProgBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+        }
+
     }
 }
