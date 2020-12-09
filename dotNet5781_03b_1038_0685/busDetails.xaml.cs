@@ -24,6 +24,7 @@ namespace dotNet5781_03b_1038_0685
             InitializeComponent();
             this.DataContext = bus;
             this.Title = $"bus number: {bus.LicensNum}";
+            tbTitle.Text = $"bus number: {bus.LicensNum}";
         }
 
         private void SetARideButton_Click(object sender, RoutedEventArgs e)

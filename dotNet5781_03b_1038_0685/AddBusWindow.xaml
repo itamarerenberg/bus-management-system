@@ -6,6 +6,17 @@
         xmlns:local="clr-namespace:dotNet5781_03b_1038_0685"
         mc:Ignorable="d"
     Title="Add Bus" Height="400" Width="350" FontSize="16">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF4CCFF0"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#FF4CCFF0"/>
+        </Style>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="images\blueBackground.jpg"/>
+    </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,7 +45,7 @@
             <Label Content="Last treatment Date:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="4" VerticalAlignment="Center"/>
             <DatePicker x:Name="lastTreatDateDatePicker" Grid.Column="1" HorizontalAlignment="Left" Margin="3" Grid.Row="4" SelectedDate="{Binding LastTreatDate, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center"/>
             <Label Content="license number:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center"/>
-            <TextBox x:Name="licensNumTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Text="{Binding LicensNum, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+            <TextBox x:Name="licensNumTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Text="{Binding LicensNum, Mode=OneWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" TextWrapping="Wrap"/>
             <Label Content="Start Date:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="1" VerticalAlignment="Center"/>
             <DatePicker x:Name="startDateDatePicker" Grid.Column="1" HorizontalAlignment="Left" Margin="3" Grid.Row="1" SelectedDate="{Binding StartDate, Mode=OneWay}" VerticalAlignment="Center"/>
             <Label Content="Status:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="6" VerticalAlignment="Center"/>
