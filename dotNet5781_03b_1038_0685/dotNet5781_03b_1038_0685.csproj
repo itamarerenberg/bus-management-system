@@ -98,7 +98,7 @@
     <Compile Include="AddBusWindow.xaml.cs">
       <DependentUpon>AddBusWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Is_need_fule.cs" />
+    <Compile Include="exeptions.cs" />
     <Compile Include="NumericUpDownControl.xaml.cs">
       <DependentUpon>NumericUpDownControl.xaml</DependentUpon>
     </Compile>

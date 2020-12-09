@@ -145,17 +145,42 @@ namespace dotNet5781_03b_1038_0685
         public string Display_stat { 
             get
             {
-                if(stat == StatEnum.READY || stat == StatEnum.NEED_TREATMENT)
+                if(IsBusy)
                 {
-                    return stat.ToString().Replace("_"," ").ToLower() + " ";
+                    return stat.ToString().Replace("_", " ").ToLower() + " " + time_until_ready;
                 }
                 else
                 {
-                    return stat.ToString().Replace("_", " ").ToLower() + " " + time_until_ready;
+                    return stat.ToString().Replace("_"," ").ToLower() + " ";
                 }
             } 
         }
 
+        public bool IsBusy
+        {
+            get
+            {
+                if (this.Stat == StatEnum.IN_REFUELING)
+                {
+                    return true;
+                }
+
+                if (this.Stat == StatEnum.IN_TREATMENT)
+                {
+                    return true;
+                }
+
+                if (this.Stat == StatEnum.IS_TRAVELING)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public bool IsNotBusy => !IsBusy;
+
+        public bool CanFule => (!IsBusy) && (fule_in_km <= 1200);
         #endregion
 
         #region constractors
@@ -177,35 +202,40 @@ namespace dotNet5781_03b_1038_0685
 
         public void Ride(double km)
         {
-            if (this.Stat == StatEnum.IN_REFUELING)
+            //check if the input is valid
+            if (km > 1200)
             {
-                throw new ArgumentException("the bus is refeuling, please wait!");
+                throw new ArgumentException("can not preform a ride over then 1200 km");
             }
-            if (this.Stat == StatEnum.IN_TREATMENT)
+
+            //check if busy
+            if(IsBusy)
             {
-                throw new ArgumentException("the bus is in treatment, please wait!");
+                throw new Busy("the bus is busy");
             }
-            if (this.Stat == StatEnum.IS_TRAVELING)
+
+            if(Stat == StatEnum.NEED_TREATMENT)
             {
-                throw new ArgumentException("the bus is already on the ride!");
+                throw new NeedTreatment("need tratment");
             }
+
             //check if the last treatment was less then one year
-            if (Stat == StatEnum.NEED_TREATMENT || DateTime.Now - LastTreatDate > new TimeSpan(365, 0, 0, 0))
+            if (DateTime.Now - LastTreatDate > new TimeSpan(365, 0, 0, 0))
             {
                 Stat = StatEnum.NEED_TREATMENT;
-                throw new ArgumentException("passed more than a year from the last treatment");
+                throw new NeedTreatment("need treatment");
             }
 
             //crheck if this ride will cose to pass the 20,000km from last treatment
             if (KmAfterTreat + km > 20000)
             {
-                throw new ArgumentException("the bus need a 20,000's treatment");
+                throw new Danger("this ride will over the 20,000 km from the last treatment");
             }
 
             //check if there is enough fule for the ride
             if (Fule_in_km < km)
             {
-                throw new ArgumentException("there is not enough fuel for this ride");
+                throw new NotEnoughFule("there is not enough fuel for this ride");
             }
 
             //update the km end the fule
@@ -215,36 +245,33 @@ namespace dotNet5781_03b_1038_0685
             Stat = StatEnum.IS_TRAVELING;
             int time = (int)((km / new Random().Next(20, 50)) * 6);//in seconds
             Time_until_ready = new TimeSpan(0,0,time);
-
         }
 
         public void Refule()
         {
-            if (Stat == StatEnum.READY || Stat == StatEnum.NEED_TREATMENT)
-            {
-                Stat = StatEnum.IN_REFUELING;
-                Time_until_ready = time_refuling;
-                Fule_in_km = 1200;
-            }
-            else
+            //check if busy
+            if (IsBusy)
             {
                 throw new ArgumentException("you cannot refuel the bus while driving or treatmenting");
             }
+
+            Stat = StatEnum.IN_REFUELING;
+            Time_until_ready = time_refuling;
+            Fule_in_km = 1200;
         }
 
         public void Treatment()
         {
-            if (stat == StatEnum.READY || Stat == StatEnum.NEED_TREATMENT)
+            //check if busy
+            if (IsBusy)
             {
-                LastTreatDate = DateTime.Now;
-                KmAfterTreat = 0;
-                Stat = StatEnum.IN_TREATMENT;
-                Time_until_ready = time_treatment;
+                throw new ArgumentException("you cannot refuel the bus while driving or treatmenting");
             }
-            else
-            {
-                throw new ArgumentException("you cannot treatment the bus while driving or refueling");
-            }
+
+            LastTreatDate = DateTime.Now;
+            KmAfterTreat = 0;
+            Stat = StatEnum.IN_TREATMENT;
+            Time_until_ready = time_treatment;
         }
 
         public override string ToString()

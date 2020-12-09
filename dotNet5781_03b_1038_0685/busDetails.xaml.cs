@@ -30,7 +30,7 @@ namespace dotNet5781_03b_1038_0685
         private void SetARideButton_Click(object sender, RoutedEventArgs e)
         {
             Bus busForRide = (Bus)((Button)e.Source).DataContext;
-            RideWindow RWindow = new RideWindow(busForRide);
+            RideWindow RWindow = new RideWindow(busForRide);//opens the ride window
             RWindow.ShowDialog();
         }
 
@@ -39,8 +39,8 @@ namespace dotNet5781_03b_1038_0685
             try
             {
                 Bus row = (Bus)((Button)e.Source).DataContext;
-                row.Refule();
-                this.Close();
+                row.Refule();//send the bus to refule
+                this.Close();//close the window
             }
             catch (Exception msg)
             {

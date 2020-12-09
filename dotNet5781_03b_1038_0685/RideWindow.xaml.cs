@@ -78,17 +78,40 @@ namespace dotNet5781_03b_1038_0685
                     BusForRide.Ride((double)kmNumUpDown.Num);
                     this.Close();
                 }
-                catch (Exception ex)
+                catch(Busy ex)
                 {
-                    if (ex.Message == "passed more than a year from the last treatment"|| ex.Message == "the bus need a 20,000's treatment")
+                    Result = MessageBox.Show(ex.Message, "ERORR", MessageBoxButton.OK);
+                }
+                catch(Danger ex)
+                {
+                    Result = MessageBox.Show(ex.Message + "\ndo you want to send the bus to treatment?", "ERORR", MessageBoxButton.YesNo);
+                    if (Result == MessageBoxResult.Yes)
                     {
-                        Result = MessageBox.Show(ex.Message + "\ndo you want to treat the bus?", "ERORR", MessageBoxButton.YesNo);
-                        if (Result == MessageBoxResult.Yes)
-                        {
-                            BusForRide.Treatment();
-                            start_progresbar("the bus is in Treatment... please wait!");
-                        }
+                        BusForRide.Treatment();
+                        start_progresbar("in treatment... plese wait");
                     }
+                }
+                catch (NotEnoughFule ex)//#split tot two difrent exptions
+                {
+                    Result = MessageBox.Show(ex.Message + "\ndo you want to refule the bus?", "ERORR", MessageBoxButton.YesNo);
+                    if (Result == MessageBoxResult.Yes)
+                    {
+                        BusForRide.Refule();
+                        start_progresbar("in refuling... plese wait");
+                    }
+                }
+                catch (NeedTreatment ex)//#split tot two difrent exptions
+                {
+                    Result = MessageBox.Show(ex.Message + "\ndo you want to send the bus to treatment?", "ERORR", MessageBoxButton.YesNo);
+                    if (Result == MessageBoxResult.Yes)
+                    {
+                        BusForRide.Treatment();
+                        start_progresbar("in treatment... plese wait");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Result = MessageBox.Show(ex.Message, "ERORR", MessageBoxButton.OK);
                 }
             }
         }

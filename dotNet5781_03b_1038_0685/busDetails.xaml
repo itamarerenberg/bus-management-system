@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Height="471.399" Width="545.105" FontSize="16" >
     <Window.Resources>
-        <local:Is_need_fule x:Key="Is_need_fule" />
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="#FF4CCFF0"/>
         </Style>
@@ -56,8 +55,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="fuel" x:Name="FuelButton" Click="FuelButton_Click" FontSize="40" IsEnabled="{Binding Path= Fule_in_km, Converter = {StaticResource Is_need_fule}}" Margin="30"/>
-            <Button x:Name="SetARideButton" Grid.Column="1" Content="set a ride" Click="SetARideButton_Click" FontSize="40" Margin="30" ></Button>
+            <Button Content="fuel" x:Name="FuelButton" Click="FuelButton_Click" FontSize="40" IsEnabled="{Binding CanFule}" Margin="30"/>
+            <Button x:Name="SetARideButton" Grid.Column="1" Content="set a ride" Click="SetARideButton_Click" FontSize="40" Margin="30" IsEnabled="{Binding IsNotBusy}" ></Button>
         </Grid>
         <TextBlock x:Name="tbTitle" HorizontalAlignment="Left" Margin="54,-53,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="auto" Width="auto" FontSize="28" FontFamily="Sylfaen" Grid.ColumnSpan="2"/>
     </Grid>
