@@ -25,16 +25,14 @@ namespace dotNet5781_03b_1038_0685
         public MainWindow()
         {
             InitializeComponent();
+            this.Closing += MainWindow_Closing;
             RandBus.Buses = RandBus.ListRB(10);
             main_list.ItemsSource = RandBus.Buses;
-            //new Thread(() =>
-            //{
-            //    while (true) 
-            //    {
-            //        Thread.Sleep(1000);
-            //        Dispatcher.BeginInvoke((Action)( () => TestGrid.Items.Refresh()));
-            //    } 
-            //}).Start();
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            Environment.Exit(Environment.ExitCode);
         }
 
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
