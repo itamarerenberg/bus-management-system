@@ -30,6 +30,10 @@ namespace dotNet5781_03b_1038_0685
             this.Closing += MainWindow_Closing;
 
             BusesCollection = new busCollection(RandBus.ListRB(10));
+            BusesCollection.Buses.Add(RandBus.RB(fuel:50));
+            BusesCollection.Buses.Add(RandBus.RB(km: 19950));
+            BusesCollection.Buses.Add(new Bus(1234567));
+
             this.DataContext = BusesCollection;
             main_list.ItemsSource = BusesCollection.Buses;
         }

@@ -16,6 +16,7 @@ namespace dotNet5781_03b_1038_0685
         private string readyBussesMsg;
         private string busyBussesMsg;
         private string needTreatBussesMsg;
+        private string totalBaussesMsg;
 
         public ObservableCollection<Bus> Buses
         {
@@ -24,6 +25,7 @@ namespace dotNet5781_03b_1038_0685
             {
                 buses = value;
                 BusesList = value.ToList<Bus>();
+                TotalBaussesMsg = $"Total busses: {Buses.Count}";
                 update_messages();
             }
         }
@@ -61,8 +63,16 @@ namespace dotNet5781_03b_1038_0685
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NeedTreatBussesMsg"));
             }
         }
+        public string TotalBaussesMsg { get => totalBaussesMsg;
+            set
+            {
+                totalBaussesMsg = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TotalBaussesMsg"));
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        #region constractor
         public busCollection(ObservableCollection<Bus> list)
         {
             Buses = list;
@@ -72,7 +82,9 @@ namespace dotNet5781_03b_1038_0685
                 (item as INotifyPropertyChanged).PropertyChanged += new PropertyChangedEventHandler(item_PropertyChanged);
             }
         }
+        #endregion
 
+        #region events handeling
         private void Buses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null)
@@ -82,6 +94,7 @@ namespace dotNet5781_03b_1038_0685
                     (item as INotifyPropertyChanged).PropertyChanged += new PropertyChangedEventHandler(item_PropertyChanged);
                 }
                 BusesList = Buses.ToList<Bus>();
+                TotalBaussesMsg = $"Total busses: {Buses.Count}";
                 update_messages();
             }
         }
@@ -103,10 +116,10 @@ namespace dotNet5781_03b_1038_0685
                     ReadyBussesMsg = "one bus is ready for driving!";
                     break;
                 default:
-                    ReadyBussesMsg= $"{num} busses are ready for driving";
+                    ReadyBussesMsg = $"{num} busses are ready for driving";
                     break;
             }
-            num = BusesList.FindAll(b => b.Stat == StatEnum.IN_REFUELING || 
+            num = BusesList.FindAll(b => b.Stat == StatEnum.IN_REFUELING ||
             b.Stat == StatEnum.IN_TREATMENT || b.Stat == StatEnum.IS_TRAVELING).Count();
             switch (num)
             {
@@ -133,7 +146,8 @@ namespace dotNet5781_03b_1038_0685
                     NeedTreatBussesMsg = $"{num} busses need treatment!";
                     break;
             }
-        }
+        } 
+        #endregion
     }
 
 
