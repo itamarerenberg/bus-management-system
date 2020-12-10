@@ -13,7 +13,7 @@ namespace dotNet5781_03b_1038_0685
     public class Bus : INotifyPropertyChanged
     {
         static readonly TimeSpan time_refuling = TimeSpan.FromSeconds(12);
-        static readonly TimeSpan time_treatment = TimeSpan.FromSeconds(144);
+        static readonly TimeSpan time_treatment = TimeSpan.FromSeconds(3);//1111111111111111111111111111111111111111
         #region privates fildes
         private string licensNum;
         private StatEnum stat;

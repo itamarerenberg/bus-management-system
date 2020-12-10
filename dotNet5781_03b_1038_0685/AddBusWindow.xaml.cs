@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,12 @@ namespace dotNet5781_03b_1038_0685
     public partial class AddBusWindow : Window
     {
         Bus bus;
-        public AddBusWindow()
+        public ObservableCollection<Bus> Buses;
+        public AddBusWindow(ObservableCollection<Bus> buses)
         {
             InitializeComponent();
             statComboBox.ItemsSource = Enum.GetValues(typeof(StatEnum));
+            Buses = buses;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -40,8 +43,9 @@ namespace dotNet5781_03b_1038_0685
                 StatEnum st = statComboBox.SelectedItem == null ? StatEnum.READY : (StatEnum)statComboBox.SelectedItem;
 
                 bus = new Bus(ln, sd, kmat, skm, fikm, ltd, st);
+
                 
-                RandBus.Buses.Add(bus);//add the bus to the bus's list
+                Buses.Add(bus);//add the bus to the bus's list
             } 
             catch (Exception ex)
             { 

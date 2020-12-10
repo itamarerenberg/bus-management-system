@@ -22,12 +22,16 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class MainWindow : Window
     {
+        public busCollection BusesCollection { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             this.Closing += MainWindow_Closing;
-            RandBus.Buses = RandBus.ListRB(10);
-            main_list.ItemsSource = RandBus.Buses;
+
+            BusesCollection = new busCollection(RandBus.ListRB(10));
+            this.DataContext = BusesCollection;
+            main_list.ItemsSource = BusesCollection.Buses;
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -38,7 +42,6 @@ namespace dotNet5781_03b_1038_0685
         private void TestGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
-            
 
         }
 
@@ -47,14 +50,12 @@ namespace dotNet5781_03b_1038_0685
             Bus busForRide = (Bus)((Button)e.Source).DataContext;
             RideWindow RWindow = new RideWindow(busForRide);
             RWindow.ShowDialog();
-            //TestGrid.Items.Refresh();
         }
 
         private void Add_Bus_Button_Click(object sender, RoutedEventArgs e)
         {
-            AddBusWindow addBusWindow = new AddBusWindow();
+            AddBusWindow addBusWindow = new AddBusWindow(BusesCollection.Buses);
             addBusWindow.ShowDialog();
-            //TestGrid.Items.Refresh();
         }
 
         private void FuelButton_Click(object sender, RoutedEventArgs e)
@@ -81,7 +82,7 @@ namespace dotNet5781_03b_1038_0685
 
         private void Add_Random_Bus_Button_Click(object sender, RoutedEventArgs e)
         {
-            RandBus.Buses.Add(RandBus.RB());
+            BusesCollection.Buses.Add(RandBus.RB());
         }
 
         private void treat_Click(object sender, RoutedEventArgs e)
