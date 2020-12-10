@@ -81,6 +81,8 @@ namespace dotNet5781_03b_1038_0685
                 {
                     (item as INotifyPropertyChanged).PropertyChanged += new PropertyChangedEventHandler(item_PropertyChanged);
                 }
+                BusesList = Buses.ToList<Bus>();
+                update_messages();
             }
         }
 
