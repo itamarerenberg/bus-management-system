@@ -69,7 +69,6 @@ namespace dotNet5781_03b_1038_0685
             {
                 MessageBox.Show(msg.Message, "ERROR");
             }
-            //TestGrid.Items.Refresh();
         }
 
         private void RowDoubleClick(object sender, RoutedEventArgs e)

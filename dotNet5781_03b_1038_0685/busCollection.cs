@@ -13,7 +13,9 @@ namespace dotNet5781_03b_1038_0685
     {
         private ObservableCollection<Bus> buses = new ObservableCollection<Bus>();
         private List<Bus> busesList;
-        private string readyBussesNomber;
+        private string readyBussesMsg;
+        private string busyBussesMsg;
+        private string needTreatBussesMsg;
 
         public ObservableCollection<Bus> Buses
         {
@@ -22,7 +24,7 @@ namespace dotNet5781_03b_1038_0685
             {
                 buses = value;
                 BusesList = value.ToList<Bus>();
-                ReadyBussesNomber = $"{BusesList.FindAll(b => b.Stat == StatEnum.READY).Count()}  busses are ready for driving";
+                update_messages();
             }
         }
         public List<Bus> BusesList
@@ -34,13 +36,29 @@ namespace dotNet5781_03b_1038_0685
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BusesList"));
             }
         }
-        public string ReadyBussesNomber
+        public string ReadyBussesMsg
         {
-            get => readyBussesNomber;
+            get => readyBussesMsg;
             set
             {
-                readyBussesNomber = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReadyBussesNomber"));
+                readyBussesMsg = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReadyBussesMsg"));
+            }
+        }
+        public string BusyBussesMsg { get => busyBussesMsg;
+            set
+            {
+                busyBussesMsg = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BusyBussesMsg"));
+            }
+        }
+        public string NeedTreatBussesMsg
+        {
+            get => needTreatBussesMsg;
+            set
+            {
+                needTreatBussesMsg = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NeedTreatBussesMsg"));
             }
         }
 
@@ -66,11 +84,55 @@ namespace dotNet5781_03b_1038_0685
             }
         }
 
-        void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            ReadyBussesNomber = $"{BusesList.FindAll(b => b.Stat == StatEnum.READY).Count()}  busses are ready for driving";
+            update_messages();
+        }
+
+        private void update_messages()
+        {
+            int num = BusesList.FindAll(b => b.Stat == StatEnum.READY).Count();
+            switch (num)
+            {
+                case 0:
+                    ReadyBussesMsg = "no busses available for driving!";
+                    break;
+                case 1:
+                    ReadyBussesMsg = "one bus is ready for driving!";
+                    break;
+                default:
+                    ReadyBussesMsg= $"{num} busses are ready for driving";
+                    break;
+            }
+            num = BusesList.FindAll(b => b.Stat == StatEnum.IN_REFUELING || 
+            b.Stat == StatEnum.IN_TREATMENT || b.Stat == StatEnum.IS_TRAVELING).Count();
+            switch (num)
+            {
+                case 0:
+                    BusyBussesMsg = "";
+                    break;
+                case 1:
+                    BusyBussesMsg = "one bus is busy";
+                    break;
+                default:
+                    BusyBussesMsg = $"{num} busses are busy";
+                    break;
+            }
+            num = BusesList.FindAll(b => b.Stat == StatEnum.NEED_TREATMENT).Count();
+            switch (num)
+            {
+                case 0:
+                    NeedTreatBussesMsg = "";
+                    break;
+                case 1:
+                    NeedTreatBussesMsg = "one bus needs treatment!";
+                    break;
+                default:
+                    NeedTreatBussesMsg = $"{num} busses need treatment!";
+                    break;
+            }
         }
     }
 
-    
+
 }
