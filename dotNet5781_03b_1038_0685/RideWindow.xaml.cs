@@ -31,6 +31,8 @@ namespace dotNet5781_03b_1038_0685
             BusForRide = busForRide;
             this.DataContext = BusForRide;
             kmNumUpDown.MaxValue = busForRide.Fule_in_km;
+            kmNumUpDown.txtNum.Focus();
+            kmNumUpDown.txtNum.SelectAll();
         }
 
 
@@ -51,6 +53,7 @@ namespace dotNet5781_03b_1038_0685
                     {
                         input.Num = input.MaxValue;
                         input.txtNum.Text = input.Num.ToString();
+                        kmNumUpDown.txtNum.SelectAll();
                     }
                 }
                 else
@@ -58,12 +61,14 @@ namespace dotNet5781_03b_1038_0685
                     MessageBox.Show("a bus cannot rides over 1200 km!", "ERORR");
                     input.Num = 0;
                     input.txtNum.Text = input.Num.ToString();
+                    kmNumUpDown.txtNum.SelectAll();
                 }
             }
             else if (input.Num < input.MinValue)
             {
                 input.Num = input.MinValue;
                 MessageBox.Show("enter a positive number", "ERORR");
+                kmNumUpDown.txtNum.SelectAll();
             }
             else
                 input.txtNum.Text = input.Num == null ? "" : input.Num.ToString();
@@ -73,6 +78,12 @@ namespace dotNet5781_03b_1038_0685
         {
             if (e.Key == Key.Enter)
             {
+                if (kmNumUpDown.Num == null || kmNumUpDown.Num == 0)
+                {
+                    MessageBox.Show("insert a value", "ERORR");
+                    kmNumUpDown.txtNum.SelectAll();
+                    return;
+                }
                 try
                 {
                     BusForRide.Ride((double)kmNumUpDown.Num);
@@ -123,14 +134,17 @@ namespace dotNet5781_03b_1038_0685
             ProgBar.Visibility = Visibility.Visible;
 
             Duration duration = new Duration(BusForRide.Time_until_ready);
-            DoubleAnimation doubleanimation = new DoubleAnimation(ProgBar.Maximum, duration);
-            doubleanimation.FillBehavior = FillBehavior.Stop;
+            DoubleAnimation doubleanimation = new DoubleAnimation(ProgBar.Maximum, duration)
+            {
+                FillBehavior = FillBehavior.Stop
+            };
             doubleanimation.Completed += (s, e) =>
             {
                 ProgBarMsg.Visibility = Visibility.Collapsed;
                 ProgBar.Visibility = Visibility.Collapsed;
                 kmNumUpDown.IsEnabled = true;
                 ProgBar.Value = 0;
+                kmNumUpDown.txtNum.Focus();
             };
             ProgBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
         }

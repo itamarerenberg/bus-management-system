@@ -21,7 +21,6 @@ namespace dotNet5781_03b_1038_0685
     /// </summary>
     public partial class NumericUpDownControl : INotifyPropertyChanged
     {
-        public MessageBoxResult Result;
         private double? num = null;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -32,7 +31,6 @@ namespace dotNet5781_03b_1038_0685
                 num = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Num"));
             }
-
         }
        
         public double MinValue { get; set; }
