@@ -52,7 +52,7 @@
                     <Setter Property="Foreground" Value="#FF61C7D6" />
                     <Setter Property="Background" Value="#FF5A5B83"/>
                     <Setter Property="BorderBrush" Value="DarkBlue"/>
-                    <EventSetter Event="Control.MouseDoubleClick" Handler="RowDoubleClick"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="RowDoubleClick"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Stat}" Value="IN_REFUELING">
                             <Setter Property="Background" Value="#FF4495B9" />
