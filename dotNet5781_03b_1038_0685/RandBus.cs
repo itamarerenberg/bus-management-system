@@ -26,7 +26,7 @@ namespace dotNet5781_03b_1038_0685
             DateTime SDate = new DateTime(2018 + r.Next(2), r.Next(1, 12), r.Next(1, 28));//random start date
             double Fuel = (fuel == -1 || fuel > 1200) ? r.Next(1200) : fuel;
             double Km = km == -1 ? r.Next(20000) : km;
-            DateTime Time = time == new TimeSpan() ? DateTime.Today.AddDays(r.Next(-600, 0)) : DateTime.Today - time;
+            DateTime Time = time == new TimeSpan() ? DateTime.Today.AddDays(r.Next(-400, 0)) : DateTime.Today - time;
 
             while (SDate > Time)//make sure the last treatment date is after the start date
             {

@@ -184,5 +184,8 @@
     <Resource Include="images\blueBackground.jpg" />
     <Resource Include="images\blueButton.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bus-stop-emoji.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -70,6 +70,8 @@ namespace dotNet5781_03b_1038_0685
                 stat = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stat"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsBusy"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsNotBusy"));
             }
         }
         [DisplayName("fuel status(km)")]
@@ -137,7 +139,7 @@ namespace dotNet5781_03b_1038_0685
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));//announce that Time_until_ready chenged
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));//announce that Display_stat chenged
                         Thread.Sleep(1000);
-                        Stat = (DateTime.Now - lastTreatDate > new TimeSpan(365, 0, 0, 0))? StatEnum.NEED_TREATMENT : StatEnum.READY;//change stat to "READY"
+                        Stat = (DateTime.Now - lastTreatDate > new TimeSpan(365, 0, 0, 0))? StatEnum.NEED_TREATMENT : StatEnum.READY;//change stat to "READY" or "IN_TREATMENT" 
                     }).Start();
                 }
             }

@@ -30,9 +30,9 @@ namespace dotNet5781_03b_1038_0685
             this.Closing += MainWindow_Closing;
 
             BusesCollection = new busCollection(RandBus.ListRB(10));
-            BusesCollection.Buses.Add(RandBus.RB(fuel:50));
+            BusesCollection.Buses.Add(RandBus.RB(fuel: 50));
             BusesCollection.Buses.Add(RandBus.RB(km: 19950));
-            //BusesCollection.Buses.Add(new Bus(1234567));
+            BusesCollection.Buses.Add(new Bus("1234567", new DateTime(2010, 3, 1), 10000, 300000, 1000, new DateTime(2018, 1 , 1))) ;
 
             this.DataContext = BusesCollection;
             main_list.ItemsSource = BusesCollection.Buses;
@@ -81,11 +81,6 @@ namespace dotNet5781_03b_1038_0685
             Bus selectedBus = (Bus)((ListViewItem)sender).Content;
             BusDetails busDetails = new BusDetails(selectedBus);
             busDetails.ShowDialog();
-        }
-
-        private void Add_Random_Bus_Button_Click(object sender, RoutedEventArgs e)
-        {
-            BusesCollection.Buses.Add(RandBus.RB());
         }
 
         private void treat_Click(object sender, RoutedEventArgs e)
