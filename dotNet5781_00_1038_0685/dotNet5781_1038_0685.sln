@@ -13,11 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet5781_03a_1038_0685", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet5781_03b_1038_0685", "..\dotNet5781_03b_1038_0685\dotNet5781_03b_1038_0685.csproj", "{6C2BC3C2-ED2F-4329-AE3D-0B1B69AE3578}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3293F2C1-449A-48AC-9A5B-975F0FD48D0D}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\..\Desktop\בונוסים.docx = ..\..\..\..\..\Desktop\בונוסים.docx
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
