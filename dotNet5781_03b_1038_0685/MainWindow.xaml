@@ -20,6 +20,7 @@
                     <Setter Property="Background" Value="#FF5A5B83"/>
                     <Setter Property="BorderBrush" Value="DarkBlue"/>
                     <EventSetter Event="MouseDoubleClick" Handler="RowDoubleClick"/>
+                    <!--set the color of the row according to the ststus of the bus-->
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Stat}" Value="IN_REFUELING">
                             <Setter Property="Background" Value="#FF4495B9" />

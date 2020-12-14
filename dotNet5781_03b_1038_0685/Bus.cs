@@ -117,7 +117,7 @@ namespace dotNet5781_03b_1038_0685
             get => time_until_ready;
             private set
             {
-                if (value == new TimeSpan(0))
+                if (value == new TimeSpan(0))//if value == 0:0:0
                 {
                     time_until_ready = new TimeSpan(0, 0, 0);
                     Stat = StatEnum.READY;
@@ -129,14 +129,15 @@ namespace dotNet5781_03b_1038_0685
                     {
                         while (time_until_ready > new TimeSpan(0,0,0))
                         {
-                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));
-                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));//announce that Time_until_ready chenged
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));//announce that Display_stat chenged
                             Thread.Sleep(1000);
                             time_until_ready = new TimeSpan(hours:0, minutes:0, seconds: (int)time_until_ready.TotalSeconds - 1);//subtruct 1 from Seconds_until_ready   
                         }
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));
-                        Stat = (DateTime.Now - lastTreatDate > new TimeSpan(365, 0, 0, 0))? StatEnum.NEED_TREATMENT : StatEnum.READY;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time_until_ready"));//announce that Time_until_ready chenged
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Display_stat"));//announce that Display_stat chenged
+                        Thread.Sleep(1000);
+                        Stat = (DateTime.Now - lastTreatDate > new TimeSpan(365, 0, 0, 0))? StatEnum.NEED_TREATMENT : StatEnum.READY;//change stat to "READY"
                     }).Start();
                 }
             }
@@ -147,7 +148,7 @@ namespace dotNet5781_03b_1038_0685
             {
                 if(IsBusy)
                 {
-                    return stat.ToString().Replace("_", " ").ToLower() + " " + time_until_ready;
+                    return stat.ToString().Replace("_", " ").ToLower() + " " + time_until_ready;//if busy: add the time until ready to th status
                 }
                 else
                 {
@@ -156,6 +157,10 @@ namespace dotNet5781_03b_1038_0685
             } 
         }
 
+        /// <summary>
+        /// true: if the bus in refuling or treatment or traveling
+        /// false: if the bus ready or need treatment
+        /// </summary>
         public bool IsBusy
         {
             get
@@ -180,12 +185,29 @@ namespace dotNet5781_03b_1038_0685
 
         public bool IsNotBusy => !IsBusy;
 
+        /// <summary>
+        /// true: if the bus in a condition that it can refule at the moment
+        /// </summary>
         public bool CanFule => (!IsBusy) && (fule_in_km <= 1200);
         #endregion
 
         #region constractors
         public Bus() { }
-        public Bus(string _licensNum, DateTime _startDate, double kmAfterTreat = 0, double sumKm = 0, double _fule_in_km = 1200, DateTime _lastTreatDate = new DateTime(), StatEnum status = 0)
+        /// <summary>
+        /// Stat = status;
+        /// this.startDate = _startDate;
+        /// this.LicensNum = _licensNum;
+        /// this.KmAfterTreat = kmAfterTreat;
+        /// this.SumKm = sumKm;
+        /// this.Fule_in_km = _fule_in_km;
+        /// this.LastTreatDate = _lastTreatDate;
+        /// </summary>
+        /// <param name="kmAfterTreat">defult value: 0</param>
+        /// <param name="sumKm">defult value: 0</param>
+        /// <param name="_fule_in_km">defult value: 1200</param>
+        /// <param name="_lastTreatDate">defult value: {01/01/0001 00:00:00}</param>
+        /// <param name="status">defult value: StatEnum.READY</param>
+        public Bus(string _licensNum, DateTime _startDate, double kmAfterTreat = 0, double sumKm = 0, double _fule_in_km = 1200, DateTime _lastTreatDate = new DateTime(), StatEnum status = StatEnum.READY)
         {
             Stat = status;
             this.startDate = _startDate;
@@ -255,9 +277,9 @@ namespace dotNet5781_03b_1038_0685
                 throw new ArgumentException("you cannot refuel the bus while driving or treatmenting");
             }
 
-            Stat = StatEnum.IN_REFUELING;
-            Time_until_ready = time_refuling;
-            Fule_in_km = 1200;
+            Stat = StatEnum.IN_REFUELING;//set the stat to refueling
+            Time_until_ready = time_refuling;//set Time_until_ready to 'time_refuling' secondes
+            Fule_in_km = 1200;//set the Fule_in_km to 1200
         }
 
         public void Treatment()
@@ -268,10 +290,10 @@ namespace dotNet5781_03b_1038_0685
                 throw new ArgumentException("you cannot refuel the bus while driving or treatmenting");
             }
 
-            LastTreatDate = DateTime.Now;
-            KmAfterTreat = 0;
-            Stat = StatEnum.IN_TREATMENT;
-            Time_until_ready = time_treatment;
+            LastTreatDate = DateTime.Now;//set LastTreatDate to now
+            KmAfterTreat = 0;//set KmAfterTreat to 0
+            Stat = StatEnum.IN_TREATMENT;//set stat to be IN_TREATMENT
+            Time_until_ready = time_treatment;//set Time_until_ready to 'time_treatment' seconds
         }
 
         public override string ToString()

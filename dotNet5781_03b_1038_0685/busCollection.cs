@@ -27,6 +27,7 @@ namespace dotNet5781_03b_1038_0685
                 update_messages();
             }
         }
+
         public List<Bus> BusesList
         {
             get => busesList;

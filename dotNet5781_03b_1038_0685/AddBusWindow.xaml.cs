@@ -51,7 +51,7 @@ namespace dotNet5781_03b_1038_0685
             { 
                 MessageBox.Show(ex.Message, "ERORR");
             }
-            this.Close();
+            this.Close();//close window
         }
     }
 }
