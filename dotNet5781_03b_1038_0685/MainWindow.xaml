@@ -40,7 +40,10 @@
                 </TextBlock>
             </StackPanel>
         </Border>
-        <ListView x:Name ="main_list" ItemsSource="{Binding}" Margin="42,46,0,34" HorizontalAlignment="Left" MinWidth="200" Height="auto">
+        <ListView x:Name ="main_list" ItemsSource="{Binding}" Margin="42,46,0,34" HorizontalAlignment="Left" MinWidth="200" Height="auto" VerticalAlignment="Top" BorderThickness="1,3,3,3">
+            <ListView.BorderBrush>
+                <ImageBrush ImageSource="images/blueButton.jpg"/>
+            </ListView.BorderBrush>
             <ListView.Background>
                 <ImageBrush ImageSource="images\blueButton.jpg"/>
             </ListView.Background>
