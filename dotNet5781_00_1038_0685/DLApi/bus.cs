@@ -8,6 +8,10 @@ namespace DO
 {
     internal class bus
     {
-        string license
+        public string LicenseNum { get; set; }
+        public DateTime LicenesDate { get; set; }
+        public float Kilometraz { get; set; }
+        public float Fule { get; set; }
+        public BusStatusEnum Stat { get; set; }
     }
 }
