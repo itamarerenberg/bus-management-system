@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DLApi
 {
-    class LineTrip
+    public class LineTrip
     {
         public string LineId{ get; set; }
         public TimeSpan StartTime{ get; set; }

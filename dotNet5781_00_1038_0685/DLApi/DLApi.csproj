@@ -44,7 +44,7 @@
     <Compile Include="AdjacentStations.cs" />
     <Compile Include="BosOnTrip.cs" />
     <Compile Include="AreasEnum.cs" />
-    <Compile Include="bus.cs" />
+    <Compile Include="Bus.cs" />
     <Compile Include="LineTrip.cs" />
     <Compile Include="BusLine.cs" />
     <Compile Include="BusStation.cs" />

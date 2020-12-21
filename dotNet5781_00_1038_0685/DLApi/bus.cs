@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DO
 {
-    internal class bus
+    public class bus
     {
         public string LicenseNum { get; set; }
         public DateTime LicenesDate { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DLApi
 {
-    class AdjacentStations
+    public  class AdjacentStations
     {
         public int StationCode1{ get; set; }
         public int StationCode2 { get; set; }

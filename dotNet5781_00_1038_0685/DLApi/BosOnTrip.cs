@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DO
 {
-    class BosOnTrip
+    public class BosOnTrip
     {
         public int MyProperty { get; set; }
 

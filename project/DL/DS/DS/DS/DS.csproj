@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{93433E73-3662-41F9-9DD6-40EAD6ABF262}</ProjectGuid>
+    <ProjectGuid>{08F62454-0F8E-4D4D-B35B-F15C4974BFBA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DS</RootNamespace>
@@ -43,12 +43,6 @@
   <ItemGroup>
     <Compile Include="DataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\DLApi\DLApi.csproj">
-      <Project>{3af5fe1d-d4fe-4961-8733-d034e11cddc2}</Project>
-      <Name>DLApi</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

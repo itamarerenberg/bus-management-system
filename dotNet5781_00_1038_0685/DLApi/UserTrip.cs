@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DO
 {
-    class UserTrip
+    public class UserTrip
     {
         static int Counter = 0;
         public int TripId = Counter++;
