@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DLApi
+namespace DO
 {
-    public  class AdjacentStations
+    public class AdjacentStations
     {
         public int StationCode1{ get; set; }
         public int StationCode2 { get; set; }
