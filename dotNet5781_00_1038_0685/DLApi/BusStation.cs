@@ -8,9 +8,9 @@ namespace DO
 {
     public class BusStation
     {
-        public int StationCode { get; set; }
+        public int Code { get; set; }
         public float Longitude { get; set; }
         public float Latitude { get; set; }
-        public string adress { get; set; }
+        public string Address { get; set; }
     }
 }

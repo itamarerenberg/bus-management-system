@@ -7,28 +7,28 @@ using DO;
 
 namespace DS
 {
-    public class DataSource
+    public static class DataSource
     {
-        List<AdjacentStations> AdjacentStations;
-        List<Bus> Buses;
-        List<BusLine> BusLines;
-        List<BusOnTrip> BusesOnTrip;
-        List<BusStation> BusStations;
-        List<LineStation> LineStations;
-        List<LineTrip> LineTrips;
-        List<User> Users;
-        List<UserTrip> UsersTrips;
+        public static List<AdjacentStations> AdjacentStations;
+        public static List<Bus> Buses;
+        public static List<Line> BusLines;
+        public static List<BusOnTrip> BusesOnTrip;
+        public static List<BusStation> BusStations;
+        public static List<LineStation> LineStations;
+        public static List<LineTrip> LineTrips;
+        public static List<User> Users;
+        public static List<UserTrip> UsersTrips;
 
-        internal DataSource()
+        static DataSource()
         {
             InitAllLists();
         }
 
-        private void InitAllLists()
+        static void InitAllLists()
         {
             AdjacentStations = new List<AdjacentStations>();
             Buses = new List<Bus>();
-            BusLines = new List<BusLine>();
+            BusLines = new List<Line>();
             BusesOnTrip = new List<BusOnTrip>();
             BusStations = new List<BusStation>();
             LineStations = new List<LineStation>();

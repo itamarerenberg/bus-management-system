@@ -8,8 +8,7 @@ namespace DO
 {
     public class UserTrip
     {
-        static int Counter = 0;
-        public int TripId = Counter++;
+        public int TripId { get; set; }
         public string UserName { get; set; }
         public int LineId { get; set; }
         public int InStation { get; set; }

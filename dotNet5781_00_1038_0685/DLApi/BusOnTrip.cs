@@ -8,14 +8,13 @@ namespace DO
 {
     public class BusOnTrip
     {
-        public int MyProperty { get; set; }
-
+        public int ID { get; set; }
         public string LicenseNum { get; set; }
         public int LineNum { get; set; }
         public TimeSpan PlannedStartTime{ get; set; }
         public TimeSpan StartTime { get; set; }
-        public int LastPassedStation { get; set; }
-        public TimeSpan TimeLastPassedStation { get; set; }
+        public int PrevStation { get; set; }
+        public TimeSpan TimePrevStation { get; set; }
         public TimeSpan TimeFromTheNextStation { get; set; }
 
     }

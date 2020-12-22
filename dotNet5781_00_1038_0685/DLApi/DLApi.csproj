@@ -45,8 +45,9 @@
     <Compile Include="BusOnTrip.cs" />
     <Compile Include="AreasEnum.cs" />
     <Compile Include="Bus.cs" />
+    <Compile Include="IDL.cs" />
     <Compile Include="LineTrip.cs" />
-    <Compile Include="BusLine.cs" />
+    <Compile Include="Line.cs" />
     <Compile Include="BusStation.cs" />
     <Compile Include="BusStatusEnum.cs" />
     <Compile Include="LineStation.cs" />
