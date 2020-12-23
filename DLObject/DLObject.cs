@@ -23,18 +23,24 @@ namespace DL
         #region Bus
         void IDL.AddBuss(Bus bus)
         {
-            if(DataSource.Buses.FirstOrDefault(b=>b.LicenseNum == bus.LicenseNum) != null)
-            {
-                throw new DuplicateExeption("bus with identical License's num allready exist");
-            }
-            else
+            Bus tempBus = DataSource.Buses.FirstOrDefault(b => b.LicenseNum == bus.LicenseNum);
+            if (tempBus == null)
             {
                 DataSource.Buses.Add(bus);
+            }
+            //in case the bus is allready in the data base: checks if he is active
+            else
+            {
+                if (tempBus.IsActive == true)
+                {
+                    throw new DuplicateExeption("bus with identical License's num allready exist");
+                }
+                tempBus.IsActive = true;
             }
         }
         Bus IDL.GetBus(string licenseNum)
         {
-            Bus bus = DataSource.Buses.Find(b => b.LicenseNum == licenseNum);
+            Bus bus = DataSource.Buses.Find(b => b.LicenseNum == licenseNum && b.IsActive == true);
             if(bus == null)
             {
                 throw new NotExistExeption("bus with this License's num not exist");
@@ -48,7 +54,7 @@ namespace DL
         /// <param name="bus">update bus</param>
         void IDL.UpdateBus(Bus bus)
         {
-            if(!DataSource.Buses.Exists(b => b.LicenseNum == bus.LicenseNum))
+            if(!DataSource.Buses.Exists(b => b.LicenseNum == bus.LicenseNum && b.IsActive == true))//ככה לא נצטרך לחפש אותו שוב כדי לעדכן FirstOrDefault נראה לי שעדיף לעבוד עם 
             {
                 throw new NotExistExeption("bus with License's num like 'bus' not exist");
             }
@@ -57,7 +63,17 @@ namespace DL
 
         void IDL.DeleteBus(string licenseNum)
         {
-            if (DataSource.Buses.RemoveAll(b => b.LicenseNum == licenseNum) == 0)
+            //if (DataSource.Buses.RemoveAll(b => b.LicenseNum == licenseNum) == 0)
+            //{
+            //    throw new NotExistExeption("bus with this License's num not exist");
+            //}
+
+            Bus bus = DataSource.Buses.Find(b => b.LicenseNum == licenseNum && b.IsActive == true);//עשיתי לפי הבונוס שלא מוחקים אלא הופכים ללא פעיל
+            if (bus != null)
+            {
+                bus.IsActive = false;
+            }
+            else
             {
                 throw new NotExistExeption("bus with this License's num not exist");
             }
@@ -65,12 +81,13 @@ namespace DL
         IEnumerable<Bus> IDL.GetAllBuses()
         {
             return from bus in DataSource.Buses
+                   where bus.IsActive == true
                    select bus.Clone();
         }
-        IEnumerable<Bus> IDLGetAllBusesBy(Predicate<Bus> predicate)
+        IEnumerable<Bus> IDL.GetAllBusesBy(Predicate<Bus> predicate)
         {
             return from bus in DataSource.Buses
-                   where predicate(bus)
+                   where predicate(bus) && bus.IsActive == true
                    select bus.Clone();
         }
 
@@ -79,19 +96,26 @@ namespace DL
         #region Line
         void IDL.AddLine(Line line)
         {
-            if (DataSource.Lines.FirstOrDefault(l => l.ID == line.ID) != null)
-            {
-                throw new DuplicateExeption("line with identical ID allready exist");
-            }
-            else
+            Line tempLine = DataSource.Lines.FirstOrDefault(l => l.ID == line.ID);
+            if (tempLine == null)
             {
                 DataSource.Lines.Add(line);
             }
+            //in case the Line is allready in the data base: checks if he is active
+            else
+            {
+                if (tempLine.IsActive == true)
+                {
+                    throw new DuplicateExeption("line with identical ID allready exist");
+                }
+                tempLine.IsActive = true;
+            }
+
         }
 
         Line IDL.GetLine(int id)
         {
-            Line line = DataSource.Lines.Find(l => l.ID == id);
+            Line line = DataSource.Lines.Find(l => l.ID == id && l.IsActive == true);
             if (line == null)
             {
                 throw new NotExistExeption("line with this id not exist");
@@ -105,7 +129,7 @@ namespace DL
         /// <param name="line">update line</param>
         void IDL.UpdateLine(Line line)
         {
-            if (!DataSource.Lines.Exists(l => l.ID == line.ID))
+            if (!DataSource.Lines.Exists(l => l.ID == line.ID))//כנ"ל 
             {
                 throw new NotExistExeption("line with id like 'line' not exist");
             }
@@ -114,7 +138,17 @@ namespace DL
 
         void IDL.DeleteLine(int id)
         {
-            if (DataSource.Lines.RemoveAll(l => l.ID == id) == 0)//if RemoveAll() do's not found line with such id
+            //if (DataSource.Lines.RemoveAll(l => l.ID == id) == 0)//if RemoveAll() do's not found line with such id
+            //{
+            //    throw new NotExistExeption("line with this id not exist");
+            //}
+
+            Line line = DataSource.Lines.Find(l => l.ID == id && l.IsActive == true);//עשיתי לפי הבונוס שלא מוחקים אלא הופכים ללא פעיל
+            if (line != null)
+            {
+                line.IsActive = false;
+            }
+            else
             {
                 throw new NotExistExeption("line with this id not exist");
             }
@@ -123,13 +157,14 @@ namespace DL
         IEnumerable<Line> IDL.GetAllLines()
         {
             return from line in DataSource.Lines
+                   where line.IsActive == true
                    select line.Clone();
         }
 
         IEnumerable<Line> IDL.GetAllLinesBy(Predicate<Line> predicate)
         {
             return from line in DataSource.Lines
-                   where predicate(line)
+                   where predicate(line) && line.IsActive == true
                    select line.Clone();
         }
 
@@ -138,30 +173,43 @@ namespace DL
         #region BusOnTrip
         void IDL.AddBusOnTrip(BusOnTrip busOnTrip)
         {
-            if (DataSource.Lines.FirstOrDefault(bot => bot.ID == bot.ID) != null)
+            if (DataSource.BusesOnTrip.FirstOrDefault(bot => bot.ID == busOnTrip.ID) != null)
             {
-                throw new DuplicateExeption("line with identical ID allready exist");
+                throw new DuplicateExeption("the bus is allready in driving");
             }
             else
             {
-                DataSource.Lines.Add(line);
+                DataSource.BusesOnTrip.Add(busOnTrip);
             }
         }
-        void IDL.GetBusOnTrip(int id)
+        BusOnTrip IDL.GetBusOnTrip(int id)
         {
-            throw new NotImplementedException();
+            BusOnTrip busOnTrip = DataSource.BusesOnTrip.Find(bot=> bot.ID == id );
+            if (busOnTrip == null)
+            {
+                throw new NotExistExeption("the bus is not in driving");
+            }
+            return busOnTrip;
         }
         void IDL.UpdateBusOnTrip(BusOnTrip busOnTrip)
         {
-            throw new NotImplementedException();
+            BusOnTrip oldBusOnTrip = DataSource.BusesOnTrip.Find(bot => bot.ID == busOnTrip.ID);
+            if (oldBusOnTrip == null)
+            {
+                throw new NotExistExeption("the bus is not in driving");
+            }
+            oldBusOnTrip = busOnTrip;
         }
         IEnumerable<BusOnTrip> IDL.GetAllBusesOnTrip()
         {
-            throw new NotImplementedException();
+            return from bot in DataSource.BusesOnTrip
+                   select bot.Clone();
         }
         IEnumerable<BusOnTrip> IDL.GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
         {
-            throw new NotImplementedException();
+            return from bot in DataSource.BusesOnTrip
+                   where predicate(bot)
+                   select bot.Clone();
         }
         #endregion
 

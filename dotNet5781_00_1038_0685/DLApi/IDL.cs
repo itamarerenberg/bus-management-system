@@ -28,7 +28,7 @@ namespace DLApi
 
         #region BusOnTrip
         void AddBusOnTrip(BusOnTrip busOnTrip);
-        void GetBusOnTrip(int id);
+        BusOnTrip GetBusOnTrip(int id);
         void UpdateBusOnTrip(BusOnTrip busOnTrip);
         IEnumerable<BusOnTrip> GetAllBusesOnTrip();
         IEnumerable<BusOnTrip> GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate);
