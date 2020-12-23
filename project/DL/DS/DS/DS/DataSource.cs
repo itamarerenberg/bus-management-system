@@ -11,7 +11,7 @@ namespace DS
     {
         public static List<AdjacentStations> AdjacentStations;
         public static List<Bus> Buses;
-        public static List<Line> BusLines;
+        public static List<Line> Lines;
         public static List<BusOnTrip> BusesOnTrip;
         public static List<BusStation> BusStations;
         public static List<LineStation> LineStations;
@@ -28,7 +28,7 @@ namespace DS
         {
             AdjacentStations = new List<AdjacentStations>();
             Buses = new List<Bus>();
-            BusLines = new List<Line>();
+            Lines = new List<Line>();
             BusesOnTrip = new List<BusOnTrip>();
             BusStations = new List<BusStation>();
             LineStations = new List<LineStation>();
