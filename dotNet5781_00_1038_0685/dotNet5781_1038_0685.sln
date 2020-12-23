@@ -23,6 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{ACDC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exersis", "exersis", "{7FFE5375-4CA1-4EA9-8A95-616372A294BC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{1628FB02-D544-4714-B9FA-60522D2C5601}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\Desktop\windows_project\3TA_Sample-main\3TA_Sample-main\bin\config.xml = ..\..\..\..\..\Desktop\windows_project\3TA_Sample-main\3TA_Sample-main\bin\config.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
