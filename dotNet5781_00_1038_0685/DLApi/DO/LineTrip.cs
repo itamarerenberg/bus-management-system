@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DO
 {
+    /// <summary>
+    /// identity property = ID
+    /// </summary>
     public class LineTrip
     {
         public int ID { get; set; }

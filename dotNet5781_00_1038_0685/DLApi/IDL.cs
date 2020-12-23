@@ -8,25 +8,26 @@ namespace DLApi
     public interface IDL
     {
         #region Bus
-        Bus AddBuss(Bus bus);
-        void GetBus(int id);
+        void AddBuss(Bus bus);
+        Bus GetBus(string licenseNum);
         void UpdateBus(Bus bus);
-        void DeleteBus(int id);
+        void DeleteBus(string licenseNum);
         IEnumerable<Bus> GetAllBuses();
+        IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> predicate);
         #endregion
 
         #region Line
-        Line AddBusLine(Line busLine);
-        void GetBusLine(int id);
-        void UpdateBusLine(Line busLine);
-        void DeleteBusLine(int id);
-        IEnumerable<Line> GetAllBusLines();
-        IEnumerable<Line> GetAllBusLinesBy(Predicate<Line> predicate);
+        void AddLine(Line line);
+        Line GetLine(int id);
+        void UpdateLine(Line Line);
+        void DeleteLine(int id);
+        IEnumerable<Line> GetAllLines();
+        IEnumerable<Line> GetAllLinesBy(Predicate<Line> predicate);
 
         #endregion
 
         #region BusOnTrip
-        BusOnTrip AddBusOnTrip(BusOnTrip busOnTrip);
+        void AddBusOnTrip(BusOnTrip busOnTrip);
         void GetBusOnTrip(int id);
         void UpdateBusOnTrip(BusOnTrip busOnTrip);
         IEnumerable<BusOnTrip> GetAllBusesOnTrip();

@@ -5,224 +5,290 @@ using System.Text;
 using System.Threading.Tasks;
 using DLApi;
 using DO;
+using DS;
 
-namespace DLObject
+namespace DL
 {
-    public class DLObject : IDL
+    sealed class DLObject : IDL
     {
-        public AdjacentStations AddAdjacentStations(int stationCode1, int stationCode2)
+        #region singelton
+
+        static readonly DLObject instance = new DLObject();
+        static DLObject() { }
+        DLObject() { }
+        public static DLObject Instance { get => instance; }
+
+        #endregion
+
+        #region Bus
+        void IDL.AddBuss(Bus bus)
         {
-            throw new NotImplementedException();
+            if(DataSource.Buses.FirstOrDefault(b=>b.LicenseNum == bus.LicenseNum) != null)
+            {
+                throw new DuplicateExeption("bus with identical License's num allready exist");
+            }
+            else
+            {
+                DataSource.Buses.Add(bus);
+            }
+        }
+        Bus IDL.GetBus(string licenseNum)
+        {
+            Bus bus = DataSource.Buses.Find(b => b.LicenseNum == licenseNum);
+            if(bus == null)
+            {
+                throw new NotExistExeption("bus with this License's num not exist");
+            }
+            return bus;
         }
 
-        public Line AddBusLine(Line busLine)
+        /// <summary>
+        /// insert new bus insted of the corrent bus with identical LicenseNum
+        /// </summary>
+        /// <param name="bus">update bus</param>
+        void IDL.UpdateBus(Bus bus)
         {
-            throw new NotImplementedException();
+            if(!DataSource.Buses.Exists(b => b.LicenseNum == bus.LicenseNum))
+            {
+                throw new NotExistExeption("bus with License's num like 'bus' not exist");
+            }
+            DataSource.Buses[DataSource.Buses.FindIndex(b => b.LicenseNum == bus.LicenseNum)] = bus;
         }
 
-        public BusOnTrip AddBusOnTrip(BusOnTrip busOnTrip)
+        void IDL.DeleteBus(string licenseNum)
         {
-            throw new NotImplementedException();
+            if (DataSource.Buses.RemoveAll(b => b.LicenseNum == licenseNum) == 0)
+            {
+                throw new NotExistExeption("bus with this License's num not exist");
+            }
+        }
+        IEnumerable<Bus> IDL.GetAllBuses()
+        {
+            return from bus in DataSource.Buses
+                   select bus.Clone();
+        }
+        IEnumerable<Bus> IDLGetAllBusesBy(Predicate<Bus> predicate)
+        {
+            return from bus in DataSource.Buses
+                   where predicate(bus)
+                   select bus.Clone();
         }
 
-        public Bus AddBuss(Bus bus)
+        #endregion
+
+        #region Line
+        void IDL.AddLine(Line line)
         {
-            throw new NotImplementedException();
+            if (DataSource.Lines.FirstOrDefault(l => l.ID == line.ID) != null)
+            {
+                throw new DuplicateExeption("line with identical ID allready exist");
+            }
+            else
+            {
+                DataSource.Lines.Add(line);
+            }
         }
 
-        public BusStation AddBusStation(BusStation busStation)
+        Line IDL.GetLine(int id)
         {
-            throw new NotImplementedException();
+            Line line = DataSource.Lines.Find(l => l.ID == id);
+            if (line == null)
+            {
+                throw new NotExistExeption("line with this id not exist");
+            }
+            return line;
         }
 
-        public LineStation AddLineStation(LineStation iineStation)
+        /// <summary>
+        /// insert new line insted of the corrent line with identical ID
+        /// </summary>
+        /// <param name="line">update line</param>
+        void IDL.UpdateLine(Line line)
         {
-            throw new NotImplementedException();
+            if (!DataSource.Lines.Exists(l => l.ID == line.ID))
+            {
+                throw new NotExistExeption("line with id like 'line' not exist");
+            }
+            DataSource.Lines[DataSource.Lines.FindIndex(l => l.ID == line.ID)] = line;
         }
 
-        public LineTrip AddLineTrip(LineTrip lineTrip)
+        void IDL.DeleteLine(int id)
         {
-            throw new NotImplementedException();
+            if (DataSource.Lines.RemoveAll(l => l.ID == id) == 0)//if RemoveAll() do's not found line with such id
+            {
+                throw new NotExistExeption("line with this id not exist");
+            }
         }
 
-        public User AddUser(User user)
+        IEnumerable<Line> IDL.GetAllLines()
         {
-            throw new NotImplementedException();
+            return from line in DataSource.Lines
+                   select line.Clone();
         }
 
-        public UserTrip AddUserTrip(UserTrip userTrip)
+        IEnumerable<Line> IDL.GetAllLinesBy(Predicate<Line> predicate)
         {
-            throw new NotImplementedException();
+            return from line in DataSource.Lines
+                   where predicate(line)
+                   select line.Clone();
         }
 
-        public void DeleteBus(int id)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
-        public void DeleteBusLine(int id)
+        #region BusOnTrip
+        void IDL.AddBusOnTrip(BusOnTrip busOnTrip)
+        {
+            if (DataSource.Lines.FirstOrDefault(bot => bot.ID == bot.ID) != null)
+            {
+                throw new DuplicateExeption("line with identical ID allready exist");
+            }
+            else
+            {
+                DataSource.Lines.Add(line);
+            }
+        }
+        void IDL.GetBusOnTrip(int id)
         {
             throw new NotImplementedException();
         }
+        void IDL.UpdateBusOnTrip(BusOnTrip busOnTrip)
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<BusOnTrip> IDL.GetAllBusesOnTrip()
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<BusOnTrip> IDL.GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
-        public void DeleteUser(int id)
+        #region BusStation
+        BusStation IDL.AddBusStation(BusStation busStation)
         {
             throw new NotImplementedException();
         }
+        void IDL.GetBusStation(int id)
+        {
+            throw new NotImplementedException();
+        }
+        void IDL.UpdateBusStation(BusStation busStation)
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<BusStation> IDL.GetAllBusStations()
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<BusStation> IDL.GetAllBusStationBy(Predicate<BusStation> predicate)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
-        public void GetAheadAdjacentStation(int stationCode)
+        #region LineStation
+        LineStation IDL.AddLineStation(LineStation iineStation)
         {
             throw new NotImplementedException();
         }
+        void IDL.GetLineStation(int id)
+        {
+            throw new NotImplementedException();
+        }
+        void IDL.UpdateLineStation(LineStation iineStation)
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<LineStation> IDL.GetAllLineStations()
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<LineStation> IDL.GetAllLineStationBy(Predicate<LineStation> predicate)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
-        public IEnumerable<Bus> GetAllBuses()
+        #region AdjacentStations
+        AdjacentStations IDL.AddAdjacentStations(int stationCode1, int stationCode2)
         {
             throw new NotImplementedException();
         }
+        void IDL.GetBackAdjacentStation(int stationCode)
+        {
+            throw new NotImplementedException();
+        }
+        void IDL.GetAheadAdjacentStation(int stationCode)
+        {
+            throw new NotImplementedException();
+        }
+        void IDL.UpdateAdjacentStations(int stationCode1, int stationCode2)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
-        public IEnumerable<BusOnTrip> GetAllBusesOnTrip()
+        #region LineTrip
+        LineTrip IDL.AddLineTrip(LineTrip lineTrip)
         {
             throw new NotImplementedException();
         }
+        void IDL.GetLineTrip(int id)
+        {
+            throw new NotImplementedException();
+        }
+        void IDL.UpdateLineTrip(LineTrip lineTrip)
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<LineTrip> IDL.GetAllLineTrips()
+        {
+            throw new NotImplementedException();
+        }
+        IEnumerable<LineTrip> IDL.GetAllLineTripBy(Predicate<LineTrip> predicate)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
-        public IEnumerable<BusOnTrip> GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
+        #region User
+        User IDL.AddUser(User user)
         {
             throw new NotImplementedException();
         }
+        void IDL.GetUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+        void IDL.UpdateUser(User user)
+        {
+            throw new NotImplementedException();
+        }
+        void IDL.DeleteUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
-        public IEnumerable<Line> GetAllBusLines()
+        #region UserTrip
+        UserTrip IDL.AddUserTrip(UserTrip userTrip)
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<Line> GetAllBusLinesBy(Predicate<Line> predicate)
+        void IDL.GetUserTrip(int id)
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<BusStation> GetAllBusStationBy(Predicate<BusStation> predicate)
+        void IDL.UpdateUserTrip(UserTrip userTrip)
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<BusStation> GetAllBusStations()
+        IEnumerable<UserTrip> IDL.GetAllUserTrips()
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<LineStation> GetAllLineStationBy(Predicate<LineStation> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<LineStation> GetAllLineStations()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<LineTrip> GetAllLineTrips()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserTrip> GetAllUserTrips()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetBackAdjacentStation(int stationCode)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetBus(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetBusLine(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetBusOnTrip(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetBusStation(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetLineStation(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetLineTrip(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetUser(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GetUserTrip(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateAdjacentStations(int stationCode1, int stationCode2)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateBus(Bus bus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateBusLine(Line busLine)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateBusOnTrip(BusOnTrip busOnTrip)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateBusStation(BusStation busStation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateLineStation(LineStation iineStation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateLineTrip(LineTrip lineTrip)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateUser(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateUserTrip(UserTrip userTrip)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }

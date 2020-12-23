@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DO
 {
+    /// <summary>
+    /// identity property = LicenseNum
+    /// </summary>
     public class Bus
     {
         public string LicenseNum { get; set; }
