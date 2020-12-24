@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="DO\AdjacentStations.cs" />
     <Compile Include="DO\BusOnTrip.cs" />
-    <Compile Include="DO\AreasEnum.cs" />
+    <Compile Include="DO\Enums.cs" />
     <Compile Include="DO\Bus.cs" />
     <Compile Include="DLConfig.cs" />
     <Compile Include="DLFactory.cs" />
@@ -52,7 +52,6 @@
     <Compile Include="DO\LineTrip.cs" />
     <Compile Include="DO\Line.cs" />
     <Compile Include="DO\BusStation.cs" />
-    <Compile Include="DO\BusStatusEnum.cs" />
     <Compile Include="DO\LineStation.cs" />
     <Compile Include="Passenger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

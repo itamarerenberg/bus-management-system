@@ -19,6 +19,9 @@ namespace DS
         public static List<User> Users;
         public static List<UserTrip> UsersTrips;
 
+        public static List<object> dsList;
+
+
         static DataSource()
         {
             InitAllLists();
@@ -35,6 +38,19 @@ namespace DS
             LineTrips = new List<LineTrip>();
             Users = new List<User>();
             UsersTrips = new List<UserTrip>();
+
+            dsList = new List<object>()
+            {
+            AdjacentStations,
+            Buses,
+            Lines,
+            BusesOnTrip,
+            BusStations,
+            LineStations,
+            LineTrips,
+            Users,
+            UsersTrips
+            };
         }
     }
 }
