@@ -16,7 +16,7 @@ namespace DO
         public AreasEnum Area { get; set; }
         public int FirstStationCode { get; set; }
         public int LastStationCode { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

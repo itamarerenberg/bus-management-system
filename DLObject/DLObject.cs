@@ -77,6 +77,7 @@ namespace DL
             {
                 throw new NotExistExeption("bus with this License's num not exist");
             }
+            GetType(licenseNum)
         }
         IEnumerable<Bus> IDL.GetAllBuses()
         {
