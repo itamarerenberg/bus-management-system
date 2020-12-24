@@ -51,12 +51,12 @@ namespace DLApi
     //    IEnumerable<LineStation> GetAllLineStationBy(Predicate<LineStation> predicate);
     //    #endregion
 
-        #region AdjacentStations
-        AdjacentStations AddAdjacentStations(int stationCode1, int stationCode2);
-        void GetBackAdjacentStation(int stationCode);
-        void GetAheadAdjacentStation(int stationCode);
-        void UpdateAdjacentStations(int stationCode1, int stationCode2);
-    #endregion
+    //    #region AdjacentStations
+    //    AdjacentStations AddAdjacentStations(int stationCode1, int stationCode2);
+    //    void GetBackAdjacentStation(int stationCode);
+    //    void GetAheadAdjacentStation(int stationCode);
+    //    void UpdateAdjacentStations(int stationCode1, int stationCode2);
+    //#endregion
 
     //#region LineTrip
     //LineTrip AddLineTrip(LineTrip lineTrip);

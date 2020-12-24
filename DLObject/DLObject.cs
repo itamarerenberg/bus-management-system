@@ -12,16 +12,16 @@ namespace DL
 {
     sealed class DLObject : IDL
     {
-        //#region singelton
+        #region singelton
 
         //static readonly DLObject instance = new DLObject();
         //static DLObject() { }
         //DLObject() { }
         //public static DLObject Instance { get => instance; }
 
-        //#endregion
+        #endregion
 
-        //#region Bus
+        #region Bus
         //void IDL.AddBuss(Bus bus)
         //{
         //    Bus tempBus = DataSource.Buses.FirstOrDefault(b => b.LicenseNum == bus.LicenseNum);
@@ -93,9 +93,9 @@ namespace DL
         //           select bus.Clone();
         //}
 
-        //#endregion
+        #endregion
 
-        //#region Line
+        #region Line
         //void IDL.AddLine(Line line)
         //{
         //    Line tempLine = DataSource.Lines.FirstOrDefault(l => l.ID == line.ID);
@@ -170,9 +170,9 @@ namespace DL
         //           select line.Clone();
         //}
 
-        //#endregion
+        #endregion
 
-        //#region BusOnTrip
+        #region BusOnTrip
         //void IDL.AddBusOnTrip(BusOnTrip busOnTrip)
         //{
         //    if (DataSource.BusesOnTrip.FirstOrDefault(bot => bot.ID == busOnTrip.ID) != null)
@@ -214,9 +214,9 @@ namespace DL
         //           where predicate(bot)
         //           select bot.Clone();
         //}
-        //#endregion
+        #endregion
 
-        //#region BusStation
+        #region BusStation
         //void IDL.AddBusStation(BusStation busStation)
         //{
         //    if (DataSource.BusStations.FirstOrDefault(bs => bs.Code == bs.Code) != null)
@@ -290,51 +290,60 @@ namespace DL
         //{
         //    throw new NotImplementedException();
         //}
-        //#endregion
+        #endregion
 
         #region AdjacentStations
-        AdjacentStations IDL.AddAdjacentStations(int stationCode1, int stationCode2)
-        {
-            throw new NotImplementedException();
-        }
-        void IDL.GetBackAdjacentStation(int stationCode)
-        {
-            throw new NotImplementedException();
-        }
-        void IDL.GetAheadAdjacentStation(int stationCode)
-        {
-            throw new NotImplementedException();
-        }
-        void IDL.UpdateAdjacentStations(int stationCode1, int stationCode2)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Add<T>(T type)
         {
-            throw new NotImplementedException();
-        }
+            int? index = null;
+            foreach (object entity in Enum.GetValues(typeof(Entites)))
+            {
+                if (entity.ToString() == typeof(T).Name)
+                {
+                    index = (int)entity;
+                }
+            }
+            if (index == null)
+            {
+                throw new NotExistExeption("the object doesn't exist");
+            }
+            if (index != -1)
+            {
+                object tempType = 
+            }
+            //Bus tempBus = DataSource.Buses.FirstOrDefault(b => b.LicenseNum == bus.LicenseNum);
+            //    if (tempBus == null)
+            //    {
+            //        DataSource.Buses.Add(bus);
+            //    }
+            //    //in case the bus is allready in the data base: checks if he is active
+            //    else
+            //    {
+            //        if (tempBus.IsActive == true)
+            //        {
+            //            throw new DuplicateExeption("bus with identical License's num allready exist");
+            //        }
+            //        tempBus.IsActive = true;
+            //    }
 
+        }
         public T Get<T>(int id)
         {
             throw new NotImplementedException();
         }
-
         public void Update<T>(T type)
         {
             throw new NotImplementedException();
         }
-
         public void Delete<T>(int id)
         {
             throw new NotImplementedException();
         }
-
         public IEnumerable<T> GetAll<T>()
         {
             throw new NotImplementedException();
         }
-
         public IEnumerable<T> GetAllBy<T>(Predicate<T> predicate)
         {
             throw new NotImplementedException();
