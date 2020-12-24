@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace DO
 {
+    /// <summary>
+    /// identity property = LineId|StationNumber
+    /// for exempol if LineId = 123 and StationNumber = 456 then 
+    /// the identity property = 123456
+    /// </summary>
     public class LineStation
     {
         public int LineId { get; set; }
@@ -14,7 +19,5 @@ namespace DO
         public int PrevStation { get; set; }
         public int NextStation { get; set; }
         public bool? IsActive { get; set; }
-
-
     }
 }

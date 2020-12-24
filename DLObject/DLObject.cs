@@ -67,7 +67,7 @@ namespace DL
             return from bus in DataSource.Buses
                    select bus.Clone();
         }
-        IEnumerable<Bus> IDLGetAllBusesBy(Predicate<Bus> predicate)
+        IEnumerable<Bus> IDL.GetAllBusesBy(Predicate<Bus> predicate)
         {
             return from bus in DataSource.Buses
                    where predicate(bus)
@@ -138,49 +138,99 @@ namespace DL
         #region BusOnTrip
         void IDL.AddBusOnTrip(BusOnTrip busOnTrip)
         {
-            if (DataSource.Lines.FirstOrDefault(bot => bot.ID == bot.ID) != null)
+            if (DataSource.BusesOnTrip.FirstOrDefault(bot => bot.ID == bot.ID) != null)
             {
-                throw new DuplicateExeption("line with identical ID allready exist");
+                throw new DuplicateExeption("bus on trip with identical ID allready exist");
             }
             else
             {
-                DataSource.Lines.Add(line);
+                DataSource.BusesOnTrip.Add(busOnTrip);
             }
         }
-        void IDL.GetBusOnTrip(int id)
+        BusOnTrip IDL.GetBusOnTrip(int id)
         {
-            throw new NotImplementedException();
+            BusOnTrip busOnTrip = DataSource.BusesOnTrip.Find(bot => bot.ID == id);
+            if (busOnTrip == null)
+            {
+                throw new NotExistExeption("bus on trip with this id not exist");
+            }
+            return busOnTrip;
         }
+
+        /// <summary>
+        /// insert new BusOnTrip insted of the corrent BusOnTrip with identical ID
+        /// </summary>
+        /// <param name="busOnTrip">updated BusOnTrip</param>
         void IDL.UpdateBusOnTrip(BusOnTrip busOnTrip)
         {
-            throw new NotImplementedException();
+            if (!DataSource.BusesOnTrip.Exists(bot => bot.ID == busOnTrip.ID))
+            {
+                throw new NotExistExeption("bus on trip with id like 'busOnTrip' not exist");
+            }
+            DataSource.BusesOnTrip[DataSource.BusesOnTrip.FindIndex(bot => bot.ID == bot.ID)] = busOnTrip;//!
         }
+
+        void IDL.DeleteBusOnTrip(int id)
+        {
+            if (DataSource.BusesOnTrip.RemoveAll(bot => bot.ID == id) == 0)//if RemoveAll() do's not found BusOnTrip with such id
+            {
+                throw new NotExistExeption("bus on trip with this id not exist");
+            }
+        }
+
         IEnumerable<BusOnTrip> IDL.GetAllBusesOnTrip()
         {
-            throw new NotImplementedException();
+            return from bot in DataSource.BusesOnTrip
+                   select bot.Clone();
         }
+
         IEnumerable<BusOnTrip> IDL.GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
         {
-            throw new NotImplementedException();
+            return from bot in DataSource.BusesOnTrip
+                   where predicate(bot)
+                   select bot.Clone();
         }
         #endregion
 
         #region BusStation
-        BusStation IDL.AddBusStation(BusStation busStation)
+        void IDL.AddBusStation(BusStation busStation)
         {
-            throw new NotImplementedException();
+            if (DataSource.BusStations.FirstOrDefault(bs => bs.Code == bs.Code) != null)
+            {
+                throw new DuplicateExeption("bus's station with identical Code allready exist");
+            }
+            else
+            {
+                DataSource.BusStations.Add(busStation);
+            }
         }
-        void IDL.GetBusStation(int id)
+
+        BusStation IDL.GetBusStation(int code)
         {
-            throw new NotImplementedException();
+            BusStation busStation = DataSource.BusStations.Find(bs => bs.Code == code);
+            if (busStation == null)
+            {
+                throw new NotExistExeption("bus's station with this code not exist");
+            }
+            return busStation;
         }
+
+        /// <summary>
+        /// insert new busStation insted of the corrent BusStation with identical Code
+        /// </summary>
+        /// <param name="busStation">updated BusStation</param>
         void IDL.UpdateBusStation(BusStation busStation)
         {
-            throw new NotImplementedException();
+            if (!DataSource.BusStations.Exists(bs => bs.Code == busStation.Code))
+            {
+                throw new NotExistExeption("bus's station with Code like 'busOnTrip' not exist");
+            }
+            DataSource.BusStations[DataSource.BusStations.FindIndex(bs => bs.Code == bs.Code)] = busStation;//!        }
         }
+
         IEnumerable<BusStation> IDL.GetAllBusStations()
         {
-            throw new NotImplementedException();
+            
         }
         IEnumerable<BusStation> IDL.GetAllBusStationBy(Predicate<BusStation> predicate)
         {

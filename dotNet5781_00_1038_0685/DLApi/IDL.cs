@@ -28,15 +28,16 @@ namespace DLApi
 
         #region BusOnTrip
         void AddBusOnTrip(BusOnTrip busOnTrip);
-        void GetBusOnTrip(int id);
+        BusOnTrip GetBusOnTrip(int id);
         void UpdateBusOnTrip(BusOnTrip busOnTrip);
+        void DeleteBusOnTrip(int id);
         IEnumerable<BusOnTrip> GetAllBusesOnTrip();
         IEnumerable<BusOnTrip> GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate);
         #endregion
 
         #region BusStation
-        BusStation AddBusStation(BusStation busStation);
-        void GetBusStation(int id);
+        void AddBusStation(BusStation busStation);
+        BusStation GetBusStation(int code);
         void UpdateBusStation(BusStation busStation);
         IEnumerable<BusStation> GetAllBusStations();
         IEnumerable<BusStation> GetAllBusStationBy(Predicate<BusStation> predicate);
