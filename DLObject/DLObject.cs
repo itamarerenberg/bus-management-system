@@ -46,7 +46,7 @@ namespace DL
         //    {
         //        throw new NotExistExeption("bus with this License's num not exist");
         //    }
-        //    return bus;
+        //    return bus.Clone();
         //}
 
         ///// <summary>
@@ -122,7 +122,7 @@ namespace DL
         //    {
         //        throw new NotExistExeption("line with this id not exist");
         //    }
-        //    return line;
+        //    return line.Clone();
         //}
 
         ///// <summary>
@@ -145,7 +145,7 @@ namespace DL
         //    //    throw new NotExistExeption("line with this id not exist");
         //    //}
 
-        //    Line line = DataSource.Lines.Find(l => l.ID == id && l.IsActive == true);//עשיתי לפי הבונוס שלא מוחקים אלא הופכים ללא פעיל
+        //    Line line = DataSource.Lines.Find(l => l.ID == id && l.IsActive == true);
         //    if (line != null)
         //    {
         //        line.IsActive = false;
@@ -191,7 +191,7 @@ namespace DL
         //    {
         //        throw new NotExistExeption("the bus is not in driving");
         //    }
-        //    return busOnTrip;
+        //    return busOnTrip.Clone();
         //}
         //void IDL.UpdateBusOnTrip(BusOnTrip busOnTrip)
         //{
@@ -236,7 +236,7 @@ namespace DL
         //    {
         //        throw new NotExistExeption("bus's station with this code not exist");
         //    }
-        //    return busStation;
+        //    return busStation.Clone();
         //}
 
         ///// <summary>
@@ -254,7 +254,7 @@ namespace DL
 
         //IEnumerable<BusStation> IDL.GetAllBusStations()
         //{
-            
+
         //}
         //IEnumerable<BusStation> IDL.GetAllBusStationBy(Predicate<BusStation> predicate)
         //{
@@ -294,43 +294,96 @@ namespace DL
 
         #region AdjacentStations
 
-        public void Add<T>(T type)
+        void IDL.Add<T>(T newEntity)
         {
             int? index = null;
-            foreach (object entity in Enum.GetValues(typeof(Entites)))
+            foreach (var entity in Enum.GetValues(typeof(Entites)))// find the newEntity's type
             {
                 if (entity.ToString() == typeof(T).Name)
                 {
                     index = (int)entity;
+                    break;
                 }
             }
             if (index == null)
             {
-                throw new NotExistExeption("the object doesn't exist");
+                throw new NotExistExeption("the object type doesn't exist");
             }
             if (index != -1)
             {
-                object tempType = 
+                List<T> entityList = DataSource.dsList[(int)index] as List<T>;// get the appropriate list of the T type
+                var dataBaseEntity = entityList.FirstOrDefault(ob => ob.GetType().GetProperties().First().GetValue(ob) == newEntity.GetType().GetProperties().First().GetValue(newEntity));//check if the key elemnt is already exist
+                if (dataBaseEntity == null)
+                {
+                    entityList.Add(newEntity);
+                }
+                //in case the entity is allready in the data base: checks if he is active
+                else
+                {
+                    if((bool)dataBaseEntity.GetType().GetProperty("IsActive").GetValue(dataBaseEntity) == true) //isActive == true
+                    {
+                        throw new DuplicateExeption("the object is already exist");
+                    }
+                    dataBaseEntity.GetType().GetProperty("IsActive").SetValue(dataBaseEntity, true);
+                }
             }
-            //Bus tempBus = DataSource.Buses.FirstOrDefault(b => b.LicenseNum == bus.LicenseNum);
-            //    if (tempBus == null)
-            //    {
-            //        DataSource.Buses.Add(bus);
-            //    }
-            //    //in case the bus is allready in the data base: checks if he is active
-            //    else
-            //    {
-            //        if (tempBus.IsActive == true)
-            //        {
-            //            throw new DuplicateExeption("bus with identical License's num allready exist");
-            //        }
-            //        tempBus.IsActive = true;
-            //    }
-
+            else // the T type == AdjacentStations
+            {
+                List<T> entityList = DataSource.dsList[(int)index] as List<T>;// get the appropriate list of the T type
+                var dataBaseEntity = entityList.FirstOrDefault(
+                    ob => ob.GetType().GetProperty("StationCode1").GetValue(ob) == newEntity.GetType().GetProperty("StationCode1").GetValue(newEntity)//the StationCode1 is the same
+                    && ob.GetType().GetProperty("StationCode2").GetValue(ob) == newEntity.GetType().GetProperty("StationCode2").GetValue(newEntity));//the StationCode2 is the same
+                if (dataBaseEntity == null)
+                {
+                    entityList.Add(newEntity);
+                }
+                else
+                {
+                    throw new DuplicateExeption("AdjacentStations with identical stations are already exist");
+                }
+            }
         }
-        public T Get<T>(int id)
+        T IDL.Get<T>(string id, string id2 = null)
         {
-            throw new NotImplementedException();
+            int? index = null;
+            foreach (var entity in Enum.GetValues(typeof(Entites)))// find the newEntity's type
+            {
+                if (entity.ToString() == typeof(T).Name)
+                {
+                    index = (int)entity;
+                    break;
+                }
+            }
+            if (index == null)
+            {
+                throw new NotExistExeption("the object type doesn't exist");
+            }
+            if (index != -1)
+            {
+                List<T> entityList = DataSource.dsList[(int)index] as List<T>;// get the appropriate list of the T type
+                var dataBaseEntity = entityList.FirstOrDefault(ob => ob.GetType().GetProperties().First().GetValue(ob).ToString() == id//check if the key elemnt is exist
+                                                                   && (bool)ob.GetType().GetProperty("IsActive").GetValue(ob) == true);//check if IsActive == true
+                if (dataBaseEntity == null)
+                {
+                    throw new NotExistExeption("the object doesn't exist");
+                }
+                return dataBaseEntity.Clone();
+            }
+            else // the T type == AdjacentStations
+            {
+                List<T> entityList = DataSource.dsList[(int)index] as List<T>;// get the appropriate list of the T type
+                var dataBaseEntity = entityList.FirstOrDefault(
+                    ob => ob.GetType().GetProperty("StationCode1").GetValue(ob).ToString() == id //the StationCode1 is the same
+                    && ob.GetType().GetProperty("StationCode2").GetValue(ob).ToString() == id2);//the StationCode2 is the same
+                if (dataBaseEntity == null)
+                {
+                    throw new NotExistExeption("the object doesn't exist");
+                }
+                else
+                {
+                    return dataBaseEntity,Clone();
+                }
+            }
         }
         public void Update<T>(T type)
         {
@@ -350,7 +403,7 @@ namespace DL
         }
         #endregion
 
-        //#region LineTrip
+        #region LineTrip
         //LineTrip IDL.AddLineTrip(LineTrip lineTrip)
         //{
         //    throw new NotImplementedException();
@@ -371,9 +424,9 @@ namespace DL
         //{
         //    throw new NotImplementedException();
         //}
-        //#endregion
+        #endregion
 
-        //#region User
+        #region User
         //User IDL.AddUser(User user)
         //{
         //    throw new NotImplementedException();
@@ -390,9 +443,9 @@ namespace DL
         //{
         //    throw new NotImplementedException();
         //}
-        //#endregion
+        #endregion
 
-        //#region UserTrip
+        #region UserTrip
         //UserTrip IDL.AddUserTrip(UserTrip userTrip)
         //{
         //    throw new NotImplementedException();
@@ -409,6 +462,6 @@ namespace DL
         //{
         //    throw new NotImplementedException();
         //}
-        //#endregion
+        #endregion
     }
 }

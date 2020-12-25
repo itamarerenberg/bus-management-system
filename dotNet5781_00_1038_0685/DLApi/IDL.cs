@@ -82,7 +82,7 @@ namespace DLApi
 
     #region Generic
     void Add<T>(T type);
-    T Get<T>(int id);
+    T Get<T>(string id, string id2 = null);
     void Update<T>(T type);
     void Delete<T>(int id);
     IEnumerable<T> GetAll<T>();

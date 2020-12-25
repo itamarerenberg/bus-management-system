@@ -38,7 +38,7 @@ namespace DS
             LineTrips = new List<LineTrip>();
             Users = new List<User>();
             UsersTrips = new List<UserTrip>();
-
+            
             dsList = new List<object>()
             {
             AdjacentStations,

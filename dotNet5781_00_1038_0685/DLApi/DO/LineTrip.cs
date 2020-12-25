@@ -16,6 +16,7 @@ namespace DO
         public TimeSpan StartTime{ get; set; }
         public TimeSpan Frequency{ get; set; }
         public TimeSpan FinishAt { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

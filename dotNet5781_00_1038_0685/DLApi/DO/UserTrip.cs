@@ -18,6 +18,7 @@ namespace DO
         public DateTime InTime { get; set; }
         public int OutStation { get; set; }
         public DateTime OutTime { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }
