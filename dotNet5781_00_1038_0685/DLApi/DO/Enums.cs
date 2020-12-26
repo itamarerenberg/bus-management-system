@@ -23,7 +23,7 @@ namespace DO
     }
     public enum Entites 
     {
-        AdjacentStations = -1,
+        AdjacentStations,
         Buses,
         Lines,
         BusesOnTrip,

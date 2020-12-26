@@ -15,4 +15,8 @@ namespace DL
     {
         public NotExistExeption(string msg) : base(msg) { }
     }
+    public class InvalidObjectExeption : Exception
+    {
+        public InvalidObjectExeption(string msg) : base(msg) { }
+    }
 }

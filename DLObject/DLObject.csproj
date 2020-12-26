@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Cloning.cs" />
     <Compile Include="DLObject.cs" />
-    <Compile Include="DOobjectExpretions.cs" />
+    <Compile Include="DOobjectException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
