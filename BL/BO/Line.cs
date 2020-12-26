@@ -11,8 +11,8 @@ namespace BO
         public int ID { get; set; }
         public int LineNumber { get; set; }
         public AreasEnum Area { get; set; }
-        public Station FirstStation { get; set; }
-        public Station LastStation { get; set; }
-        public List<Station> Stations { get; set; }
+        public LineStation FirstStation { get; set; }
+        public LineStation LastStation { get; set; }
+        public List<LineStation> Stations { get; set; }
     }
 }
