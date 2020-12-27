@@ -50,6 +50,7 @@
     <Compile Include="BO\LineStation.cs" />
     <Compile Include="BO\LineTrip.cs" />
     <Compile Include="BO\Manager.cs" />
+    <Compile Include="BO\Managment.cs" />
     <Compile Include="BO\Pasenger.cs" />
     <Compile Include="BO\Station.cs" />
     <Compile Include="BO\UserTrip.cs" />

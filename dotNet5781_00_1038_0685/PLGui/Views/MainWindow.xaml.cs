@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,15 @@ namespace PLGui
     /// </summary>
     public partial class MainWindow : Window
     {
-        PO.User user;
+        IBL bl;
+        User user;
         public MainWindow()
         {
             InitializeComponent();
+            bl = null;//=>GetBl();
             userName.TextChanged += UserNameChanged;
             password.TextChanged += passwordChanged;
+
         }
 
         private void passwordChanged(object sender, TextChangedEventArgs e)

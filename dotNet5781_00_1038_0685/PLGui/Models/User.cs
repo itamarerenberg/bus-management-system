@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace PO
+namespace PLGui.Models
 {
     public class User : DependencyObject
     {
@@ -55,3 +55,5 @@ namespace PO
 
     }
 }
+
+

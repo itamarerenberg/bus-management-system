@@ -7,13 +7,19 @@
         mc:Ignorable="d"
         Title="Maneger" Height="450" Width="800">
     <Grid>
-        <ListView x:Name="BusesList" HorizontalAlignment="Left" Height="401" Margin="10,10,0,0" VerticalAlignment="Top" Width="259">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-
+        <TabControl x:Name="tab_control">
+            <TabItem x:Name="Buses_view" Header="Buses view">
+                <ListView x:Name="BusesList" HorizontalAlignment="Left" Height="401" Margin="10,10,0,0" VerticalAlignment="Top" Width="259">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            <TabItem x:Name="Lines_view" Header="Lines view" Background="Red">
+                
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -7,11 +7,38 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="200" Width="400">
     <Grid Margin="0,0,-6.667,-0.333">
-        <Label Content="enter name" HorizontalAlignment="Left" Margin="35,63,0,0" VerticalAlignment="Top" Height="31" Width="93"/>
-        <TextBox x:Name="userName" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="" VerticalAlignment="Top" MinWidth="100" Width="auto" Margin="133,63,0,0"/>
-        <Label Content="enter password" HorizontalAlignment="Left" Margin="35,99,0,0" VerticalAlignment="Top" Height="35" Width="93" RenderTransformOrigin="2.129,0.181"/>
-        <TextBox x:Name="password" HorizontalAlignment="Left" Height="35" Margin="133,99,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" MinWidth="100" Width="auto"/>
-        <Button x:Name="SignInButton" Content="sign in" HorizontalAlignment="Left" Margin="302,134,0,0" VerticalAlignment="Top" Width="90" Height="27" Click="SignInButton_Click"/>
-        <Label x:Name="ErrorLabel" Content="" HorizontalAlignment="Left" Margin="35,10,0,0" VerticalAlignment="Top" Height="auto" Width="auto" Visibility="Hidden"/>
+        <TabControl x:Name="Tab_Control">
+            <!--sign in tab-->
+            <TabItem Header="sign in">
+                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <!--row 1-->
+                    <Label Grid.Row="1" Grid.Column="1" Content="enter name" Height="31" Width="93"/>
+                    <TextBox x:Name="userName" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="" MinWidth="100" Width="auto"/>
+                    
+                    <!--row 2-->
+                    <Label Content="enter password" Grid.Column="1" Grid.Row="2" Height="35" Width="93"/>
+                    <TextBox x:Name="password" Grid.Column="2" Grid.Row="2" Height="35" Text="" VerticalAlignment="Top" MinWidth="100" Width="auto"/>
+
+                    <!--row 4-->
+                    <Button x:Name="SignInButton" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" Click="SignInButton_Click"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

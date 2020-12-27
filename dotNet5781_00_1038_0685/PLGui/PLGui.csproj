@@ -56,6 +56,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Maneger.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserTrip.cs" />
     <Compile Include="Views\ManegerWindow.xaml.cs">
       <DependentUpon>ManegerWindow.xaml</DependentUpon>
     </Compile>
@@ -113,10 +115,6 @@
     <ProjectReference Include="..\..\BL\BL.csproj">
       <Project>{306d7e8c-a199-4b12-8a36-d89b80ac975e}</Project>
       <Name>BL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PO\PO.csproj">
-      <Project>{ad9a0280-23a5-436a-b974-4fba7a7bb1f2}</Project>
-      <Name>PO</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

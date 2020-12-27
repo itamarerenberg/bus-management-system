@@ -1,4 +1,5 @@
-﻿using PLGui.Models;
+﻿using BLApi;
+using PLGui.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,7 +23,7 @@ namespace PLGui
     public partial class ManegerWindow : Window
     {
         Maneger mngr;
-        public ManegerWindow(User user)
+        public ManegerWindow(BL.BO.Manager)
         {
             InitializeComponent();
             mngr.Name = user.Name;
