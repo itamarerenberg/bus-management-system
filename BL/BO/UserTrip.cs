@@ -11,6 +11,5 @@ namespace BO
         public TimeSpan Ontime { get; set; }
         public TimeSpan Offtime { get; set; }
         public BusTrip Trip { get; set; }
-        public User GetUser { get; set; }
     }
 }
