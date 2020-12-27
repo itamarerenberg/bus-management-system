@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DL
+namespace DO
 {
     public class DuplicateExeption:Exception
     {
@@ -18,5 +18,4 @@ namespace DL
     {
         public InvalidObjectExeption(string msg) : base(msg) { }
     }
-
 }

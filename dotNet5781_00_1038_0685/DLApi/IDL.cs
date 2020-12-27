@@ -69,7 +69,7 @@ namespace DLApi
 
         #region User
         void AddUser(User user);
-        User GetUser(string name);
+        User GetUser(string name, string password);
         void UpdateUser(User user);
         void DeleteUser(string name);
         #endregion
