@@ -8,10 +8,12 @@ namespace BO
 {
     public enum BusStatus
     {
-        Traveling, 
         Ready,
+        Traveling, 
         In_treatment,
-        In_refueling
+        In_refueling,
+        Need_treatment,
+        Need_refueling
     }
 
     public enum AreasEnum

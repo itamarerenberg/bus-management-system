@@ -13,6 +13,5 @@ namespace BO
         public float Kilometraz { get; set; }
         public float Fule { get; set; }
         public BusStatus Stat { get; set; }
-        public is MyProperty { get; set; }
     }
 }
