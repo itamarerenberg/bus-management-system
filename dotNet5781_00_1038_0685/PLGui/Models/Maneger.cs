@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace PO
+namespace PLGui.Models
 {
-    class Maneger : DependencyObject
+    public class Maneger : DependencyObject
     {
         public string Name
         {
