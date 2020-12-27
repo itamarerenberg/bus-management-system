@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class UnvalidID : Exception
+    public class InvalidID : Exception
     {
-        public UnvalidID(string msg) : base(msg) { }
+        public InvalidID(string msg) : base(msg) { }
+    }
+    public class InvalidPassword : Exception
+    {
+        public InvalidPassword(string msg) : base(msg) { }
     }
 }

@@ -455,7 +455,7 @@ namespace DL
                 tempUser.IsActive = true;
             }
         }
-        User IDL.GetUser(string name)
+        User IDL.GetUser(string name, string password)
         {
             User tempUser = DataSource.Users.FirstOrDefault(l => l.Name == name && l.IsActive == true);
             if (tempUser == null)
