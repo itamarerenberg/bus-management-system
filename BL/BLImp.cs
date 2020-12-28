@@ -44,7 +44,6 @@ namespace BL
                     throw new InvalidPassword("invalid password");
                 }
 
-
             }
             catch (DO.InvalidObjectExeption msg)
             {
@@ -76,7 +75,7 @@ namespace BL
                 throw;
             }
         }
-
+        
         public void UpdateManagar(string name, string password)
         {
             throw new NotImplementedException();
