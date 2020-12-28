@@ -96,22 +96,27 @@ namespace DL
         #endregion
 
         #region Line
+        //void IDL.AddLine(Line line)
+        //{
+        //    Line tempLine = DataSource.Lines.FirstOrDefault(l => l.ID == line.ID);
+        //    if (tempLine == null)
+        //    {
+        //        DataSource.Lines.Add(line);
+        //    }
+        //    //in case the Line is allready in the data base: checks if he is active
+        //    else
+        //    {
+        //        if (tempLine.IsActive == true)
+        //        {
+        //            throw new DuplicateExeption("line with identical ID allready exist");
+        //        }
+        //        tempLine.IsActive = true;
+        //    }
+        //}
         void IDL.AddLine(Line line)
         {
-            Line tempLine = DataSource.Lines.FirstOrDefault(l => l.ID == line.ID);
-            if (tempLine == null)
-            {
-                DataSource.Lines.Add(line);
-            }
-            //in case the Line is allready in the data base: checks if he is active
-            else
-            {
-                if (tempLine.IsActive == true)
-                {
-                    throw new DuplicateExeption("line with identical ID allready exist");
-                }
-                tempLine.IsActive = true;
-            }
+            line.ID = ++DataSource.serialLineID;
+            DataSource.Lines.Add(line);
         }
 
         Line IDL.GetLine(int id)

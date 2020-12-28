@@ -15,8 +15,8 @@ namespace BO
         public static Managment Instance { get => instance; }
         #endregion
 
-        List<Line> Lines;
-        List<Bus> Buses;
-        List<Station> Stations;
+        public List<Line> Lines;
+        public List<Bus> Buses;
+        public List<Station> Stations;
     }
 }

@@ -20,15 +20,12 @@ namespace DS
         public static List<UserTrip> UsersTrips;
 
         public static List<object> dsList;
-
+        public static int serialLineID;
 
         static DataSource()
         {
-            InitAllLists();
-        }
+            serialLineID = 0;
 
-        static void InitAllLists()
-        {
             AdjacentStations = new List<AdjacentStations>();
             Buses = new List<Bus>();
             Lines = new List<Line>();
@@ -37,7 +34,12 @@ namespace DS
             LineStations = new List<LineStation>();
             LineTrips = new List<LineTrip>();
             Users = new List<User>();
-            UsersTrips = new List<UserTrip>();
+            UsersTrips = new List<UserTrip>(); InitAllLists();
+         }
+
+        static void InitAllLists()
+        {
+           //init list with data
             
             dsList = new List<object>()
             {

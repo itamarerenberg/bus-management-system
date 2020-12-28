@@ -35,6 +35,8 @@ namespace BLApi
 
         #endregion
 
-
+        #region Managment
+        Managment GetManagment(string Name, string password);
+        #endregion
     }
 }
