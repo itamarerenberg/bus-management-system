@@ -1,4 +1,4 @@
-﻿using BLApi;
+﻿
 using PLGui.Models;
 using System;
 using System.Collections.Generic;
@@ -22,12 +22,12 @@ namespace PLGui
     /// </summary>
     public partial class ManegerWindow : Window
     {
-        Maneger mngr;
-        public ManegerWindow(BL.BO.Manager)
+        BO.Manager manager;
+        public ManegerWindow(BO.Manager _manager)
         {
             InitializeComponent();
-            mngr.Name = user.Name;
-            BusesList.DataContext = mngr.buses;
+            manager = _manager;
+            BusesList.DataContext = manager.Buses;
         }
 
         BackgroundWorker GetManegerInfoWorker;

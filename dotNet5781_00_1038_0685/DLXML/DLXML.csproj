@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{306D7E8C-A199-4B12-8A36-D89B80AC975E}</ProjectGuid>
+    <ProjectGuid>{6685551C-272D-4009-B4F2-F6609CDD94B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BL</RootNamespace>
-    <AssemblyName>BL</AssemblyName>
+    <RootNamespace>DLXML</RootNamespace>
+    <AssemblyName>DLXML</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,29 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLApi\BLFactory.cs" />
-    <Compile Include="BLExeptions.cs" />
-    <Compile Include="BLImp.cs" />
-    <Compile Include="BO\AdjastStations.cs" />
-    <Compile Include="BO\Bus.cs" />
-    <Compile Include="BO\BusTrip.cs" />
-    <Compile Include="BO\Line.cs" />
-    <Compile Include="BO\LineStation.cs" />
-    <Compile Include="BO\LineTrip.cs" />
-    <Compile Include="BO\Manager.cs" />
-    <Compile Include="BO\Managment.cs" />
-    <Compile Include="BO\Passenger.cs" />
-    <Compile Include="BO\Station.cs" />
-    <Compile Include="BO\UserTrip.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="BLApi\IBL.cs" />
+    <Compile Include="DalXml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dotNet5781_00_1038_0685\DLApi\DLApi.csproj">
-      <Project>{fa640085-e3a4-407a-8b69-dc8831d2dd9f}</Project>
-      <Name>DLApi</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
