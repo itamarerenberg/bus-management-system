@@ -51,6 +51,10 @@
       <Project>{fa640085-e3a4-407a-8b69-dc8831d2dd9f}</Project>
       <Name>DLApi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\dotNet5781_00_1038_0685\DLXML\DLXML.csproj">
+      <Project>{6685551C-272D-4009-B4F2-F6609CDD94B4}</Project>
+      <Name>DLXML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\project\DL\DS\DS\DS\DS.csproj">
       <Project>{08f62454-0f8e-4d4d-b35b-f15c4974bfba}</Project>
       <Name>DS</Name>

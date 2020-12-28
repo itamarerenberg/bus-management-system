@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using DLApi;
+using DLXML;
 using DO;
 using DS;
 
@@ -115,7 +117,14 @@ namespace DL
         //}
         void IDL.AddLine(Line line)
         {
-            line.ID = ++DataSource.serialLineID;
+            try
+            {
+                line.ID = SerialNumbers.GetLineId;
+            }
+            catch (Exception e)//!
+            {
+                throw e;
+            }
             DataSource.Lines.Add(line);
         }
 
@@ -495,20 +504,8 @@ namespace DL
         #region UserTrip
         void IDL.AddUserTrip(UserTrip userTrip)
         {
-            UserTrip tempUserTrip = DataSource.UsersTrips.FirstOrDefault(u => u.TripId == userTrip.TripId);
-            if (tempUserTrip == null)
-            {
-                DataSource.UsersTrips.Add(userTrip);
-            }
-            //in case the user trip is allready in the data base: checks if he is active
-            else
-            {
-                if (tempUserTrip.IsActive == true)
-                {
-                    throw new DuplicateExeption("the user trip is allready exist");
-                }
-                tempUserTrip.IsActive = true;
-            }
+            userTrip.TripId = SerialNumbers.GetUserTripId;//get a serial number from SerialNumbers for the id
+            DataSource.UsersTrips.Add(userTrip);//add to the data source
         }
         UserTrip IDL.GetUserTrip(int id)
         {
