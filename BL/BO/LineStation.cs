@@ -2,16 +2,18 @@
 {
     public class LineStation
     {
-        public AdjastStations Last_section { get; set; }
-        public Station BaseStation
-        {
-            get => Last_section.stationA;
-            set => Last_section.stationA = value;
-        }
-        public Station PrevStation { 
-            get => Last_section.stationB;
-            set => Last_section.stationB = value;
-        }
-        public int Place_in_line { get; set; }
+        public int LineId { get; set; }
+        public int StationNumber { get; set; }
+        public int LineStationIndex { get; set; }
+
+        public AdjastStations PrevToCurrent { get; set; }
+        public AdjastStations CurrentToNext { get; set; }
+
+        public double DistanceBack { get => PrevToCurrent.Distance; }
+        public double DistanceNext { get => CurrentToNext.Distance; }
+        public int PrevStation { get => PrevToCurrent.StationCode1; }
+        public int NextStation { get => CurrentToNext.StationCode2; }
+
+        public int location { get; set; }
     }
 }

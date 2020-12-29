@@ -22,7 +22,7 @@ namespace DL
         #endregion
 
         #region Bus
-        void IDL.AddBuss(Bus bus)
+        void IDL.AddBus(Bus bus)
         {
             Bus tempBus = DataSource.Buses.FirstOrDefault(b => b.LicenseNum == bus.LicenseNum);
             if (tempBus == null)
@@ -389,6 +389,16 @@ namespace DL
             }
             oldAdjacentStations = newAdjacentStations;
         }
+        void IDL.DeleteAdjacentStations(AdjacentStations adjacentStations)
+        {
+            AdjacentStations tempAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == adjacentStations.StationCode1 && s.StationCode2 == adjacentStations.StationCode2);
+            if (tempAdjacentStations == null)
+            {
+                throw new NotExistExeption("the Adjacent Station doesn't exist");
+            }
+            DataSource.AdjacentStations.Remove(tempAdjacentStations);
+        }
+
 
         #endregion
 

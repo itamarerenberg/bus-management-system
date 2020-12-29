@@ -8,9 +8,29 @@ namespace DLApi
     public interface IDL
     {
         #region Bus
-        void AddBuss(Bus bus);
+        /// <summary>
+        /// Add DO bus
+        /// </summary>
+        /// <exception cref="DuplicateExeption">
+        /// </exception>
+        void AddBus(Bus bus);
+        /// <summary>
+        /// Get DO bus
+        /// </summary>
+        /// <exception cref="NotExistExeption">
+        /// </exception>
         Bus GetBus(string licenseNum);
+        /// <summary>
+        /// Update DO bus
+        /// </summary>
+        /// <exception cref="NotExistExeption">
+        /// </exception>
         void UpdateBus(Bus bus);
+        /// <summary>
+        /// Delete DO bus
+        /// </summary>
+        /// <exception cref="NotExistExeption">
+        /// </exception>
         void DeleteBus(string licenseNum);
         IEnumerable<Bus> GetAllBuses();
         IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> predicate);
@@ -57,6 +77,7 @@ namespace DLApi
         AdjacentStations GetBackAdjacentStation(int stationCode);
         AdjacentStations GetAheadAdjacentStation(int stationCode);
         void UpdateAdjacentStations(AdjacentStations adjacentStations);
+        void DeleteAdjacentStations(AdjacentStations adjacentStations);
         #endregion
 
         #region LineTrip

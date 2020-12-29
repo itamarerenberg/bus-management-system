@@ -14,4 +14,8 @@ namespace BL
     {
         public InvalidPassword(string msg) : base(msg) { }
     }
+    public class InvalidInput : Exception
+    {
+        public InvalidInput(string msg) : base(msg) { }
+    }
 }

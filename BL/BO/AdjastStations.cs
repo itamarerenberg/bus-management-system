@@ -8,10 +8,9 @@ namespace BO
 {
     public class AdjastStations
     {
-        public Station stationA { get; set; }
-        public Station stationB { get; set; }
-        public float dist_km { get; set; }
-        public TimeSpan? from_A_to_B { get; set; }
-        public TimeSpan? from_B_to_A { get; set; }
+        public int StationCode1 { get; set; }
+        public int StationCode2 { get; set; }
+        public double Distance { get; set; }
+        public TimeSpan Time { get; set; }
     }
 }

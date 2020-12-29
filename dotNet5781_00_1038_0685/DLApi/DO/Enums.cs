@@ -14,12 +14,14 @@ namespace DO
         Rehovot,
         General
     }
-    public enum BusStatusEnum
+    public enum BusStatus
     {
-        Traveling,
         Ready,
+        Traveling,
         In_treatment,
-        In_refueling
+        In_refueling,
+        Need_treatment,
+        Need_refueling
     }
     public enum Entites 
     {
