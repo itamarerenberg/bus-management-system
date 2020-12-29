@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +9,7 @@ using System.Windows;
 
 namespace PLGui.Models
 {
-    public class Maneger : DependencyObject
+    public class Maneger : INotifyPropertyChanged
     {
         public string Name
         {
@@ -20,9 +22,9 @@ namespace PLGui.Models
 
 
 
-        public List<BO.Bus> buses
+        public ObservableCollection<BO.Bus> buses
         {
-            get { return (List<BO.Bus>)GetValue(busesProperty); }
+            get { return (ObservableCollection<BO.Bus>)GetValue(busesProperty); }
             set { SetValue(busesProperty, value); }
         }
         public static readonly DependencyProperty busesProperty =
@@ -38,5 +40,7 @@ namespace PLGui.Models
         }
         public static readonly DependencyProperty StationsProperty =
             DependencyProperty.Register("Stations", typeof(List<BO.Station>), typeof(Maneger));
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
