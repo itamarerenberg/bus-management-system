@@ -14,8 +14,8 @@ namespace DO
         public int ID { get; set; }
         public int LineNumber { get; set; }
         public AreasEnum Area { get; set; }
-        public int FirstStationCode { get; set; }
-        public int LastStationCode { get; set; }
+        public int FirstStation_Id { get; set; }
+        public int LastStation_Id { get; set; }
         public bool IsActive { get; set; }
 
     }

@@ -240,6 +240,9 @@ namespace DL
         #endregion
 
         #region BusStation
+
+
+        /// <exception cref="DuplicateExeption">if the Station all ready exist</exception>
         void IDL.AddBusStation(BusStation busStation)
         {
             BusStation tempBusStation = DataSource.BusStations.FirstOrDefault(b => b.Code == busStation.Code);

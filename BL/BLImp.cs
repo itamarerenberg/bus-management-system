@@ -267,7 +267,51 @@ namespace BL
         public void DeletePassenger(string name, string password)
         {
             throw new NotImplementedException();
-        } 
+        }
+        #endregion
+
+        //******************
+
+        #region Station
+
+        /// <summary>
+        /// adds new station to the data base
+        /// </summary>
+        /// <param name="station">the station to add</param>
+        /// <exception cref="LocationOutOfRange">if the location of the station is not in the allowable range</exception>
+        public void AddStation(BO.Station station)
+        {
+            int max_longitude = 30;
+            int min_longitude = -30;
+            int max_latitude = 30;
+            int min_latitude = -30;
+
+            //check if the location is valid
+            if(station.Longitude > max_longitude || station.Longitude < min_longitude ||
+               station.Latitude > max_latitude || station.Latitude < min_latitude)
+            {
+                throw new LocationOutOfRange($"unvalid location, location range is: longitude: [{min_longitude} - {max_longitude}] ,latitude: [{min_latitude} - {max_latitude}]");
+            }
+
+            //creates a DO.BusStation to add to dl
+            DO.BusStation DOstation = (DO.BusStation)station.CopyPropertiesToNew(typeof(DO.BusStation));
+
+            try
+            {
+                dl.AddBusStation(DOstation);
+            }
+            catch(DO.DuplicateExeption)//if station with identical code allready exist
+            {
+                throw new DuplicateExeption("station with identical code allready exist");
+            }
+        }
+
+        public Station GetStation()
+
+        public void DeleteStation(int Code)
+        {
+            Station station = 
+        }
         #endregion
     }
 }

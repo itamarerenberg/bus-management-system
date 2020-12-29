@@ -15,7 +15,7 @@ namespace DO
         public DateTime LicenesDate { get; set; }
         public float Kilometraz { get; set; }
         public float Fule { get; set; }
-        public BusStatusEnum Stat { get; set; }
+        public BusStatus Stat { get; set; }
         public bool IsActive{ get; set; }
     }
 }

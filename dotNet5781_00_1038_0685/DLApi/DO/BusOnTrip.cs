@@ -12,8 +12,8 @@ namespace DO
     public class BusOnTrip
     {
         public int ID { get; set; }
-        public string LicenseNum { get; set; }
-        public int LineNum { get; set; }
+        public string Bus_Id { get; set; }
+        public int Line_Id { get; set; }
         public TimeSpan PlannedStartTime{ get; set; }
         public TimeSpan StartTime { get; set; }
         public int PrevStation { get; set; }
