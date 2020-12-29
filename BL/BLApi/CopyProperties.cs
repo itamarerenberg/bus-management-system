@@ -21,19 +21,6 @@ namespace BL.BLApi
                     propTo.SetValue(to, value);
             }
 
-            //foreach (PropertyInfo propTo in to.GetType().GetProperties())
-            //{
-            //    PropertyInfo propFrom = typeof(S).GetProperty(propTo.Name);
-            //    if (propFrom == null)
-            //        continue;
-            //    var value = propFrom.GetValue(from, null);
-            //    if (value is ValueType || value is string)
-            //        propTo.SetValue(to, value);
-            //    if (propTo.PropertyType.IsEnum && propTo.PropertyType.IsEnum)
-            //    {
-            //        propTo.SetValue(to, Enum.ToObject(propTo.PropertyType, value));
-            //    }
-            //}
         }
         public static object CopyPropertiesToNew<S>(this S from, Type type)
         {

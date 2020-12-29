@@ -9,7 +9,7 @@ namespace DO
     /// <summary>
     /// identity property = Code
     /// </summary>
-    public class BusStation
+    public class Station
     {
         public int Code { get; set; }
         public float Longitude { get; set; }

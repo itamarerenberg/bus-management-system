@@ -239,13 +239,12 @@ namespace DL
         }
         #endregion
 
-        #region BusStation
+        #region Station
 
 
-        /// <exception cref="DuplicateExeption">if the Station all ready exist</exception>
-        void IDL.AddBusStation(BusStation busStation)
+        void IDL.AddStation(Station busStation)
         {
-            BusStation tempBusStation = DataSource.BusStations.FirstOrDefault(b => b.Code == busStation.Code);
+            Station tempBusStation = DataSource.BusStations.FirstOrDefault(b => b.Code == busStation.Code);
             if (tempBusStation == null)
             {
                 DataSource.BusStations.Add(busStation);
@@ -261,9 +260,9 @@ namespace DL
             }
         }
 
-        BusStation IDL.GetBusStation(int code)
+        Station IDL.GetStation(int code)
         {
-            BusStation busStation = DataSource.BusStations.Find(bs => bs.Code == code && bs.IsActive == true);
+            Station busStation = DataSource.BusStations.Find(bs => bs.Code == code && bs.IsActive == true);
             if (busStation == null)
             {
                 throw new NotExistExeption("bus's station with this code not exist");
@@ -272,12 +271,12 @@ namespace DL
         }
 
         /// <summary>
-        /// insert new busStation insted of the corrent BusStation with identical Code
+        /// insert new busStation insted of the corrent Station with identical Code
         /// </summary>
-        /// <param name="busStation">updated BusStation</param>
-        void IDL.UpdateBusStation(BusStation newBusStation)
+        /// <param name="busStation">updated Station</param>
+        void IDL.UpdateStation(Station newBusStation)
         {
-            BusStation oldBusStation = DataSource.BusStations.Find(bs => bs.Code == newBusStation.Code && bs.IsActive == true);
+            Station oldBusStation = DataSource.BusStations.Find(bs => bs.Code == newBusStation.Code && bs.IsActive == true);
             if (oldBusStation == null)
             {
                 throw new NotExistExeption("the station doesn't not exist");
@@ -285,13 +284,13 @@ namespace DL
             oldBusStation = newBusStation;
         }
 
-        IEnumerable<BusStation> IDL.GetAllBusStations()
+        IEnumerable<Station> IDL.GetAllStations()
         {
             return from station in DataSource.BusStations
                    where station.IsActive == true
                    select station.Clone();
         }
-        IEnumerable<BusStation> IDL.GetAllBusStationBy(Predicate<BusStation> predicate)
+        IEnumerable<Station> IDL.GetAllStationBy(Predicate<Station> predicate)
         {
             return from station in DataSource.BusStations
                    where predicate(station) && station.IsActive == true
@@ -372,6 +371,16 @@ namespace DL
             {
                 throw new DuplicateExeption("the adjacent stations is allready exist");
             }
+        }
+
+        public AdjacentStations GetAdjacentStation(int stationCode1, int stationCode2)
+        {
+            AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
+            if (tempStations == null)
+            {
+                throw new NotExistExeption("the Adjacent Station doesn't exist");
+            }
+            return tempStations.Clone();
         }
 
         AdjacentStations IDL.GetBackAdjacentStation(int stationCode)

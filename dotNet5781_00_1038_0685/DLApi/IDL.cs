@@ -55,12 +55,13 @@ namespace DLApi
         IEnumerable<BusOnTrip> GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate);
         #endregion
 
-        #region BusStation
-        void AddBusStation(BusStation busStation);
-        BusStation GetBusStation(int code);
-        void UpdateBusStation(BusStation busStation);
-        IEnumerable<BusStation> GetAllBusStations();
-        IEnumerable<BusStation> GetAllBusStationBy(Predicate<BusStation> predicate);
+        #region Station
+        /// <exception cref="DuplicateExeption">if the Station all ready exist</exception>
+        void AddStation(Station busStation);
+        Station GetStation(int code);
+        void UpdateStation(Station busStation);
+        IEnumerable<Station> GetAllStations();
+        IEnumerable<Station> GetAllStationBy(Predicate<Station> predicate);
         #endregion
 
         #region LineStation
@@ -74,6 +75,7 @@ namespace DLApi
 
         #region AdjacentStations
         void AddAdjacentStations(AdjacentStations adjacentStations);
+        AdjacentStations GetAdjacentStation(int stationCode1, int stationCode2);
         AdjacentStations GetBackAdjacentStation(int stationCode);
         AdjacentStations GetAheadAdjacentStation(int stationCode);
         void UpdateAdjacentStations(AdjacentStations adjacentStations);

@@ -52,7 +52,6 @@ namespace BLApi
         void DeleteLineStation(LineStation lineStation, int index); 
         #endregion
 
-
         #region Station
         void AddStation(Station station);
         Line GetStation(int code);

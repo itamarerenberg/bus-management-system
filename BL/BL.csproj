@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,9 +44,10 @@
   <ItemGroup>
     <Compile Include="BLApi\BLFactory.cs" />
     <Compile Include="BLApi\CopyProperties.cs" />
+    <Compile Include="BLApi\HelpMethods.cs" />
     <Compile Include="BLExeptions.cs" />
     <Compile Include="BLImp.cs" />
-    <Compile Include="BO\AdjastStations.cs" />
+    <Compile Include="BO\AdjacentStations.cs" />
     <Compile Include="BO\Bus.cs" />
     <Compile Include="BO\BusTrip.cs" />
     <Compile Include="BO\Line.cs" />

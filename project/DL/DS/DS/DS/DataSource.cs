@@ -13,7 +13,7 @@ namespace DS
         public static List<Bus> Buses;
         public static List<Line> Lines;
         public static List<BusOnTrip> BusesOnTrip;
-        public static List<BusStation> BusStations;
+        public static List<Station> BusStations;
         public static List<LineStation> LineStations;
         public static List<LineTrip> LineTrips;
         public static List<User> Users;
@@ -30,7 +30,7 @@ namespace DS
             Buses = new List<Bus>();
             Lines = new List<Line>();
             BusesOnTrip = new List<BusOnTrip>();
-            BusStations = new List<BusStation>();
+            BusStations = new List<Station>();
             LineStations = new List<LineStation>();
             LineTrips = new List<LineTrip>();
             Users = new List<User>();

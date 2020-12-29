@@ -7,6 +7,7 @@ using BL.BLApi;
 using BLApi;
 using BO;
 using DLApi;
+using static BL.BLApi.HelpMethods;// למה זה לא עובד בלי זה ??? הא איתמר?? (המחלקה הסטטית של הפרופרטי עובדת בלי) תבדוק את זה אם תוכל 
 
 namespace BL
 {
@@ -109,8 +110,7 @@ namespace BL
         {
             try
             {
-                Bus tempBus = (Bus)dl.GetBus(licensNum).CopyPropertiesToNew(typeof(Bus));
-                return tempBus;
+                return (Bus)dl.GetBus(licensNum).CopyPropertiesToNew(typeof(Bus));
             }
             catch (Exception msg)
             {
@@ -173,7 +173,15 @@ namespace BL
             }
         }
 
-        public Line GetLine(int id);
+        public Line GetLine(int id)
+        {
+            Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
+            line.Stations = (from lineStationDO in dl.GetAllLineStationBy(l => l.LineId == id)
+                            let lineStationBO = GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
+                            orderby lineStationBO.LineStationIndex
+                            select lineStationBO).ToList();
+            return line;
+        }
         public void UpdateLine(Line line)
         {
             try
@@ -281,10 +289,11 @@ namespace BL
         /// <exception cref="LocationOutOfRange">if the location of the station is not in the allowable range</exception>
         public void AddStation(BO.Station station)
         {
-            int max_longitude = 30;
-            int min_longitude = -30;
-            int max_latitude = 30;
-            int min_latitude = -30;
+            const double max_latitude = 33.3;
+            const double min_latitude = 31;
+            const double max_longitude = 35.5;
+            const double min_longitude = 34.3;
+
 
             //check if the location is valid
             if(station.Longitude > max_longitude || station.Longitude < min_longitude ||
@@ -293,12 +302,12 @@ namespace BL
                 throw new LocationOutOfRange($"unvalid location, location range is: longitude: [{min_longitude} - {max_longitude}] ,latitude: [{min_latitude} - {max_latitude}]");
             }
 
-            //creates a DO.BusStation to add to dl
-            DO.BusStation DOstation = (DO.BusStation)station.CopyPropertiesToNew(typeof(DO.BusStation));
+            //creates a DO.Station to add to dl
+            DO.Station DOstation = (DO.Station)station.CopyPropertiesToNew(typeof(DO.Station));
 
             try
             {
-                dl.AddBusStation(DOstation);
+                dl.AddStation(DOstation);
             }
             catch(DO.DuplicateExeption)//if station with identical code allready exist
             {
