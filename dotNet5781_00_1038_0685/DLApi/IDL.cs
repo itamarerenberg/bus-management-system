@@ -60,6 +60,7 @@ namespace DLApi
         void AddStation(Station busStation);
         Station GetStation(int code);
         void UpdateStation(Station busStation);
+        void DeleteStation(int code);
         IEnumerable<Station> GetAllStations();
         IEnumerable<Station> GetAllStationBy(Predicate<Station> predicate);
         #endregion
@@ -69,6 +70,7 @@ namespace DLApi
         LineStation GetLineStation(int lineId, int stationNum);
         LineStation GetLineStationByIndex(int lineId, int index);
         void UpdateLineStation(LineStation lineStation);
+        void DeleteLineStation(int lineId, int stationNum);
         IEnumerable<LineStation> GetAllLineStations();
         IEnumerable<LineStation> GetAllLineStationBy(Predicate<LineStation> predicate);
         #endregion

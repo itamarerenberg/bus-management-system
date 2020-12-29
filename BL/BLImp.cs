@@ -172,15 +172,21 @@ namespace BL
                 throw msg.InnerException;
             }
         }
-
         public Line GetLine(int id)
         {
-            Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
-            line.Stations = (from lineStationDO in dl.GetAllLineStationBy(l => l.LineId == id)
-                            let lineStationBO = GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
-                            orderby lineStationBO.LineStationIndex
-                            select lineStationBO).ToList();
-            return line;
+            try
+            {
+                Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
+                line.Stations = (from lineStationDO in dl.GetAllLineStationBy(l => l.LineId == id)
+                                 let lineStationBO = GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
+                                 orderby lineStationBO.LineStationIndex
+                                 select lineStationBO).ToList();
+                return line;
+            }
+            catch (Exception msg)
+            {
+                throw msg.InnerException;
+            }
         }
         public void UpdateLine(Line line)
         {
@@ -199,9 +205,48 @@ namespace BL
                 throw msg.InnerException;
             }
         }
-        public void DeleteLine(Line id);
-        public IEnumerable<Line> GetAllLines();
-        public IEnumerable<Line> GetAllLinesBy(Predicate<Line> pred);
+        public void DeleteLine(int id)
+        {
+            Line line = GetLine(id);
+            try
+            {
+                foreach (LineStation lStation in line.Stations)
+                {
+                    dl.DeleteLineStation(lStation.LineId, lStation.StationNumber);
+                }
+                dl.DeleteLine(id);
+            }
+            catch (Exception msg)
+            {
+                throw msg.InnerException;
+            }
+        }
+        public IEnumerable<Line> GetAllLines()
+        {
+            try
+            {
+                return from lineDO in dl.GetAllLines()
+                       select GetLine(lineDO.ID);
+            }
+            catch (Exception msg)
+            {
+                throw msg.InnerException;
+            }
+        }
+        public IEnumerable<Line> GetAllLinesBy(Predicate<Line> pred)
+        {
+            try
+            {
+                return from lineDO in dl.GetAllLines()
+                       let lineBO = GetLine(lineDO.ID)
+                       where pred(lineBO)
+                       select lineBO;
+            }
+            catch (Exception msg)
+            {
+                throw msg.InnerException;
+            }
+        }
         #endregion
 
         #region LineStation

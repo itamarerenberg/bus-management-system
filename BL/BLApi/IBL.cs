@@ -36,7 +36,7 @@ namespace BLApi
         void AddLine(Line line);
         Line GetLine(int id);
         void UpdateLine(Line line);
-        void DeleteLine(Line id);
+        void DeleteLine(int id);
         IEnumerable<Line> GetAllLines();
         IEnumerable<Line> GetAllLinesBy(Predicate<Line> pred);
         #endregion

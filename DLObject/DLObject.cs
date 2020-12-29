@@ -244,10 +244,10 @@ namespace DL
 
         void IDL.AddStation(Station busStation)
         {
-            Station tempBusStation = DataSource.BusStations.FirstOrDefault(b => b.Code == busStation.Code);
+            Station tempBusStation = DataSource.Stations.FirstOrDefault(b => b.Code == busStation.Code);
             if (tempBusStation == null)
             {
-                DataSource.BusStations.Add(busStation);
+                DataSource.Stations.Add(busStation);
             }
             //in case the bus station is allready in the data base: checks if he is active
             else
@@ -262,7 +262,7 @@ namespace DL
 
         Station IDL.GetStation(int code)
         {
-            Station busStation = DataSource.BusStations.Find(bs => bs.Code == code && bs.IsActive == true);
+            Station busStation = DataSource.Stations.Find(bs => bs.Code == code && bs.IsActive == true);
             if (busStation == null)
             {
                 throw new NotExistExeption("bus's station with this code not exist");
@@ -276,23 +276,35 @@ namespace DL
         /// <param name="busStation">updated Station</param>
         void IDL.UpdateStation(Station newBusStation)
         {
-            Station oldBusStation = DataSource.BusStations.Find(bs => bs.Code == newBusStation.Code && bs.IsActive == true);
+            Station oldBusStation = DataSource.Stations.Find(bs => bs.Code == newBusStation.Code && bs.IsActive == true);
             if (oldBusStation == null)
             {
                 throw new NotExistExeption("the station doesn't not exist");
             }
             oldBusStation = newBusStation;
         }
+        void IDL.DeleteStation(int code)
+        {
+            Station station = DataSource.Stations.Find(s => s.Code == code && s.IsActive == true);
+            if (station != null)
+            {
+                station.IsActive = false;
+            }
+            else
+            {
+                throw new NotExistExeption("the line station doesn't exist");
+            }
+        }
 
         IEnumerable<Station> IDL.GetAllStations()
         {
-            return from station in DataSource.BusStations
+            return from station in DataSource.Stations
                    where station.IsActive == true
                    select station.Clone();
         }
         IEnumerable<Station> IDL.GetAllStationBy(Predicate<Station> predicate)
         {
-            return from station in DataSource.BusStations
+            return from station in DataSource.Stations
                    where predicate(station) && station.IsActive == true
                    select station.Clone();
         }
@@ -344,6 +356,19 @@ namespace DL
             }
             oldLineStation = newLineStation;
         }
+        void IDL.DeleteLineStation(int lineId, int stationNum)
+        {
+            LineStation lineS = DataSource.LineStations.Find(l => l.LineId == lineId && l.StationNumber == stationNum && l.IsActive == true);
+            if (lineS != null)
+            {
+                lineS.IsActive = false;
+            }
+            else
+            {
+                throw new NotExistExeption("the line station doesn't exist");
+            }
+        }
+
         IEnumerable<LineStation> IDL.GetAllLineStations()
         {
             return from lineStation in DataSource.LineStations
