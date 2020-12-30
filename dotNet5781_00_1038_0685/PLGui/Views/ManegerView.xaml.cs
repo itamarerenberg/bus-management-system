@@ -1,5 +1,6 @@
 ﻿
 using PLGui.Models;
+using PLGui.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,14 +21,15 @@ namespace PLGui
     /// <summary>
     /// Interaction logic for Maneger.xaml
     /// </summary>
-    public partial class ManegerWindow : Window
+    public partial class ManegerView : Window
     {
-        BO.Manager manager;
-        public ManegerWindow(BO.Manager _manager)
+        ManegerViewModel vModel;
+        public ManegerView(ManegerViewModel vm)
         {
             InitializeComponent();
-            manager = _manager;
-            BusesList.DataContext = manager.Buses;
+            vModel = vm;
+            this.DataContext = vModel;
+            BusesList.ItemsSource = vModel.Buses;
         }
 
         BackgroundWorker GetManegerInfoWorker;

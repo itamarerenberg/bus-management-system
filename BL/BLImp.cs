@@ -7,7 +7,7 @@ using BL.BLApi;
 using BLApi;
 using BO;
 using DLApi;
-using static BL.BLApi.HelpMethods;// למה זה לא עובד בלי זה ??? הא איתמר?? (המחלקה הסטטית של הפרופרטי עובדת בלי) תבדוק את זה אם תוכל 
+//using static BL.BLApi.HelpMethods;// למה זה לא עובד בלי זה ??? הא איתמר?? (המחלקה הסטטית של הפרופרטי עובדת בלי) תבדוק את זה אם תוכל 
 
 namespace BL
 {
@@ -204,7 +204,7 @@ namespace BL
             {
                 Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
                 line.Stations = (from lineStationDO in dl.GetAllLineStationBy(l => l.LineId == id)
-                                 let lineStationBO = GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
+                                 let lineStationBO = HelpMethods.GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
                                  orderby lineStationBO.LineStationIndex
                                  select lineStationBO).ToList();
                 return line;
@@ -409,7 +409,7 @@ namespace BL
             try
             {
                 dl.DeleteStation(code);
-                foreach (LineStation lineS in GetAllLineStationsBy(s => s.StationNumber == code))
+                foreach (LineStation lineS in HelpMethods.GetAllLineStationsBy(s => s.StationNumber == code))
                 {
                     DeleteLineStation(lineS, lineS.StationNumber);
                 }
@@ -432,5 +432,7 @@ namespace BL
                    select stationBO;
         }
         #endregion
+
+
     }
 }
