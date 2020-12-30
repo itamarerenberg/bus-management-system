@@ -62,7 +62,7 @@ namespace BL.BLApi
             {
                 throw msg.InnerException;
             }        
-        }
+        }//כנראה צריך למחוק
         public static AdjacentStations GetAheadAdjacentStation(int stationCode)
         {
             try
@@ -86,7 +86,7 @@ namespace BL.BLApi
             {
                 throw msg.InnerException;
             }
-        }
+        }//כנ"ל
 
         //void UpdateAdjacentStations(AdjacentStations adjacentStations);
         //void DeleteAdjacentStations(AdjacentStations adjacentStations);
@@ -102,6 +102,20 @@ namespace BL.BLApi
             lineStationBO.CurrentToNext = GetAdjacentStation(stationNum, lineStationBO.NextStationCode);
 
             return lineStationBO;
+        }
+        public static IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> pred)
+        {
+            try
+            {
+                return from lineStationDO in dl.GetAllLineStations()
+                       let lineStationBO = GetLineStation(lineStationDO.LineId,lineStationDO.StationNumber)
+                       where pred(lineStationBO)
+                       select lineStationBO;
+            }
+            catch (Exception msg)
+            {
+                throw msg.InnerException;
+            }
         }
         #endregion
     }

@@ -10,7 +10,7 @@ namespace BLApi
         #region Manager
         void AddManagar(string name, string password);
         Manager GetManagar(string name, string password);
-        void UpdateManagar(string name, string password);
+        void UpdateManagar(string name, string password,string oldName, string oldPassword);
         void DeleteManagar(string name, string password);
 
         #endregion
@@ -54,9 +54,9 @@ namespace BLApi
 
         #region Station
         void AddStation(Station station);
-        Line GetStation(int code);
+        Station GetStation(int code);
         void UpdateStation(Station station);
-        void DeleteStation(Station code);
+        void DeleteStation(int code);
         IEnumerable<Station> GetAllStations();
         IEnumerable<Station> GetAllStationsBy(Predicate<Station> pred);
         #endregion

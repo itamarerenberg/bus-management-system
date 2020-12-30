@@ -22,7 +22,7 @@ namespace BL
             {
                 //validation
                 DO.User user = dl.GetUser(name, password);
-                if (user.Password != password)
+                if (user.Password != password)//זה לא יקרא לעולם
                 {
                     throw new InvalidPassword("invalid password");
                 }
@@ -45,23 +45,49 @@ namespace BL
                 {
                     Name = name,
                     Password = password,
-                    Admin = true
+                    Admin = true,
+                    IsActive = true
                 };
                 dl.AddUser(tempUser);
             }
             catch (DO.DuplicateExeption msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                throw;
+                throw msg;
             }
         }
         
-        public void UpdateManagar(string name, string password)
+        public void UpdateManagar(string oldName, string oldPassword, string newName, string newPassword)
         {
-            throw new NotImplementedException();
+            try
+            {
+                DO.User oldManagar = dl.GetUser(oldName, oldPassword);
+                if (oldManagar.Admin == false)
+                    throw new InvalidInput("the user doesn't have an administrator access");
+                DO.User newManagar = new DO.User()
+                {
+                    Name = newName,
+                    Password = newPassword,
+                    Admin = true,
+                    IsActive = true
+                };
+                dl.UpdateUser(newManagar);
+            }
+            catch (DO.NotExistExeption)
+            {
+                throw new InvalidPassword("the password or name are invalid");
+            }
+            catch (InvalidInput msg)
+            {
+                throw msg;
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
         }
         public void DeleteManagar(string name, string password)
         {
@@ -301,7 +327,11 @@ namespace BL
             }
         }
         public void UpdateLineStation(LineStation lineStation, int index);
-        public void DeleteLineStation(LineStation lineStation, int index); 
+        public void DeleteLineStation(LineStation lineStation, int index)
+        {
+
+        }
+        
         #endregion
 
         #region Passenger
@@ -359,12 +389,47 @@ namespace BL
                 throw new DuplicateExeption("station with identical code allready exist");
             }
         }
-
-        public Station GetStation()
-
-        public void DeleteStation(int Code)
+        public Station GetStation(int code)
         {
-            Station station = 
+            try
+            {
+                Station station = (Station)dl.GetStation(code).CopyPropertiesToNew(typeof(Station));
+                station.GetLines = (from lineS in dl.GetAllLineStationBy(s => s.LineId == code)
+                                    orderby lineS.LineId
+                                    select GetLine(lineS.LineId)).ToList();
+                return station;
+            }
+            catch (Exception msg)
+            {
+                throw msg.InnerException;
+            }
+        }
+        public void DeleteStation(int code)
+        {
+            try
+            {
+                dl.DeleteStation(code);
+                foreach (LineStation lineS in GetAllLineStationsBy(s => s.StationNumber == code))
+                {
+                    DeleteLineStation(lineS, lineS.StationNumber);
+                }
+            }
+            catch (Exception msg)
+            {
+                throw msg.InnerException;
+            }
+        }
+        public IEnumerable<Station> GetAllStations()
+        {
+            return from stationDO in dl.GetAllStations()
+                   select GetStation(stationDO.Code);
+        }
+        public IEnumerable<Station> GetAllStationsBy(Predicate<Station> pred)
+        {
+            return from stationDO in dl.GetAllStations()
+                   let stationBO = GetStation(stationDO.Code)
+                   where pred(stationBO)
+                   select stationBO;
         }
         #endregion
     }
