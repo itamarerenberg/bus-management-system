@@ -16,8 +16,8 @@ namespace DO
         public int LineId { get; set; }
         public int StationNumber { get; set; }
         public int LineStationIndex { get; set; }
-        public int PrevStation { get; set; }
-        public int NextStation { get; set; }
+        public int? PrevStation { get; set; }
+        public int? NextStation { get; set; }
         public bool IsActive { get; set; }
     }
 }

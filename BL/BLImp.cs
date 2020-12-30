@@ -21,7 +21,7 @@ namespace BL
             try
             {
                 //validation
-                DO.User user = dl.GetUser(name, password);
+                DO.User user = dl.GetUser(name);
                 if (user.Password != password)//זה לא יקרא לעולם
                 {
                     throw new InvalidPassword("invalid password");
@@ -30,11 +30,11 @@ namespace BL
             }
             catch (DO.InvalidObjectExeption)
             {
-                throw new InvalidID("invalid ID");
+                throw new InvalidID("invalid name");
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public void AddManagar(string name, string password)
@@ -276,16 +276,31 @@ namespace BL
         #endregion
 
         #region LineStation
-        public void AddLineStation(LineStation lineStation, int index = -1)
+        public void AddLineStation(int lineNumber,int stationNumber, int index)
         {
-            if (index < -1)
+            Line line = GetLine(lineNumber);
+            if (index < 0 || index > line.Stations.Count)
             {
-                throw new InvalidInput("the index couldn't be a negative number");
+                throw new IndexOutOfRangeException("the index is out of range");
             }
-            if (index == -1)//adding to the end of the line 
+            Station station = GetStation(stationNumber);
+            DO.LineStation lineStationDO = new DO.LineStation()
+            {
+                LineId = lineNumber,
+                StationNumber = stationNumber,
+                LineStationIndex = index,
+                //PrevStation = null,
+                PrevStation = index == 0 ? null : (int?)line.Stations[index - 1].StationNumber,
+                NextStation = index == line.Stations.Count ? null : (int?)line.Stations[index + 1].StationNumber,
+            };
+            LineStation lineStation = (LineStation)lineStationDO.CopyPropertiesToNew(typeof(LineStation));
+            lineStation.PrevToCurrent = HelpMethods.GetAdjacentStation(lineStation.PrevStationCode, lineStation.NextStationCode);
+            lineStation.CurrentToNext = HelpMethods.GetAdjacentStation(lineStation.NextStationCode, lineStation.NextStationCode);
+
+
+            if (index == -1 || index == line.Stations.Count)//adding to the end of the line 
             {
                 //BO uapdates
-                Line line = GetLine(lineStation.LineId);
                 lineStation.LineStationIndex = line.Stations.Count();//gets the index of the end of the line
                 line.Stations.Add(lineStation);
 
@@ -297,7 +312,6 @@ namespace BL
             {
                 //BO uapdates
                 lineStation.LineStationIndex = 0;
-                Line line = GetLine(lineStation.LineId);
                 for (int i = 0; i < line.Stations.Count; i++)//updates the indexes of the stations
                 {
                     line.Stations[i].LineStationIndex++;
@@ -312,7 +326,6 @@ namespace BL
             {
                 //BO uapdates
                 lineStation.LineStationIndex = index;
-                Line line = GetLine(lineStation.LineId);
                 for (int i = index; i < line.Stations.Count; i++)//updates the indexes of the stations
                 {
                     line.Stations[i].LineStationIndex++;
@@ -326,8 +339,8 @@ namespace BL
                 UpdateLine(line);
             }
         }
-        public void UpdateLineStation(LineStation lineStation, int index);
-        public void DeleteLineStation(LineStation lineStation, int index)
+        public void UpdateLineStation(int lineNumber, int StationNumber);
+        public void DeleteLineStation(int lineNumber, int StationNumber)
         {
 
         }
@@ -401,7 +414,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public void DeleteStation(int code)
@@ -416,7 +429,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public IEnumerable<Station> GetAllStations()

@@ -77,9 +77,7 @@ namespace DLApi
 
         #region AdjacentStations
         void AddAdjacentStations(AdjacentStations adjacentStations);
-        AdjacentStations GetAdjacentStation(int stationCode1, int stationCode2);
-        AdjacentStations GetBackAdjacentStation(int stationCode);
-        AdjacentStations GetAheadAdjacentStation(int stationCode);
+        AdjacentStations GetAdjacentStation(int? stationCode1, int? stationCode2);
         void UpdateAdjacentStations(AdjacentStations adjacentStations);
         void DeleteAdjacentStations(AdjacentStations adjacentStations);
         #endregion
@@ -94,7 +92,7 @@ namespace DLApi
 
         #region User
         void AddUser(User user);
-        User GetUser(string name, string password);
+        User GetUser(string name);
         void UpdateUser(User user);
         void DeleteUser(string name);
         #endregion

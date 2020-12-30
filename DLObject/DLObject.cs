@@ -368,7 +368,6 @@ namespace DL
                 throw new NotExistExeption("the line station doesn't exist");
             }
         }
-
         IEnumerable<LineStation> IDL.GetAllLineStations()
         {
             return from lineStation in DataSource.LineStations
@@ -398,7 +397,7 @@ namespace DL
             }
         }
 
-        public AdjacentStations GetAdjacentStation(int stationCode1, int stationCode2)
+        public AdjacentStations GetAdjacentStation(int? stationCode1, int? stationCode2)
         {
             AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
             if (tempStations == null)
@@ -408,24 +407,6 @@ namespace DL
             return tempStations.Clone();
         }
 
-        AdjacentStations IDL.GetBackAdjacentStation(int stationCode)
-        {
-            AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode2 == stationCode);
-            if (tempStations == null)
-            {
-                throw new NotExistExeption("the Adjacent Station doesn't exist");
-            }
-            return tempStations.Clone();
-        }
-        AdjacentStations IDL.GetAheadAdjacentStation(int stationCode)
-        {
-            AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode);
-            if (tempStations == null)
-            {
-                throw new NotExistExeption("the Adjacent Station doesn't exist");
-            }
-            return tempStations.Clone();
-        }
         void IDL.UpdateAdjacentStations(AdjacentStations newAdjacentStations)
         {
             AdjacentStations oldAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == newAdjacentStations.StationCode1 && s.StationCode2 == newAdjacentStations.StationCode2);
@@ -516,7 +497,7 @@ namespace DL
                 tempUser.IsActive = true;
             }
         }
-        User IDL.GetUser(string name, string password)
+        User IDL.GetUser(string name)
         {
             User tempUser = DataSource.Users.FirstOrDefault(l => l.Name == name && l.IsActive == true);
             if (tempUser == null)

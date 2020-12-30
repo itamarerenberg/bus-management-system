@@ -47,9 +47,9 @@ namespace BLApi
         /// </summary>
         /// <param name="lineStation">line Station of type BO </param>
         /// <param name="index">the location in the line (push the rest of the stations 1 step ahead). default = to the end of the line</param>
-        void AddLineStation(LineStation lineStation, int index);
-        void UpdateLineStation(LineStation lineStation, int index);
-        void DeleteLineStation(LineStation lineStation, int index); 
+        void AddLineStation(int lineNumber, int StationNumber, int index);
+        void UpdateLineStation(int lineNumber, int StationNumber);
+        void DeleteLineStation(int lineNumber, int StationNumber); 
         #endregion
 
         #region Station
