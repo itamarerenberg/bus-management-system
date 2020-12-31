@@ -64,7 +64,9 @@ namespace BL
         {
             try
             {
-                DO.User oldManagar = dl.GetUser(oldName, oldPassword);
+                DO.User oldManagar = dl.GetUser(oldName);
+                if (oldManagar.Password != oldPassword)
+                    throw new InvalidInput("the old password is incorect");
                 if (oldManagar.Admin == false)
                     throw new InvalidInput("the user doesn't have an administrator access");
                 DO.User newManagar = new DO.User()
@@ -283,68 +285,71 @@ namespace BL
             {
                 throw new IndexOutOfRangeException("the index is out of range");
             }
-            Station station = GetStation(stationNumber);
             DO.LineStation lineStationDO = new DO.LineStation()
             {
                 LineId = lineNumber,
                 StationNumber = stationNumber,
                 LineStationIndex = index,
-                //PrevStation = null,
                 PrevStation = index == 0 ? null : (int?)line.Stations[index - 1].StationNumber,
-                NextStation = index == line.Stations.Count ? null : (int?)line.Stations[index + 1].StationNumber,
+                NextStation = index == line.Stations.Count ? null : (int?)line.Stations[index].StationNumber,
             };
+
+            //generating the BO line station
             LineStation lineStation = (LineStation)lineStationDO.CopyPropertiesToNew(typeof(LineStation));
-            lineStation.PrevToCurrent = HelpMethods.GetAdjacentStation(lineStation.PrevStationCode, lineStation.NextStationCode);
-            lineStation.CurrentToNext = HelpMethods.GetAdjacentStation(lineStation.NextStationCode, lineStation.NextStationCode);
+            if(HelpMethods.AddAdjacentStations(lineStationDO.PrevStation, lineStationDO.NextStation))
+                lineStation.PrevToCurrent = HelpMethods.GetAdjacentStations(lineStationDO.PrevStation, lineStationDO.NextStation);
+            if(HelpMethods.AddAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation))
+                lineStation.CurrentToNext = HelpMethods.GetAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation);
 
-
-            if (index == -1 || index == line.Stations.Count)//adding to the end of the line 
+            //updating the stations's index
+            for (int i = index; i < line.Stations.Count; i++)//updates the indexes of the stations
             {
-                //BO uapdates
-                lineStation.LineStationIndex = line.Stations.Count();//gets the index of the end of the line
-                line.Stations.Add(lineStation);
-
-                //DO uapdates
-                dl.AddAdjacentStations((DO.AdjacentStations)lineStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                UpdateLine(line);
+                line.Stations[i].LineStationIndex++;
             }
-            if (index == 0)//adding to the first of the line
+            line.Stations.Insert(index, lineStation);
+
+            if(lineStation.PrevToCurrent != null)//the added station is not in the first location
             {
-                //BO uapdates
-                lineStation.LineStationIndex = 0;
-                for (int i = 0; i < line.Stations.Count; i++)//updates the indexes of the stations
-                {
-                    line.Stations[i].LineStationIndex++;
-                }
-                line.Stations.Insert(0, lineStation);
-
-                //DO uapdates
-                dl.AddAdjacentStations((DO.AdjacentStations)lineStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                UpdateLine(line);
+                HelpMethods.DeleteAdjacentStations(line.Stations[index - 1].CurrentToNext);
+                line.Stations[index - 1].CurrentToNext = line.Stations[index].PrevToCurrent;
             }
-            else
+
+            if (lineStation.CurrentToNext != null)//the added station is not in the last location
             {
-                //BO uapdates
-                lineStation.LineStationIndex = index;
-                for (int i = index; i < line.Stations.Count; i++)//updates the indexes of the stations
-                {
-                    line.Stations[i].LineStationIndex++;
-                }
-                line.Stations.Insert(index, lineStation);
-
-                //DO uapdates
-                dl.AddAdjacentStations((DO.AdjacentStations)lineStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations for the back Line Station
-                dl.AddAdjacentStations((DO.AdjacentStations)lineStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations for the next Line Station
-                dl.DeleteAdjacentStations((DO.AdjacentStations)line.Stations[index - 1].CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//delete the conactions between Stations[index - 1] and Stations[index + 1]
-                UpdateLine(line);
+                HelpMethods.DeleteAdjacentStations(line.Stations[index + 1].PrevToCurrent);
+                line.Stations[index + 1].PrevToCurrent = line.Stations[index].CurrentToNext;
             }
+
         }
         public void UpdateLineStation(int lineNumber, int StationNumber);
         public void DeleteLineStation(int lineNumber, int StationNumber)
         {
+            Line line = GetLine(lineNumber);
+            LineStation lineStation = HelpMethods.GetLineStation(lineNumber, StationNumber);
 
+            if (lineStation.PrevToCurrent != null)//the deleted station is not in the first location
+            {
+                HelpMethods.DeleteAdjacentStations(line.Stations[lineStation.LineStationIndex - 1].CurrentToNext);
+            }
+            if (lineStation.CurrentToNext != null)//the deleted station is not in the last location
+            {
+                HelpMethods.DeleteAdjacentStations(line.Stations[lineStation.LineStationIndex + 1].PrevToCurrent);
+            }
+            if (lineStation.PrevToCurrent != null && lineStation.CurrentToNext != null)//the deleted station is niether in the first and last
+            {
+                HelpMethods.AddAdjacentStations(lineStation.PrevToCurrent.StationCode1, lineStation.CurrentToNext.StationCode2);
+                AdjacentStations newAdjacentStations = HelpMethods.GetAdjacentStations(lineStation.PrevToCurrent.StationCode1, lineStation.CurrentToNext.StationCode2);
+                line.Stations[lineStation.LineStationIndex - 1].CurrentToNext = newAdjacentStations;
+                line.Stations[lineStation.LineStationIndex + 1].PrevToCurrent = newAdjacentStations;
+            }
+            for (int i = line.Stations.Count - 1; i > lineStation.LineStationIndex; i--)
+            {
+                line.Stations[i].LineStationIndex--;
+            }
+            line.Stations.RemoveAt(lineStation.LineStationIndex);
+            dl.DeleteLineStation(lineNumber, StationNumber);
         }
-        
+
         #endregion
 
         #region Passenger

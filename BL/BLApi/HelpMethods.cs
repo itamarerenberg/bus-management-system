@@ -14,8 +14,40 @@ namespace BL.BLApi
         static IDL dl = DLFactory.GetDL();
 
         #region AdjacentStations
-        //void AddAdjacentStations(AdjacentStations adjacentStations);
-        public static AdjacentStations GetAdjacentStation(int? stationCode1,int? stationCode2)
+        /// <summary>
+        /// generating new DO Adjacent Stations
+        /// </summary>
+        /// <param name="stationCode1"></param>
+        /// <param name="stationCode2"></param>
+        /// <returns>true: if success.  false: if any of the given parameters is null</returns>
+        public static bool AddAdjacentStations(int? stationCode1, int? stationCode2)
+        {
+            if (stationCode1 == null || stationCode2 == null)
+                return false;
+
+            //getting the DO stations
+            DO.Station tempS1 = dl.GetStation((int)stationCode1);
+            DO.Station tempS2 = dl.GetStation((int)stationCode2);
+
+            //getting the locations by Latitude and Longitude of the stations
+            var locationStation1 = new GeoCoordinate(tempS1.Latitude, tempS1.Longitude);
+            var locationStation2 = new GeoCoordinate(tempS2.Latitude, tempS2.Longitude);
+
+            //calculating the distance between the stations
+            double distance = locationStation1.GetDistanceTo(locationStation2);//distance in meters
+
+            //generating DO Adjacent Stations
+            DO.AdjacentStations adjacentStationsDO = new DO.AdjacentStations()
+            {
+                StationCode1 = (int)stationCode1,
+                StationCode2 = (int)stationCode2,
+                Distance = distance
+                //'Time = צריך להוסיף
+            };
+            dl.AddAdjacentStations(adjacentStationsDO);
+            return true;
+        }
+        public static AdjacentStations GetAdjacentStations(int? stationCode1,int? stationCode2)
         {
             try
             {
@@ -41,19 +73,23 @@ namespace BL.BLApi
         }
         
         //void UpdateAdjacentStations(AdjacentStations adjacentStations);
-        //void DeleteAdjacentStations(AdjacentStations adjacentStations);
+        public static bool DeleteAdjacentStations(AdjacentStations adjacentStations)
+        {
+            return dl.DeleteAdjacentStations(adjacentStations.StationCode1, adjacentStations.StationCode2);
+        }
         #endregion
 
         #region Line station
 
         public static LineStation GetLineStation(int lineId, int stationNum)
         {
-            LineStation lineStationBO = (LineStation)dl.GetLineStation(lineId, stationNum).CopyPropertiesToNew(typeof(LineStation));
+            DO.LineStation lineStationDO = dl.GetLineStation(lineId, stationNum);
+            LineStation lineStation = (LineStation)lineStationDO.CopyPropertiesToNew(typeof(LineStation));
 
-            lineStationBO.PrevToCurrent = GetAdjacentStation(lineStationBO.PrevStationCode, stationNum);
-            lineStationBO.CurrentToNext = GetAdjacentStation(stationNum, lineStationBO.NextStationCode);
+            lineStation.PrevToCurrent = GetAdjacentStations(lineStationDO.PrevStation, stationNum);
+            lineStation.CurrentToNext = GetAdjacentStations(stationNum, lineStationDO.NextStation);
 
-            return lineStationBO;
+            return lineStation;
         }
         public static IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> pred)
         {

@@ -78,8 +78,14 @@ namespace DLApi
         #region AdjacentStations
         void AddAdjacentStations(AdjacentStations adjacentStations);
         AdjacentStations GetAdjacentStation(int? stationCode1, int? stationCode2);
-        void UpdateAdjacentStations(AdjacentStations adjacentStations);
-        void DeleteAdjacentStations(AdjacentStations adjacentStations);
+        void UpdateAdjacentStations(AdjacentStations newAdjacentStations);
+        /// <summary>
+        /// try to delete the Adjacent Stations
+        /// </summary>
+        /// <param name="stationCode1"></param>
+        /// <param name="stationCode2"></param>
+        /// <returns>true: if success.  false: if any of the given parameters is null</returns>
+        bool DeleteAdjacentStations(int? stationCode1, int? stationCode2);
         #endregion
 
         #region LineTrip

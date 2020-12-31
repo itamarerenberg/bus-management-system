@@ -396,34 +396,29 @@ namespace DL
                 throw new DuplicateExeption("the adjacent stations is allready exist");
             }
         }
-
         public AdjacentStations GetAdjacentStation(int? stationCode1, int? stationCode2)
         {
             AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
             if (tempStations == null)
-            {
-                throw new NotExistExeption("the Adjacent Station doesn't exist");
-            }
+                return null;
             return tempStations.Clone();
         }
-
         void IDL.UpdateAdjacentStations(AdjacentStations newAdjacentStations)
         {
             AdjacentStations oldAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == newAdjacentStations.StationCode1 && s.StationCode2 == newAdjacentStations.StationCode2);
             if (oldAdjacentStations == null)
             {
-                throw new NotExistExeption("the Adjacent Station doesn't exist");
+                throw new NotExistExeption("the Adjacent Stations doesn't exist");
             }
             oldAdjacentStations = newAdjacentStations;
         }
-        void IDL.DeleteAdjacentStations(AdjacentStations adjacentStations)
+        bool IDL.DeleteAdjacentStations(int? stationCode1, int? stationCode2)
         {
-            AdjacentStations tempAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == adjacentStations.StationCode1 && s.StationCode2 == adjacentStations.StationCode2);
+            AdjacentStations tempAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
             if (tempAdjacentStations == null)
-            {
-                throw new NotExistExeption("the Adjacent Station doesn't exist");
-            }
+                return false;
             DataSource.AdjacentStations.Remove(tempAdjacentStations);
+            return true;
         }
 
 

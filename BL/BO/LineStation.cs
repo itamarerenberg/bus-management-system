@@ -11,8 +11,6 @@
         
         public double DistanceBack { get => PrevToCurrent.Distance; }
         public double DistanceNext { get => CurrentToNext.Distance; }
-        public int? PrevStationCode { get => PrevToCurrent.StationCode1; }
-        public int? NextStationCode { get => CurrentToNext.StationCode2; }
 
         public int location { get; set; }
     }
