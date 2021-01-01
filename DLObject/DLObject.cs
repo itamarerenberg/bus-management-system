@@ -24,7 +24,7 @@ namespace DL
         #endregion
 
         #region Bus
-        void IDL.AddBus(Bus bus)
+        public void AddBus(Bus bus)
         {
             Bus tempBus = DataSource.Buses.FirstOrDefault(b => b.LicenseNum == bus.LicenseNum);
             if (tempBus == null)
@@ -41,7 +41,7 @@ namespace DL
                 tempBus.IsActive = true;
             }
         }
-        Bus IDL.GetBus(string licenseNum)
+        public Bus GetBus(string licenseNum)
         {
             Bus bus = DataSource.Buses.Find(b => b.LicenseNum == licenseNum && b.IsActive == true);
             if (bus == null)
@@ -55,7 +55,7 @@ namespace DL
         /// insert new bus insted of the corrent bus with identical LicenseNum
         /// </summary>
         /// <param name="bus">updated bus</param>
-        void IDL.UpdateBus(Bus newBus)
+        public void UpdateBus(Bus newBus)
         {
             Bus oldBus = DataSource.Buses.Find(b => b.LicenseNum == newBus.LicenseNum && b.IsActive == true);
             if (oldBus == null)
@@ -65,7 +65,7 @@ namespace DL
             oldBus = newBus;
         }
 
-        void IDL.DeleteBus(string licenseNum)
+        public void DeleteBus(string licenseNum)
         {
             //if (DataSource.Buses.RemoveAll(b => b.LicenseNum == licenseNum) == 0)
             //{
@@ -82,13 +82,15 @@ namespace DL
                 throw new NotExistExeption("bus with this License's num not exist");
             }
         }
-        IEnumerable<Bus> IDL.GetAllBuses()
+
+        public IEnumerable<Bus> GetAllBuses()
         {
             return from bus in DataSource.Buses
                    where bus.IsActive == true
                    select bus.Clone();
         }
-        IEnumerable<Bus> IDL.GetAllBusesBy(Predicate<Bus> predicate)
+
+        public IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> predicate)
         {
             return from bus in DataSource.Buses
                    where predicate(bus) && bus.IsActive == true
@@ -115,7 +117,7 @@ namespace DL
         //        tempLine.IsActive = true;
         //    }
         //}
-        void IDL.AddLine(Line line)
+        public void AddLine(Line line)
         {
             try
             {
@@ -128,7 +130,7 @@ namespace DL
             DataSource.Lines.Add(line);
         }
 
-        Line IDL.GetLine(int id)
+        public Line GetLine(int id)
         {
             Line line = DataSource.Lines.Find(l => l.ID == id && l.IsActive == true);
             if (line == null)
@@ -142,7 +144,7 @@ namespace DL
         /// insert new line insted of the corrent line with identical ID
         /// </summary>
         /// <param name="line">update line</param>
-        void IDL.UpdateLine(Line newLine)
+        public void UpdateLine(Line newLine)
         {
             Line oldLine = DataSource.Lines.Find(l => l.ID == newLine.ID && l.IsActive == true);
             if (oldLine == null)
@@ -152,7 +154,7 @@ namespace DL
             oldLine = newLine;
         }
 
-        void IDL.DeleteLine(int id)
+        public void DeleteLine(int id)
         {
             Line line = DataSource.Lines.Find(l => l.ID == id && l.IsActive == true);
             if (line != null)
@@ -165,14 +167,14 @@ namespace DL
             }
         }
 
-        IEnumerable<Line> IDL.GetAllLines()
+        public IEnumerable<Line> GetAllLines()
         {
             return from line in DataSource.Lines
                    where line.IsActive == true
                    select line.Clone();
         }
 
-        IEnumerable<Line> IDL.GetAllLinesBy(Predicate<Line> predicate)
+        public IEnumerable<Line> GetAllLinesBy(Predicate<Line> predicate)
         {
             return from line in DataSource.Lines
                    where predicate(line) && line.IsActive == true
@@ -182,7 +184,7 @@ namespace DL
         #endregion
 
         #region BusOnTrip
-        void IDL.AddBusOnTrip(BusOnTrip busOnTrip)
+        public void AddBusOnTrip(BusOnTrip busOnTrip)
         {
             if (DataSource.BusesOnTrip.FirstOrDefault(bot => bot.ID == busOnTrip.ID) != null)
             {
@@ -193,7 +195,8 @@ namespace DL
                 DataSource.BusesOnTrip.Add(busOnTrip);
             }
         }
-        BusOnTrip IDL.GetBusOnTrip(int id)
+
+        public BusOnTrip GetBusOnTrip(int id)
         {
             BusOnTrip busOnTrip = DataSource.BusesOnTrip.Find(bot => bot.ID == id);
             if (busOnTrip == null)
@@ -202,7 +205,8 @@ namespace DL
             }
             return busOnTrip.Clone();
         }
-        void IDL.UpdateBusOnTrip(BusOnTrip busOnTrip)
+
+        public void UpdateBusOnTrip(BusOnTrip busOnTrip)
         {
             BusOnTrip oldBusOnTrip = DataSource.BusesOnTrip.Find(bot => bot.ID == busOnTrip.ID);
             if (oldBusOnTrip == null)
@@ -211,7 +215,8 @@ namespace DL
             }
             oldBusOnTrip = busOnTrip;
         }
-        void IDL.DeleteBusOnTrip(int id)
+
+        public void DeleteBusOnTrip(int id)
         {
             BusOnTrip busOnTrip = DataSource.BusesOnTrip.Find(l => l.ID == id && l.IsActive == true);
             if (busOnTrip != null)
@@ -224,14 +229,14 @@ namespace DL
             }
         }
 
-        IEnumerable<BusOnTrip> IDL.GetAllBusesOnTrip()
+        public IEnumerable<BusOnTrip> GetAllBusesOnTrip()
         {
             return from bot in DataSource.BusesOnTrip
                    where bot.IsActive == true
                    select bot.Clone();
         }
 
-        IEnumerable<BusOnTrip> IDL.GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
+        public IEnumerable<BusOnTrip> GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
         {
             return from bot in DataSource.BusesOnTrip
                    where predicate(bot) && bot.IsActive == true
@@ -242,7 +247,7 @@ namespace DL
         #region Station
 
 
-        void IDL.AddStation(Station busStation)
+        public void AddStation(Station busStation)
         {
             Station tempBusStation = DataSource.Stations.FirstOrDefault(b => b.Code == busStation.Code);
             if (tempBusStation == null)
@@ -260,7 +265,7 @@ namespace DL
             }
         }
 
-        Station IDL.GetStation(int code)
+        public Station GetStation(int code)
         {
             Station busStation = DataSource.Stations.Find(bs => bs.Code == code && bs.IsActive == true);
             if (busStation == null)
@@ -274,7 +279,7 @@ namespace DL
         /// insert new busStation insted of the corrent Station with identical Code
         /// </summary>
         /// <param name="busStation">updated Station</param>
-        void IDL.UpdateStation(Station newBusStation)
+        public void UpdateStation(Station newBusStation)
         {
             Station oldBusStation = DataSource.Stations.Find(bs => bs.Code == newBusStation.Code && bs.IsActive == true);
             if (oldBusStation == null)
@@ -283,7 +288,8 @@ namespace DL
             }
             oldBusStation = newBusStation;
         }
-        void IDL.DeleteStation(int code)
+
+        public void DeleteStation(int code)
         {
             Station station = DataSource.Stations.Find(s => s.Code == code && s.IsActive == true);
             if (station != null)
@@ -296,13 +302,14 @@ namespace DL
             }
         }
 
-        IEnumerable<Station> IDL.GetAllStations()
+        public IEnumerable<Station> GetAllStations()
         {
             return from station in DataSource.Stations
                    where station.IsActive == true
                    select station.Clone();
         }
-        IEnumerable<Station> IDL.GetAllStationBy(Predicate<Station> predicate)
+
+        public IEnumerable<Station> GetAllStationBy(Predicate<Station> predicate)
         {
             return from station in DataSource.Stations
                    where predicate(station) && station.IsActive == true
@@ -312,7 +319,7 @@ namespace DL
 
         #region LineStation
 
-        void IDL.AddLineStation(LineStation lineStation)
+        public void AddLineStation(LineStation lineStation)
         {
             LineStation tempLineStation = DataSource.LineStations.FirstOrDefault(l => l.LineId == lineStation.LineId);
             if (tempLineStation == null)
@@ -329,7 +336,8 @@ namespace DL
                 tempLineStation.IsActive = true;
             }
         }
-        LineStation IDL.GetLineStation(int lineId, int stationNum)
+
+        public LineStation GetLineStation(int lineId, int stationNum)
         {
             LineStation lineStation = DataSource.LineStations.Find(l => l.LineId == lineId && l.StationNumber == stationNum && l.IsActive == true);
             if (lineStation == null)
@@ -338,7 +346,8 @@ namespace DL
             }
             return lineStation.Clone();
         }
-        LineStation IDL.GetLineStationByIndex(int lineId, int index)
+
+        public LineStation GetLineStationByIndex(int lineId, int index)
         {
             LineStation lineStation = DataSource.LineStations.Find(l => l.LineId == lineId && l.LineStationIndex == index && l.IsActive == true);
             if (lineStation == null)
@@ -347,7 +356,8 @@ namespace DL
             }
             return lineStation.Clone();
         }
-        void IDL.UpdateLineStation(LineStation newLineStation)
+
+        public void UpdateLineStation(LineStation newLineStation)
         {
             LineStation oldLineStation = DataSource.LineStations.FirstOrDefault(l => l.LineId == newLineStation.LineId);
             if (oldLineStation == null)
@@ -356,7 +366,8 @@ namespace DL
             }
             oldLineStation = newLineStation;
         }
-        void IDL.DeleteLineStation(int lineId, int stationNum)
+
+        public void DeleteLineStation(int lineId, int stationNum)
         {
             LineStation lineS = DataSource.LineStations.Find(l => l.LineId == lineId && l.StationNumber == stationNum && l.IsActive == true);
             if (lineS != null)
@@ -368,13 +379,15 @@ namespace DL
                 throw new NotExistExeption("the line station doesn't exist");
             }
         }
-        IEnumerable<LineStation> IDL.GetAllLineStations()
+
+        public IEnumerable<LineStation> GetAllLineStations()
         {
             return from lineStation in DataSource.LineStations
                    where lineStation.IsActive == true
                    select lineStation.Clone();
         }
-        IEnumerable<LineStation> IDL.GetAllLineStationBy(Predicate<LineStation> predicate)
+
+        public IEnumerable<LineStation> GetAllLineStationBy(Predicate<LineStation> predicate)
         {
             return from lineStation in DataSource.LineStations
                    where predicate(lineStation) && lineStation.IsActive == true
@@ -384,7 +397,7 @@ namespace DL
 
         #region AdjacentStations
 
-        void IDL.AddAdjacentStations(AdjacentStations adjacentStations)
+        public void AddAdjacentStations(AdjacentStations adjacentStations)
         {
             AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == adjacentStations.StationCode1 && s.StationCode2 == adjacentStations.StationCode2);
             if (tempStations == null)
@@ -403,7 +416,8 @@ namespace DL
                 return null;
             return tempStations.Clone();
         }
-        void IDL.UpdateAdjacentStations(AdjacentStations newAdjacentStations)
+
+        public void UpdateAdjacentStations(AdjacentStations newAdjacentStations)
         {
             AdjacentStations oldAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == newAdjacentStations.StationCode1 && s.StationCode2 == newAdjacentStations.StationCode2);
             if (oldAdjacentStations == null)
@@ -412,7 +426,8 @@ namespace DL
             }
             oldAdjacentStations = newAdjacentStations;
         }
-        bool IDL.DeleteAdjacentStations(int? stationCode1, int? stationCode2)
+
+        public bool DeleteAdjacentStations(int? stationCode1, int? stationCode2)
         {
             AdjacentStations tempAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
             if (tempAdjacentStations == null)
@@ -425,7 +440,7 @@ namespace DL
         #endregion
 
         #region LineTrip
-        void IDL.AddLineTrip(LineTrip lineTrip)
+        public void AddLineTrip(LineTrip lineTrip)
         {
             LineTrip tempLineTrip = DataSource.LineTrips.FirstOrDefault(l => l.ID == lineTrip.ID);
             if (tempLineTrip == null)
@@ -442,7 +457,8 @@ namespace DL
                 tempLineTrip.IsActive = true;
             }
         }
-        LineTrip IDL.GetLineTrip(int id)
+
+        public LineTrip GetLineTrip(int id)
         {
             LineTrip lineTrip = DataSource.LineTrips.Find(l => l.ID == id && l.IsActive == true);
             if (lineTrip == null)
@@ -451,7 +467,8 @@ namespace DL
             }
             return lineTrip.Clone();
         }
-        void IDL.UpdateLineTrip(LineTrip newLineTrip)
+
+        public void UpdateLineTrip(LineTrip newLineTrip)
         {
             LineTrip oldLineTrip = DataSource.LineTrips.Find(l => l.ID == newLineTrip.ID && l.IsActive == true);
             if (oldLineTrip == null)
@@ -460,13 +477,15 @@ namespace DL
             }
             oldLineTrip = newLineTrip;
         }
-        IEnumerable<LineTrip> IDL.GetAllLineTrips()
+
+        public IEnumerable<LineTrip> GetAllLineTrips()
         {
             return from lineTrip in DataSource.LineTrips
                    where lineTrip.IsActive == true
                    select lineTrip.Clone();
         }
-        IEnumerable<LineTrip> IDL.GetAllLineTripBy(Predicate<LineTrip> predicate)
+
+        public IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate)
         {
             return from lineTrip in DataSource.LineTrips
                    where predicate(lineTrip) && lineTrip.IsActive == true
@@ -475,7 +494,7 @@ namespace DL
         #endregion
 
         #region User
-        void IDL.AddUser(User user)
+        public void AddUser(User user)
         {
             User tempUser = DataSource.Users.FirstOrDefault(l => l.Name == user.Name);
             if (tempUser == null)
@@ -492,7 +511,8 @@ namespace DL
                 tempUser.IsActive = true;
             }
         }
-        User IDL.GetUser(string name)
+
+        public User GetUser(string name)
         {
             User tempUser = DataSource.Users.FirstOrDefault(l => l.Name == name && l.IsActive == true);
             if (tempUser == null)
@@ -501,7 +521,8 @@ namespace DL
             }
             return tempUser.Clone();
         }
-        void IDL.UpdateUser(User newUser)
+
+        public void UpdateUser(User newUser)
         {
             User oldUser = DataSource.Users.Find(l => l.Name == newUser.Name && l.IsActive == true);
             if (oldUser == null)
@@ -510,7 +531,8 @@ namespace DL
             }
             oldUser = newUser;
         }
-        void IDL.DeleteUser(string name)
+
+        public void DeleteUser(string name)
         {
             User user = DataSource.Users.Find(l => l.Name == name && l.IsActive == true);
             if (user != null)
@@ -525,12 +547,13 @@ namespace DL
         #endregion
 
         #region UserTrip
-        void IDL.AddUserTrip(UserTrip userTrip)
+        public void AddUserTrip(UserTrip userTrip)
         {
             userTrip.TripId = SerialNumbers.GetUserTripId;//get a serial number from SerialNumbers for the id
             DataSource.UsersTrips.Add(userTrip);//add to the data source
         }
-        UserTrip IDL.GetUserTrip(int id)
+
+        public UserTrip GetUserTrip(int id)
         {
             UserTrip tempUserTrip = DataSource.UsersTrips.FirstOrDefault(u => u.TripId == id && u.IsActive == true);
             if (tempUserTrip == null)
@@ -539,7 +562,8 @@ namespace DL
             }
             return tempUserTrip.Clone();
         }
-        void IDL.UpdateUserTrip(UserTrip newUserTrip)
+
+        public void UpdateUserTrip(UserTrip newUserTrip)
         {
             UserTrip oldUserTrip = DataSource.UsersTrips.Find(u => u.TripId == newUserTrip.TripId && u.IsActive == true);
             if (oldUserTrip == null)
@@ -548,13 +572,15 @@ namespace DL
             }
             oldUserTrip = newUserTrip;
         }
-        IEnumerable<UserTrip> IDL.GetAllUserTrips()
+
+        public IEnumerable<UserTrip> GetAllUserTrips()
         {
             return from userTrip in DataSource.UsersTrips
                    where userTrip.IsActive == true
                    select userTrip.Clone();
         }
-        IEnumerable<UserTrip> IDL.GetAllUserTripsBy(Predicate<UserTrip> predicate)
+
+        public IEnumerable<UserTrip> GetAllUserTripsBy(Predicate<UserTrip> predicate)
         {
             return from userTrip in DataSource.UsersTrips
                    where predicate(userTrip) && userTrip.IsActive == true

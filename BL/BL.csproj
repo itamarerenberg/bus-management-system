@@ -43,10 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLApi\BLFactory.cs" />
+    <Compile Include="BLApi\BLImpPassenger.cs" />
     <Compile Include="BLApi\CopyProperties.cs" />
     <Compile Include="BLApi\HelpMethods.cs" />
     <Compile Include="BLExeptions.cs" />
-    <Compile Include="BLImp.cs" />
+    <Compile Include="BLImpAdmin.cs" />
     <Compile Include="BO\AdjacentStations.cs" />
     <Compile Include="BO\Bus.cs" />
     <Compile Include="BO\BusTrip.cs" />

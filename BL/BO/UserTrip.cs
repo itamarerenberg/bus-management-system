@@ -8,8 +8,12 @@ namespace BO
 {
     public class UserTrip
     {
-        public TimeSpan Ontime { get; set; }
-        public TimeSpan Offtime { get; set; }
-        public BusTrip Trip { get; set; }
+        public int TripId { get; set; }
+        public string UserName { get; set; }
+        public int LineId { get; set; }
+        public int InStation { get; set; }
+        public DateTime InTime { get; set; }
+        public int OutStation { get; set; }
+        public DateTime OutTime { get; set; }
     }
 }

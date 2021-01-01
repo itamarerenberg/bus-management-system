@@ -9,7 +9,7 @@ namespace BLApi
 
         #region Manager
         void AddManagar(string name, string password);
-        Manager GetManagar(string name, string password);
+        bool GetManagar(string name, string password);
         void UpdateManagar(string name, string password,string oldName, string oldPassword);
         void DeleteManagar(string name, string password);
 
@@ -18,7 +18,7 @@ namespace BLApi
         #region Passenger
         void AddPassenger(string name, string password);
         Passenger GetPassenger(string name, string password);
-        void UpdatePassenger(string name, string password);
+        void UpdatePassenger(string name, string password, string newName, string newPassword);
         void DeletePassenger(string name, string password);
 
         #endregion
@@ -63,11 +63,11 @@ namespace BLApi
 
         #region User Trip
         void AddUserTrip(UserTrip userTrip);
-        Line GetUserTrip(int id);
+        UserTrip GetUserTrip(int id);
         void UpdateUserTrip(UserTrip userTrip);
         void DeleteUserTrip( int id);
-        IEnumerable<UserTrip> GetAllUserTrips();
-        IEnumerable<UserTrip> GetAllUserTripsBy(Predicate<UserTrip> pred);
+        IEnumerable<UserTrip> GetAllUserTrips(string name);
+        IEnumerable<UserTrip> GetAllUserTripsBy(string name,Predicate<UserTrip> pred);
         #endregion
     }
 }

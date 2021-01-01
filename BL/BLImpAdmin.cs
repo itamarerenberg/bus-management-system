@@ -7,26 +7,28 @@ using BL.BLApi;
 using BLApi;
 using BO;
 using DLApi;
-//using static BL.BLApi.HelpMethods;// למה זה לא עובד בלי זה ??? הא איתמר?? (המחלקה הסטטית של הפרופרטי עובדת בלי) תבדוק את זה אם תוכל 
 
 namespace BL
 {
-    public class BLImp : IBL
+    public class BLImpAdmin : IBL
     {
         IDL dl = DLFactory.GetDL();
         
         #region Manager
-        public Manager GetManagar(string name, string password)
+        public bool GetManagar(string name, string password)
         {
             try
             {
                 //validation
                 DO.User user = dl.GetUser(name);
-                if (user.Password != password)//זה לא יקרא לעולם
-                {
-                    throw new InvalidPassword("invalid password");
-                }
 
+                if (user.Admin == false)
+                    throw new InvalidInput("the user doesn't have an administrator access");
+
+                if (user.Password != password)
+                    throw new InvalidPassword("invalid password");
+
+                return true;
             }
             catch (DO.InvalidObjectExeption)
             {
@@ -74,7 +76,6 @@ namespace BL
                     Name = newName,
                     Password = newPassword,
                     Admin = true,
-                    IsActive = true
                 };
                 dl.UpdateUser(newManagar);
             }
@@ -321,7 +322,10 @@ namespace BL
             }
 
         }
-        public void UpdateLineStation(int lineNumber, int StationNumber);
+        public void UpdateLineStation(int lineNumber, int StationNumber)
+        {
+            throw new NotImplementedException();
+        }
         public void DeleteLineStation(int lineNumber, int StationNumber)
         {
             Line line = GetLine(lineNumber);
@@ -370,8 +374,6 @@ namespace BL
             throw new NotImplementedException();
         }
         #endregion
-
-        //******************
 
         #region Station
 
@@ -422,6 +424,10 @@ namespace BL
                 throw msg;
             }
         }
+        public void UpdateStation(Station station)
+        {
+            throw new NotImplementedException();
+        }
         public void DeleteStation(int code)
         {
             try
@@ -429,7 +435,7 @@ namespace BL
                 dl.DeleteStation(code);
                 foreach (LineStation lineS in HelpMethods.GetAllLineStationsBy(s => s.StationNumber == code))
                 {
-                    DeleteLineStation(lineS, lineS.StationNumber);
+                    DeleteLineStation(lineS.LineId, lineS.StationNumber);
                 }
             }
             catch (Exception msg)
@@ -451,6 +457,37 @@ namespace BL
         }
         #endregion
 
+        #region User Trip
+        public void AddUserTrip(UserTrip userTrip)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Line GetUserTrip(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateUserTrip(UserTrip userTrip)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteUserTrip(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<UserTrip> GetAllUserTrips()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<UserTrip> GetAllUserTripsBy(Predicate<UserTrip> pred)
+        {
+            throw new NotImplementedException();
+        } 
+        #endregion
 
     }
 }

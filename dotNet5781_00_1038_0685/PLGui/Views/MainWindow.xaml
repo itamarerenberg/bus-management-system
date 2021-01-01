@@ -33,7 +33,7 @@
                     
                     <!--row 2-->
                     <Label Content="enter password" Grid.Column="1" Grid.Row="2" Height="35" Width="93"/>
-                    <TextBox x:Name="password" Grid.Column="2" Grid.Row="2" Height="35" Text="" VerticalAlignment="Top" MinWidth="100" Width="auto"/>
+                    <PasswordBox x:Name="password" Grid.Column="2" Grid.Row="2" Height="35" MinWidth="100" Width="auto"/>
 
                     <!--row 4-->
                     <Button x:Name="SignInButton" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" Click="SignInButton_Click"/>
