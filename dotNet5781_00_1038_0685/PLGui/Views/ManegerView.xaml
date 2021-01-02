@@ -7,9 +7,34 @@
         mc:Ignorable="d"
         Title="Maneger" Height="450" Width="800">
     <Grid>
-        <TabControl x:Name="tab_control">
-            <TabItem x:Name="Buses_view" Header="Buses view">
-                <ListView x:Name="BusesList" HorizontalAlignment="Left" Height="401" Margin="10,10,0,0" VerticalAlignment="Top" Width="259">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="0">
+            <MenuItem Header="new">
+                <MenuItem Header="new line"/>
+                <MenuItem Header="new bus" />
+                <MenuItem Header="station" />
+            </MenuItem>
+        </Menu>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Margin="25,0,0,0">
+            <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="70"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Margin="100,0,0,0">
+            <TextBlock Text="search:" HorizontalAlignment="Left"/>
+            <TextBox x:Name="SearchBox" MinWidth="70" Height="22" TextChanged="SearchBox_TextChanged" />
+        </StackPanel>
+        <TabControl x:Name="tab_control" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25">
+            <TabItem x:Name="Buses_view" Header="Buses">
+                <ListView x:Name="BusesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn/>
@@ -17,7 +42,7 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="Lines_view" Header="Lines view" Background="Red">
+            <TabItem x:Name="Lines_view" Header="Lines" Background="Red">
                 
             </TabItem>
         </TabControl>

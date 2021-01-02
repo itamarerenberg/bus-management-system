@@ -14,11 +14,11 @@ namespace BL.BLApi
             switch (type)
             {
                 case "1":
-                    return new BLImpAdmin();
+                    return new BLImpPassenger();
                 case "2":
-                //return new BLImp2();
-                default:
                     return new BLImpAdmin();
+                default:
+                    return new BLImpPassenger();
             }
         }
     }

@@ -296,10 +296,13 @@ namespace BL
             };
 
             //generating the BO line station
-            LineStation lineStation = (LineStation)lineStationDO.CopyPropertiesToNew(typeof(LineStation));
-            if(HelpMethods.AddAdjacentStations(lineStationDO.PrevStation, lineStationDO.NextStation))
+            LineStation lineStation = (LineStation)lineStationDO.CopyPropertiesToNew(typeof(LineStation));//copy from DO line station          
+            lineStation = (LineStation)GetStation(stationNumber).CopyPropertiesToNew(typeof(LineStation));//copy from BO station          
+
+            if (HelpMethods.AddAdjacentStations(lineStationDO.PrevStation, lineStationDO.NextStation))//if success to add "Adjacent Stations" (it's mean the line station is not the first station)
                 lineStation.PrevToCurrent = HelpMethods.GetAdjacentStations(lineStationDO.PrevStation, lineStationDO.NextStation);
-            if(HelpMethods.AddAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation))
+
+            if(HelpMethods.AddAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation))//if success to add "Adjacent Stations" (it's mean the line station is not the last station)
                 lineStation.CurrentToNext = HelpMethods.GetAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation);
 
             //updating the stations's index

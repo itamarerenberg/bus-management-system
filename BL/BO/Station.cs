@@ -13,7 +13,7 @@ namespace BO
         public float Longitude { get; set; }
         public float Latitude { get; set; }
         public string Address { get; set; }
-        //public GeoCoordinate location { get => new GeoCoordinate(Longitude, Latitude); }
+        public GeoCoordinate Location { get => new GeoCoordinate(Longitude, Latitude); }
         public List<Line> GetLines { get; set; }
     }
 }
