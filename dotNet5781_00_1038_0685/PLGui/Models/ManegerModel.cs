@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PLGui.Models.PO;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,8 +12,10 @@ namespace PLGui.Models
 {
     public class ManegerModel
     {
-        public ObservableCollection<BO.Bus> Buses { get; set; }
+        public ObservableCollection<Bus> Buses { get; set; }
 
-        public ObservableCollection<BO.Line> Lines { get; set; }
+        public ObservableCollection<Line> Lines { get; set; }
+
+        public ObservableCollection<Station> Stations { get; set; }
     }
 }

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -56,6 +57,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\ManegerModel.cs" />
+    <Compile Include="Models\PO\Bus.cs" />
+    <Compile Include="Models\PO\Line.cs" />
+    <Compile Include="Models\PO\Station.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserTrip.cs" />
     <Compile Include="ViewModels\ManegerViewModel.cs" />

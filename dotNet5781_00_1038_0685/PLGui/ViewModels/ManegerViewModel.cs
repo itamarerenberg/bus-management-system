@@ -60,7 +60,7 @@ namespace PLGui.ViewModels
                 (object sender, RunWorkerCompletedEventArgs args) =>
                 {
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                  //terminated befor he done execute DoWork
+                    {                                                   //terminated befor he done execute DoWork
                         model = (ManegerModel)args.Result;
                     }
                 };//this function will execute in the main thred
