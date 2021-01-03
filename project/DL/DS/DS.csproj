@@ -75,12 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\dotNet5781_00_1038_0685\DLApi\DLApi.csproj">
-      <Project>{fa640085-e3a4-407a-8b69-dc8831d2dd9f}</Project>
-      <Name>DLApi</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
