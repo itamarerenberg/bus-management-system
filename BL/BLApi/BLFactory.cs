@@ -13,9 +13,9 @@ namespace BL.BLApi
         {
             switch (type)
             {
-                case "1":
+                case "passenger":
                     return new BLImpPassenger();
-                case "2":
+                case "admin":
                     return new BLImpAdmin();
                 default:
                     return new BLImpPassenger();

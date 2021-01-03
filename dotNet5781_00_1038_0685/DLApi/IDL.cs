@@ -72,7 +72,7 @@ namespace DLApi
         void UpdateLineStation(LineStation lineStation);
         void DeleteLineStation(int lineId, int stationNum);
         IEnumerable<LineStation> GetAllLineStations();
-        IEnumerable<LineStation> GetAllLineStationBy(Predicate<LineStation> predicate);
+        IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> predicate);
         #endregion
 
         #region AdjacentStations

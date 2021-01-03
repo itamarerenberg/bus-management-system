@@ -387,7 +387,7 @@ namespace DL
                    select lineStation.Clone();
         }
 
-        public IEnumerable<LineStation> GetAllLineStationBy(Predicate<LineStation> predicate)
+        public IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> predicate)
         {
             return from lineStation in DataSource.LineStations
                    where predicate(lineStation) && lineStation.IsActive == true

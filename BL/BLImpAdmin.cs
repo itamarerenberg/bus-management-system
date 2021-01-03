@@ -241,7 +241,7 @@ namespace BL
             {
                 foreach (LineStation lStation in line.Stations)
                 {
-                    dl.DeleteLineStation(lStation.LineId, lStation.StationNumber);
+                    DeleteLineStation(id, lStation.StationNumber);
                 }
                 dl.DeleteLine(id);
             }
@@ -436,7 +436,7 @@ namespace BL
             try
             {
                 dl.DeleteStation(code);
-                foreach (LineStation lineS in HelpMethods.GetAllLineStationsBy(s => s.StationNumber == code))
+                foreach (LineStation lineS in dl.GetAllLineStationBy(s => s.StationNumber == code))
                 {
                     DeleteLineStation(lineS.LineId, lineS.StationNumber);
                 }

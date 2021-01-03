@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BL.BLApi;
 using BLApi;
 using PLGui.Models;
+using PLGui.Models.PO;
 
 namespace PLGui.ViewModels
 {
@@ -14,27 +16,36 @@ namespace PLGui.ViewModels
     {
         ManegerModel model;
         public event PropertyChangedEventHandler PropertyChanged;
-        IBL source;
+        IBL bl = BLFactory.GetBL("admin");
 
         #region properties
 
-        public ObservableCollection<BO.Bus> Buses
+        public ObservableCollection<Bus> Buses
         {
             get => model.Buses;
             set
             {
                 model.Buses = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Lines"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Buses"));
             }
         }
 
-        public ObservableCollection<BO.Line> Lines
+        public ObservableCollection<Line> Lines
         {
             get => model.Lines;
             set
             {
                 model.Lines = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Lines"));
+            }
+        }
+        public ObservableCollection<Station> Stations
+        {
+            get => model.Stations;
+            set
+            {
+                model.Stations = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stations"));
             }
         }
 
