@@ -206,7 +206,7 @@ namespace BL
             try
             {
                 Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
-                line.Stations = (from lineStationDO in dl.GetAllLineStationBy(l => l.LineId == id)
+                line.Stations = (from lineStationDO in dl.GetAllLineStationsBy(l => l.LineId == id)
                                  let lineStationBO = HelpMethods.GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
                                  orderby lineStationBO.LineStationIndex
                                  select lineStationBO).ToList();
@@ -368,7 +368,7 @@ namespace BL
         {
             throw new NotImplementedException();
         }
-        public void UpdatePassenger(string name, string password)
+        public void UpdatePassenger(string name, string password, string newName, string newPassword)
         {
             throw new NotImplementedException();
         }
@@ -417,7 +417,7 @@ namespace BL
             try
             {
                 Station station = (Station)dl.GetStation(code).CopyPropertiesToNew(typeof(Station));
-                station.GetLines = (from lineS in dl.GetAllLineStationBy(s => s.LineId == code)
+                station.GetLines = (from lineS in dl.GetAllLineStationsBy(s => s.LineId == code)
                                     orderby lineS.LineId
                                     select GetLine(lineS.LineId)).ToList();
                 return station;
@@ -436,9 +436,13 @@ namespace BL
             try
             {
                 dl.DeleteStation(code);
-                foreach (LineStation lineS in dl.GetAllLineStationBy(s => s.StationNumber == code))
+                foreach (DO.LineStation lineS in dl.GetAllLineStationsBy(s => s.StationNumber == code))
                 {
-                    DeleteLineStation(lineS.LineId, lineS.StationNumber);
+                    dl.DeleteLineStation(lineS.LineId, lineS.StationNumber);
+                }
+                foreach (DO.AdjacentStations AjaS in dl.GetAllAdjacentStationsBy(a => a.StationCode1 == code || a.StationCode2 == code))
+                {
+                    dl.DeleteAdjacentStations(AjaS);
                 }
             }
             catch (Exception msg)
@@ -466,7 +470,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public Line GetUserTrip(int id)
+        public UserTrip GetUserTrip(int id)
         {
             throw new NotImplementedException();
         }
@@ -481,12 +485,12 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserTrip> GetAllUserTrips()
+        public IEnumerable<UserTrip> GetAllUserTrips(string name)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserTrip> GetAllUserTripsBy(Predicate<UserTrip> pred)
+        public IEnumerable<UserTrip> GetAllUserTripsBy(string name,Predicate<UserTrip> pred)
         {
             throw new NotImplementedException();
         } 

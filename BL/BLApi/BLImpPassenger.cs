@@ -162,7 +162,7 @@ namespace BL
             try
             {
                 Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
-                line.Stations = (from lineStationDO in dl.GetAllLineStationBy(l => l.LineId == id)
+                line.Stations = (from lineStationDO in dl.GetAllLineStationsBy(l => l.LineId == id)
                                  let lineStationBO = HelpMethods.GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
                                  orderby lineStationBO.LineStationIndex
                                  select lineStationBO).ToList();
@@ -208,7 +208,7 @@ namespace BL
             try
             {
                 Station station = (Station)dl.GetStation(code).CopyPropertiesToNew(typeof(Station));
-                station.GetLines = (from lineS in dl.GetAllLineStationBy(s => s.LineId == code)
+                station.GetLines = (from lineS in dl.GetAllLineStationsBy(s => s.LineId == code)
                                     orderby lineS.LineId
                                     select GetLine(lineS.LineId)).ToList();
                 return station;

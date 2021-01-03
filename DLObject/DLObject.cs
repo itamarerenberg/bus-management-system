@@ -432,10 +432,26 @@ namespace DL
             AdjacentStations tempAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
             if (tempAdjacentStations == null)
                 return false;
-            DataSource.AdjacentStations.Remove(tempAdjacentStations);
+            //DataSource.AdjacentStations.Remove(tempAdjacentStations);
+            tempAdjacentStations.IsActive = false;
+            return true;
+        }
+        public bool DeleteAdjacentStations(AdjacentStations adjacentStations)
+        {
+            if (!DataSource.AdjacentStations.Contains(adjacentStations))
+                return false;
+
+            adjacentStations.IsActive = false;
             return true;
         }
 
+        public IEnumerable<AdjacentStations> GetAllAdjacentStationsBy(Predicate<AdjacentStations> predicate)
+        {
+            return from adjacentStations in DataSource.AdjacentStations
+                   where predicate(adjacentStations) && adjacentStations.IsActive == true
+                   select adjacentStations.Clone();
+        }
+        
 
         #endregion
 

@@ -86,6 +86,10 @@ namespace DLApi
         /// <param name="stationCode2"></param>
         /// <returns>true: if success.  false: if any of the given parameters is null</returns>
         bool DeleteAdjacentStations(int? stationCode1, int? stationCode2);
+        bool DeleteAdjacentStations(AdjacentStations adjacentStations);
+
+        IEnumerable<AdjacentStations> GetAllAdjacentStationsBy(Predicate<AdjacentStations> predicate);
+
         #endregion
 
         #region LineTrip
