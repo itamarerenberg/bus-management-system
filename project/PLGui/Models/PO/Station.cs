@@ -24,6 +24,17 @@ namespace PLGui.Models.PO
             }
         }
 
+        private string name;
+        public string Name
+        {
+            get => Name;
+            set
+            {
+                name = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+            }
+        }
+
         private float longitude;
         public float Longitude 
         {

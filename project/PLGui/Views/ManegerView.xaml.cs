@@ -1,5 +1,6 @@
 ﻿
 using PLGui.Models;
+using PLGui.Models.PO;
 using PLGui.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,15 @@ namespace PLGui
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void StationList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Station selectedStation = (Station)((ListViewItem)sender).Content;
+            Header1.Visibility = Visibility.Visible;
+            Header1.Text = "Name";
+            content1.Visibility = Visibility.Visible;
+            content1.Content = selectedStation.Name;
         }
     }
 }

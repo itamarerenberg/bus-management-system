@@ -34,10 +34,12 @@
         </StackPanel>
         <TabControl x:Name="tab_control" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25">
             <TabItem x:Name="Buses_view" Header="Buses">
-                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" DataContext="{Binding Stations}">
+                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" DataContext="{Binding Stations}" SelectionChanged="StationList_SelectionChanged">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn x:Name="Name"  Header="lisence number" Width="auto" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn x:Name="Name"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn x:Name="Code"  Header="Code" Width="auto" DisplayMemberBinding="{Binding Code}" />
+                            <GridViewColumn x:Name="Area"  Header="Area" Width="auto" DisplayMemberBinding="{Binding Area}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -46,5 +48,13 @@
                 
             </TabItem>
         </TabControl>
+
+        <GroupBox Header="details" Grid.Row="2" Grid.Column="1" Margin="10">
+            <StackPanel>
+                <TextBlock x:Name="Header1" Visibility="Collapsed"/>
+                <Label x:Name="content1" Visibility="Collapsed" BorderThickness="2"/>
+
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>
