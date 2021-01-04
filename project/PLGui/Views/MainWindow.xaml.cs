@@ -2,6 +2,7 @@
 using PLGui.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +28,19 @@ namespace PLGui
         {
             vModel = new UserViewModel();
             InitializeComponent();
+            this.Closing += MainWindow_Closing;
             userName.TextChanged += UserNameChanged;
             password.PasswordChanged += passwordChanged;
         }
 
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            Environment.Exit(Environment.ExitCode);
+        }
+
         private void passwordChanged(object sender, RoutedEventArgs e)
         {
-            
+            vModel.Password = password.Password;
         }
 
         private void UserNameChanged(object sender, TextChangedEventArgs e)
