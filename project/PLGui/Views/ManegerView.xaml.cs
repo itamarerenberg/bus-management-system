@@ -24,10 +24,10 @@ namespace PLGui
     public partial class ManegerView : Window
     {
         ManegerViewModel vModel;
-        public ManegerView(ManegerViewModel vm)
+        public ManegerView()
         {
             InitializeComponent();
-            vModel = vm;
+            vModel = new ManegerViewModel();
             this.DataContext = vModel;
             StationList.ItemsSource = vModel.Buses;
         }
