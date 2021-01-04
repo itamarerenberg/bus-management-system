@@ -32,6 +32,9 @@ namespace PLGui
             StationList.ItemsSource = vModel.Buses;
         }
 
-        
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

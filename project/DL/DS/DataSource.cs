@@ -35,6 +35,7 @@ namespace DS
             {
                 Stations = stations.Table<Station>().ToList();
             }
+            Users = new List<User>() { new User() { Name = "Admin", Password = "1234", Admin = true } };
         }
     }
 }
