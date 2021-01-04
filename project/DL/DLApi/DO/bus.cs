@@ -16,6 +16,8 @@ namespace DO
         public float Kilometraz { get; set; }
         public float Fule { get; set; }
         public BusStatus Stat { get; set; }
+        public double KmAfterTreat { get; set; }
+        public DateTime LastTreatDate { get; set; }
         public bool IsActive{ get; set; }
     }
 }

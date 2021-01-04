@@ -119,15 +119,7 @@ namespace BL
             }
             try
             {
-                DO.Bus tempBus = new DO.Bus()
-                {
-                    LicenseNum = bus.LicensNumber,
-                    LicenesDate = bus.LicenesDate,
-                    Kilometraz = bus.Kilometraz,
-                    Fule = bus.Fule,
-                    Stat = (DO.BusStatus)Enum.Parse(typeof(DO.BusStatus), bus.Stat.ToString())
-                };
-                dl.AddBus(tempBus);
+                dl.AddBus((DO.Bus)bus.CopyPropertiesToNew(typeof(DO.Bus)));
             }
             catch (Exception msg)
             {
@@ -355,6 +347,55 @@ namespace BL
             }
             line.Stations.RemoveAt(lineStation.LineStationIndex);
             dl.DeleteLineStation(lineNumber, StationNumber);
+        }
+
+        #endregion
+
+        #region Line trip
+        public void AddLineTrip(LineTrip lineTrip)
+        {
+            try
+            {
+                dl.AddLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+        public LineTrip GetLineTrip(int id)
+        {
+            try
+            {
+                return (LineTrip)dl.GetLineTrip(id).CopyPropertiesToNew(typeof(LineTrip));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+        public void UpdateLineTrip(LineTrip lineTrip)
+        {
+            try
+            {
+                dl.UpdateLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+        public IEnumerable<LineTrip> GetAllLineTrips()
+        {
+            return from LTripDO in dl.GetAllLineTrips()
+                   select (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip));
+        }
+        public IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate)
+        {
+            return from LTripDO in dl.GetAllLineTrips()
+                   let LTripBO = (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip))
+                   where predicate(LTripBO)
+                   select LTripBO;
         }
 
         #endregion

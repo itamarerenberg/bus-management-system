@@ -46,7 +46,7 @@ namespace BLApi
         /// adding a new line station
         /// </summary>
         /// <param name="lineStation">line Station of type BO </param>
-        /// <param name="index">the location in the line (push the rest of the stations 1 step ahead). default = to the end of the line</param>
+        /// <param name="index">the location in the line (push the rest of the stations 1 step ahead)</param>
         void AddLineStation(int lineNumber, int StationNumber, int index);
         void UpdateLineStation(int lineNumber, int StationNumber);
         void DeleteLineStation(int lineNumber, int StationNumber); 
@@ -68,6 +68,15 @@ namespace BLApi
         void DeleteUserTrip( int id);
         IEnumerable<UserTrip> GetAllUserTrips(string name);
         IEnumerable<UserTrip> GetAllUserTripsBy(string name,Predicate<UserTrip> pred);
+        #endregion
+
+        #region Line trip
+        void AddLineTrip(LineTrip lineTrip);
+        LineTrip GetLineTrip(int id);
+        void UpdateLineTrip(LineTrip lineTrip);
+        IEnumerable<LineTrip> GetAllLineTrips();
+        IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate);
+
         #endregion
     }
 }

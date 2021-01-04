@@ -26,7 +26,7 @@ namespace DS
         {
             serialLineID = 0;
             InitAllLists();
-         }
+        }
 
         static void InitAllLists()
         {
