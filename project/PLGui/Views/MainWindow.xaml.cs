@@ -28,13 +28,13 @@ namespace PLGui
             InitializeComponent();
             bl = null;//=>GetBl();
             userName.TextChanged += UserNameChanged;
-            password.TextChanged += passwordChanged;
-
+            password.PasswordChanged += passwordChanged;
+            bl = BL.BLApi.BLFactory.GetBL("admin");
         }
 
-        private void passwordChanged(object sender, TextChangedEventArgs e)
+        private void passwordChanged(object sender, RoutedEventArgs e)
         {
-            user.Password = password.Text;
+            
         }
 
         private void UserNameChanged(object sender, TextChangedEventArgs e)
@@ -44,15 +44,15 @@ namespace PLGui
 
         private void SignInButton_Click(object sender, RoutedEventArgs e)
         {
-            if(!IsValidUser(user))
-            {
-                ErrorLabel.Content = "ERROR";
-                ErrorLabel.Visibility = Visibility.Visible;
-            }
-            if(isAdmin(user))
-            {
-                Maneger
-            }
+            //if(!IsValidUser(user))
+            //{
+            //    ErrorLabel.Content = "ERROR";
+            //    ErrorLabel.Visibility = Visibility.Visible;
+            //}
+            //if(isAdmin(user))
+            //{
+            //    Maneger
+            //}
         }
     }
 }
