@@ -55,6 +55,7 @@ namespace PLGui.ViewModels
 
         public ManegerViewModel()
         {
+            model = new ManegerModel();
             source = BLFactory.GetBL("admin");
             loadData();
         }
