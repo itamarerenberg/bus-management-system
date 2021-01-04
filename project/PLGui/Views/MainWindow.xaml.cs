@@ -1,4 +1,5 @@
 ﻿using BLApi;
+using PLGui.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,10 @@ namespace PLGui
     public partial class MainWindow : Window
     {
         IBL bl;
-        User user;
+        UserViewModel vModel;
         public MainWindow()
         {
+            vModel = new UserViewModel();
             InitializeComponent();
             bl = null;//=>GetBl();
             userName.TextChanged += UserNameChanged;
@@ -39,20 +41,15 @@ namespace PLGui
 
         private void UserNameChanged(object sender, TextChangedEventArgs e)
         {
-            user.Name = userName.Text;
+            vModel.Name = userName.Text;
         }
 
         private void SignInButton_Click(object sender, RoutedEventArgs e)
         {
-            //if(!IsValidUser(user))
-            //{
-            //    ErrorLabel.Content = "ERROR";
-            //    ErrorLabel.Visibility = Visibility.Visible;
-            //}
-            //if(isAdmin(user))
-            //{
-            //    Maneger
-            //}
+            try
+            {
+                vModel.signIn()
+            }
         }
     }
 }

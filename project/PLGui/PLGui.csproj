@@ -61,9 +61,11 @@
     <Compile Include="Models\PO\Line.cs" />
     <Compile Include="Models\PO\Station.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserTrip.cs" />
     <Compile Include="ViewModels\CopyHelper.cs" />
     <Compile Include="ViewModels\ManegerViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="Views\ManegerView.xaml.cs">
       <DependentUpon>ManegerView.xaml</DependentUpon>
     </Compile>
