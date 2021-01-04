@@ -76,6 +76,9 @@ namespace PLGui.ViewModels
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated befor he done execute DoWork
                         model = (ManegerModel)args.Result;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stations"));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Buses"));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Lines"));
                     }
                 };//this function will execute in the main thred
 
@@ -84,11 +87,16 @@ namespace PLGui.ViewModels
                 {
                     BackgroundWorker worker = (BackgroundWorker)sender;
                     ManegerModel result = new ManegerModel();
+                    result.Stations = new ObservableCollection<Station>();
                     //result.Buses = (ObservableCollection<BO.Bus>)source.GetAllBuses();//!possible problem: ther is no conversion from IEnumerable to ObservableColection
                     //result.Lines = (ObservableCollection<BO.Line>)source.GetAllLines();//same⬆
-                    source.GetAllStations().DeepCopyTo(result.Stations);
+                    foreach (var st in source.GetAllStations())
+                    {
+                        result.Stations.Add(CopyHelper.Station_BO_PO(st));
+                    }
                     args.Result = worker.CancellationPending ? null : result;
                 };//this function will execute in the BackgroundWorker thread
+            load_data.RunWorkerAsync();
         }
 
 

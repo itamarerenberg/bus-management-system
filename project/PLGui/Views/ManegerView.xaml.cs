@@ -27,10 +27,9 @@ namespace PLGui
         ManegerViewModel vModel;
         public ManegerView()
         {
-            InitializeComponent();
             vModel = new ManegerViewModel();
             this.DataContext = vModel;
-            StationList.ItemsSource = vModel.Buses;
+            InitializeComponent();
         }
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)

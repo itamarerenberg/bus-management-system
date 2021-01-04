@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using PLGui.Models.PO;
 
 namespace PLGui.ViewModels
 {
@@ -45,6 +47,27 @@ namespace PLGui.ViewModels
                         value.DeepCopyTo(target);
                 }
             }
+        }
+        public static Station Station_BO_PO(BO.Station from)
+        {
+            Station result = new Station();
+            result.Code = from.Code;
+            result.Address = from.Address;
+            result.Latitude = from.Latitude;
+            result.Longitude = from.Longitude;
+            result.Name = from.Name;
+            result.GetLines = new ObservableCollection<Line>(from.GetLines.Select(ln => Line_BO_PO(ln)));
+            return result;
+        }
+
+        public static Line Line_BO_PO(BO.Line from)
+        {
+            Line result = new Line();
+            result.ID = from.ID;
+            result.LineNumber = from.LineNumber;
+            result.Stations = new ObservableCollection<BO.LineStation>(from.Stations);
+            result.Area = from.Area;
+            return result;
         }
     }
 }

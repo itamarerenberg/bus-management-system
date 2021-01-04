@@ -27,7 +27,7 @@ namespace PLGui.Models.PO
         private string name;
         public string Name
         {
-            get => Name;
+            get => name;
             set
             {
                 name = value;
@@ -35,8 +35,8 @@ namespace PLGui.Models.PO
             }
         }
 
-        private float longitude;
-        public float Longitude 
+        private double longitude;
+        public double Longitude 
         {
             get => longitude;
             set
@@ -46,8 +46,8 @@ namespace PLGui.Models.PO
             }
         }
 
-        private float latitude;
-        public float Latitude 
+        private double latitude;
+        public double Latitude 
         {
             get => latitude;
             set

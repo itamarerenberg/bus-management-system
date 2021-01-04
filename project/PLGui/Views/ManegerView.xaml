@@ -34,7 +34,7 @@
         </StackPanel>
         <TabControl x:Name="tab_control" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25">
             <TabItem x:Name="Buses_view" Header="Buses">
-                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" DataContext="{Binding Stations}" SelectionChanged="StationList_SelectionChanged">
+                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectionChanged="StationList_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="Name"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
