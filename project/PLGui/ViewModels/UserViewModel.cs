@@ -1,4 +1,6 @@
-﻿using PLGui.Models;
+﻿using BLApi;
+using PLGui.Models;
+using PLGui.Models.PO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,12 +12,14 @@ namespace PLGui.ViewModels
 {
     class UserViewModel : INotifyPropertyChanged
     {
+        IBL bl;
         UserModel model;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public UserViewModel()
         {
             model = new UserModel();
+            bl = BL.BLApi.BLFactory.GetBL("admin");
         }
 
         public string Name
@@ -38,9 +42,20 @@ namespace PLGui.ViewModels
             }
         }
 
-        internal void signIn()
+        public void signIn(bool isAdmin)
         {
-            throw new NotImplementedException();
+            if(isAdmin)
+            {
+                if(bl.GetManagar(model.name, model.password))
+                {
+                    (new ManegerView()).ShowDialog();
+                }
+                else
+                {
+                    throw new InvalidDetails("Invalid details");
+                }
+            }
+            else { }
         }
     }
 }

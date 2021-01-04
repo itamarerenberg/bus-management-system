@@ -22,16 +22,13 @@ namespace PLGui
     /// </summary>
     public partial class MainWindow : Window
     {
-        IBL bl;
         UserViewModel vModel;
         public MainWindow()
         {
             vModel = new UserViewModel();
             InitializeComponent();
-            bl = null;//=>GetBl();
             userName.TextChanged += UserNameChanged;
             password.PasswordChanged += passwordChanged;
-            bl = BL.BLApi.BLFactory.GetBL("admin");
         }
 
         private void passwordChanged(object sender, RoutedEventArgs e)
@@ -46,13 +43,13 @@ namespace PLGui
 
         private void SignInButton_Click(object sender, RoutedEventArgs e)
         {
+            bool isChecked = IsAdmin.IsChecked == null ? false : (bool)IsAdmin.IsChecked;
             try
             {
-                vModel.signIn();
+                vModel.signIn(isChecked);
             }
             catch
             {
-                this.Close();
                 return;
             }
         }

@@ -37,6 +37,8 @@
 
                     <!--row 4-->
                     <Button x:Name="SignInButton" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" Click="SignInButton_Click"/>
+                    <Label Grid.Column="1" Grid.Row="4" Content="enter as admin"/>
+                    <CheckBox x:Name="IsAdmin" Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" IsChecked ="False"/>
                 </Grid>
             </TabItem>
         </TabControl>
