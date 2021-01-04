@@ -56,7 +56,7 @@ namespace PLGui.ViewModels
         public ManegerViewModel()
         {
             loadData();
-            source = BLFactory.GetBL("admin");;
+            source = BLFactory.GetBL("admin");
         }
 
         #endregion

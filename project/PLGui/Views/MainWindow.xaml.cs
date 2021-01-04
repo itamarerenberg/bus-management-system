@@ -48,7 +48,12 @@ namespace PLGui
         {
             try
             {
-                vModel.signIn()
+                vModel.signIn();
+            }
+            catch
+            {
+                this.Close();
+                return;
             }
         }
     }

@@ -37,5 +37,10 @@ namespace PLGui.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Password"));
             }
         }
+
+        internal void signIn()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
