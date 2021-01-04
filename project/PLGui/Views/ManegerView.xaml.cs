@@ -29,23 +29,9 @@ namespace PLGui
             InitializeComponent();
             vModel = vm;
             this.DataContext = vModel;
-            BusesList.ItemsSource = vModel.Buses;
+            StationList.ItemsSource = vModel.Buses;
         }
 
-        BackgroundWorker GetManegerInfoWorker;
-        internal void blGetManegerInfo()
-        {
-            if(GetManegerInfoWorker != null)
-            {
-                GetManegerInfoWorker.CancelAsync();
-            }
-            GetManegerInfoWorker = new BackgroundWorker();
-            GetManegerInfoWorker.WorkerSupportsCancellation = true;
-            GetManegerInfoWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs args) =>
-            {
-                if (!((BackgroundWorker)sender).CancellationPending)
-                    mngr = (BO.Maneger)args.Result;
-            }
-        }
+        
     }
 }

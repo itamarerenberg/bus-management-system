@@ -16,7 +16,7 @@ namespace PLGui.ViewModels
     {
         ManegerModel model;
         public event PropertyChangedEventHandler PropertyChanged;
-        IBL bl = BLFactory.GetBL("admin");
+        IBL source;
 
         #region properties
 
@@ -53,11 +53,13 @@ namespace PLGui.ViewModels
 
         #region constractors
 
-        public ManegerViewModel(IBL bl)
+        public ManegerViewModel()
         {
             loadData();
-            source = bl;
+            source = BLFactory.GetBL("admin");;
         }
+
+        #endregion
 
         BackgroundWorker load_data;
         private void loadData()
@@ -81,12 +83,13 @@ namespace PLGui.ViewModels
                 {
                     BackgroundWorker worker = (BackgroundWorker)sender;
                     ManegerModel result = new ManegerModel();
-                    result.Buses = (ObservableCollection<BO.Bus>)source.GetAllBuses();//!possible problem: ther is no conversion from IEnumerable to ObservableColection
-                    result.Lines = (ObservableCollection<BO.Line>)source.GetAllLines();//same⬆
+                    //result.Buses = (ObservableCollection<BO.Bus>)source.GetAllBuses();//!possible problem: ther is no conversion from IEnumerable to ObservableColection
+                    //result.Lines = (ObservableCollection<BO.Line>)source.GetAllLines();//same⬆
+                    source.GetAllStations().DeepCopyTo(result.Stations);
                     args.Result = worker.CancellationPending ? null : result;
                 };//this function will execute in the BackgroundWorker thread
         }
 
-        #endregion
+
     }
 }

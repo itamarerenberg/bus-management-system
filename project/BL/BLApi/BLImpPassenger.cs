@@ -317,5 +317,53 @@ namespace BL
         }
         #endregion
 
+        #region Line trip
+        public void AddLineTrip(LineTrip lineTrip)
+        {
+            try
+            {
+                dl.AddLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+        public LineTrip GetLineTrip(int id)
+        {
+            try
+            {
+                return (LineTrip)dl.GetLineTrip(id).CopyPropertiesToNew(typeof(LineTrip));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+        public void UpdateLineTrip(LineTrip lineTrip)
+        {
+            try
+            {
+                dl.UpdateLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+        public IEnumerable<LineTrip> GetAllLineTrips()
+        {
+            return from LTripDO in dl.GetAllLineTrips()
+                   select (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip));
+        }
+        public IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate)
+        {
+            return from LTripDO in dl.GetAllLineTrips()
+                   let LTripBO = (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip))
+                   where predicate(LTripBO)
+                   select LTripBO;
+        }
+
+        #endregion
     }
 }

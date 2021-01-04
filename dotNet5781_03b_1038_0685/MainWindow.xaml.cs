@@ -96,5 +96,10 @@ namespace dotNet5781_03b_1038_0685
                 MessageBox.Show(msg.Message, "ERROR");
             }
         }
+
+        private void main_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
