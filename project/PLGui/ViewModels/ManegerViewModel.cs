@@ -90,10 +90,13 @@ namespace PLGui.ViewModels
                     result.Stations = new ObservableCollection<Station>();
                     //result.Buses = (ObservableCollection<BO.Bus>)source.GetAllBuses();//!possible problem: ther is no conversion from IEnumerable to ObservableColection
                     //result.Lines = (ObservableCollection<BO.Line>)source.GetAllLines();//same⬆
-                    foreach (var st in source.GetAllStations())
-                    {
-                        result.Stations.Add(CopyHelper.Station_BO_PO(st));
-                    }
+                    source.GetAllStations().DeepCopyToCollection(result.Stations);
+
+                    //foreach (var st in source.GetAllStations())
+                    //{
+                    //    result.Stations.Add(CopyHelper.Station_BO_PO(st));
+                    //}
+
                     args.Result = worker.CancellationPending ? null : result;
                 };//this function will execute in the BackgroundWorker thread
             load_data.RunWorkerAsync();

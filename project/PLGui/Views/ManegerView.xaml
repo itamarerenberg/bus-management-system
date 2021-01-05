@@ -26,20 +26,28 @@
         </Menu>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Margin="25,0,0,0">
             <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
-            <ComboBox x:Name="ComboBoxSearch" MinWidth="70"/>
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" DataContext="{Binding }"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Margin="100,0,0,0">
             <TextBlock Text="search:" HorizontalAlignment="Left"/>
             <TextBox x:Name="SearchBox" MinWidth="70" Height="22" TextChanged="SearchBox_TextChanged" />
         </StackPanel>
-        <TabControl x:Name="tab_control" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25">
-            <TabItem x:Name="Buses_view" Header="Buses">
+        <TabControl x:Name="mainTab" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" SelectionChanged="tab_selactionChange" SelectedIndex="0">
+            <TabItem x:Name="Stations_view" Header="Stations" >
                 <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectionChanged="StationList_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="Name"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
                             <GridViewColumn x:Name="Code"  Header="Code" Width="auto" DisplayMemberBinding="{Binding Code}" />
-                            <GridViewColumn x:Name="Area"  Header="Area" Width="auto" DisplayMemberBinding="{Binding Area}" />
+                            <GridViewColumn x:Name="Address"  Header="Address" Width="auto" DisplayMemberBinding="{Binding Address}" />
+                            <GridViewColumn x:Name="Lines"  Header="Lines" Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <ComboBox x:Name="LinesComboBox" BindingGroup="{Binding GetLines}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -50,7 +58,7 @@
         </TabControl>
 
         <GroupBox Header="details" Grid.Row="2" Grid.Column="1" Margin="10">
-            <StackPanel>
+            <StackPanel Margin="10">
                 <TextBlock x:Name="Header1" Visibility="Collapsed"/>
                 <Label x:Name="content1" Visibility="Collapsed" BorderThickness="2"/>
 

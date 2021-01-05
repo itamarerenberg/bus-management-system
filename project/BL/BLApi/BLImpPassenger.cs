@@ -208,9 +208,9 @@ namespace BL
             try
             {
                 Station station = (Station)dl.GetStation(code).CopyPropertiesToNew(typeof(Station));
-                station.GetLines = (from lineS in dl.GetAllLineStationsBy(s => s.LineId == code)
-                                    orderby lineS.LineId
-                                    select GetLine(lineS.LineId)).ToList();
+                station.LinesNums = (from lineNum in dl.GetAllLineStationsBy(s => s.LineId == code)
+                                     orderby lineNum.LineId
+                                     select lineNum.LineId).ToList();
                 return station;
             }
             catch (Exception msg)

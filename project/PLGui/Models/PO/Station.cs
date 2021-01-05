@@ -43,6 +43,7 @@ namespace PLGui.Models.PO
             {
                 longitude = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Location"));
             }
         }
 
@@ -54,6 +55,7 @@ namespace PLGui.Models.PO
             {
                 latitude = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Location"));
             }
         }
 
@@ -70,11 +72,11 @@ namespace PLGui.Models.PO
 
         public GeoCoordinate Location
         { 
-            get => new GeoCoordinate(Longitude, Latitude); 
+            get => new GeoCoordinate(Latitude, Longitude); 
         }
 
-        private ObservableCollection<Line> getLines;
-        public ObservableCollection<Line> GetLines 
+        private ObservableCollection<int> getLines;
+        public ObservableCollection<int> LinesNums 
         {
             get => getLines;
             set

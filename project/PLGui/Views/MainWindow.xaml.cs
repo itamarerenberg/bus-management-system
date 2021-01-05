@@ -60,5 +60,10 @@ namespace PLGui
                 return;
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            new ManegerView().ShowDialog();
+        }
     }
 }

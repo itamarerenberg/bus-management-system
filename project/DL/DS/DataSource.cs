@@ -21,7 +21,7 @@ namespace DS
         public static List<UserTrip> UsersTrips = new List<UserTrip>();
 
         public static int serialLineID;
-        static string DataBasePath = AppDomain.CurrentDomain.BaseDirectory;
+        static string dataBasePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database");
 
         static DataSource()
         {
@@ -31,14 +31,14 @@ namespace DS
 
         static void InitAllLists()
         {
-            string StationsPath = System.IO.Path.Combine(DataBasePath, "Stations.db");
+            string StationsPath = System.IO.Path.Combine(dataBasePath, "Stations.db");
             using (SQLiteConnection stations = new SQLiteConnection(StationsPath))
             {
                 stations.CreateTable<Station>();
                 Stations = stations.Table<Station>().ToList();
             }
             Users = new List<User>() { new User() { Name = "Admin", Password = "1234", Admin = true, IsActive = true } };
-            Stations = new List<Station>() { new Station() { Name = "station", Code = 12376, IsActive = true, Address = "sdfkjh" } };
+            //Stations = new List<Station>() { new Station() { Name = "station", Code = 12376, IsActive = true, Address = "sdfkjh", Latitude = 34.342,Longitude= 35.578 } };
         }
     }
 }

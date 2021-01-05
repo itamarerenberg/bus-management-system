@@ -35,7 +35,8 @@ namespace PLGui.ViewModels
                     if (value is IEnumerable)
                     {
                         Type itemType = propTo.PropertyType.GetGenericArguments()[0];
-                        propTo.PropertyType.GetMethod("Clear").Invoke(target, null);
+                        if(target != null)
+                            propTo.PropertyType.GetMethod("Clear").Invoke(target, null);
                         foreach (var item in (value as IEnumerable))
                         {
                             var targetItem = Activator.CreateInstance(itemType);
@@ -48,6 +49,16 @@ namespace PLGui.ViewModels
                 }
             }
         }
+        public static void DeepCopyToCollection<S, T>(this IEnumerable<S> from, Collection<T> to)
+        {
+            foreach (var fromItem in from)
+            {
+                T targetItem = (T)Activator.CreateInstance(typeof(T));
+                fromItem.DeepCopyTo(targetItem);
+                to.Add(targetItem);
+                //to = to.Concat(new[] { targetItem });
+            }
+        }
         public static Station Station_BO_PO(BO.Station from)
         {
             Station result = new Station();
@@ -56,7 +67,8 @@ namespace PLGui.ViewModels
             result.Latitude = from.Latitude;
             result.Longitude = from.Longitude;
             result.Name = from.Name;
-            result.GetLines = new ObservableCollection<Line>(from.GetLines.Select(ln => Line_BO_PO(ln)));
+            //result.GetLines = new ObservableCollection<Line>(from.GetLines.Select(ln => Line_BO_PO(ln)));
+            result.LinesNums = new ObservableCollection<int>(from.LinesNums.Select( n => n));
             return result;
         }
 
