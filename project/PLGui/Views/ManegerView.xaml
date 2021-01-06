@@ -5,36 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGui"
         mc:Ignorable="d"
-        Title="Maneger" Height="450" Width="800">
+        Title="Maneger" MinHeight="700" MinWidth="1000">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="0">
-            <MenuItem Header="new">
+        <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left"  Grid.ColumnSpan="2" Grid.Row="0">
+            <MenuItem Header="new" Height="25">
                 <MenuItem Header="new line"/>
                 <MenuItem Header="new bus" />
-                <MenuItem Header="station" />
+                <MenuItem Header="new station" />
+            </MenuItem>
+            <MenuItem Header="update">
+                <MenuItem Header="update line"/>
+                <MenuItem Header="update bus" />
+                <MenuItem Header="update station" />
+            </MenuItem>
+            <MenuItem Header="exit">
+                <MenuItem Header="enter as passenger"/>
+                <MenuItem Header="enter as manager"/>
             </MenuItem>
         </Menu>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Margin="25,0,0,0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="25,0,0,0">
             <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
-            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" DataContext="{Binding }"/>
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" />
         </StackPanel>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1" Margin="100,0,0,0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="100,0,0,0">
             <TextBlock Text="search:" HorizontalAlignment="Left"/>
             <TextBox x:Name="SearchBox" MinWidth="70" Height="22" TextChanged="SearchBox_TextChanged" />
         </StackPanel>
         <TabControl x:Name="mainTab" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" SelectionChanged="tab_selactionChange" SelectedIndex="0">
             <TabItem x:Name="Stations_view" Header="Stations" >
-                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectionChanged="StationList_SelectionChanged">
+                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectionChanged="StationList_SelectionChanged" IsTextSearchCaseSensitive="True" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="Name"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
@@ -43,24 +52,43 @@
                             <GridViewColumn x:Name="Lines"  Header="Lines" Width="auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate >
-                                        <ComboBox x:Name="LinesComboBox" BindingGroup="{Binding GetLines}"/>
+                                        <ComboBox x:Name="LinesComboBox" ItemsSource="{Binding LinesNums}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-
                         </GridView>
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="Lines_view" Header="Lines" Background="Red">
-                
+            <TabItem x:Name="Lines_view" Header="Lines" >
+                <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectionChanged="StationList_SelectionChanged">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn x:Name="LineNumber"  Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineNumber}" />
+                            <GridViewColumn x:Name="Area"  Header="Area" Width="auto" DisplayMemberBinding="{Binding Area}" />
+                            <GridViewColumn x:Name="Stations"  Header="Stations" Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <ComboBox x:Name="LinesComboBox" BindingGroup="{Binding Stations}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </TabItem>
         </TabControl>
 
         <GroupBox Header="details" Grid.Row="2" Grid.Column="1" Margin="10">
             <StackPanel Margin="10">
                 <TextBlock x:Name="Header1" Visibility="Collapsed"/>
-                <Label x:Name="content1" Visibility="Collapsed" BorderThickness="2"/>
+                <Label x:Name="content1" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header2" Visibility="Collapsed"/>
+                <Label x:Name="content2" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header3" Visibility="Collapsed"/>
+                <Label x:Name="content3" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header4" Visibility="Collapsed"/>
+                <Label x:Name="content4" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
 
             </StackPanel>
         </GroupBox>

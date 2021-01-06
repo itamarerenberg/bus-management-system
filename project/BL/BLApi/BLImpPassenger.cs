@@ -128,7 +128,6 @@ namespace BL
 
         #region Bus
 
-
         public Bus GetBus(string licensNum)
         {
             try
@@ -140,7 +139,6 @@ namespace BL
                 throw msg.InnerException;
             }
         }
-
         public IEnumerable<Bus> GetAllBuses()
         {
             return from BObus in dl.GetAllBuses()
@@ -173,7 +171,6 @@ namespace BL
                 throw msg.InnerException;
             }
         }
-
         public IEnumerable<Line> GetAllLines()
         {
             try
@@ -217,8 +214,7 @@ namespace BL
             {
                 throw msg;
             }
-        }
-       
+        }      
         public IEnumerable<Station> GetAllStations()
         {
             return from stationDO in dl.GetAllStations()
@@ -232,6 +228,33 @@ namespace BL
                    select stationBO;
         }
 
+        #endregion
+
+        #region Line trip
+
+        public LineTrip GetLineTrip(int id)
+        {
+            try
+            {
+                return (LineTrip)dl.GetLineTrip(id).CopyPropertiesToNew(typeof(LineTrip));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+        public IEnumerable<LineTrip> GetAllLineTrips()
+        {
+            return from LTripDO in dl.GetAllLineTrips()
+                   select (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip));
+        }
+        public IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate)
+        {
+            return from LTripDO in dl.GetAllLineTrips()
+                   let LTripBO = (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip))
+                   where predicate(LTripBO)
+                   select LTripBO;
+        }
 
         #endregion
 
@@ -315,55 +338,15 @@ namespace BL
         {
             throw new NotImplementedException();
         }
-        #endregion
-
-        #region Line trip
         public void AddLineTrip(LineTrip lineTrip)
         {
-            try
-            {
-                dl.AddLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
-            }
-            catch (Exception msg)
-            {
-                throw msg;
-            }
-        }
-        public LineTrip GetLineTrip(int id)
-        {
-            try
-            {
-                return (LineTrip)dl.GetLineTrip(id).CopyPropertiesToNew(typeof(LineTrip));
-            }
-            catch (Exception msg)
-            {
-                throw msg;
-            }
+            throw new NotImplementedException();
         }
         public void UpdateLineTrip(LineTrip lineTrip)
         {
-            try
-            {
-                dl.UpdateLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
-            }
-            catch (Exception msg)
-            {
-                throw msg;
-            }
+            throw new NotImplementedException();
         }
-        public IEnumerable<LineTrip> GetAllLineTrips()
-        {
-            return from LTripDO in dl.GetAllLineTrips()
-                   select (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip));
-        }
-        public IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate)
-        {
-            return from LTripDO in dl.GetAllLineTrips()
-                   let LTripBO = (LineTrip)LTripDO.CopyPropertiesToNew(typeof(LineTrip))
-                   where predicate(LTripBO)
-                   select LTripBO;
-        }
-
         #endregion
+
     }
 }

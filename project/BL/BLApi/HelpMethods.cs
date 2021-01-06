@@ -12,6 +12,7 @@ namespace BL.BLApi
     public static class HelpMethods
     {
         static IDL dl = DLFactory.GetDL();
+        static Random r;
 
         #region AdjacentStations
         /// <summary>
@@ -41,8 +42,8 @@ namespace BL.BLApi
             {
                 StationCode1 = (int)stationCode1,
                 StationCode2 = (int)stationCode2,
-                Distance = distance
-                //'Time = צריך להוסיף
+                Distance = distance,
+                Time = TimeSpan.FromSeconds(r.Next(5, 15) * distance)//calculating the time by distance driving around 20 - 50 kmh
             };
             dl.AddAdjacentStations(adjacentStationsDO);
             return true;
@@ -68,7 +69,7 @@ namespace BL.BLApi
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         
@@ -80,7 +81,6 @@ namespace BL.BLApi
         #endregion
 
         #region Line station
-
         public static LineStation GetLineStation(int lineId, int stationNum)
         {
             DO.LineStation lineStationDO = dl.GetLineStation(lineId, stationNum);
@@ -102,7 +102,7 @@ namespace BL.BLApi
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         #endregion
