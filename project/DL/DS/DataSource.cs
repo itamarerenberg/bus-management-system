@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using DO;
 using SQLite;
 
@@ -10,6 +13,7 @@ namespace DS
 {
     public static class DataSource
     {
+        #region lists
         public static List<AdjacentStations> AdjacentStations = new List<AdjacentStations>();
         public static List<Bus> Buses = new List<Bus>();
         public static List<Line> Lines = new List<Line>();
@@ -19,13 +23,23 @@ namespace DS
         public static List<LineTrip> LineTrips = new List<LineTrip>();
         public static List<User> Users = new List<User>();
         public static List<UserTrip> UsersTrips = new List<UserTrip>();
-
+        #endregion
+        static string FilePath = "DataSource.xml";
+        static XElement dsRoot;
         public static int serialLineID;
         static string dataBasePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database");
 
         static DataSource()
         {
             serialLineID = 0;
+            if(!File.Exists(FilePath))//if the file don't exist
+            {
+                CreateFile();
+            }
+            else
+            {
+                LoadData();
+            }
             InitAllLists();
         }
 
@@ -38,7 +52,46 @@ namespace DS
                 Stations = stations.Table<Station>().ToList();
             }
             Users = new List<User>() { new User() { Name = "Admin", Password = "1234", Admin = true, IsActive = true } };
+            //foreach (var st in Stations)
+            //{
+            //    SaveObj(st, "Stations");
+            //}
             //Stations = new List<Station>() { new Station() { Name = "station", Code = 12376, IsActive = true, Address = "sdfkjh", Latitude = 34.342,Longitude= 35.578 } };
+        }
+
+        private static void CreateFile()
+        {
+            dsRoot = new XElement("DS");
+            dsRoot.Add(
+                     new XElement("Stations"),//add new label in wich the stations will be save
+                     new XElement("Lines"),
+                     new XElement("users")
+                     //...
+                     );
+            dsRoot.Save(FilePath);
+        }
+
+        private static void LoadData()
+        {
+            try
+            {
+                dsRoot = XElement.Load(FilePath);
+            }
+            catch
+            {
+                throw new Exception("File upload problem");
+            }
+        }
+
+        private static void SaveObj(object obj, string lable)
+        {
+            XElement newObj = new XElement(obj.GetType().Name);
+            foreach(var prop in obj.GetType().GetProperties())
+            {
+              //  newObj.Add(new XElement(prop.Name));//insert new label <prop.Name> prop.GetValue(prop).ToString() </prop.Name>
+            }
+            dsRoot.Element(lable).Add(newObj);
+            dsRoot.Save(FilePath);
         }
     }
 }
