@@ -176,11 +176,11 @@ namespace BL
         #endregion
 
         #region Line
-        public void AddLine(Line line)
+        public int AddLine(Line line)
         {
             try
             {
-                dl.AddLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
+                int id = dl.AddLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
 
                 if (line.Stations != null)
                 {
@@ -190,6 +190,7 @@ namespace BL
                         dl.AddAdjacentStations((DO.AdjacentStations)lStation.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
                     } 
                 }
+                return id;
             }
             catch (Exception msg)
             {

@@ -90,8 +90,8 @@ namespace PLGui.ViewModels
                         Lines = new ObservableCollection<Line>()
                     };
                     source.GetAllStations().DeepCopyToCollection(result.Stations);
-                    source.GetAllLines().DeepCopyToCollection(result.Lines);
-                    source.GetAllBuses().DeepCopyToCollection(result.Buses);
+                    //source.GetAllLines().DeepCopyToCollection(result.Lines);
+                    //source.GetAllBuses().DeepCopyToCollection(result.Buses);
 
 
                     args.Result = worker.CancellationPending ? null : result;

@@ -23,14 +23,14 @@ namespace DL
         internal static void xelement_to_object<T>(XElement from, out T to) where T : new()
         {
             to = new T();
-            foreach (var prop in typeof(T).GetType().GetProperties())
+            foreach (var prop in to.GetType().GetProperties())
             {
                 if (from.Element(prop.Name) == null)
                     continue;
                 string val = from.Element(prop.Name).Value;
                 switch (prop.PropertyType.Name)
                 {
-                    case "int":
+                    case "Int32":
                         prop.SetValue(to, int.Parse(val));
                         break;
                     case "DateTime":
@@ -39,8 +39,11 @@ namespace DL
                     case "String":
                         prop.SetValue(to, val);
                         break;
-                    case "bool":
+                    case "Boolean":
                         prop.SetValue(to, bool.Parse(val));
+                        break;
+                    case "Double":
+                        prop.SetValue(to, double.Parse(val));
                         break;
                     default:
                         throw new Exception($"need to add {prop.PropertyType.Name} to swich");
