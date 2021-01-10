@@ -38,6 +38,18 @@ namespace DLXML
             }
         }
 
+        public static int GetLineTripId
+        {
+            get
+            {
+                LoadData();
+                int id = int.Parse(Root.Element("LineTripId").Value);
+                Root.Element("LineTripId").Value = (id + 1).ToString();
+                Root.Save(SerialIDPath);
+                return id;
+            }
+        }
+
         static SerialNumbers()
         {
             if (!File.Exists(SerialIDPath))//case ther isn't a file of the serials IDs yet 
