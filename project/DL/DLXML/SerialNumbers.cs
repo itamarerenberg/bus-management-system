@@ -15,7 +15,6 @@ namespace DLXML
     {
         static XElement Root;
         static string SerialIDPath = @"SerialNumbers.xml";
-
         public static int GetLineId { 
             get 
             {

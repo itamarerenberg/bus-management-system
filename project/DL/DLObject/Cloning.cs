@@ -23,7 +23,7 @@ namespace DL
         internal static void xelement_to_object<T>(XElement from, out T to) where T : new()
         {
             to = new T();
-            foreach (var prop in typeof(T).GetType().GetProperties())
+            foreach (var prop in to.GetType().GetProperties())
             {
                 if (from.Element(prop.Name) == null)
                     continue;

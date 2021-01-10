@@ -115,8 +115,7 @@ namespace PLGui.ViewModels
                     BO.Line BOline = new BO.Line()//creating new BO line
                     {
                         LineNumber = (int)NewLine.LineNumber,
-                        //Area = NewLine.Area
-                        Area = BO.AreasEnum.Jerusalem//צריך לשנות!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        Area = (BO.AreasEnum)NewLine.Area
                     };
                     source.AddLine(BOline);
 
