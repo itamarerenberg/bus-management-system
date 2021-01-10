@@ -10,7 +10,7 @@ using DLApi;
 
 namespace BL
 {
-    public class BLImpPassenger : IBL
+    public class BLImpPassenger : IBL//צריך להפוך לסינגלטון
     {
         IDL dl = DLFactory.GetDL();
 

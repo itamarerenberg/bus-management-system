@@ -1,0 +1,96 @@
+﻿<Window x:Class="PLGui.NewLineView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
+        xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:PLGui.Models.PO"
+        mc:Ignorable="d"
+        Title="NewLineView" Height="450" Width="600">
+    <Window.DataContext>
+        <viewmodels:NewLineViewModel x:Name="vModel"/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ObjectDataProvider x:Key="EnumBinding" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:AreasEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="10">
+            <TextBlock Text="line number" HorizontalAlignment="Left"/>
+            <TextBox x:Name="LNum" Text="{Binding NewLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  />
+            <TextBlock Text="{Binding ElementName=LNum , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=NewLine.Area}"/>
+
+
+            <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}"  >
+                <!--<y:Interaction.Triggers>
+                    <y:EventTrigger EventName="MouseDoubleClick">
+                        <y:InvokeCommandAction Command="{Binding StationListChangedCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type ListView},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                    </y:EventTrigger>
+                </y:Interaction.Triggers>-->
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn x:Name="Name"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn x:Name="Code"  Header="Code" Width="auto" DisplayMemberBinding="{Binding Code}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+        <Button x:Name="AddLineButton" Content="Add line" Command="{Binding AddLineButton}"  Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Margin="20">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="IsEnabled" Value="false" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ElementName=LNum, Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding IsMinStation}" Value="true" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsEnabled" Value="true" />
+                            <Setter Property="FocusManager.IsFocusScope" Value="True"/>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+
+        <ListView x:Name="DBStationList" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding DBStations}"  >
+            <y:Interaction.Triggers>
+                <y:EventTrigger EventName="MouseDoubleClick">
+                    <y:InvokeCommandAction Command="{Binding SelectStationCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type ListView},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                </y:EventTrigger>
+            </y:Interaction.Triggers>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn x:Name="DBName"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn x:Name="DBCode"  Header="Code" Width="auto" DisplayMemberBinding="{Binding Code}" />
+                    <GridViewColumn x:Name="DBAddress"  Header="Address" Width="auto" DisplayMemberBinding="{Binding Address}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+    </Grid>
+</Window>

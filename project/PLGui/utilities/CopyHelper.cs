@@ -72,14 +72,14 @@ namespace PLGui.ViewModels
             return result;
         }
 
-        public static Line Line_BO_PO(BO.Line from)
-        {
-            Line result = new Line();
-            result.ID = from.ID;
-            result.LineNumber = from.LineNumber;
-            result.Stations = new ObservableCollection<BO.LineStation>(from.Stations);
-            result.Area = from.Area;
-            return result;
-        }
+        //public static Line Line_BO_PO(BO.Line from)
+        //{
+        //    Line result = new Line();
+        //    result.ID = from.ID;
+        //    result.LineNumber = from.LineNumber;
+        //    result.Stations = new ObservableCollection<BO.LineStation>(from.Stations);
+        //    result.Area = from.Area;
+        //    return result;
+        //}
     }
 }
