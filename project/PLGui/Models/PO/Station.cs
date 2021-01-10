@@ -2,60 +2,72 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace PLGui.Models.PO
 {
-    public class Station : INotifyPropertyChanged
+    public class Station : ObservableValidator
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public Station()
+        {
+            this.ErrorsChanged += Station_ErrorsChanged;
+            this.PropertyChanged += Station_PropertyChanged;
+        }
 
-        private int code { get; set; }
+        private void Station_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(HasErrors))
+            {
+                OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change
+            }
+        }
+
+        private void Station_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private int code;
+        [Required(ErrorMessage = "code cannot be empty")]
         public int Code 
         {
             get => code;
-            set
-            {
-                code = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Code"));
-            }
+            set => SetProperty(ref code, value, true);
         }
 
         private string name;
         public string Name
         {
             get => name;
-            set
-            {
-                name = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
-            }
+            set => SetProperty(ref name, value, true);
         }
 
         private double longitude;
+        [Range(34.3, 35.5, ErrorMessage = "longitude should be between 34.3 - 35.5")]
         public double Longitude 
         {
             get => longitude;
             set
             {
-                longitude = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Location"));
+                SetProperty(ref longitude, value, true);
+                OnPropertyChanged("Location");
             }
         }
 
         private double latitude;
+        [Range(31, 33.3, ErrorMessage = "latitude should be between 31, 33.3")]
         public double Latitude 
         {
             get => latitude;
             set
             {
-                latitude = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Location"));
+                SetProperty(ref latitude, value, true);
+                OnPropertyChanged("Location");
             }
         }
 
@@ -63,11 +75,7 @@ namespace PLGui.Models.PO
         public string Address 
         {
             get => address;
-            set
-            {
-                address = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Address"));
-            }
+            set => SetProperty(ref address, value, true);
         }
 
         public GeoCoordinate Location
@@ -75,15 +83,11 @@ namespace PLGui.Models.PO
             get => new GeoCoordinate(Latitude, Longitude); 
         }
 
-        private ObservableCollection<int> getLines;
+        private ObservableCollection<int> linesNums;
         public ObservableCollection<int> LinesNums 
         {
-            get => getLines;
-            set
-            {
-                getLines = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GetLines"));
-            }
+            get => linesNums;
+            set => SetProperty(ref linesNums, value, true);
         }
     }
 }

@@ -12,10 +12,10 @@ namespace PLGui.Models
 {
     public class ManegerModel
     {
-        public ObservableCollection<Bus> Buses { get; set; }
+        public ObservableCollection<Bus> Buses;
 
-        public ObservableCollection<Line> Lines { get; set; }
+        public ObservableCollection<Line> Lines;
 
-        public ObservableCollection<Station> Stations { get; set; }
+        public ObservableCollection<Station> Stations;
     }
 }

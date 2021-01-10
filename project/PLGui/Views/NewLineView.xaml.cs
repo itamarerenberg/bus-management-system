@@ -1,11 +1,5 @@
-﻿
-using PLGui.Models;
-using PLGui.Models.PO;
-using PLGui.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,15 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace PLGui
 {
     /// <summary>
-    /// Interaction logic for Maneger.xaml
+    /// Interaction logic for NewLineView.xaml
     /// </summary>
-    public partial class ManegerView : Window
+    public partial class NewLineView : Window
     {
-        public ManegerView()
+        public NewLineView()
         {
             InitializeComponent();
         }

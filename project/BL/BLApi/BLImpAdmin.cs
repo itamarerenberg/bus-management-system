@@ -10,7 +10,7 @@ using DLApi;
 
 namespace BL
 {
-    public class BLImpAdmin : IBL
+    public class BLImpAdmin : IBL//צריך להפוך לסינגלטון
     {
         IDL dl = DLFactory.GetDL();
         
@@ -182,15 +182,18 @@ namespace BL
             {
                 dl.AddLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
 
-                foreach (LineStation lStation in line.Stations)
+                if (line.Stations != null)
                 {
-                    dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-                    dl.AddAdjacentStations((DO.AdjacentStations)lStation.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
+                    foreach (LineStation lStation in line.Stations)
+                    {
+                        dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
+                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
+                    } 
                 }
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public Line GetLine(int id)
@@ -206,7 +209,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public void UpdateLine(Line line)
@@ -223,7 +226,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public void DeleteLine(int id)
@@ -239,7 +242,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public IEnumerable<Line> GetAllLines()
@@ -251,7 +254,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public IEnumerable<Line> GetAllLinesBy(Predicate<Line> pred)
@@ -265,22 +268,22 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         #endregion
 
         #region LineStation
-        public void AddLineStation(int lineNumber,int stationNumber, int index)
+        public void AddLineStation(int lineId ,int stationNumber, int index)
         {
-            Line line = GetLine(lineNumber);
+            Line line = GetLine(lineId);
             if (index < 0 || index > line.Stations.Count)
             {
                 throw new IndexOutOfRangeException("the index is out of range");
             }
             DO.LineStation lineStationDO = new DO.LineStation()
             {
-                LineId = lineNumber,
+                LineId = lineId,
                 StationNumber = stationNumber,
                 LineStationIndex = index,
                 PrevStation = index == 0 ? null : (int?)line.Stations[index - 1].StationNumber,

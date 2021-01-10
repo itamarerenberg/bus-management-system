@@ -3,9 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PLGui"
+        xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
         mc:Ignorable="d"
         Title="Maneger" MinHeight="700" MinWidth="1000">
+    <Window.DataContext>
+        <viewmodels:ManegerViewModel x:Name="vModel"/>
+    </Window.DataContext>
+    <Window.Resources>
+        <viewmodels:Text_converter_to_visibility x:Key="text_converter_to_visibility" />
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -19,7 +26,7 @@
         </Grid.RowDefinitions>
         <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left"  Grid.ColumnSpan="2" Grid.Row="0">
             <MenuItem Header="new" Height="25">
-                <MenuItem Header="new line"/>
+                <MenuItem Header="new line" Command="{Binding NewLine}"/>
                 <MenuItem Header="new bus" />
                 <MenuItem Header="new station" />
             </MenuItem>
@@ -39,11 +46,36 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="100,0,0,0">
             <TextBlock Text="search:" HorizontalAlignment="Left"/>
-            <TextBox x:Name="SearchBox" MinWidth="70" Height="22" TextChanged="SearchBox_TextChanged" />
+            <TextBox x:Name="SearchBox" MinWidth="70" Height="22"  >
+                <y:Interaction.Triggers>
+                    <y:EventTrigger EventName="TextChanged">
+                        <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type TextBox},
+                                           AncestorLevel=1}}" PassEventArgsToCommand="True"/>
+                    </y:EventTrigger>
+                </y:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
-        <TabControl x:Name="mainTab" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" SelectionChanged="tab_selactionChange" SelectedIndex="0">
+        <TabControl x:Name="mainTab" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25"  SelectedIndex="0">
+            <y:Interaction.Triggers>
+                <y:EventTrigger EventName="SelectionChanged">
+                    <y:InvokeCommandAction Command="{Binding TabChangedCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type TabControl},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                </y:EventTrigger>
+            </y:Interaction.Triggers>
             <TabItem x:Name="Stations_view" Header="Stations" >
-                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectionChanged="StationList_SelectionChanged" IsTextSearchCaseSensitive="True" >
+                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}">
+                    <y:Interaction.Triggers>
+                        <y:EventTrigger EventName="SelectionChanged">
+                            <y:InvokeCommandAction Command="{Binding StationListChangedCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type ListView},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                        </y:EventTrigger>
+                    </y:Interaction.Triggers>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="Name"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
@@ -61,14 +93,22 @@
                 </ListView>
             </TabItem>
             <TabItem x:Name="Lines_view" Header="Lines" >
-                <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectionChanged="StationList_SelectionChanged">
+                <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Lines}">
+                    <y:Interaction.Triggers>
+                        <y:EventTrigger EventName="SelectionChanged">
+                            <y:InvokeCommandAction Command="{Binding LineListChangedCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type ListView},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                        </y:EventTrigger>
+                    </y:Interaction.Triggers>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="LineNumber"  Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineNumber}" />
                             <GridViewColumn x:Name="Area"  Header="Area" Width="auto" DisplayMemberBinding="{Binding Area}" />
                             <GridViewColumn x:Name="Stations"  Header="Stations" Width="auto">
                                 <GridViewColumn.CellTemplate>
-                                    <DataTemplate >
+                                    <DataTemplate>
                                         <ComboBox x:Name="LinesComboBox" BindingGroup="{Binding Stations}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -81,15 +121,14 @@
 
         <GroupBox Header="details" Grid.Row="2" Grid.Column="1" Margin="10">
             <StackPanel Margin="10">
-                <TextBlock x:Name="Header1" Visibility="Collapsed"/>
-                <Label x:Name="content1" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header2" Visibility="Collapsed"/>
-                <Label x:Name="content2" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header3" Visibility="Collapsed"/>
-                <Label x:Name="content3" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header4" Visibility="Collapsed"/>
-                <Label x:Name="content4" Visibility="Collapsed" BorderThickness="2" HorizontalAlignment="Right"/>
-
+                <TextBlock x:Name="Header1" Visibility="{Binding ElementName=Header1, Converter={StaticResource text_converter_to_visibility}}"/>
+                <Label x:Name="content1" Visibility="{Binding ElementName=content1, Converter={StaticResource text_converter_to_visibility}}" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header2" Visibility="{Binding ElementName=Header2, Converter={StaticResource text_converter_to_visibility}}"/>
+                <Label x:Name="content2" Visibility="{Binding ElementName=content2, Converter={StaticResource text_converter_to_visibility}}" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header3" Visibility="{Binding ElementName=Header3, Converter={StaticResource text_converter_to_visibility}}"/>
+                <Label x:Name="content3" Visibility="{Binding ElementName=content3, Converter={StaticResource text_converter_to_visibility}}" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header4" Visibility="{Binding ElementName=Header4, Converter={StaticResource text_converter_to_visibility}}"/>
+                <Label x:Name="content4" Visibility="{Binding ElementName=content4, Converter={StaticResource text_converter_to_visibility}}" BorderThickness="2" HorizontalAlignment="Right"/>
             </StackPanel>
         </GroupBox>
     </Grid>
