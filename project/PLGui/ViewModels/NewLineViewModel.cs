@@ -35,7 +35,7 @@ namespace PLGui.ViewModels
         public ObservableCollection<Station> DBStations { get; set; }
         public ObservableCollection<Station> Stations { get; set; }
 
-
+        public bool IsMinStation { get => Stations.Count >= 2; }
 
         #endregion
 
@@ -88,6 +88,7 @@ namespace PLGui.ViewModels
             if ((sender as ListView).SelectedItem is Station selectedStation)
             {
                 Stations.Add(selectedStation);
+                OnPropertyChanged("IsMinStation");
             }
         } 
 

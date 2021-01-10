@@ -44,7 +44,23 @@
                 </ListView.View>
             </ListView>
         </StackPanel>
-        <Button x:Name="AddLineButton" Content="Add line" Command="{Binding AddLineButton}"  Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Margin="20"/>
+        <Button x:Name="AddLineButton" Content="Add line" Command="{Binding AddLineButton}"  Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Margin="20">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="IsEnabled" Value="false" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ElementName=LNum, Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding IsMinStation}" Value="true" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsEnabled" Value="true" />
+                            <Setter Property="FocusManager.IsFocusScope" Value="True"/>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
 
 
         <ListView x:Name="DBStationList" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding DBStations}"  >
