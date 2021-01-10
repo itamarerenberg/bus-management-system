@@ -33,7 +33,7 @@ namespace BLApi
         #endregion
 
         #region Line
-        void AddLine(Line line);
+        int AddLine(Line line);
         Line GetLine(int id);
         void UpdateLine(Line line);
         void DeleteLine(int id);

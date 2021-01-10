@@ -124,7 +124,7 @@ namespace DL
         //        tempLine.IsActive = true;
         //    }
         //}
-        public void AddLine(Line line)
+        public int AddLine(Line line)
         {
             DataSource.LoadData();
             try
@@ -137,6 +137,7 @@ namespace DL
             }
             DataSource.SaveObj(line, "Lines");
             DataSource.Save();
+            return line.ID;
         }
 
         public Line GetLine(int id)

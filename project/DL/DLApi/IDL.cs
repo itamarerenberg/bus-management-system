@@ -37,7 +37,7 @@ namespace DLApi
         #endregion
 
         #region Line
-        void AddLine(Line line);
+        int AddLine(Line line);
         Line GetLine(int id);
         void UpdateLine(Line Line);
         void DeleteLine(int id);

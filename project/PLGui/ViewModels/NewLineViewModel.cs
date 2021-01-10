@@ -117,7 +117,7 @@ namespace PLGui.ViewModels
                         LineNumber = (int)NewLine.LineNumber,
                         Area = (BO.AreasEnum)NewLine.Area
                     };
-                    source.AddLine(BOline);
+                    int id = source.AddLine(BOline);
 
                     for (int i = 0; i < Stations.Count; i++)
                     {

@@ -30,7 +30,7 @@ namespace DL
                 string val = from.Element(prop.Name).Value;
                 switch (prop.PropertyType.Name)
                 {
-                    case "int":
+                    case "Int32":
                         prop.SetValue(to, int.Parse(val));
                         break;
                     case "DateTime":
@@ -39,8 +39,11 @@ namespace DL
                     case "String":
                         prop.SetValue(to, val);
                         break;
-                    case "bool":
+                    case "Boolean":
                         prop.SetValue(to, bool.Parse(val));
+                        break;
+                    case "Double":
+                        prop.SetValue(to, double.Parse(val));
                         break;
                     default:
                         throw new Exception($"need to add {prop.PropertyType.Name} to swich");
