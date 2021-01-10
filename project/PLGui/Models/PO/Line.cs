@@ -34,8 +34,8 @@ namespace PLGui.Models.PO
             set =>SetProperty(ref lineNumber, value, true);
         }
 
-        private BO.AreasEnum area;
-        public BO.AreasEnum Area 
+        private AreasEnum area;
+        public AreasEnum Area 
         {
             get => area;
             set => SetProperty(ref area, value, true);

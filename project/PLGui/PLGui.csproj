@@ -89,8 +89,10 @@
     </ApplicationDefinition>
     <Compile Include="Models\ManegerModel.cs" />
     <Compile Include="Models\PO\Bus.cs" />
+    <Compile Include="Models\PO\Enums.cs" />
     <Compile Include="Models\PO\Exeptions.cs" />
     <Compile Include="Models\PO\Line.cs" />
+    <Compile Include="Models\PO\LineTrip.cs" />
     <Compile Include="Models\PO\Station.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserModel.cs" />

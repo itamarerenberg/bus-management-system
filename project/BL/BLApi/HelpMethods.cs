@@ -21,7 +21,7 @@ namespace BL.BLApi
         /// <param name="stationCode1"></param>
         /// <param name="stationCode2"></param>
         /// <returns>true: if success.  false: if any of the given parameters is null</returns>
-        public static bool AddAdjacentStations(int? stationCode1, int? stationCode2)
+        public static bool AddAdjacentStations(int? stationCode1, int? stationCode2, TimeSpan time = new TimeSpan())
         {
             if (stationCode1 == null || stationCode2 == null)
                 return false;
@@ -42,12 +42,34 @@ namespace BL.BLApi
             {
                 StationCode1 = (int)stationCode1,
                 StationCode2 = (int)stationCode2,
-                Distance = distance,
-                Time = TimeSpan.FromSeconds(r.Next(5, 15) * distance)//calculating the time by distance driving around 20 - 50 kmh
+                Distance = distance                          
             };
-            dl.AddAdjacentStations(adjacentStationsDO);
+            if (time != new TimeSpan())
+                adjacentStationsDO.Time = TimeSpan.FromSeconds(r.Next(5, 15) * distance);//calculating the time by distance driving around 20 - 50 kmh
+
+            try
+            {
+                dl.AddAdjacentStations(adjacentStationsDO);
+            }
+            catch (Exception)
+            {
+                return false;
+            } 
             return true;
         }
+        public static bool AddAdjacentStations(AdjacentStations adjacentStations)
+        {
+            try
+            {
+                dl.AddAdjacentStations((DO.AdjacentStations)adjacentStations.CopyPropertiesToNew(typeof(DO.AdjacentStations)));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public static AdjacentStations GetAdjacentStations(int? stationCode1,int? stationCode2)
         {
             try

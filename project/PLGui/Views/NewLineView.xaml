@@ -3,12 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodels="clr-namespace:PLGui.ViewModels" xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
+        xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:PLGui.Models.PO"
         mc:Ignorable="d"
         Title="NewLineView" Height="450" Width="600">
     <Window.DataContext>
         <viewmodels:NewLineViewModel x:Name="vModel"/>
     </Window.DataContext>
+    <Window.Resources>
+        <ObjectDataProvider x:Key="EnumBinding" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:AreasEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -24,7 +34,7 @@
             <TextBlock Text="line number" HorizontalAlignment="Left"/>
             <TextBox x:Name="LNum" Text="{Binding NewLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  />
             <TextBlock Text="{Binding ElementName=LNum , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
-            <ComboBox SelectedItem="{Binding NewLine.Area, Mode=TwoWay}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=NewLine.Area}"/>
 
 
             <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}"  >
