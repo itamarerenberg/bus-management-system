@@ -12,6 +12,12 @@ namespace BL
 {
     public class BLImpPassenger : IBL//צריך להפוך לסינגלטון
     {
+        #region singelton
+        static readonly BLImpPassenger instance = new BLImpPassenger();
+        static BLImpPassenger() { }
+        BLImpPassenger() { }
+        public static BLImpPassenger Instance { get => instance; }
+        #endregion
         IDL dl = DLFactory.GetDL();
 
         #region Passenger
@@ -294,7 +300,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public void AddLine(Line line)
+        public int AddLine(Line line)
         {
             throw new NotImplementedException();
         }

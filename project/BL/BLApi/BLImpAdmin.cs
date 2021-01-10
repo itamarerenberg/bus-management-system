@@ -12,6 +12,14 @@ namespace BL
 {
     public class BLImpAdmin : IBL//צריך להפוך לסינגלטון
     {
+
+        #region singelton
+        static readonly BLImpAdmin instance = new BLImpAdmin();
+        static BLImpAdmin() { }
+        BLImpAdmin() { }
+        public static BLImpAdmin Instance { get => instance; } 
+        #endregion
+
         IDL dl = DLFactory.GetDL();
         
         #region Manager

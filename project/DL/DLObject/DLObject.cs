@@ -18,6 +18,8 @@ namespace DL
         public static DLObject Instance { get => instance; }
 
         #endregion
+
+
         #region Bus
         public void AddBus(Bus bus)
         {
@@ -362,77 +364,104 @@ namespace DL
 
         public void AddLineStation(LineStation lineStation)
         {
-            LineStation tempLineStation = DataSource.LineStations.FirstOrDefault(l => l.LineId == lineStation.LineId);
+            DataSource.LoadData();
+            XElement tempLineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
+                                        where ls.Element("LineId").Value == lineStation.LineId.ToString()
+                                              && ls.Element("StationNumber").Value == lineStation.StationNumber.ToString()
+                                        select ls).FirstOrDefault();
             if (tempLineStation == null)
             {
-                DataSource.LineStations.Add(lineStation);
+                DataSource.SaveObj(lineStation, "LineStations");
             }
             //in case the Line station is allready in the data base: checks if he is active
             else
             {
-                if (tempLineStation.IsActive == true)
+                if (tempLineStation.Element("IsActive").Value == true.ToString())
                 {
                     throw new DuplicateExeption("the line station is allready exist");
                 }
-                tempLineStation.IsActive = true;
+                tempLineStation.Remove();
+                DataSource.SaveObj(lineStation, "LineStations");
             }
+            DataSource.Save();
         }
 
         public LineStation GetLineStation(int lineId, int stationNum)
         {
-            LineStation lineStation = DataSource.LineStations.Find(l => l.LineId == lineId && l.StationNumber == stationNum && l.IsActive == true);
+            DataSource.LoadData();
+            XElement lineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
+                                    where ls.Element("LineId").Value == lineId.ToString()
+                                          && ls.Element("StationNumber").Value == stationNum.ToString()
+                                    select ls).FirstOrDefault();
             if (lineStation == null)
             {
                 throw new NotExistExeption("the line doesn't exist or it doesn't have such a station");
             }
-            return lineStation.Clone();
+            return Cloning.xelement_to_new_object<LineStation>(lineStation);
         }
 
         public LineStation GetLineStationByIndex(int lineId, int index)
         {
-            LineStation lineStation = DataSource.LineStations.Find(l => l.LineId == lineId && l.LineStationIndex == index && l.IsActive == true);
+            DataSource.LoadData();
+            XElement lineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
+                                    where ls.Element("LineId").Value == lineId.ToString()
+                                          && ls.Element("LineStationIndex").Value == index.ToString()
+                                    select ls).FirstOrDefault();
             if (lineStation == null)
             {
                 throw new NotExistExeption("the line doesn't exist or the index is out of range");
             }
-            return lineStation.Clone();
+            return Cloning.xelement_to_new_object<LineStation>(lineStation);
         }
 
         public void UpdateLineStation(LineStation newLineStation)
         {
-            LineStation oldLineStation = DataSource.LineStations.FirstOrDefault(l => l.LineId == newLineStation.LineId);
+            DataSource.LoadData();
+            XElement oldLineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
+                                       where ls.Element("LineId").Value == newLineStation.LineId.ToString()
+                                             && ls.Element("StationNumber").Value == newLineStation.StationNumber.ToString()
+                                       select ls).FirstOrDefault();
             if (oldLineStation == null)
             {
                 throw new NotExistExeption("the line station doesn't exist");
             }
-            oldLineStation = newLineStation;
+            Cloning.object_to_xelement(newLineStation, oldLineStation);
+            DataSource.Save();
         }
 
         public void DeleteLineStation(int lineId, int stationNum)
         {
-            LineStation lineS = DataSource.LineStations.Find(l => l.LineId == lineId && l.StationNumber == stationNum && l.IsActive == true);
+            DataSource.LoadData();
+            XElement lineS = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
+                              where ls.Element("LineId").Value == lineId.ToString()
+                                    && ls.Element("StationNumber").Value == stationNum.ToString()
+                              select ls).FirstOrDefault();
             if (lineS != null)
             {
-                lineS.IsActive = false;
+                lineS.Element("IsActive").Value = false.ToString();
             }
             else
             {
                 throw new NotExistExeption("the line station doesn't exist");
             }
+            DataSource.Save();
         }
 
         public IEnumerable<LineStation> GetAllLineStations()
         {
-            return from lineStation in DataSource.LineStations
-                   where lineStation.IsActive == true
-                   select lineStation.Clone();
+            DataSource.LoadData();
+            return from ls in DataSource.dsRoot.Element("LineStations").Elements()
+                   where ls.Element("IsActive").Value == true.ToString()
+                   select Cloning.xelement_to_new_object<LineStation>(ls);
         }
 
         public IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> predicate)
         {
-            return from lineStation in DataSource.LineStations
-                   where predicate(lineStation) && lineStation.IsActive == true
-                   select lineStation.Clone();
+            DataSource.LoadData();
+            return from ls in DataSource.dsRoot.Element("LineStations").Elements()
+                   let temp = Cloning.xelement_to_new_object<LineStation>(ls)
+                   where predicate(temp) && temp.IsActive == true
+                   select temp;
         }
         #endregion
 
@@ -499,54 +528,55 @@ namespace DL
         #region LineTrip
         public void AddLineTrip(LineTrip lineTrip)
         {
-            LineTrip tempLineTrip = DataSource.LineTrips.FirstOrDefault(l => l.ID == lineTrip.ID);
-            if (tempLineTrip == null)
-            {
-                DataSource.LineTrips.Add(lineTrip);
-            }
-            //in case the Line trip is allready in the data base: checks if he is active
-            else
-            {
-                if (tempLineTrip.IsActive == true)
-                {
-                    throw new DuplicateExeption("line trip with identical ID allready exist");
-                }
-                tempLineTrip.IsActive = true;
-            }
+            DataSource.LoadData();
+            lineTrip.ID = SerialNumbers.GetLineTripId;
+            DataSource.SaveObj(lineTrip, "LineTrips");
+            DataSource.Save();
         }
 
         public LineTrip GetLineTrip(int id)
         {
-            LineTrip lineTrip = DataSource.LineTrips.Find(l => l.ID == id && l.IsActive == true);
-            if (lineTrip == null)
+            DataSource.LoadData();
+            XElement temp = (from lt in DataSource.dsRoot.Element("LineTrips").Elements()
+                             where lt.Element("ID").Value == id.ToString()
+                             select lt).FirstOrDefault();
+            if(temp == null)
             {
-                throw new NotExistExeption("line trip with this id doesn't exist");
+                throw new NotExistExeption("the Line trip doesn't exist");
             }
-            return lineTrip.Clone();
+            return Cloning.xelement_to_new_object<LineTrip>(temp);
         }
 
         public void UpdateLineTrip(LineTrip newLineTrip)
         {
-            LineTrip oldLineTrip = DataSource.LineTrips.Find(l => l.ID == newLineTrip.ID && l.IsActive == true);
+            DataSource.LoadData();
+            XElement oldLineTrip = (from lt in DataSource.dsRoot.Element("LineTrips").Elements()
+                                    where lt.Element("ID").Value == newLineTrip.ID.ToString()
+                                    select lt).FirstOrDefault();
+                
             if (oldLineTrip == null)
             {
                 throw new NotExistExeption("the line trip doesn't exist");
             }
-            oldLineTrip = newLineTrip;
+            Cloning.object_to_xelement(newLineTrip, oldLineTrip);
+            DataSource.Save();
         }
 
         public IEnumerable<LineTrip> GetAllLineTrips()
         {
-            return from lineTrip in DataSource.LineTrips
-                   where lineTrip.IsActive == true
-                   select lineTrip.Clone();
+            DataSource.LoadData();
+            return from lt in DataSource.dsRoot.Element("LineTrips").Elements()
+                   where lt.Element("IsActive").Value == true.ToString()
+                   select Cloning.xelement_to_new_object<LineTrip>(lt);
         }
 
         public IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate)
         {
-            return from lineTrip in DataSource.LineTrips
-                   where predicate(lineTrip) && lineTrip.IsActive == true
-                   select lineTrip.Clone();
+            DataSource.LoadData();
+            return from lt in DataSource.dsRoot.Element("LineTrips").Elements()
+                   let temp = Cloning.xelement_to_new_object<LineTrip>(lt)
+                   where predicate(temp)
+                   select temp;
         }
         #endregion
 
