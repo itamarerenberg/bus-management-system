@@ -90,7 +90,7 @@ namespace PLGui.ViewModels
                         Lines = new ObservableCollection<Line>()
                     };
                     source.GetAllStations().DeepCopyToCollection(result.Stations);
-                    //source.GetAllLines().DeepCopyToCollection(result.Lines);
+                    source.GetAllLines().DeepCopyToCollection(result.Lines);
                     //source.GetAllBuses().DeepCopyToCollection(result.Buses);
 
 

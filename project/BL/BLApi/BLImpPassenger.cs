@@ -294,7 +294,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public void AddLine(Line line)
+        public int AddLine(Line line)
         {
             throw new NotImplementedException();
         }

@@ -16202,7 +16202,8 @@
       <IsActive>True</IsActive>
     </Station>
   </Stations>
-  <Lines />
+  <Lines>
+  </Lines>
   <users />
   <AdjacentStations />
   <BusesOnTrip />
