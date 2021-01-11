@@ -49,6 +49,8 @@ namespace DL
                     case "AreasEnum":
                         prop.SetValue(to, Enum.Parse(typeof(AreasEnum), val));
                         break;
+                    case "Nullable`1":
+                        break;
                     default:
                         throw new Exception($"need to add {prop.PropertyType.Name} to swich");
                         break;

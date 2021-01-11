@@ -26,6 +26,13 @@ namespace BL.BLApi
         }
         public static object CopyPropertiesToNew<S>(this S from, Type type)
         {
+            if(from == null)
+            {
+                if(type.IsClass)
+                {
+                    return null;
+                }
+            }
             object to = Activator.CreateInstance(type); // new object of Type
             from.CopyPropertiesTo(to);
             return to;

@@ -297,9 +297,9 @@ namespace DL
         public Station GetStation(int code)
         {
             DataSource.LoadData();
-            XElement busStation = (from bs in DataSource.dsRoot.Element("Stations").Elements()
-                                   where bs.Element("IsActive").Value == true.ToString()
-                                         && bs.Element("Code").Value == code.ToString()
+            XElement busStation = (from bs in DataSource.dsRoot.Element("Stations").Elements()//get all the activ station
+                                   where bool.Parse(bs.Element("IsActive").Value)
+                                         && int.Parse(bs.Element("Code").Value) == code
                                    select bs).FirstOrDefault();
             if (busStation == null)
             {
@@ -345,7 +345,7 @@ namespace DL
         {
             DataSource.LoadData();
             return from bs in DataSource.dsRoot.Element("Stations").Elements()
-                   where bs.Element("IsActive").Value == true.ToString()
+                   where bool.Parse(bs.Element("IsActive").Value)
                    select Cloning.xelement_to_new_object<Station>(bs);
         }
 
@@ -460,7 +460,7 @@ namespace DL
             DataSource.LoadData();
             return from ls in DataSource.dsRoot.Element("LineStations").Elements()
                    let temp = Cloning.xelement_to_new_object<LineStation>(ls)
-                   where predicate(temp) && temp.IsActive == true
+                   where predicate(temp)
                    select temp;
         }
         #endregion
@@ -469,57 +469,90 @@ namespace DL
 
         public void AddAdjacentStations(AdjacentStations adjacentStations)
         {
-            AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == adjacentStations.StationCode1 && s.StationCode2 == adjacentStations.StationCode2);
+            if (adjacentStations == null)
+                return;
+            XElement tempStations = (from adjSt in DataSource.AdjacentStationsXML
+                                     where int.Parse(adjSt.Element("StationCode1").Value) == adjacentStations.StationCode1
+                                           && int.Parse(adjSt.Element("StationCode2").Value) == adjacentStations.StationCode2
+                                     select adjSt).FirstOrDefault();
             if (tempStations == null)
             {
-                DataSource.AdjacentStations.Add(adjacentStations);
+                DataSource.SaveObj(adjacentStations, "AdjacentStations");
             }
             else
             {
                 throw new DuplicateExeption("the adjacent stations is allready exist");
             }
+            DataSource.Save();
         }
         public AdjacentStations GetAdjacentStation(int? stationCode1, int? stationCode2)
         {
-            AdjacentStations tempStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
+            XElement tempStations = (from adjSt in DataSource.AdjacentStationsXML
+                                     where int.Parse(adjSt.Element("StationCode1").Value) == stationCode1
+                                           && int.Parse(adjSt.Element("StationCode2").Value) == stationCode2
+                                     select adjSt).FirstOrDefault();
             if (tempStations == null)
                 return null;
-            return tempStations.Clone();
+            return Cloning.xelement_to_new_object<AdjacentStations>(tempStations);
         }
 
         public void UpdateAdjacentStations(AdjacentStations newAdjacentStations)
         {
-            AdjacentStations oldAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == newAdjacentStations.StationCode1 && s.StationCode2 == newAdjacentStations.StationCode2);
+            XElement oldAdjacentStations = (from adjSt in DataSource.AdjacentStationsXML
+                                            where int.Parse(adjSt.Element("StationCode1").Value) == newAdjacentStations.StationCode1
+                                                  && int.Parse(adjSt.Element("StationCode2").Value) == newAdjacentStations.StationCode2
+                                            select adjSt).FirstOrDefault();
             if (oldAdjacentStations == null)
             {
                 throw new NotExistExeption("the Adjacent Stations doesn't exist");
             }
-            oldAdjacentStations = newAdjacentStations;
+            Cloning.object_to_xelement(newAdjacentStations, oldAdjacentStations);
+            DataSource.Save();
         }
 
         public bool DeleteAdjacentStations(int? stationCode1, int? stationCode2)
         {
-            AdjacentStations tempAdjacentStations = DataSource.AdjacentStations.FirstOrDefault(s => s.StationCode1 == stationCode1 && s.StationCode2 == stationCode2);
+            XElement tempAdjacentStations = (from adjSt in DataSource.dsRoot.Element("AdjacentStations").Elements()
+                                             where int.Parse(adjSt.Element("StationCode1").Value) == stationCode1
+                                                   && int.Parse(adjSt.Element("StationCode2").Value) == stationCode2
+                                             select adjSt).FirstOrDefault();
             if (tempAdjacentStations == null)
                 return false;
             //DataSource.AdjacentStations.Remove(tempAdjacentStations);
-            tempAdjacentStations.IsActive = false;
+            tempAdjacentStations.Element("IsActive").Value = false.ToString();
+            DataSource.Save();
             return true;
         }
+
+        /// <returns>true: if the object deleted sucsesfuly, false: if the object dont exist or allready not active</returns>
         public bool DeleteAdjacentStations(AdjacentStations adjacentStations)
         {
-            if (!DataSource.AdjacentStations.Contains(adjacentStations))
-                return false;
+            XElement temp = (from adjSt in DataSource.AdjacentStationsXML//extracting the object from the data base
+                             where int.Parse(adjSt.Element("StationCode1").Value) == adjacentStations.StationCode1
+                                   && int.Parse(adjSt.Element("StationCode2").Value) == adjacentStations.StationCode2
+                             select adjSt).FirstOrDefault();
 
-            adjacentStations.IsActive = false;
+            if(temp == null)//if this object dont exist
+            {
+                return false;
+            }
+
+            if(bool.Parse(temp.Element("IsActive").Value) == false)//if this objec is allready not active
+            {
+                return false;
+            }
+
+            temp.Element("IsActive").Value = false.ToString();//set the object to be not active
             return true;
         }
 
+        ///<returns>all the objects where predicate returns true for them(active and not active)</returns>
         public IEnumerable<AdjacentStations> GetAllAdjacentStationsBy(Predicate<AdjacentStations> predicate)
         {
-            return from adjacentStations in DataSource.AdjacentStations
-                   where predicate(adjacentStations) && adjacentStations.IsActive == true
-                   select adjacentStations.Clone();
+            return from adjSt in DataSource.AdjacentStationsXML
+                   let temp = Cloning.xelement_to_new_object<AdjacentStations>(adjSt)
+                   where predicate(temp)
+                   select temp;
         }
         
 

@@ -25,6 +25,10 @@ namespace BLApi
 
         #region Bus
         void AddBus(Bus bus);
+
+        /// <summary>
+        /// get the bus with this licensNum
+        /// </summary>
         Bus GetBus(string licensNum);
         void UpdateBus(Bus bus);
         void DeleteBus(string licensNum);

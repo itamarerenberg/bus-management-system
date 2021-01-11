@@ -195,8 +195,9 @@ namespace BL
                     foreach (LineStation lStation in line.Stations)
                     {
                         dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                    } 
+                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
+                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
+                    }
                 }
                 return id;
             }
@@ -297,6 +298,7 @@ namespace BL
                 LineStationIndex = index,
                 PrevStation = index == 0 ? null : (int?)line.Stations[index - 1].StationNumber,
                 NextStation = index == line.Stations.Count ? null : (int?)line.Stations[index].StationNumber,
+                IsActive = true
             };
 
             //generating the BO line station
@@ -328,6 +330,7 @@ namespace BL
                 line.Stations[index + 1].PrevToCurrent = line.Stations[index].CurrentToNext;
             }
 
+            dl.AddLineStation(lineStationDO);
         }
         public void UpdateLineStation(int lineNumber, int StationNumber)
         {

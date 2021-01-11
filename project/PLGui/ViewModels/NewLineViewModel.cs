@@ -139,14 +139,34 @@ namespace PLGui.ViewModels
                     BO.Line BOline = new BO.Line()//creating new BO line
                     {
                         LineNumber = (int)NewLine.LineNumber,
-                        Area = (BO.AreasEnum)NewLine.Area
+                        Area = (BO.AreasEnum)NewLine.Area,
+                        Stations = new List<BO.LineStation>()
                     };
+
+                    //need to move to bl!!!!!!!!!!!!!!!!!
+                    //generating BO.StationLines for the line's stations
+                    List<BO.AdjacentStations> adjacentStations = Calculate_dist(Stations.ToList());
+                    for(int i = 0; i < Stations.Count; i++)
+                    {
+                        Station curSt = Stations[i];
+                        BOline.Stations.Add(new BO.LineStation()
+                        {
+                            LineId = BOline.ID,
+                            StationNumber = curSt.Code,
+                            LineStationIndex = i,
+                            Location = (int)curSt.Location.Latitude,//need to change BO.LineStation.Location to GeoCoordinate
+                            Address = curSt.Address,
+                            CurrentToNext = i < adjacentStations.Count? adjacentStations[i] : null,//for the last station
+                            PrevToCurrent = i - 1 > 0 ?adjacentStations[i - 1] : null,//for the first station
+                        });
+                    }
+
                     int id = source.AddLine(BOline);
 
-                    for (int i = 0; i < Stations.Count; i++)
-                    {
-                        source.AddLineStation(id, Stations[i].Code, i);
-                    }
+                    //for (int i = 0; i < Stations.Count; i++)
+                    //{
+                    //    source.AddLineStation(id, Stations[i].Code, i);
+                    //}
                 };//this function will execute in the BackgroundWorker thread
             creatNewLine.RunWorkerAsync();
 
@@ -174,6 +194,45 @@ namespace PLGui.ViewModels
                 }
             }
         }
+        #endregion
+
+        #region help methods
+
+        List<BO.AdjacentStations> Calculate_dist(List<Station> stations)
+        {
+            List<BO.AdjacentStations> result = new List<BO.AdjacentStations>();
+            result.Add(new BO.AdjacentStations()
+            {
+                StationCode1 = stations[0].Code,
+                StationCode2 = stations[1].Code,
+                Distance = GetDist(stations[0], stations[1]),
+                Time = GetTime(stations[0], stations[1], GetDist(stations[0], stations[1])),
+            });
+            for(int i = 1; i < stations.Count - 1; i++)//the first and last AdjacentStations clculate outside the for
+            {
+                Station cur = Stations[i];
+                Station next = Stations[i + 1];
+                result.Add(new BO.AdjacentStations()
+                {
+                    StationCode1 = cur.Code,
+                    StationCode2 = next.Code,
+                    Distance = GetDist(cur, next),
+                    Time = GetTime(cur, next, GetDist(cur, next))
+                });
+            }
+            return result;
+        }
+
+        private TimeSpan GetTime(Station station1, Station station2, double Dist)
+        {
+            return new TimeSpan((int)((new Random()).NextDouble() * Dist));
+        }
+
+        private double GetDist(Station station1, Station station2)
+        {
+            return station1.Location.GetDistanceTo(station2.Location);
+        }
+
         #endregion
     }
 }

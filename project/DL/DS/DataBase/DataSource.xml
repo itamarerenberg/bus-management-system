@@ -16021,9 +16021,11 @@
   <Lines>
   </Lines>
   <users />
-  <AdjacentStations />
+  <AdjacentStations>
+  </AdjacentStations>
   <BusesOnTrip />
-  <LineStations />
+  <LineStations>
+  </LineStations>
   <LineTrips />
   <Users />
   <UsersTrips />

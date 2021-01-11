@@ -26,6 +26,15 @@ namespace DS
         #endregion
         static string FileName = "DataSource.xml";
         public static XElement dsRoot;
+       public static IEnumerable<XElement> AdjacentStationsXML
+        {
+            get
+            {
+                LoadData();
+                return dsRoot.Element("AdjacentStations").Elements();
+            }
+        }
+
         public static int serialLineID;
         static string dataBasePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database");
         static string FilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", FileName);
@@ -91,11 +100,20 @@ namespace DS
         /// <param name="lable">the label to add the new object to</param>
         public static void SaveObj(object obj, string lable)
         {
+            if(obj == null)
+            {
+                return;
+            }
             XElement newObj = new XElement(obj.GetType().Name);
             foreach(var prop in obj.GetType().GetProperties())
             {
-                string val = prop.GetValue(obj).ToString();
-                newObj.Add(new XElement(prop.Name, val));//insert new label <prop.Name> prop.GetValue(prop).ToString() </prop.Name>
+                object temp = prop.GetValue(obj);
+
+                if (temp != null)
+                {
+                    String val = temp != null ? temp.ToString() : "";
+                    newObj.Add(new XElement(prop.Name, val));//insert new label <prop.Name> prop.GetValue(prop).ToString() </prop.Name>
+                }
             }
             dsRoot.Element(lable).Add(newObj);
             dsRoot.Save(FilePath);
