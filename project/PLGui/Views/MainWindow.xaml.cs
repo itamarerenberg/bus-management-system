@@ -26,13 +26,13 @@ namespace PLGui
         public MainWindow()
         {
             InitializeComponent();
-            //this.Closing += MainWindow_Closing;
+            this.Closing += MainWindow_Closing;
         }
 
-        //private void MainWindow_Closing(object sender, CancelEventArgs e)
-        //{
-        //    Environment.Exit(Environment.ExitCode);
-        //}
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            Environment.Exit(Environment.ExitCode);
+        }
 
     }
 }

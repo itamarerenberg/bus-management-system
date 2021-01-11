@@ -16019,30 +16019,6 @@
     </Station>
   </Stations>
   <Lines>
-    <Line>
-      <ID>0</ID>
-      <LineNumber>33</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>0</FirstStation_Id>
-      <LastStation_Id>0</LastStation_Id>
-      <IsActive>True</IsActive>
-    </Line>
-    <Line>
-      <ID>1</ID>
-      <LineNumber>33</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>0</FirstStation_Id>
-      <LastStation_Id>0</LastStation_Id>
-      <IsActive>True</IsActive>
-    </Line>
-    <Line>
-      <ID>2</ID>
-      <LineNumber>22</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>0</FirstStation_Id>
-      <LastStation_Id>0</LastStation_Id>
-      <IsActive>True</IsActive>
-    </Line>
   </Lines>
   <users />
   <AdjacentStations />

@@ -6,7 +6,7 @@
         xmlns:p="clr-namespace:PLGui.utilities"
         xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="400" WindowStartupLocation="CenterScreen" Closing="()=>Environment.Exit(Environment.ExitCode)">
+        Title="MainWindow" Height="200" Width="400" WindowStartupLocation="CenterScreen" >
     <Window.DataContext>
         <viewmodels:MainWindowViewModel x:Name="MainVModel"/>
     </Window.DataContext>
