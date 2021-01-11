@@ -23,47 +23,16 @@ namespace PLGui
     /// </summary>
     public partial class MainWindow : Window
     {
-        UserViewModel vModel;
         public MainWindow()
         {
-            vModel = new UserViewModel();
             InitializeComponent();
-            this.Closing += MainWindow_Closing;
-            userName.TextChanged += UserNameChanged;
-            password.PasswordChanged += passwordChanged;
+            //this.Closing += MainWindow_Closing;
         }
 
-        private void MainWindow_Closing(object sender, CancelEventArgs e)
-        {
-            Environment.Exit(Environment.ExitCode);
-        }
+        //private void MainWindow_Closing(object sender, CancelEventArgs e)
+        //{
+        //    Environment.Exit(Environment.ExitCode);
+        //}
 
-        private void passwordChanged(object sender, RoutedEventArgs e)
-        {
-            vModel.Password = password.Password;
-        }
-
-        private void UserNameChanged(object sender, TextChangedEventArgs e)
-        {
-            vModel.Name = userName.Text;
-        }
-
-        private void SignInButton_Click(object sender, RoutedEventArgs e)
-        {
-            bool isChecked = IsAdmin.IsChecked == null ? false : (bool)IsAdmin.IsChecked;
-            try
-            {
-                vModel.signIn(isChecked);
-            }
-            catch
-            {
-                return;
-            }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            new ManegerView().ShowDialog();
-        }
     }
 }

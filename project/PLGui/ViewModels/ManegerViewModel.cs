@@ -49,6 +49,7 @@ namespace PLGui.ViewModels
             source = BLFactory.GetBL("admin");
             loadData();
 
+            //commands initialize
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
             TabChangedCommand = new RelayCommand<object>(tab_selactionChange);
             StationListChangedCommand = new RelayCommand<object>(StationList_SelectionChanged);

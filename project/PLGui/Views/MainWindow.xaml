@@ -3,9 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PLGui"
+        xmlns:p="clr-namespace:PLGui.utilities"
+        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="400" >
+        Title="MainWindow" Height="200" Width="400" WindowStartupLocation="CenterScreen" Closing="()=>Environment.Exit(Environment.ExitCode)">
+    <Window.DataContext>
+        <viewmodels:MainWindowViewModel x:Name="MainVModel"/>
+    </Window.DataContext>
     <Grid Margin="0,0,-6.667,-0.333">
         <TabControl x:Name="Tab_Control" Margin="0,0,10,0">
             <!--sign in tab-->
@@ -29,17 +33,15 @@
                     </Grid.RowDefinitions>
                     <!--row 1-->
                     <Label Grid.Row="1" Grid.Column="1" Content="enter name" Height="31" Width="93"/>
-                    <TextBox x:Name="userName" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="" MinWidth="100" Width="auto"/>
+                    <TextBox x:Name="userName" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" Width="auto"/>
                     
                     <!--row 2-->
                     <Label Content="enter password" Grid.Column="1" Grid.Row="2" Height="35" Width="93"/>
-                    <PasswordBox x:Name="password" Grid.Column="2" Grid.Row="2" Height="35" MinWidth="100" Width="auto"/>
-
+                    <p:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="2" Height="35" MinWidth="100" Width="auto"/>
                     <!--row 4-->
-                    <Button x:Name="SignInButton" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" Click="SignInButton_Click"/>
-                    <Label Grid.Column="1" Grid.Row="4" Content="enter as admin"/>
-                    <CheckBox x:Name="IsAdmin" Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" IsChecked ="False"/>
-                     <Button Content="debug" Grid.Column="4" Grid.Row="2" Click="Button_Click"/>
+                    <Button x:Name="SignInButton" Command="{Binding SignInCommand}" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" />
+                    <CheckBox x:Name="IsAdmin" Content="enter as admin" IsChecked="{Binding ManegerCheckBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" />
+                    <Button Content="debug" Grid.Column="4" Grid.Row="2" Command="{Binding DebugButtonCommand}"/>
                 </Grid>
             </TabItem>
 
