@@ -223,8 +223,8 @@ namespace BL
         }      
         public IEnumerable<Station> GetAllStations()
         {
-            return from stationDO in dl.GetAllStations()
-                   select GetStation(stationDO.Code);
+            return (from stationDO in dl.GetAllStations()
+                    select (BO.Station)stationDO.CopyPropertiesToNew(typeof(BO.Station)));
         }
         public IEnumerable<Station> GetAllStationsBy(Predicate<Station> pred)
         {
