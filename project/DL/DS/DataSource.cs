@@ -64,7 +64,8 @@ namespace DS
                 Stations = stations.Table<Station>().ToList();
             }
             Users = new List<User>() { new User() { Name = "Admin", Password = "1234", Admin = true, IsActive = true } };
-            foreach (var st in Stations)
+            List<Station> newStationList = Stations.GroupBy(c => c.Code, (key, c) => c.FirstOrDefault()).ToList();
+            foreach (var st in newStationList)
             {
                 SaveObj(st, "Stations");
             }

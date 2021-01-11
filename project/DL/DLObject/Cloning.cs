@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.Xml.Linq;
+using DO;
 
 namespace DL
 {
@@ -45,9 +46,13 @@ namespace DL
                     case "Double":
                         prop.SetValue(to, double.Parse(val));
                         break;
+                    case "AreasEnum":
+                        prop.SetValue(to, Enum.Parse(typeof(AreasEnum), val));
+                        break;
                     default:
                         throw new Exception($"need to add {prop.PropertyType.Name} to swich");
                         break;
+                        
                 }
             }
         }

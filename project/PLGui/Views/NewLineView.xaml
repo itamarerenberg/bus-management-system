@@ -25,7 +25,7 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -38,14 +38,14 @@
 
 
             <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}"  >
-                <!--<y:Interaction.Triggers>
+                <y:Interaction.Triggers>
                     <y:EventTrigger EventName="MouseDoubleClick">
-                        <y:InvokeCommandAction Command="{Binding StationListChangedCommand}" CommandParameter="{Binding RelativeSource=
+                        <y:InvokeCommandAction Command="{Binding DeleteStationCommand}" CommandParameter="{Binding RelativeSource=
                                          { RelativeSource FindAncestor, 
                                            AncestorType={x:Type ListView},
                                            AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
                     </y:EventTrigger>
-                </y:Interaction.Triggers>-->
+                </y:Interaction.Triggers>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn x:Name="Name"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
@@ -90,7 +90,23 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="25,0,0,0">
+            <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" ItemsSource="{Binding ComboList}"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="100,0,0,0">
+            <TextBlock Text="search:" HorizontalAlignment="Left"/>
+            <TextBox x:Name="SearchBox" MinWidth="70" Height="22"  >
+                <y:Interaction.Triggers>
+                    <y:EventTrigger EventName="TextChanged">
+                        <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type TextBox},
+                                           AncestorLevel=1}}" PassEventArgsToCommand="True"/>
+                    </y:EventTrigger>
+                </y:Interaction.Triggers>
+            </TextBox>
+        </StackPanel>
 
     </Grid>
 </Window>

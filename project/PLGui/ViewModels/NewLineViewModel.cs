@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,6 +22,7 @@ namespace PLGui.ViewModels
         BackgroundWorker load_data;
         BackgroundWorker creatNewLine;
 
+        public List<string> ComboList { get; set; }
 
         Line newLine = new Line();
         public Line NewLine
@@ -43,10 +45,13 @@ namespace PLGui.ViewModels
         {
             source = BLFactory.GetBL("admin");
             Stations = new ObservableCollection<Station>();
+            ComboList = new List<string>() { "Name", "Code", "Address" };
             loadData();
 
             SelectStationCommand = new RelayCommand<object>(SelectStation);
             AddLineButton = new RelayCommand(AddLineButton_click);
+            DeleteStationCommand = new RelayCommand<object>(DeleteStation);
+            SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
         }
 
 
@@ -81,16 +86,35 @@ namespace PLGui.ViewModels
 
         #region commands
         public ICommand SelectStationCommand { get; }
+        public ICommand DeleteStationCommand { get; }
         public ICommand AddLineButton { get; }
+        public ICommand SearchCommand { get; }
+
 
         private void SelectStation(object sender)
         {
             if ((sender as ListView).SelectedItem is Station selectedStation)
             {
                 Stations.Add(selectedStation);
+                DBStations.Remove(selectedStation);
                 OnPropertyChanged("IsMinStation");
+
+                NewLineView Lview = ((sender as ListView).Parent as Grid).Parent as NewLineView;
+                SearchBox_TextChanged(Lview);
             }
-        } 
+        }
+        private void DeleteStation(object sender)
+        {
+            if ((sender as ListView).SelectedItem is Station selectedStation)
+            {
+                DBStations.Add(selectedStation);
+                Stations.Remove(selectedStation);
+                OnPropertyChanged("IsMinStation");
+
+                NewLineView Lview = (((sender as ListView).Parent as StackPanel).Parent as Grid).Parent as NewLineView;
+                SearchBox_TextChanged(Lview);
+            }
+        }
 
         private void AddLineButton_click()
         {
@@ -121,11 +145,34 @@ namespace PLGui.ViewModels
 
                     for (int i = 0; i < Stations.Count; i++)
                     {
-                        source.AddLineStation(1, Stations[i].Code, i);//creating new BO line stations//צריך לשנות!!!!!!!!!!!!
+                        source.AddLineStation(id, Stations[i].Code, i);
                     }
                 };//this function will execute in the BackgroundWorker thread
             creatNewLine.RunWorkerAsync();
 
+        }
+        private void SearchBox_TextChanged(object sender)
+        {
+            NewLineView Lview = new NewLineView();
+            if (sender is TextBox)
+            {
+                //get the ManegerView instance
+                Lview = (((((sender as TextBox).Parent as StackPanel).Parent) as Grid).Parent) as NewLineView; 
+            }
+            else if (sender is NewLineView)
+            {
+                Lview = sender as NewLineView;
+            }
+            if (Lview.ComboBoxSearch.SelectedItem != null)
+            {
+                //get the current presented List, get his name, and create a copy collection for searching
+                var tempList = DBStations;
+                if (tempList != null)
+                {
+                    //return a new collection according to the searching letters
+                    Lview.DBStationList.ItemsSource = tempList.Where(c => c.GetType().GetProperty(Lview.ComboBoxSearch.Text).GetValue(c, null).ToString().Contains(Lview.SearchBox.Text));
+                }
+            }
         }
         #endregion
     }
