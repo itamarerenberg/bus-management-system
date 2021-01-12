@@ -16019,79 +16019,12 @@
     </Station>
   </Stations>
   <Lines>
-    <Line>
-      <ID>29</ID>
-      <LineNumber>1</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>61157</FirstStation_Id>
-      <LastStation_Id>29</LastStation_Id>
-      <IsActive>True</IsActive>
-    </Line>
-    <Line>
-      <ID>30</ID>
-      <LineNumber>1</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>61157</FirstStation_Id>
-      <LastStation_Id>29</LastStation_Id>
-      <IsActive>True</IsActive>
-    </Line>
   </Lines>
   <users />
   <AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>61157</StationCode1>
-      <StationCode2>27</StationCode2>
-      <Distance>12020.9868283953</Distance>
-      <Time>00:00:00.0007344</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>61157</StationCode1>
-      <StationCode2>61158</StationCode2>
-      <Distance>42.266494722714</Distance>
-      <Time>00:00:00.0000025</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>61157</StationCode1>
-      <StationCode2>29</StationCode2>
-      <Distance>11832.2474245869</Distance>
-      <Time>00:00:00.0007228</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
   </AdjacentStations>
   <BusesOnTrip />
   <LineStations>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>61157</StationNumber>
-      <LineStationIndex>0</LineStationIndex>
-      <NextStation>27</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>27</StationNumber>
-      <LineStationIndex>1</LineStationIndex>
-      <PrevStation>61157</PrevStation>
-      <NextStation>61158</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>61158</StationNumber>
-      <LineStationIndex>2</LineStationIndex>
-      <PrevStation>27</PrevStation>
-      <NextStation>29</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>29</StationNumber>
-      <LineStationIndex>3</LineStationIndex>
-      <PrevStation>61158</PrevStation>
-      <IsActive>True</IsActive>
-    </LineStation>
   </LineStations>
   <LineTrips />
   <Users />

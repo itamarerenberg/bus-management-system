@@ -320,20 +320,21 @@ namespace BL
         }
         public IEnumerable<Line> GetAllLines()
         {
-            try
-            {
-                var LineStationsGroups = dl.GetAllLineStationsBy(lst => lst.IsActive).GroupBy(lst => lst.LineId);//get all line stations and goup them by they Line id
-                IEnumerable<BO.Line> result = from doLine in dl.GetAllLinesBy(l => l.IsActive)
-                                              select new BO.Line()
-                                              {
+            //try
+            //{
+            //    var LineStationsGroups = dl.GetAllLineStationsBy(lst => lst.IsActive).GroupBy(lst => lst.LineId);//get all line stations and goup them by they Line id
+            //    IEnumerable<BO.Line> result = from doLine in dl.GetAllLinesBy(l => l.IsActive)
+            //                                  select new BO.Line()
+            //                                  {
+            //                                      Stations = LineStationsGroups.
+            //                                  }
 
-                                              }
-                
-            }
-            catch (Exception msg)
-            {
-                throw msg;
-            }
+            //}
+            //catch (Exception msg)
+            //{
+            //    throw msg;
+            //}
+            return new List<Line>();
         }
         public IEnumerable<Line> GetAllLinesBy(Predicate<Line> pred)
         {
@@ -662,22 +663,21 @@ namespace BL
 
         #region clone methods
 
-        List<LineStation> LineStations_Do_Bo(List<DO.LineStation> lineStations, List<AdjacentStations> adjacentStations)//^^^^^^^^^^^^continue from heare^^^^^^^^^^^^
-        {
-            if(lin)
-            List<LineStation> result;
-            LineStation first_station = 
-            foreach(DO.LineStation lst in lineStations)
-            {
-                result.Add(new LineStation()
-                {
-                    LineId = lst.LineId,
-                    StationNumber = lst.StationNumber,
-                    LineStationIndex = lst.LineStationIndex,
-                    PrevToCurrent = adjacentStations.FirstOrDefault(adjs => adjs.StationCode1 == )
-                });
-            }
-        }
+        //List<LineStation> LineStations_Do_Bo(List<DO.LineStation> lineStations, List<AdjacentStations> adjacentStations)//^^^^^^^^^^^^continue from heare^^^^^^^^^^^^
+        //{
+        //    List<LineStation> result;
+        //    LineStation first_station = 
+        //    foreach(DO.LineStation lst in lineStations)
+        //    {
+        //        result.Add(new LineStation()
+        //        {
+        //            LineId = lst.LineId,
+        //            StationNumber = lst.StationNumber,
+        //            LineStationIndex = lst.LineStationIndex,
+        //            PrevToCurrent = adjacentStations.FirstOrDefault(adjs => adjs.StationCode1 == )
+        //        });
+        //    }
+        //}
         #endregion
     }
 }
