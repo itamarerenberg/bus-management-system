@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -184,27 +185,89 @@ namespace BL
         #endregion
 
         #region Line
-        public int AddLine(Line line)
+        /// <returns>the Serial number that given to the new line at the data layer</returns>
+        public int AddLine(Line line, IEnumerable<Station> stations)
         {
             try
             {
-                int id = dl.AddLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
-
-                if (line.Stations != null)
+                //add the line:
+                DO.Line DoLine = new DO.Line()
                 {
-                    foreach (LineStation lStation in line.Stations)
+                    LineNumber = line.LineNumber,
+                    Area = (DO.AreasEnum)Enum.Parse(typeof(DO.AreasEnum), line.Area.ToString()),
+                    FirstStation_Id = stations.ElementAt(0).Code,
+                    LastStation_Id = stations.Last().Code,
+                    IsActive = true
+                };
+                int lineId = dl.AddLine(DoLine);//add the line and save his id to return it
+
+                //add the addjecent stations:
+                List<AdjacentStations> adjStations = Calculate_dist(stations.ToList());//get the list of the AdjacentStations
+                foreach (AdjacentStations adjSt in adjStations)//add all the AdjacentStations to dl
+                {
+                    dl.AddAdjacentStations(new DO.AdjacentStations()
                     {
-                        dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                    }
+                        StationCode1 = adjSt.StationCode1,
+                        StationCode2 = adjSt.StationCode2,
+                        Distance = adjSt.Distance,
+                        Time = adjSt.Time,
+                        IsActive = true
+                    });
                 }
-                return id;
+
+                //add tha LineStations:
+                DO.LineStation first_station = new DO.LineStation()//first station define sepretly
+                {
+                    LineId = lineId,
+                    StationNumber = stations.ElementAt(0).Code,
+                    LineStationIndex = 0,
+                    PrevStation = null,
+                };
+                DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
+                stations = stations.Skip(1);//remove the first station from stations (its allready take ceared)
+                int index = 1;//this will be use to define the fild LineStationIndex in the loop
+                foreach (Station st in stations)//! I think we shuld add in dl function that add a range of LineStation
+                {
+                    prev_station.NextStation = st.Code;
+                    dl.AddLineStation(prev_station);
+                    DO.LineStation current = new DO.LineStation()
+                    {
+                        LineId = lineId,
+                        StationNumber = st.Code,
+                        LineStationIndex = index++,
+                        PrevStation = prev_station.StationNumber,//! I think we shuld add to LineStation id fild
+                        IsActive = true
+                    };
+                    prev_station = current;
+                }
+                dl.AddLineStation(prev_station);//add last station
+
+                return lineId;
             }
             catch (Exception msg)
             {
+
                 throw msg;
             }
+            //try
+            //{
+            //    int id = dl.AddLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
+
+            //    if (line.Stations != null)
+            //    {
+            //        foreach (LineStation lStation in line.Stations)
+            //        {
+            //            dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
+            //            dl.AddAdjacentStations((DO.AdjacentStations)lStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
+            //            dl.AddAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
+            //        }
+            //    }
+            //    return id;
+            //}
+            //catch (Exception msg)
+            //{
+            //    throw msg;
+            //}
         }
         public Line GetLine(int id)
         {
@@ -259,8 +322,13 @@ namespace BL
         {
             try
             {
-                return from lineDO in dl.GetAllLines()
-                       select GetLine(lineDO.ID);
+                var LineStationsGroups = dl.GetAllLineStationsBy(lst => lst.IsActive).GroupBy(lst => lst.LineId);//get all line stations and goup them by they Line id
+                IEnumerable<BO.Line> result = from doLine in dl.GetAllLinesBy(l => l.IsActive)
+                                              select new BO.Line()
+                                              {
+
+                                              }
+                
             }
             catch (Exception msg)
             {
@@ -508,8 +576,17 @@ namespace BL
         }
         public IEnumerable<Station> GetAllStations()
         {
-            return (from stationDO in dl.GetAllStations()
-                    select (BO.Station)stationDO.CopyPropertiesToNew(typeof(BO.Station)));
+            List<DO.LineStation> lineStations = dl.GetAllLineStations().ToList();//to proserv time it's loading all the line stations ahed
+            return from DOst in dl.GetAllStations()
+                    select new BO.Station()
+                    {
+                        Code = DOst.Code,
+                        Name = DOst.Name,
+                        Location = new GeoCoordinate(DOst.Latitude,
+                        DOst.Longitude),
+                        Address = DOst.Address,
+                        LinesNums = lineStations.Where(lst=>lst.StationNumber == DOst.Code).Select(lst => lst.LineId).ToList()//find all the lineStations that conected to this station and get they lineId
+                    };
         }
         public IEnumerable<Station> GetAllStationsBy(Predicate<Station> pred)
         {
@@ -549,8 +626,58 @@ namespace BL
         public IEnumerable<UserTrip> GetAllUserTripsBy(string name,Predicate<UserTrip> pred)
         {
             throw new NotImplementedException();
-        } 
+        }
         #endregion
 
+        #region calc methods
+        /// <returns>colection of AdjacentStations accurding to this structer: { (st[1],st[2]), (st[2], st[3]),...,(st[n-1], st[n]) } where st stend for stations</returns>
+        List<BO.AdjacentStations> Calculate_dist(List<Station> stations)
+        {
+            List<BO.AdjacentStations> result = new List<BO.AdjacentStations>();
+            Station pre_station = stations[0];
+            stations.RemoveAt(0);//remove the first station fro stations
+            foreach (Station current in stations)//starting from the second station in the resepted list, the first is in prev_station
+            {
+                result.Add(new BO.AdjacentStations()
+                {
+                    StationCode1 = pre_station.Code,
+                    StationCode2 = current.Code,
+                    Distance = GetDist(pre_station, current),
+                    Time = GetTime(pre_station, current, GetDist(pre_station, current))
+                });
+            }
+            return result;
+        }
+
+        private TimeSpan GetTime(Station station1, Station station2, double Dist)
+        {
+            return new TimeSpan((int)((new Random()).NextDouble() * Dist));
+        }
+
+        private double GetDist(Station station1, Station station2)
+        {
+            return station1.Location.GetDistanceTo(station2.Location);
+        }
+        #endregion
+
+        #region clone methods
+
+        List<LineStation> LineStations_Do_Bo(List<DO.LineStation> lineStations, List<AdjacentStations> adjacentStations)//^^^^^^^^^^^^continue from heare^^^^^^^^^^^^
+        {
+            if(lin)
+            List<LineStation> result;
+            LineStation first_station = 
+            foreach(DO.LineStation lst in lineStations)
+            {
+                result.Add(new LineStation()
+                {
+                    LineId = lst.LineId,
+                    StationNumber = lst.StationNumber,
+                    LineStationIndex = lst.LineStationIndex,
+                    PrevToCurrent = adjacentStations.FirstOrDefault(adjs => adjs.StationCode1 == )
+                });
+            }
+        }
+        #endregion
     }
 }

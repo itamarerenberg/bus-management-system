@@ -32,29 +32,63 @@ namespace PLGui.Models.PO
             throw new NotImplementedException();
         }
 
+        private BO.Station station;
+        public BO.Station BOstation {
+            get 
+            {
+                station.LinesNums = linesNums.ToList();
+                return station; 
+            }
+            set 
+            {
+                station = value;
+                OnPropertyChanged("Code");
+                OnPropertyChanged("Name");
+                OnPropertyChanged("Longitude");
+                OnPropertyChanged("Latitude");
+                OnPropertyChanged("Address");
+                OnPropertyChanged("Location");
+                linesNums = new ObservableCollection<int>(station.LinesNums);//bcause that lineNums need to be an ObservableCollection it a spetial case
+                OnPropertyChanged("LinesNums");
+            
+            }
+        }
+
         private int code;
         [Required(ErrorMessage = "code cannot be empty")]
         public int Code 
         {
-            get => code;
-            set => SetProperty(ref code, value, true);
+            get => station.Code;
+            set
+            {
+                int temp = station.Code;//לא הבנתי מה היה ליפני אז סירבלתי קצת
+                SetProperty(ref temp, value, true);
+                station.Code = temp;
+            }
         }
 
         private string name;
         public string Name
         {
-            get => name;
-            set => SetProperty(ref name, value, true);
+            get => station.Name;
+            set
+            {
+                string temp = station.Name;
+                SetProperty(ref temp, value, true);
+                station.Name = temp;
+            }
         }
 
         private double longitude;
         [Range(34.3, 35.5, ErrorMessage = "longitude should be between 34.3 - 35.5")]
         public double Longitude 
         {
-            get => longitude;
+            get => station.Location.Longitude;
             set
             {
-                SetProperty(ref longitude, value, true);
+                double temp = station.Location.Longitude;
+                SetProperty(ref temp, value, true);
+                station.Location.Longitude = temp;
                 OnPropertyChanged("Location");
             }
         }
@@ -63,10 +97,12 @@ namespace PLGui.Models.PO
         [Range(31, 33.3, ErrorMessage = "latitude should be between 31, 33.3")]
         public double Latitude 
         {
-            get => latitude;
+            get => station.Location.Latitude;
             set
             {
-                SetProperty(ref latitude, value, true);
+                double temp = station.Location.Latitude;
+                SetProperty(ref temp, value, true);
+                station.Location.Latitude = temp;
                 OnPropertyChanged("Location");
             }
         }
@@ -74,20 +110,29 @@ namespace PLGui.Models.PO
         private string address;
         public string Address 
         {
-            get => address;
-            set => SetProperty(ref address, value, true);
+            get => station.Address;
+            set
+            {
+                string temp = station.Address;
+                SetProperty(ref address, value, true);
+                station.Address = temp;
+            }
         }
 
         public GeoCoordinate Location
-        { 
-            get => new GeoCoordinate(Latitude, Longitude); 
+        {
+            get => station.Location;
         }
 
         private ObservableCollection<int> linesNums;
-        public ObservableCollection<int> LinesNums 
+        public ObservableCollection<int> LinesNums//bcause that lineNums need to be an ObservableCollection it a spetial case
         {
             get => linesNums;
-            set => SetProperty(ref linesNums, value, true);
+            set
+            {
+                SetProperty(ref linesNums, value, true);
+                station.LinesNums = linesNums.ToList();
+            }
         }
     }
 }
