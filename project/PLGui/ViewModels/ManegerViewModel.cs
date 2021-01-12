@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BL.BLApi;
@@ -21,7 +22,7 @@ namespace PLGui.ViewModels
         ManegerModel manegerModel;
         IBL source;
 
-        #region properties
+        #region collections
 
         public ObservableCollection<Bus> Buses
         {
@@ -51,9 +52,8 @@ namespace PLGui.ViewModels
 
             //commands initialize
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
-            TabChangedCommand = new RelayCommand<object>(tab_selactionChange);
-            StationListChangedCommand = new RelayCommand<object>(StationList_SelectionChanged);
-            LineListChangedCommand = new RelayCommand<object>(LinesList_SelectionChanged);
+            TabChangedCommand = new RelayCommand<Window>(tab_selactionChange);
+            ListChangedCommand = new RelayCommand<object>(List_SelectionChanged);
             NewLine = new RelayCommand(Add_newLine);
         }
 
@@ -104,12 +104,14 @@ namespace PLGui.ViewModels
         #region commands
         public ICommand SearchCommand { get; }
         public ICommand TabChangedCommand { get; }
-        public ICommand StationListChangedCommand { get; }
-        public ICommand LineListChangedCommand { get; }
+        public ICommand ListChangedCommand { get; }
         public ICommand NewLine { get; }
 
-
-
+        /// <summary>
+        /// accured when search box is changing. replace the list in the window into list that contains the search box text.
+        /// the search is according to the conbo box picking
+        /// </summary>
+        /// <param name="sender"></param>
         private void SearchBox_TextChanged(object sender)
         {
             //get the ManegerView instance
@@ -128,17 +130,27 @@ namespace PLGui.ViewModels
             }
 
         }
-        private void tab_selactionChange(object sender)
+
+        /// <summary>
+        /// when the tab selection is changed. replace the option in the combo box according to the entity's properties of the current list
+        /// </summary>
+        /// <param name="window"></param>
+        private void tab_selactionChange(Window window)
         {
-            ManegerView Mview = (((sender as TabControl).Parent as Grid).Parent) as ManegerView;
-            if ((Mview.mainTab.SelectedItem as TabItem).Content is ListView)
+            if (window is ManegerView)
             {
+                ManegerView Mview = window as ManegerView;
                 GridView currentGridView = ((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView;
                 List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
                 Mview.ComboBoxSearch.ItemsSource = comboList;
             }
         }
-        private void StationList_SelectionChanged(object sender)
+
+        /// <summary>
+        /// when a row in the list has selected. show in the window his properties deatails etc.
+        /// </summary>
+        /// <param name="sender"></param>
+        private void List_SelectionChanged(object sender)
         {
             ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
             if ((sender as ListView).SelectedItem is Station selectedStation)
@@ -155,10 +167,7 @@ namespace PLGui.ViewModels
                 Mview.Header4.Text = "Location:";
                 Mview.content4.Content = selectedStation.Location;
             }
-        }
-        private void LinesList_SelectionChanged(object sender)
-        {
-            ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
+
             if ((sender as ListView).SelectedItem is Line selectedLine)
             {
                 Mview.Header1.Text = "Line Number:";
@@ -174,6 +183,7 @@ namespace PLGui.ViewModels
                 //Mview.content4.Content = selectedLine.Location;
             }
         }
+        
         private void Add_newLine()
         {
             NewLineView newLineView = new NewLineView();

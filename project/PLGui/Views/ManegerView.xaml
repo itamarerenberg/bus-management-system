@@ -6,7 +6,7 @@
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
         mc:Ignorable="d"
-        Title="Maneger" MinHeight="700" MinWidth="1000">
+        Title="Maneger" x:Name="ManegerWindow" MinHeight="700" MinWidth="1000">
     <Window.DataContext>
         <viewmodels:ManegerViewModel x:Name="vModel"/>
     </Window.DataContext>
@@ -49,10 +49,7 @@
             <TextBox x:Name="SearchBox" MinWidth="70" Height="22"  >
                 <y:Interaction.Triggers>
                     <y:EventTrigger EventName="TextChanged">
-                        <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding RelativeSource=
-                                         { RelativeSource FindAncestor, 
-                                           AncestorType={x:Type TextBox},
-                                           AncestorLevel=1}}" PassEventArgsToCommand="True"/>
+                        <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" />
                     </y:EventTrigger>
                 </y:Interaction.Triggers>
             </TextBox>
@@ -60,20 +57,16 @@
         <TabControl x:Name="mainTab" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25"  SelectedIndex="0">
             <y:Interaction.Triggers>
                 <y:EventTrigger EventName="SelectionChanged">
-                    <y:InvokeCommandAction Command="{Binding TabChangedCommand}" CommandParameter="{Binding RelativeSource=
-                                         { RelativeSource FindAncestor, 
-                                           AncestorType={x:Type TabControl},
-                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                    <y:InvokeCommandAction Command="{Binding TabChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                 </y:EventTrigger>
             </y:Interaction.Triggers>
             <TabItem x:Name="Stations_view" Header="Stations" >
                 <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
-                            <y:InvokeCommandAction Command="{Binding StationListChangedCommand}" CommandParameter="{Binding RelativeSource=
-                                         { RelativeSource FindAncestor, 
-                                           AncestorType={x:Type ListView},
-                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" 
+                                                   CommandParameter="{Binding RelativeSource={ RelativeSource FindAncestor, AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                   PassEventArgsToCommand="True"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -96,7 +89,7 @@
                 <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Lines}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
-                            <y:InvokeCommandAction Command="{Binding LineListChangedCommand}" CommandParameter="{Binding RelativeSource=
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding RelativeSource=
                                          { RelativeSource FindAncestor, 
                                            AncestorType={x:Type ListView},
                                            AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
@@ -118,8 +111,10 @@
                 </ListView>
             </TabItem>
         </TabControl>
+        
+        
 
-        <GroupBox Header="details" Grid.Row="2" Grid.Column="1" Margin="10">
+        <GroupBox Header="details" Grid.Row="3" Grid.Column="1" Margin="10">
             <StackPanel Margin="10">
                 <TextBlock x:Name="Header1" Visibility="{Binding ElementName=Header1, Converter={StaticResource text_converter_to_visibility}}"/>
                 <Label x:Name="content1" Visibility="{Binding ElementName=content1, Converter={StaticResource text_converter_to_visibility}}" BorderThickness="2" HorizontalAlignment="Right"/>

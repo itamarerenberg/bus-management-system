@@ -3,12 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:p="clr-namespace:PLGui.utilities"
         xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="400" WindowStartupLocation="CenterScreen" >
+        Title="MainWindow" x:Name="ThisWindow" Height="200" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >
+    <y:Interaction.Triggers>
+        <y:EventTrigger EventName="Closed">
+            <y:InvokeCommandAction Command="{Binding CloseCommand}"/>
+        </y:EventTrigger>
+    </y:Interaction.Triggers>
     <Window.DataContext>
-        <viewmodels:MainWindowViewModel x:Name="MainVModel"/>
+        <viewmodels:MainWindowViewModel/>
     </Window.DataContext>
     <Grid Margin="0,0,-6.667,-0.333">
         <TabControl x:Name="Tab_Control" Margin="0,0,10,0">
@@ -39,7 +45,7 @@
                     <Label Content="enter password" Grid.Column="1" Grid.Row="2" Height="35" Width="93"/>
                     <p:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="2" Height="35" MinWidth="100" Width="auto"/>
                     <!--row 4-->
-                    <Button x:Name="SignInButton" Command="{Binding SignInCommand}" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" />
+                    <Button x:Name="SignInButton" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=ThisWindow}" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" />
                     <CheckBox x:Name="IsAdmin" Content="enter as admin" IsChecked="{Binding ManegerCheckBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" />
                     <Button Content="debug" Grid.Column="4" Grid.Row="2" Command="{Binding DebugButtonCommand}"/>
                 </Grid>
