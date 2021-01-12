@@ -53,7 +53,6 @@ namespace DL
                         break;
                     default:
                         throw new Exception($"need to add {prop.PropertyType.Name} to swich");
-                        break;
                         
                 }
             }

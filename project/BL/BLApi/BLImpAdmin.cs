@@ -195,7 +195,7 @@ namespace BL
                     foreach (LineStation lStation in line.Stations)
                     {
                         dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
+                        //dl.AddAdjacentStations((DO.AdjacentStations)lStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
                         dl.AddAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
                     }
                 }

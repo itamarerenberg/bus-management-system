@@ -56,18 +56,23 @@ namespace PLGui.ViewModels
             passangerBl = BL.BLApi.BLFactory.GetBL("passenger");
             mangerBl = BL.BLApi.BLFactory.GetBL("admin");
 
-            SignInCommand = new RelayCommand(SignIn);
+            SignInCommand = new RelayCommand<Window>(SignIn);
             DebugButtonCommand = new RelayCommand(debugButton);
+            CloseCommand = new RelayCommand(MainWindow_Closing);
         }
         #endregion
-
 
         #region commands
 
         public ICommand SignInCommand { get; }
-        public ICommand DebugButtonCommand { get; }
+        public ICommand DebugButtonCommand { get; }//temporery
+        public ICommand CloseCommand { get; }
 
-        private void SignIn()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="window"></param>
+        private void SignIn(Window window)
         {
             if (ManegerCheckBox == true)
             {
@@ -75,7 +80,8 @@ namespace PLGui.ViewModels
                 {
                     if (mangerBl.GetManagar(Name, Password))
                     {
-                        new ManegerView().ShowDialog();
+                        new ManegerView().Show();
+                        window.Close();
                     }
                 }
                 catch (Exception msg)
@@ -92,6 +98,12 @@ namespace PLGui.ViewModels
         private void debugButton()
         {
             new ManegerView().ShowDialog();
+            mangerBl.AddManagar("Admin", "1234");
+        }
+
+        private void MainWindow_Closing()
+        {
+            Environment.Exit(Environment.ExitCode);
         }
         #endregion
     }
