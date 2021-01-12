@@ -300,7 +300,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public int AddLine(Line line)
+        public int AddLine(Line line, IEnumerable<Station> stations)
         {
             throw new NotImplementedException();
         }

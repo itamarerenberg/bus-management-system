@@ -37,7 +37,7 @@ namespace BLApi
         #endregion
 
         #region Line
-        int AddLine(Line line);
+        int AddLine(Line line, IEnumerable<Station> stations);
         Line GetLine(int id);
         void UpdateLine(Line line);
         void DeleteLine(int id);
