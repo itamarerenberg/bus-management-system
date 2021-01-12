@@ -18,11 +18,11 @@ namespace BL
         static readonly BLImpAdmin instance = new BLImpAdmin();
         static BLImpAdmin() { }
         BLImpAdmin() { }
-        public static BLImpAdmin Instance { get => instance; } 
+        public static BLImpAdmin Instance { get => instance; }
         #endregion
 
         IDL dl = DLFactory.GetDL();
-        
+
         #region Manager
         public bool GetManagar(string name, string password)
         {
@@ -70,7 +70,7 @@ namespace BL
                 throw msg;
             }
         }
-        
+
         public void UpdateManagar(string oldName, string oldPassword, string newName, string newPassword)
         {
             try
@@ -207,10 +207,38 @@ namespace BL
                 {
                     dl.AddAdjacentStations(new DO.AdjacentStations()
                     {
-                        dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                        dl.AddAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                    }
+                        StationCode1 = adjSt.StationCode1,
+                        StationCode2 = adjSt.StationCode2,
+                        Distance = adjSt.Distance,
+                        Time = adjSt.Time,
+                        IsActive = true
+                    });
+                }
+
+                //add tha LineStations:
+                DO.LineStation first_station = new DO.LineStation()//first station define sepretly
+                {
+                    LineId = lineId,
+                    StationNumber = stations.ElementAt(0).Code,
+                    LineStationIndex = 0,
+                    PrevStation = null,
+                };
+                DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
+                stations = stations.Skip(1);//remove the first station from stations (its allready take ceared)
+                int index = 1;//this will be use to define the fild LineStationIndex in the loop
+                foreach (Station st in stations)//! I think we shuld add in dl function that add a range of LineStation
+                {
+                    prev_station.NextStation = st.Code;
+                    dl.AddLineStation(prev_station);
+                    DO.LineStation current = new DO.LineStation()
+                    {
+                        LineId = lineId,
+                        StationNumber = st.Code,
+                        LineStationIndex = index++,
+                        PrevStation = prev_station.StationNumber,//! I think we shuld add to LineStation id fild
+                        IsActive = true
+                    };
+                    prev_station = current;
                 }
                 dl.AddLineStation(prev_station);//add last station
 
@@ -263,9 +291,9 @@ namespace BL
             {
                 dl.UpdateLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
                 foreach (LineStation lStation in line.Stations)
-                {   
+                {
                     dl.UpdateLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-                    if(lStation.CurrentToNext == null) { break; } //if is the last station => break
+                    if (lStation.CurrentToNext == null) { break; } //if is the last station => break
                     dl.UpdateAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
                 }
             }
@@ -325,7 +353,7 @@ namespace BL
         #endregion
 
         #region LineStation
-        public void AddLineStation(int lineId ,int stationNumber, int index)
+        public void AddLineStation(int lineId, int stationNumber, int index)
         {
             Line line = GetLine(lineId);
             if (index < 0 || index > line.Stations.Count)
@@ -349,7 +377,7 @@ namespace BL
             if (HelpMethods.AddAdjacentStations(lineStationDO.PrevStation, lineStationDO.NextStation))//if success to add "Adjacent Stations" (it's mean the line station is not the first station)
                 lineStation.PrevToCurrent = HelpMethods.GetAdjacentStations(lineStationDO.PrevStation, lineStationDO.NextStation);
 
-            if(HelpMethods.AddAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation))//if success to add "Adjacent Stations" (it's mean the line station is not the last station)
+            if (HelpMethods.AddAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation))//if success to add "Adjacent Stations" (it's mean the line station is not the last station)
                 lineStation.CurrentToNext = HelpMethods.GetAdjacentStations(lineStationDO.NextStation, lineStationDO.PrevStation);
 
             //updating the stations's index
@@ -359,7 +387,7 @@ namespace BL
             }
             line.Stations.Insert(index, lineStation);
 
-            if(lineStation.PrevToCurrent != null)//the added station is not in the first location
+            if (lineStation.PrevToCurrent != null)//the added station is not in the first location
             {
                 HelpMethods.DeleteAdjacentStations(line.Stations[index - 1].CurrentToNext);
                 line.Stations[index - 1].CurrentToNext = line.Stations[index].PrevToCurrent;
@@ -491,7 +519,7 @@ namespace BL
 
 
             //check if the location is valid
-            if(station.Longitude > max_longitude || station.Longitude < min_longitude ||
+            if (station.Longitude > max_longitude || station.Longitude < min_longitude ||
                station.Latitude > max_latitude || station.Latitude < min_latitude)
             {
                 throw new LocationOutOfRange($"unvalid location, location range is: longitude: [{min_longitude} - {max_longitude}] ,latitude: [{min_latitude} - {max_latitude}]");
@@ -504,7 +532,7 @@ namespace BL
             {
                 dl.AddStation(DOstation);
             }
-            catch(DO.DuplicateExeption)//if station with identical code allready exist
+            catch (DO.DuplicateExeption)//if station with identical code allready exist
             {
                 throw new DuplicateExeption("station with identical code allready exist");
             }
@@ -515,8 +543,8 @@ namespace BL
             {
                 Station station = (Station)dl.GetStation(code).CopyPropertiesToNew(typeof(Station));
                 station.LinesNums = (from lineNum in dl.GetAllLineStationsBy(s => s.LineId == code)
-                                    orderby lineNum.LineId
-                                    select lineNum.LineId).ToList();
+                                     orderby lineNum.LineId
+                                     select lineNum.LineId).ToList();
                 return station;
             }
             catch (Exception msg)
@@ -551,15 +579,15 @@ namespace BL
         {
             List<DO.LineStation> lineStations = dl.GetAllLineStations().ToList();//to proserv time it's loading all the line stations ahed
             return from DOst in dl.GetAllStations()
-                    select new BO.Station()
-                    {
-                        Code = DOst.Code,
-                        Name = DOst.Name,
-                        Location = new GeoCoordinate(DOst.Latitude,
-                        DOst.Longitude),
-                        Address = DOst.Address,
-                        LinesNums = lineStations.Where(lst=>lst.StationNumber == DOst.Code).Select(lst => lst.LineId).ToList()//find all the lineStations that conected to this station and get they lineId
-                    };
+                   select new BO.Station()
+                   {
+                       Code = DOst.Code,
+                       Name = DOst.Name,
+                       Location = new GeoCoordinate(DOst.Latitude,
+                       DOst.Longitude),
+                       Address = DOst.Address,
+                       LinesNums = lineStations.Where(lst => lst.StationNumber == DOst.Code).Select(lst => lst.LineId).ToList()//find all the lineStations that conected to this station and get they lineId
+                   };
         }
         public IEnumerable<Station> GetAllStationsBy(Predicate<Station> pred)
         {
@@ -596,7 +624,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserTrip> GetAllUserTripsBy(string name,Predicate<UserTrip> pred)
+        public IEnumerable<UserTrip> GetAllUserTripsBy(string name, Predicate<UserTrip> pred)
         {
             throw new NotImplementedException();
         }
