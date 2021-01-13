@@ -1,0 +1,58 @@
+
+			Nobody has the power to take two steps together... you can take only one step at a time!
+
+<PL>
+	<view>
+		<manegerView>
+			טאבים לLineTrip/bus
+		<manegerView/>
+		<passengerView>
+			הצגת LineTrip/userTrip/Lines
+		<passengerView/>
+		<mainView>
+			טאב של signUp
+		<mainView/>
+	<view/>
+
+	<viewModel>
+		<manegerViewModel>
+			אפשרות הוספה לLine(צריך לסיים)/LineStation/LineTrip/bus/BusOnTrip
+			אפשרות עדכון לLine/LineStation/LineTrip/bus/BusOnTrip
+			אפשרות מחיקה לLine/LineStation/LineTrip/bus
+		<manegerViewModel/>
+		<passengerViewModel>
+			אפשרות הוספה/עדכון/מחיקה userTrip
+		<passengerViewModel/>
+		<mainViewModel>
+			אפשרות signUp
+		<mainViewModel/>
+	<viewModel/>
+
+	<model>
+		<PO>
+			BusOnTrip/userTrip
+		<PO/>
+		הוספת passengerModel
+	<model/>
+<PL/>
+
+<BL>
+	<IBL implement>
+		BusOnTrip
+	<IBL implement/>
+
+	<BO>
+		BusOnTrip	
+	<BO/>
+<BL/>
+
+<DL>
+	DLXML
+		קבצים שונים לכל ישות
+<DL/>
+
+<שונות>
+	תיקון config.xml
+	תיעוד
+		IBL
+			viewModel maneger/passenger/mainWindow

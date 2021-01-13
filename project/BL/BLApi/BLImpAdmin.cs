@@ -70,7 +70,6 @@ namespace BL
                 throw msg;
             }
         }
-
         public void UpdateManagar(string oldName, string oldPassword, string newName, string newPassword)
         {
             try
@@ -630,7 +629,9 @@ namespace BL
         }
         #endregion
 
-        #region calc methods
+        #region private methods
+
+        #region calculation methods
         /// <returns>colection of AdjacentStations accurding to this structer: { (st[1],st[2]), (st[2], st[3]),...,(st[n-1], st[n]) } where st stend for stations</returns>
         List<BO.AdjacentStations> Calculate_dist(List<Station> stations)
         {
@@ -678,6 +679,8 @@ namespace BL
         //        });
         //    }
         //}
+        #endregion 
+
         #endregion
     }
 }

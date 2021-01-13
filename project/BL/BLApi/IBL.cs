@@ -37,6 +37,7 @@ namespace BLApi
         #endregion
 
         #region Line
+        /// <returns>the Serial number that given to the new line at the data layer</returns>
         int AddLine(Line line, IEnumerable<Station> stations);
         Line GetLine(int id);
         void UpdateLine(Line line);
@@ -53,10 +54,15 @@ namespace BLApi
         /// <param name="index">the location in the line (push the rest of the stations 1 step ahead)</param>
         void AddLineStation(int id, int StationNumber, int index);
         void UpdateLineStation(int lineNumber, int StationNumber);
-        void DeleteLineStation(int lineNumber, int StationNumber); 
+        void DeleteLineStation(int lineNumber, int StationNumber);
         #endregion
 
         #region Station
+        /// <summary>
+        /// adds new station to the data base
+        /// </summary>
+        /// <param name="station">the station to add</param>
+        /// <exception cref="LocationOutOfRange">if the location of the station is not in the allowable range</exception>
         void AddStation(Station station);
         Station GetStation(int code);
         void UpdateStation(Station station);

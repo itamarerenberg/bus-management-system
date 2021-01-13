@@ -10,7 +10,7 @@ using DLApi;
 
 namespace BL
 {
-    public class BLImpPassenger : IBL//צריך להפוך לסינגלטון
+    public class BLImpPassenger : IBL
     {
         #region singelton
         static readonly BLImpPassenger instance = new BLImpPassenger();
@@ -18,6 +18,7 @@ namespace BL
         BLImpPassenger() { }
         public static BLImpPassenger Instance { get => instance; }
         #endregion
+
         IDL dl = DLFactory.GetDL();
 
         #region Passenger

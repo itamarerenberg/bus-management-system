@@ -45,6 +45,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Folder", "Solution
 		project\bin\config.xml = project\bin\config.xml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "A-Tasks", "A-Tasks", "{A15EC8B9-1DDE-40D4-A000-AD00426D014E}"
+	ProjectSection(SolutionItems) = preProject
+		Tasks.txt = Tasks.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +212,7 @@ Global
 		{6685551C-272D-4009-B4F2-F6609CDD94B4} = {E4AE7C14-FD15-45C2-972D-B1650BA64F4F}
 		{86E5C7A6-2315-4EC4-BE1A-B66D98502D68} = {E4AE7C14-FD15-45C2-972D-B1650BA64F4F}
 		{D6A71F10-097E-4E4F-8015-1F6D985E0F2D} = {ACDC63F0-35FF-4CAD-A752-7E62485D5D6B}
+		{A15EC8B9-1DDE-40D4-A000-AD00426D014E} = {ACDC63F0-35FF-4CAD-A752-7E62485D5D6B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73E01461-0020-48EB-A7A6-CF3CC5447A2A}
