@@ -319,21 +319,26 @@ namespace BL
         }
         public IEnumerable<Line> GetAllLines()
         {
-            //try
-            //{
-            //    var LineStationsGroups = dl.GetAllLineStationsBy(lst => lst.IsActive).GroupBy(lst => lst.LineId);//get all line stations and goup them by they Line id
-            //    IEnumerable<BO.Line> result = from doLine in dl.GetAllLinesBy(l => l.IsActive)
-            //                                  select new BO.Line()
-            //                                  {
-            //                                      Stations = LineStationsGroups.
-            //                                  }
-
-            //}
-            //catch (Exception msg)
-            //{
-            //    throw msg;
-            //}
-            return new List<Line>();
+            try
+            {
+                var LineStationsGroups = dl.GetAllLineStationsBy(lst => lst.IsActive).GroupBy(lst => lst.LineId).ToArray();//get all line stations and goup them by they Line id
+                List<DO.AdjacentStations> adjacentStations = dl.GetAllAdjacentStationsBy(adjSt=>true).ToList();
+                IEnumerable<BO.Line> result = from doLine in dl.GetAllLinesBy(l => l.IsActive)
+                                              let doStations = LineStationsGroups.Where(gr => gr.Key == doLine.ID).FirstOrDefault().ToList()//get the list of the LineStation of the current line
+                                              let boStations = LineStations_Do_Bo(doStations, adjacentStations)//convert the LineStations to BO's LineStations 
+                                              select new BO.Line()
+                                              {
+                                                  ID = doLine.ID,
+                                                  LineNumber = doLine.LineNumber,
+                                                  Area = (BO.AreasEnum)Enum.Parse(typeof(BO.AreasEnum), doLine.Area.ToString()),
+                                                  Stations = boStations,
+                                              };
+                return result;
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
         }
         public IEnumerable<Line> GetAllLinesBy(Predicate<Line> pred)
         {
@@ -647,6 +652,7 @@ namespace BL
                     Distance = GetDist(pre_station, current),
                     Time = GetTime(pre_station, current, GetDist(pre_station, current))
                 });
+                pre_station = current;
             }
             return result;
         }
@@ -663,22 +669,50 @@ namespace BL
         #endregion
 
         #region clone methods
+        /// <summary>
+        /// take a list of DO's LineStation and convert them to BO's LineStation,  
+        /// assuming all the line stations is from the same line!!!
+        /// </summary>
+        List<LineStation> LineStations_Do_Bo(List<DO.LineStation> lineStations, List<DO.AdjacentStations> adjacentStations)//^^^^^^^^^^^^continue from heare^^^^^^^^^^^^
+        {
+            //check that all the stationLines from the same line
+            if(lineStations.Exists(lst => lst.LineId != lineStations[0].LineId))
+            {
+                throw new invalidUseOfFunc("all the LineStations need to be from the same line");
+            }
 
-        //List<LineStation> LineStations_Do_Bo(List<DO.LineStation> lineStations, List<AdjacentStations> adjacentStations)//^^^^^^^^^^^^continue from heare^^^^^^^^^^^^
-        //{
-        //    List<LineStation> result;
-        //    LineStation first_station = 
-        //    foreach(DO.LineStation lst in lineStations)
-        //    {
-        //        result.Add(new LineStation()
-        //        {
-        //            LineId = lst.LineId,
-        //            StationNumber = lst.StationNumber,
-        //            LineStationIndex = lst.LineStationIndex,
-        //            PrevToCurrent = adjacentStations.FirstOrDefault(adjs => adjs.StationCode1 == )
-        //        });
-        //    }
-        //}
+            List<LineStation> result = new List<LineStation>();
+            lineStations.OrderBy(lst => lst.LineStationIndex);//order by the index of the lineStation in the line
+            LineStation first_station = new LineStation()
+            {
+                LineId = lineStations[0].LineId,
+                StationNumber = lineStations[0].StationNumber,
+                LineStationIndex = lineStations[0].LineStationIndex,
+                PrevToCurrent = null,//ther is no previus station so it's null
+                //the fild CurrentToNext will be set inside the loop
+            };
+            lineStations.RemoveAt(0);//remove the first line station for its been Taken care allready
+            LineStation prev_lineStation = first_station;//this will be use to set the fild CurrentToNext in the loop
+            foreach (DO.LineStation lst in lineStations)
+            {
+                var temp = adjacentStations.FirstOrDefault(adjs => adjs.StationCode1 == prev_lineStation.StationNumber && adjs.StationCode2 == lst.StationNumber);
+                if(temp == null)
+                {
+                    throw new missAdjacentStations($"miss adjacentStations ({prev_lineStation.StationNumber}, {lst.StationNumber}");
+                }
+                AdjacentStations prev_to_current = (BO.AdjacentStations)temp.CopyPropertiesToNew(typeof(BO.AdjacentStations));//I used tep to shorts the row
+                prev_lineStation.CurrentToNext = prev_to_current;//the fild PrevToCurrent of current is CurrentToNext of prev_lineStation
+                result.Add(prev_lineStation);
+                prev_lineStation = new LineStation()
+                {
+                    LineId = lst.LineId,
+                    StationNumber = lst.StationNumber,
+                    LineStationIndex = lst.LineStationIndex,
+                    PrevToCurrent = prev_to_current
+                };
+            }
+            return result;
+        }
         #endregion 
 
         #endregion

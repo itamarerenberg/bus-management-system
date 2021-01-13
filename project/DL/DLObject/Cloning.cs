@@ -51,6 +51,9 @@ namespace DL
                         break;
                     case "Nullable`1":
                         break;
+                    case "TimeSpan":
+                        prop.SetValue(to, TimeSpan.Parse(val));
+                        break;
                     default:
                         throw new Exception($"need to add {prop.PropertyType.Name} to swich");
                         

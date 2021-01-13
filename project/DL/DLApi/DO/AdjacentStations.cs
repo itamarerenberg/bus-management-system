@@ -18,6 +18,5 @@ namespace DO
         public double Distance { get; set; }
         public TimeSpan Time { get; set; }
         public bool IsActive { get; set; }
-
     }
 }

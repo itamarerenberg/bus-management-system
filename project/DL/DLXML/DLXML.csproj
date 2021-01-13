@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DalXml.cs" />
+    <Compile Include="DataSourceXML.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialNumbers.cs" />
   </ItemGroup>

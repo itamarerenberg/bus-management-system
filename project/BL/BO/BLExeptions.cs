@@ -36,4 +36,17 @@ namespace BL
         /// </summary>
         public DuplicateExeption(string msg) : base(msg) { }
     }
+
+    /// <summary>
+    /// for case that function gets input that not suitebale to the purpes of the function
+    /// </summary>
+    public class invalidUseOfFunc : Exception
+    {
+        public invalidUseOfFunc(string msg) : base(msg) { }
+    }
+
+    public class missAdjacentStations : Exception
+    {
+        public missAdjacentStations(string msg) : base(msg) { }
+    }
 }

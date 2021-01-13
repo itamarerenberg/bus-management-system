@@ -14,9 +14,14 @@ namespace PLGui.ViewModels
     {
         public static void DeepCopyTo<S, T>(this S from, T to)
         {
+            to = (T)Activator.CreateInstance(typeof(T));
             var fromType = from.GetType();
             foreach (PropertyInfo propTo in to.GetType().GetProperties())
             {
+                if(!propTo.CanWrite)
+                {
+                    continue;
+                }
                 PropertyInfo propFrom = fromType.GetProperty(propTo.Name);
                 if (propFrom == null)
                     continue;
@@ -37,6 +42,10 @@ namespace PLGui.ViewModels
                         Type itemType = propTo.PropertyType.GetGenericArguments()[0];
                         if(target != null)
                             propTo.PropertyType.GetMethod("Clear").Invoke(target, null);
+                        if(target == null)
+                        {
+                            target = Activator.CreateInstance(propTo.PropertyType);
+                        }
                         foreach (var item in (value as IEnumerable))
                         {
                             var targetItem = Activator.CreateInstance(itemType);

@@ -41,12 +41,9 @@ namespace PLGui.Models.PO
             set => SetProperty(ref area, value, true);
         }
 
-        public BO.LineStation FirstStation { get => Stations.First(); }
-        public BO.LineStation LastStation { get => Stations.Last(); }
-
         private ObservableCollection<BO.LineStation> stations;
         [MinLength(2, ErrorMessage = "the line has to contains at least 2 stations")]
-        public ObservableCollection<BO.LineStation> Stations 
+        public ObservableCollection<BO.LineStation> Stations
         {
             get => stations;
             set
@@ -56,6 +53,10 @@ namespace PLGui.Models.PO
                 OnPropertyChanged("FirstStation");
             }
         }
+
+        public BO.LineStation FirstStation { get => Stations.First(); }
+        public BO.LineStation LastStation { get => Stations.Last(); }
+
         private void Line_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(HasErrors))
