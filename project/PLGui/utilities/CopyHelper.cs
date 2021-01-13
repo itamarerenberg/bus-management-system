@@ -49,6 +49,19 @@ namespace PLGui.ViewModels
                 }
             }
         }
+        public static object DeepCopyToNew<S>(this S from, Type type)
+        {
+            if (from == null)
+            {
+                if (type.IsClass)
+                {
+                    return null;
+                }
+            }
+            object to = Activator.CreateInstance(type); // new object of Type
+            from.DeepCopyTo(to);
+            return to;
+        }
         public static void DeepCopyToCollection<S, T>(this IEnumerable<S> from, Collection<T> to)
         {
             foreach (var fromItem in from)

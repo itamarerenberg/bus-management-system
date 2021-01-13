@@ -142,6 +142,7 @@ namespace PLGui.ViewModels
                         Area = (BO.AreasEnum)NewLine.Area
                     };
                     source.AddLine(BOline, Stations.Select(st => st.BOstation));
+                    //source.AddLine(BOline, Stations.Select(s => (BO.Station)s.DeepCopyToNew(typeof(BO.Station))));הצעה
                 };//this function will execute in the BackgroundWorker thread
             creatNewLine.RunWorkerAsync();
 
