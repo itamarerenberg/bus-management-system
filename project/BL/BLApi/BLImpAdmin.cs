@@ -221,6 +221,7 @@ namespace BL
                     StationNumber = stations.ElementAt(0).Code,
                     LineStationIndex = 0,
                     PrevStation = null,
+                    IsActive = true
                 };
                 DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
                 stations = stations.Skip(1);//remove the first station from stations (its allready take ceared)

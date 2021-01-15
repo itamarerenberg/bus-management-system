@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DL;
+using DO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,11 +10,12 @@ using System.Xml.Linq;
 
 namespace DLXML
 {
-    class DataSourceXML
+    static class DataSourceXML
     {
         static string FileName = "DataSource.xml";
 
         #region files Names
+        static string LinesFileName = "Lines.xml";
         static string BusesFileName = "Buses.xml";
         static string AdjacentStationsFileName = "AdjacentStations.xml";
         static string BusesOnTripFileName = "BusesOnTrip.xml";
@@ -24,6 +27,7 @@ namespace DLXML
         #endregion
 
         #region files paths
+        static string LinesFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", LinesFileName);
         static string BusesFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", BusesFileName);
         static string AdjacentStationsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", AdjacentStationsFileName);
         static string BusesOnTripFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", BusesOnTripFileName);
@@ -36,87 +40,117 @@ namespace DLXML
 
         static XElement dsRoot;
         #region data Access
-        public static IEnumerable<XElement> Buses
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("Buses").Elements();
-            }
-        }
-        public static IEnumerable<XElement> AdjacentStations
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("AdjacentStations").Elements();
-            }
-        }
-        public static IEnumerable<XElement> Lines
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("Lines").Elements();
-            }
-        }
-        public static IEnumerable<XElement> BusesOnTrip
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("BusesOnTrip").Elements();
-            }
-        }
-        public static IEnumerable<XElement> Stations
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("Stations").Elements();
-            }
-        }
-        public static IEnumerable<XElement> LineStations
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("LineStations").Elements();
-            }
-        }
-        public static IEnumerable<XElement> LineTrips
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("LineTrips").Elements();
-            }
-        }
-        public static IEnumerable<XElement> Users
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("Users").Elements();
-            }
-        }
-        public static IEnumerable<XElement> UsersTrips
-        {
-            get
-            {
-                LoadData();
-                return dsRoot.Element("UsersTrips").Elements();
-            }
-        }
+        #region files roots
+        static XElement busesRoot;
+        static XElement AdjacentStationsRoot;
+        static XElement linesRoot;
+        static XElement BusesOnTripRoot;
+        static XElement StationsRoot;
+        static XElement LineStationsRoot;
+        static XElement LineTripsRoot;
+        static XElement UsersRoot;
+        static XElement UsersTripsRoot;
         #endregion
+
+        #region data acces properties
+
+
+        public static XElement Buses
+        {
+            get
+            {
+                busesRoot = XElement.Load(BusesFilePath);
+                return busesRoot;
+            }
+        }
+        public static XElement AdjacentStations
+        {
+            get
+            {
+                AdjacentStationsRoot = XElement.Load(AdjacentStationsFilePath);
+                return AdjacentStationsRoot;
+            }
+        }
+        public static XElement Lines
+        {
+            get
+            {
+                linesRoot = XElement.Load(LinesFilePath);
+                return linesRoot;
+            }
+        }
+        public static XElement BusesOnTrip
+        {
+            get
+            {
+                BusesOnTripRoot = XElement.Load(BusesOnTripFilePath);
+                return BusesOnTripRoot;
+            }
+        }
+        public static XElement Stations
+        {
+            get
+            {
+                StationsRoot = XElement.Load(StationsFilePath);
+                return StationsRoot;
+            }
+        }
+        public static XElement LineStations
+        {
+            get
+            {
+                LineStationsRoot = XElement.Load(LineStationsFilePath);
+                return LineStationsRoot;
+            }
+        }
+        public static XElement LineTrips
+        {
+            get
+            {
+                LineTripsRoot = XElement.Load(LineTripsFilePath);
+                return LineTripsRoot;
+            }
+        }
+        public static XElement Users
+        {
+            get
+            {
+                UsersRoot = XElement.Load(UsersFilePath);
+                return UsersRoot;
+            }
+        }
+        public static XElement UsersTrips
+        {
+            get
+            {
+                UsersTripsRoot = XElement.Load(UsersTripsFilePath);
+                return UsersTripsRoot;
+            }
+        } 
+        #endregion
+        #endregion
+
+        static Dictionary<string, bool> IsChenged = new Dictionary<string, bool> {
+            [BusesFilePath] = false,
+            [AdjacentStationsFilePath] = false,
+            [LinesFilePath] = false,
+            [BusesOnTripFilePath] = false,
+            [StationsFilePath] = false,
+            [LineStationsFilePath] = false,
+            [LineTripsFilePath] = false,
+            [UsersFilePath] = false,
+            [UsersTripsFilePath] = false
+        };
+
         public static int serialLineID;
         static string dataBasePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database");
         static readonly string FilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", FileName);
 
         static DataSourceXML()
         {
+            busesRoot.Changed += (object sender, XObjectChangeEventArgs e) => IsChenged[BusesFilePath] = true;
             serialLineID = 0;
-            List<string> filesPaths = new List<string>() { BusesFilePath, AdjacentStationsFilePath, BusesOnTripFilePath,
+            List<string> filesPaths = new List<string>() { LinesFileName, BusesFilePath, AdjacentStationsFilePath, BusesOnTripFilePath,
             StationsFilePath, LineStationsFilePath, LineTripsFilePath, UsersFilePath, UsersTripsFilePath};
             foreach (string filePath in filesPaths)
             {
@@ -125,44 +159,6 @@ namespace DLXML
                     (new XElement("elements")).Save(filePath);//create new file with root <elements>
                 }
             }
-            //serialLineID = 0;
-            //if (!File.Exists(FilePath))//if the file don't exist
-            //{
-            //    CreateFile();
-            //}
-            //else
-            //{
-            //    LoadData();
-            //}
-        }
-
-        private static void CreateFile()
-        {
-            //dsRoot = new XElement("DS");
-            //dsRoot.Add(
-            //         new XElement("Stations"),//add new label in wich the stations will be save
-            //         new XElement("Lines"),//add new label in wich the lines will be save
-            //         new XElement("users"),//...users...
-            //         new XElement("AdjacentStations"),//...AdjacentStations...
-            //         new XElement("BusesOnTrip"),//...BusesOnTrip...
-            //         new XElement("LineStations"),//...LineStations...
-            //         new XElement("LineTrips"),//...LineTrips...
-            //         new XElement("Users"),//...Users...
-            //         new XElement("UsersTrips")//...UsersTrips...
-            //         );
-            //string StationsPath = System.IO.Path.Combine(dataBasePath, "Stations.db");
-            //using (SQLiteConnection stations = new SQLiteConnection(StationsPath))
-            //{
-            //    stations.CreateTable<Station>();
-            //    Stations = stations.Table<Station>().ToList();
-            //}
-            //Users = new List<User>() { new User() { Name = "Admin", Password = "1234", Admin = true, IsActive = true } };
-            //List<Station> newStationList = Stations.GroupBy(c => c.Code, (key, c) => c.FirstOrDefault()).ToList();
-            //foreach (var st in newStationList)
-            //{
-            //    SaveObj(st, "Stations");
-            //}
-            //dsRoot.Save(FilePath);
         }
 
         public static XElement LoadData(string path = "")
@@ -203,9 +199,32 @@ namespace DLXML
             dsRoot.Save(FilePath);
         }
 
-        public static void Save()
+
+      public static void SaveListSerializer<T>(this List<T> list, string typename)
         {
-            dsRoot.Save(FilePath);
+            switch (typename)
+            {
+                case "Lines":
+                    XMLTools.SaveListToXMLSerializer<T>(list, "Lines.xml");
+                    break;
+                default:
+                    break;
+            }
+            
+
+        }
+        public static void SaveList(this XElement root,string typename)
+        {
+            switch (typename)
+            {
+                case "Lines":
+                    root.Save(LinesFilePath);
+                    break;
+                default:
+                    break;
+            }
+            //dsRoot.Save(path);
+            throw new NotImplementedException("DataSourceXML.Save");
         }
     }
 }

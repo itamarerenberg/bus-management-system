@@ -211,6 +211,7 @@ namespace DL
         #region BusOnTrip
         public void AddBusOnTrip(BusOnTrip busOnTrip)
         {
+            List<BusOnTrip> BusesOnTripList =
             if (DataSource.BusesOnTrip.FirstOrDefault(bot => bot.ID == busOnTrip.ID) != null)
             {
                 throw new DuplicateExeption("the bus is allready in driving");
