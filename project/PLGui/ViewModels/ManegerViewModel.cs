@@ -21,6 +21,37 @@ namespace PLGui.ViewModels
     {
         ManegerModel manegerModel;
         IBL source;
+        TabItem selectedTabItem;
+
+        #region help properties
+        public TabItem SelectedTabItem 
+        {
+            get => selectedTabItem;
+            set
+            {
+                SetProperty(ref selectedTabItem, value);
+                OnPropertyChanged(nameof(IsSelcetdItemList));
+            }
+        }
+        public bool IsSelcetdItemList
+        {
+            get
+            {
+                if (SelectedTabItem != null)
+                {
+                    if (SelectedTabItem.Content is ListView currentList)
+                    {
+                        if (currentList.SelectedItem != null)
+                        {
+                            return true;
+                        }
+                    } 
+                }
+                return false;
+            }
+        } 
+        #endregion
+
 
         #region collections
 
@@ -51,10 +82,11 @@ namespace PLGui.ViewModels
             loadData();
 
             //commands initialize
-            SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
+            SearchCommand = new RelayCommand<Window>(SearchBox_TextChanged);
             TabChangedCommand = new RelayCommand<Window>(tab_selactionChange);
             ListChangedCommand = new RelayCommand<object>(List_SelectionChanged);
             NewLine = new RelayCommand(Add_newLine);
+            DeleteCommand = new RelayCommand<Window>(delete);
         }
 
         #endregion
@@ -91,8 +123,8 @@ namespace PLGui.ViewModels
                         Lines = new ObservableCollection<Line>()
                     };
                     result.Stations = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));
-                    var temp = source.GetAllLines();
-                    temp.DeepCopyToCollection(result.Lines);
+                    //result.Lines = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));
+                    //source.GetAllLines().CollectionLine_BO_PO(result.Lines);
                     //source.GetAllBuses().DeepCopyToCollection(result.Buses);
 
 
@@ -107,16 +139,16 @@ namespace PLGui.ViewModels
         public ICommand TabChangedCommand { get; }
         public ICommand ListChangedCommand { get; }
         public ICommand NewLine { get; }
+        public ICommand DeleteCommand { get; }
 
         /// <summary>
         /// accured when search box is changing. replace the list in the window into list that contains the search box text.
         /// the search is according to the conbo box picking
         /// </summary>
-        /// <param name="sender"></param>
-        private void SearchBox_TextChanged(object sender)
+        private void SearchBox_TextChanged(Window window)
         {
             //get the ManegerView instance
-            ManegerView Mview = (((((sender as TextBox).Parent as StackPanel).Parent) as Grid).Parent) as ManegerView;
+            ManegerView Mview = window as ManegerView;
             if (Mview.ComboBoxSearch.SelectedItem != null)
             {
                 //get the current presented List, get his name, and create a copy collection for searching
@@ -144,6 +176,7 @@ namespace PLGui.ViewModels
                 GridView currentGridView = ((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView;
                 List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
                 Mview.ComboBoxSearch.ItemsSource = comboList;
+                OnPropertyChanged(nameof(IsSelcetdItemList));
             }
         }
 
@@ -183,13 +216,66 @@ namespace PLGui.ViewModels
                 //Mview.Header4.Text = "Location:";
                 //Mview.content4.Content = selectedLine.Location;
             }
+            OnPropertyChanged(nameof(IsSelcetdItemList));
         }
-        
+
         private void Add_newLine()
         {
             NewLineView newLineView = new NewLineView();
             newLineView.ShowDialog();
             loadData();
+        }
+
+        private void MouseRightButtonDown(object sender)
+        {
+            ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
+            ContextMenu CMenu = Mview.FindResource("rightClickMenuStrip") as ContextMenu;
+            ListView currentList = sender as ListView;
+            currentList.ContextMenu = CMenu;
+            //CMenu.Show(this, new Point(e.X, e.Y));
+            //if ((sender as ListView).SelectedItem is Station selectedStation) ;
+
+        }
+        /// <summary>
+        /// generic delete command
+        /// </summary>
+        /// <param name="window"></param>
+        private void delete(Window window)
+        {
+            if (window is ManegerView)
+            {
+                ManegerView Mview = window as ManegerView;
+                //station
+                if (Mview.Stations_view.IsSelected)
+                {
+                    Station station = Mview.StationList.SelectedItem as Station;
+                    if (station != null)
+                    {
+                        MessageBoxResult result = MessageBox.Show($"station: {station.Name} code: {station.Code} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                        if (result == MessageBoxResult.OK)
+                        {
+                            source.DeleteStation(station.Code);
+                            loadData();
+                            MessageBox.Show($"station: {station.Name} code: {station.Code} was deleted successfully!");
+                        } 
+                    }
+                }
+                //Line
+                if (Mview.Lines_view.IsSelected)
+                {
+                    Line line = Mview.LinesList.SelectedItem as Line;
+                    if (line != null)
+                    {
+                        MessageBoxResult result = MessageBox.Show($"line number: {line.LineNumber} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                        if (result == MessageBoxResult.OK)
+                        {
+                            source.DeleteLine(line.ID);
+                            loadData();
+                            MessageBox.Show($"line number: {line.LineNumber} was deleted successfully!");
+                        }
+                    }
+                }
+            }
         }
         #endregion
     }

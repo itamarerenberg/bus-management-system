@@ -19,6 +19,7 @@ namespace PLGui.ViewModels
         IBL passangerBl;
         private string name;
         private string password;
+        private string newPasswod;
         private bool manegerCheckBox;
 
         public string Name
@@ -39,6 +40,13 @@ namespace PLGui.ViewModels
             }
         }
 
+        public string NewPassword
+        {
+            get { return newPasswod; }
+            set { newPasswod = value; }
+        }
+
+
         public bool ManegerCheckBox
         {
             get => manegerCheckBox;
@@ -57,6 +65,7 @@ namespace PLGui.ViewModels
             mangerBl = BL.BLApi.BLFactory.GetBL("admin");
 
             SignInCommand = new RelayCommand<Window>(SignIn);
+            SignUnCommand = new RelayCommand<Window>(SignUn);
             DebugButtonCommand = new RelayCommand(debugButton);
             CloseCommand = new RelayCommand(MainWindow_Closing);
         }
@@ -65,6 +74,7 @@ namespace PLGui.ViewModels
         #region commands
 
         public ICommand SignInCommand { get; }
+        public ICommand SignUnCommand { get; }
         public ICommand DebugButtonCommand { get; }//temporery
         public ICommand CloseCommand { get; }
 
@@ -93,6 +103,25 @@ namespace PLGui.ViewModels
             else 
             {
 
+            }
+        }
+        private void SignUn(Window window)
+        {
+            if (Password == newPasswod)
+            {
+                try
+                {
+                    passangerBl.AddPassenger(Name, Password);
+                    MessageBox.Show("the user was added successfully");
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "the access is denied");
+                }
+            }
+            else
+            {
+                MessageBox.Show("the passwords didn't match", "ERROR");
             }
         }
         private void debugButton()

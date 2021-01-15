@@ -9,23 +9,17 @@
 		<passengerView>
 			הצגת LineTrip/userTrip/Lines
 		<passengerView/>
-		<mainView>
-			טאב של signUp
-		<mainView/>
 	<view/>
 
 	<viewModel>
 		<manegerViewModel>
 			אפשרות הוספה לLine(צריך לסיים)/LineStation/LineTrip/bus/BusOnTrip
 			אפשרות עדכון לLine/LineStation/LineTrip/bus/BusOnTrip
-			אפשרות מחיקה לLine/LineStation/LineTrip/bus
+			אפשרות מחיקה לLineStation/LineTrip/bus
 		<manegerViewModel/>
 		<passengerViewModel>
 			אפשרות הוספה/עדכון/מחיקה userTrip
 		<passengerViewModel/>
-		<mainViewModel>
-			אפשרות signUp
-		<mainViewModel/>
 	<viewModel/>
 
 	<model>

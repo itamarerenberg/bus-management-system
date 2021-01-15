@@ -12,9 +12,12 @@ namespace PLGui.ViewModels
 {
     public static class CopyHelper
     {
-        public static void DeepCopyTo<S, T>(this S from, T to)
+        public static object DeepCopyTo<S, T>(this S from, T to)
         {
-            to = (T)Activator.CreateInstance(typeof(T));
+            if (to == null || from == null)
+            {
+                return null;
+            }
             var fromType = from.GetType();
             foreach (PropertyInfo propTo in to.GetType().GetProperties())
             {
@@ -27,7 +30,11 @@ namespace PLGui.ViewModels
                     continue;
                 var value = propFrom.GetValue(from, null);
                 if (value is ValueType || value is string)
+                {
                     propTo.SetValue(to, value);
+                    return to;
+                }
+
                 else
                 {
                     if (value == null)
@@ -40,23 +47,31 @@ namespace PLGui.ViewModels
                     if (value is IEnumerable)
                     {
                         Type itemType = propTo.PropertyType.GetGenericArguments()[0];
-                        if(target != null)
-                            propTo.PropertyType.GetMethod("Clear").Invoke(target, null);
-                        if(target == null)
+                        if (target == null)
                         {
                             target = Activator.CreateInstance(propTo.PropertyType);
+                            //var colleItemType = propTo.PropertyType.GetGenericArguments()[0];
+                            //target = Activator.CreateInstance(typeof(Collection<colleItemType>));
                         }
+                        propTo.PropertyType.GetMethod("Clear").Invoke(target, null);
                         foreach (var item in (value as IEnumerable))
                         {
                             var targetItem = Activator.CreateInstance(itemType);
                             item.DeepCopyTo(targetItem);
                             propTo.PropertyType.GetMethod("Add").Invoke(target, new object[] { targetItem });
                         }
+                        //propTo.SetValue(to, target);
                     }
                     else
-                        value.DeepCopyTo(target);
+                    {
+                        if (target == null)
+                        {
+                            target = Activator.CreateInstance(propTo.PropertyType);
+                        }
+                    }
                 }
             }
+            return null;
         }
         public static object DeepCopyToNew<S>(this S from, Type type)
         {
@@ -94,14 +109,24 @@ namespace PLGui.ViewModels
             return result;
         }
 
-        //public static Line Line_BO_PO(BO.Line from)
-        //{
-        //    Line result = new Line();
-        //    result.ID = from.ID;
-        //    result.LineNumber = from.LineNumber;
-        //    result.Stations = new ObservableCollection<BO.LineStation>(from.Stations);
-        //    result.Area = from.Area;
-        //    return result;
-        //}
+        public static Line Line_BO_PO(this BO.Line from)
+        {
+            Line result = new Line
+            {
+                ID = from.ID,
+                LineNumber = from.LineNumber,
+                Area = (AreasEnum)from.Area,
+                Stations = new ObservableCollection<BO.LineStation>(from.Stations)
+        };
+            return result;
+        }
+        public static void CollectionLine_BO_PO(this IEnumerable<BO.Line> from, Collection<Line> to)
+        {
+            foreach (var fromLine in from)
+            {
+                Line line = fromLine.Line_BO_PO();
+                to.Add(line);
+            }
+        }
     }
 }

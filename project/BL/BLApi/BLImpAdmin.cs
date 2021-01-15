@@ -689,6 +689,7 @@ namespace BL
                 StationNumber = lineStations[0].StationNumber,
                 LineStationIndex = lineStations[0].LineStationIndex,
                 PrevToCurrent = null,//ther is no previus station so it's null
+                Address = lineStations[0].Address
                 //the fild CurrentToNext will be set inside the loop
             };
             lineStations.RemoveAt(0);//remove the first line station for its been Taken care allready
@@ -710,7 +711,9 @@ namespace BL
                     LineStationIndex = lst.LineStationIndex,
                     PrevToCurrent = prev_to_current
                 };
+                
             }
+            result.Add(prev_lineStation);
             return result;
         }
         #endregion 
