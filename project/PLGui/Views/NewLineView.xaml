@@ -8,7 +8,7 @@
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PLGui.Models.PO"
         mc:Ignorable="d"
-        Title="NewLineView" Height="450" Width="600">
+        Title="NewLineView" x:Name="NewLineWindow" Height="450" Width="750">
     <Window.DataContext>
         <viewmodels:NewLineViewModel x:Name="vModel"/>
     </Window.DataContext>
@@ -21,29 +21,40 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
+        <TextBlock Text="add/remove a station to/from the new line by double click on the station" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
 
         <StackPanel Grid.Column="0" Grid.Row="1" Margin="10">
-            <TextBlock Text="line number" HorizontalAlignment="Left"/>
-            <TextBox x:Name="LNum" Text="{Binding NewLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  />
-            <TextBlock Text="{Binding ElementName=LNum , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=NewLine.Area}"/>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <TextBlock Text="line number" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="LNum" Text="{Binding NewLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" />
+                    <TextBlock Text="{Binding ElementName=LNum , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
+                </StackPanel>
+                <StackPanel Margin="30,0,0,0">
+                    <TextBlock Text="Area" HorizontalAlignment="Left"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=NewLine.Area}" HorizontalAlignment="Left" MinWidth="80"/>
+                </StackPanel>
+            </StackPanel>
 
-
-            <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}"  >
+            <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" >
                 <y:Interaction.Triggers>
                     <y:EventTrigger EventName="MouseDoubleClick">
                         <y:InvokeCommandAction Command="{Binding DeleteStationCommand}" CommandParameter="{Binding RelativeSource=
                                          { RelativeSource FindAncestor, 
                                            AncestorType={x:Type ListView},
                                            AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                    </y:EventTrigger>
+                    <y:EventTrigger EventName="SelectionChanged">
+                        <y:InvokeCommandAction Command="{Binding SelectStationCommand}" CommandParameter="{Binding ElementName=NewLineWindow}"/>
                     </y:EventTrigger>
                 </y:Interaction.Triggers>
                 <ListView.View>
@@ -54,7 +65,7 @@
                 </ListView.View>
             </ListView>
         </StackPanel>
-        <Button x:Name="AddLineButton" Content="Add line" Command="{Binding AddLineButton}"  Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Margin="20">
+        <Button x:Name="AddLineButton" Content="Add line" Command="{Binding AddLineButton}"  Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" HorizontalAlignment="Right">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="IsEnabled" Value="false" />
@@ -76,7 +87,7 @@
         <ListView x:Name="DBStationList" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding DBStations}"  >
             <y:Interaction.Triggers>
                 <y:EventTrigger EventName="MouseDoubleClick">
-                    <y:InvokeCommandAction Command="{Binding SelectStationCommand}" CommandParameter="{Binding RelativeSource=
+                    <y:InvokeCommandAction Command="{Binding SelectDBStationCommand}" CommandParameter="{Binding RelativeSource=
                                          { RelativeSource FindAncestor, 
                                            AncestorType={x:Type ListView},
                                            AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
@@ -90,11 +101,11 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="25,0,0,0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="80,0,0,0">
             <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
             <ComboBox x:Name="ComboBoxSearch" MinWidth="70" ItemsSource="{Binding ComboList}"/>
         </StackPanel>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="100,0,0,0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="180,0,0,0">
             <TextBlock Text="search:" HorizontalAlignment="Left"/>
             <TextBox x:Name="SearchBox" MinWidth="70" Height="22"  >
                 <y:Interaction.Triggers>
@@ -106,6 +117,19 @@
                     </y:EventTrigger>
                 </y:Interaction.Triggers>
             </TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
+            <TextBox x:Name="DisToBack" Text="{Binding Path=ToBack.Distance}" MinWidth="50"/>
+            <StackPanel Margin="10,0,10,0">
+                <TextBlock Text="distance to back"/>
+                <Label/>
+            </StackPanel>
+            <TextBlock x:Name="StationName" MinWidth="90" Margin="10,0,10,0"/>
+            <StackPanel Margin="10,0,10,0">
+                <TextBlock Text="distance to next"/>
+                <Label/>
+            </StackPanel>
+            <TextBox x:Name="DisToNext" Text="{Binding Path=ToNext.Distance}" MinWidth="50" Margin="10,0,10,0" />
         </StackPanel>
 
     </Grid>

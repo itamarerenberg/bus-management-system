@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BL.BLApi;
@@ -17,14 +18,20 @@ namespace PLGui.ViewModels
     public class NewLineViewModel : ObservableRecipient
     {
 
-        #region fields and properties
+        #region fields
         IBL source;
         BackgroundWorker load_data;
         BackgroundWorker creatNewLine;
 
+        Line newLine = new Line();
+        private BO.AdjacentStations toNext;
+        private BO.AdjacentStations toBack;
+
+        #endregion
+
+        #region properties
         public List<string> ComboList { get; set; }
 
-        Line newLine = new Line();
         public Line NewLine
         {
             get => newLine;
@@ -34,13 +41,33 @@ namespace PLGui.ViewModels
             }
         }
 
-        public ObservableCollection<Station> DBStations { get; set; }
-        public ObservableCollection<Station> Stations { get; set; }
+        public BO.AdjacentStations ToNext
+        {
+            get => toNext;
+            set 
+            {
+                SetProperty(ref toNext, value);
+            }
+        }
+
+        public BO.AdjacentStations ToBack
+        {
+            get => toBack;
+            set
+            {
+                SetProperty(ref toBack, value);
+            }
+        }
+
+
+        public ObservableCollection<Station> DBStations { get; set; }//data base stations
+        public ObservableCollection<Station> Stations { get; set; }//new/updated line stations
 
         public bool IsMinStation { get => Stations.Count >= 2; }
 
         #endregion
 
+        #region constructors
         public NewLineViewModel()
         {
             source = BLFactory.GetBL("admin");
@@ -48,12 +75,22 @@ namespace PLGui.ViewModels
             ComboList = new List<string>() { "Name", "Code", "Address" };
             loadData();
 
-            SelectStationCommand = new RelayCommand<object>(SelectStation);
+            SelectDBStationCommand = new RelayCommand<object>(SelectDBStation);
+            SelectStationCommand = new RelayCommand<Window>(SelectStation);
             AddLineButton = new RelayCommand(AddLineButton_click);
             DeleteStationCommand = new RelayCommand<object>(DeleteStation);
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
         }
+        /// <summary>
+        /// updating an existing line
+        /// </summary>
+        /// <param name="oldLine"></param>
+        public NewLineViewModel(Line oldLine)//constructor for updating purpose
+        {
 
+        }
+
+        #endregion
 
         #region load data
         private void loadData()
@@ -85,37 +122,57 @@ namespace PLGui.ViewModels
         #endregion
 
         #region commands
+        public ICommand SelectDBStationCommand { get; }
         public ICommand SelectStationCommand { get; }
         public ICommand DeleteStationCommand { get; }
         public ICommand AddLineButton { get; }
         public ICommand SearchCommand { get; }
 
-
-        private void SelectStation(object sender)
+        /// <summary>
+        /// double click on data base station, the station will be added to the new/updated line stations
+        /// </summary>
+        private void SelectDBStation(object sender)
         {
             if ((sender as ListView).SelectedItem is Station selectedStation)
             {
                 Stations.Add(selectedStation);
                 DBStations.Remove(selectedStation);
-                OnPropertyChanged("IsMinStation");
+                OnPropertyChanged(nameof(IsMinStation));
 
                 NewLineView Lview = ((sender as ListView).Parent as Grid).Parent as NewLineView;
                 SearchBox_TextChanged(Lview);
             }
         }
+        /// <summary>
+        /// double click on the new/updated line station, the station will be deleted from the stations list
+        /// </summary>
         private void DeleteStation(object sender)
         {
             if ((sender as ListView).SelectedItem is Station selectedStation)
             {
                 DBStations.Add(selectedStation);
                 Stations.Remove(selectedStation);
-                OnPropertyChanged("IsMinStation");
+                OnPropertyChanged(nameof(IsMinStation));
 
                 NewLineView Lview = (((sender as ListView).Parent as StackPanel).Parent as Grid).Parent as NewLineView;
                 SearchBox_TextChanged(Lview);
             }
         }
+        private void SelectStation(Window window)
+        {
+            NewLineView newLineView = window as NewLineView;
+            if (newLineView.StationList.SelectedItem is Station selectedStation)
+            {
+                //if( 1= null)
+                //toNext = selectedStation.
+                //toBsck = selectedStation
+                //OnPropertyChanged(nameof(toNext));
+                //OnPropertyChanged(nameof(toBack));
 
+                newLineView.StationName.Text = selectedStation.Name;
+
+            }
+        }
         private void AddLineButton_click()
         {
             if (creatNewLine == null)
@@ -129,7 +186,7 @@ namespace PLGui.ViewModels
                     {                                                   //terminated before he done execute DoWork
                         
                     }
-                };//this function will execute in the main thred
+                };//this function will execute in the main thread
 
             creatNewLine.DoWork +=
                 (object sender, DoWorkEventArgs args) =>

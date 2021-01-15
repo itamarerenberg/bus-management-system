@@ -15,7 +15,7 @@
 		<manegerViewModel>
 			אפשרות הוספה לLine(צריך לסיים)/LineStation/LineTrip/bus/BusOnTrip
 			אפשרות עדכון לLine/LineStation/LineTrip/bus/BusOnTrip
-			אפשרות מחיקה לLineStation/LineTrip/bus
+			אפשרות מחיקה לLineTrip/bus
 		<manegerViewModel/>
 		<passengerViewModel>
 			אפשרות הוספה/עדכון/מחיקה userTrip
