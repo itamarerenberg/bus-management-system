@@ -50,7 +50,37 @@
                     <Button Content="debug" Grid.Column="4" Grid.Row="2" Command="{Binding DebugButtonCommand}"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="sign up">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <!--row 1-->
+                    <Label Grid.Row="1" Grid.Column="1" Content="enter name" Height="31" Width="93"/>
+                    <TextBox x:Name="newUserName" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" Width="auto"/>
 
+                    <!--row 2-->
+                    <Label Content="enter password" Grid.Column="1" Grid.Row="2" Height="35" Width="93"/>
+                    <p:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="2" Height="35" MinWidth="100" Width="auto"/>
+                    <!--row 3-->
+                    <Label Content="confirm password" Grid.Column="1" Grid.Row="3" Height="35" Width="93"/>
+                    <p:PasswordBox Password="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="3" Height="35" MinWidth="100" Width="auto"/>
+                    <!--row 4-->
+                    <Button x:Name="SignUpButton" Command="{Binding SignUnCommand}" CommandParameter="{Binding ElementName=ThisWindow}" Grid.Column="4" Grid.Row="3" Content="sign in" Width="90" Height="27" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
