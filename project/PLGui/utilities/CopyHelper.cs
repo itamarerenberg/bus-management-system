@@ -117,7 +117,7 @@ namespace PLGui.ViewModels
                 LineNumber = from.LineNumber,
                 Area = (AreasEnum)from.Area,
                 Stations = new ObservableCollection<BO.LineStation>(from.Stations)
-        };
+            };
             return result;
         }
         public static void CollectionLine_BO_PO(this IEnumerable<BO.Line> from, Collection<Line> to)

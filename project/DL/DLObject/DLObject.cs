@@ -479,12 +479,9 @@ namespace DL
             if (tempStations == null)
             {
                 DataSource.SaveObj(adjacentStations, "AdjacentStations");
-            }
-            else
-            {
-                throw new DuplicateExeption("the adjacent stations is allready exist");
-            }
-            DataSource.Save();
+                DataSource.Save();
+            }            
+
         }
         public AdjacentStations GetAdjacentStation(int? stationCode1, int? stationCode2)
         {

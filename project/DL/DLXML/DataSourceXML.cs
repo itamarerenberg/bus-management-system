@@ -42,9 +42,9 @@ namespace DLXML
         #region data Access
         #region files roots
         static XElement busesRoot;
-        static XElement AdjacentStationsRoot;
+        static XElement adjacentStationsRoot;
         static XElement linesRoot;
-        static XElement BusesOnTripRoot;
+        static XElement busesOnTripRoot;
         static XElement StationsRoot;
         static XElement LineStationsRoot;
         static XElement LineTripsRoot;
@@ -67,8 +67,8 @@ namespace DLXML
         {
             get
             {
-                AdjacentStationsRoot = XElement.Load(AdjacentStationsFilePath);
-                return AdjacentStationsRoot;
+                adjacentStationsRoot = XElement.Load(AdjacentStationsFilePath);
+                return adjacentStationsRoot;
             }
         }
         public static XElement Lines
@@ -83,8 +83,8 @@ namespace DLXML
         {
             get
             {
-                BusesOnTripRoot = XElement.Load(BusesOnTripFilePath);
-                return BusesOnTripRoot;
+                busesOnTripRoot = XElement.Load(BusesOnTripFilePath);
+                return busesOnTripRoot;
             }
         }
         public static XElement Stations
@@ -130,16 +130,16 @@ namespace DLXML
         #endregion
         #endregion
 
-        static Dictionary<string, bool> IsChenged = new Dictionary<string, bool> {
-            [BusesFilePath] = false,
-            [AdjacentStationsFilePath] = false,
-            [LinesFilePath] = false,
-            [BusesOnTripFilePath] = false,
-            [StationsFilePath] = false,
-            [LineStationsFilePath] = false,
-            [LineTripsFilePath] = false,
-            [UsersFilePath] = false,
-            [UsersTripsFilePath] = false
+        static Dictionary<string, dynamic> files = new Dictionary<string, dynamic> {
+            ["Buses"] = {isChanged = false , root = busesRoot, path = BusesFilePath},
+            ["AdjacentStations"] = { isChanged = false, root = adjacentStationsRoot, path = AdjacentStationsFilePath },
+            ["Lines"] = { isChanged = false, root = linesRoot, path = LinesFilePath },
+            ["BusesOnTrip"] = { isChanged = false, root = busesOnTripRoot, path = BusesFilePath },
+            ["Stations"] = { isChanged = false, root = StationsRoot, path = StationsFilePath }, 
+            ["LineStations"] = { isChanged = false, root = LineStationsRoot, path = LineStationsFilePath },
+            ["LineTrips"] = { isChanged = false, root = LineTripsRoot, path = LineTripsFilePath },
+            ["Users"] = { isChanged = false, root = UsersRoot, path = UsersFilePath },
+            ["UsersTrips"] = { isChanged = false, root = UsersTripsRoot, path = UsersTripsFilePath }
         };
 
         public static int serialLineID;
@@ -148,15 +148,27 @@ namespace DLXML
 
         static DataSourceXML()
         {
-            busesRoot.Changed += (object sender, XObjectChangeEventArgs e) => IsChenged[BusesFilePath] = true;
+            busesRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Buses"].isChanged = true;//if the xelement is changed then set IsChenged[BusesFilePath] to true
+            adjacentStationsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["AdjacentStations"].isChanged = true;//...IsChenged[AdjacentStationsFilePath]...
+            linesRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Lines"].isChanged = true;//...IsChenged[LinesFilePath]...
+            busesOnTripRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["BusesOnTrip"].isChanged = true;//...IsChenged[BusesOnTripFilePath]...
+            StationsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Stations"].isChanged = true;//...IsChenged[StationsFilePath]...
+            LineStationsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["LineStations"].isChanged = true;//...IsChenged[LineStationsFilePath]...
+            LineTripsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["LineTrips"].isChanged = true;//...IsChenged[LineTripsFilePath]...
+            UsersRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Users"].isChanged = true;//...IsChenged[UsersFilePath]...
+            UsersTrips.Changed += (object sender, XObjectChangeEventArgs e) => files["UsersTrips"].isChanged = true;//...IsChenged[UsersTripsFilePath]...
+
             serialLineID = 0;
-            List<string> filesPaths = new List<string>() { LinesFileName, BusesFilePath, AdjacentStationsFilePath, BusesOnTripFilePath,
-            StationsFilePath, LineStationsFilePath, LineTripsFilePath, UsersFilePath, UsersTripsFilePath};
-            foreach (string filePath in filesPaths)
+            foreach (var file in files)
             {
-                if (!File.Exists(filePath))//if the file don't exist
+                if (!File.Exists(file.Value.path))//if the file don't exist
                 {
-                    (new XElement("elements")).Save(filePath);//create new file with root <elements>
+                    file.Value.root = new XElement(file.Key);//create new file with root <elements>
+                    file.Value.root.Save(file.Value.path);
+                }
+                else
+                {
+                    file.Value.root = XElement.Load(file.Value.path);
                 }
             }
         }
@@ -199,19 +211,21 @@ namespace DLXML
             dsRoot.Save(FilePath);
         }
 
-
-      public static void SaveListSerializer<T>(this List<T> list, string typename)
+        static public void Save()
         {
-            switch (typename)
+            foreach(var file in files)
             {
-                case "Lines":
-                    XMLTools.SaveListToXMLSerializer<T>(list, "Lines.xml");
-                    break;
-                default:
-                    break;
+                if(file.Value.isChanged)
+                {
+                    file.Value.root.Save(file.Value.path);
+                    file.Value.isChanged = false;
+                }
             }
-            
+        }
 
+        public static void SaveListSerializer<T>(this List<T> list, string typename)
+        {
+            XMLTools.SaveListToXMLSerializer<T>(list, files[typename].path);//save the list to the file that accur in files as the file of this intety
         }
         public static void SaveList(this XElement root,string typename)
         {
