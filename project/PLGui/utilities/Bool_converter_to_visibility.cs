@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace PLGui.ViewModels
 {
-    class Text_converter_to_visibility : IValueConverter
+    class Bool_converter_to_visibility : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

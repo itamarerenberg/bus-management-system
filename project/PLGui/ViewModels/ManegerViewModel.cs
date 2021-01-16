@@ -87,6 +87,8 @@ namespace PLGui.ViewModels
             ListChangedCommand = new RelayCommand<object>(List_SelectionChanged);
             NewLine = new RelayCommand(Add_newLine);
             DeleteCommand = new RelayCommand<Window>(delete);
+            Enter_asAnotherUserCommand = new RelayCommand<Window>(enter_asAnotherUser);
+            manegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
         }
 
         #endregion
@@ -123,7 +125,7 @@ namespace PLGui.ViewModels
                         Lines = new ObservableCollection<Line>()
                     };
                     result.Stations = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));
-                    //result.Lines = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));
+                    result.Lines = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));
                     //source.GetAllLines().CollectionLine_BO_PO(result.Lines);
                     //source.GetAllBuses().DeepCopyToCollection(result.Buses);
 
@@ -140,6 +142,8 @@ namespace PLGui.ViewModels
         public ICommand ListChangedCommand { get; }
         public ICommand NewLine { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand Enter_asAnotherUserCommand { get; }
+        public ICommand manegerView_ClosingCommand { get; }
 
         /// <summary>
         /// accured when search box is changing. replace the list in the window into list that contains the search box text.
@@ -276,6 +280,19 @@ namespace PLGui.ViewModels
                     }
                 }
             }
+        }
+        private void enter_asAnotherUser(Window window)
+        {
+            ManegerView Mview = window as ManegerView;
+            Mview.Close();
+
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+        }
+        private void manegerView_Closing(Window window)
+        {
+            //Environment.Exit(Environment.ExitCode);
+            window.Close();
         }
         #endregion
     }

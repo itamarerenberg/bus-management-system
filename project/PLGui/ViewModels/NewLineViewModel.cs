@@ -26,6 +26,7 @@ namespace PLGui.ViewModels
         Line newLine = new Line();
         private BO.AdjacentStations toNext;
         private BO.AdjacentStations toBack;
+        private bool addManually;
 
         #endregion
 
@@ -44,7 +45,7 @@ namespace PLGui.ViewModels
         public BO.AdjacentStations ToNext
         {
             get => toNext;
-            set 
+            set
             {
                 SetProperty(ref toNext, value);
             }
@@ -64,6 +65,14 @@ namespace PLGui.ViewModels
         public ObservableCollection<Station> Stations { get; set; }//new/updated line stations
 
         public bool IsMinStation { get => Stations.Count >= 2; }
+        public bool AddManually 
+        { 
+            get => addManually;
+            set
+            {
+                SetProperty(ref addManually, value);
+            }
+        }
 
         #endregion
 
@@ -72,11 +81,13 @@ namespace PLGui.ViewModels
         {
             source = BLFactory.GetBL("admin");
             Stations = new ObservableCollection<Station>();
+            newLine.Stations = new ObservableCollection<BO.LineStation>();
             ComboList = new List<string>() { "Name", "Code", "Address" };
             loadData();
 
             SelectDBStationCommand = new RelayCommand<object>(SelectDBStation);
             SelectStationCommand = new RelayCommand<Window>(SelectStation);
+            SaveButton = new RelayCommand<Window>(saveButton);
             AddLineButton = new RelayCommand(AddLineButton_click);
             DeleteStationCommand = new RelayCommand<object>(DeleteStation);
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
@@ -125,6 +136,7 @@ namespace PLGui.ViewModels
         public ICommand SelectDBStationCommand { get; }
         public ICommand SelectStationCommand { get; }
         public ICommand DeleteStationCommand { get; }
+        public ICommand SaveButton { get; }
         public ICommand AddLineButton { get; }
         public ICommand SearchCommand { get; }
 
@@ -136,6 +148,8 @@ namespace PLGui.ViewModels
             if ((sender as ListView).SelectedItem is Station selectedStation)
             {
                 Stations.Add(selectedStation);
+                NewLine.Stations.Add(new BO.LineStation() 
+                { Address = selectedStation.Address, StationNumber = selectedStation.Code, LineStationIndex = newLine.Stations.Count });
                 DBStations.Remove(selectedStation);
                 OnPropertyChanged(nameof(IsMinStation));
 
@@ -150,27 +164,79 @@ namespace PLGui.ViewModels
         {
             if ((sender as ListView).SelectedItem is Station selectedStation)
             {
+                int index = (sender as ListView).SelectedIndex;
+
                 DBStations.Add(selectedStation);
                 Stations.Remove(selectedStation);
+                newLine.Stations.RemoveAt(index);
                 OnPropertyChanged(nameof(IsMinStation));
 
                 NewLineView Lview = (((sender as ListView).Parent as StackPanel).Parent as Grid).Parent as NewLineView;
                 SearchBox_TextChanged(Lview);
             }
         }
+        /// <summary>
+        /// when a station in the new line's stations is selected. add an option to add a distance and time between the stations
+        /// </summary>
         private void SelectStation(Window window)
         {
             NewLineView newLineView = window as NewLineView;
             if (newLineView.StationList.SelectedItem is Station selectedStation)
             {
-                //if( 1= null)
-                //toNext = selectedStation.
-                //toBsck = selectedStation
-                //OnPropertyChanged(nameof(toNext));
-                //OnPropertyChanged(nameof(toBack));
-
                 newLineView.StationName.Text = selectedStation.Name;
 
+                int index = newLineView.StationList.SelectedIndex;
+                int lastIndex = newLineView.StationList.Items.Count - 1;
+
+                //preventing the option to add distance to back/next if the station's index is first/last respectivly
+                if (index == 0)
+                {
+                    newLineView.DisToBack.IsEnabled = false;
+                    newLineView.TimeToBack.IsEnabled = false;
+                    newLineView.DisToNext.IsEnabled = true;
+                    newLineView.TimeToNext.IsEnabled = true;
+                }
+                else
+                {
+                    if (index == lastIndex)
+                    {
+                        newLineView.DisToBack.IsEnabled = true;
+                        newLineView.TimeToBack.IsEnabled = true;
+                        newLineView.DisToNext.IsEnabled = false;
+                        newLineView.TimeToNext.IsEnabled = false;
+                    }
+                    else
+                    {
+                        newLineView.DisToBack.IsEnabled = true;
+                        newLineView.TimeToBack.IsEnabled = true;
+                        newLineView.DisToNext.IsEnabled = true;
+                        newLineView.TimeToNext.IsEnabled = true;
+                    }
+                }
+
+                toNext = newLine.Stations[index].CurrentToNext;
+                toBack = newLine.Stations[index].PrevToCurrent;
+                OnPropertyChanged(nameof(toNext));
+                OnPropertyChanged(nameof(toBack));
+            }
+        }
+        /// <summary>
+        /// save the changes of distance/time
+        /// </summary>
+        private void saveButton(Window window)
+        {
+            NewLineView newLineView = window as NewLineView;
+            if (newLineView.StationList.SelectedItem is Station selectedStation)
+            {
+                int index = newLineView.StationList.SelectedIndex;
+
+                newLine.Stations[index].CurrentToNext = toNext;
+                newLine.Stations[index].PrevToCurrent = toBack;
+
+                ToNext = null;
+                toBack = null;
+                OnPropertyChanged(nameof(toNext));
+                OnPropertyChanged(nameof(toBack));
             }
         }
         private void AddLineButton_click()
@@ -184,7 +250,7 @@ namespace PLGui.ViewModels
                 {
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated before he done execute DoWork
-                        
+
                     }
                 };//this function will execute in the main thread
 
@@ -199,18 +265,21 @@ namespace PLGui.ViewModels
                         Area = (BO.AreasEnum)NewLine.Area
                     };
                     source.AddLine(BOline, Stations.Select(st => st.BOstation));
-                    //source.AddLine(BOline, Stations.Select(s => (BO.Station)s.DeepCopyToNew(typeof(BO.Station))));הצעה
                 };//this function will execute in the BackgroundWorker thread
             creatNewLine.RunWorkerAsync();
 
         }
+        /// <summary>
+        /// accured when search box is changing. replace the list in the window into list that contains the search box text.
+        /// the search is according to the conbo box picking
+        /// </summary>
         private void SearchBox_TextChanged(object sender)
         {
             NewLineView Lview = new NewLineView();
             if (sender is TextBox)
             {
                 //get the ManegerView instance
-                Lview = (((((sender as TextBox).Parent as StackPanel).Parent) as Grid).Parent) as NewLineView; 
+                Lview = (((((sender as TextBox).Parent as StackPanel).Parent) as Grid).Parent) as NewLineView;
             }
             else if (sender is NewLineView)
             {
@@ -231,7 +300,7 @@ namespace PLGui.ViewModels
 
         #region help methods
 
-       
+
 
         #endregion
     }
