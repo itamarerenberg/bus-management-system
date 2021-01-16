@@ -4,7 +4,7 @@
 <PL>
 	<view>
 		<manegerView>
-			טאבים לLineTrip/bus
+			טאבים לLineTrip/bus/BusOnTrip
 		<manegerView/>
 		<passengerView>
 			הצגת LineTrip/userTrip/Lines
@@ -14,7 +14,7 @@
 	<viewModel>
 		<manegerViewModel>
 			אפשרות הוספה לLine(צריך לסיים)/LineStation/LineTrip/bus/BusOnTrip
-			אפשרות עדכון לLine/LineStation/LineTrip/bus/BusOnTrip
+			אפשרות עדכון לLine/Station/LineTrip/bus/BusOnTrip
 			אפשרות מחיקה לLineTrip/bus
 		<manegerViewModel/>
 		<passengerViewModel>
@@ -41,8 +41,7 @@
 <BL/>
 
 <DL>
-	DLXML
-		קבצים שונים לכל ישות
+
 <DL/>
 
 <שונות>

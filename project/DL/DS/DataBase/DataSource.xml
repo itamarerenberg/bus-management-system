@@ -16020,7 +16020,7 @@
   </Stations>
   <Lines>
     <Line>
-      <ID>27</ID>
+      <ID>38</ID>
       <LineNumber>867</LineNumber>
       <Area>Jerusalem</Area>
       <FirstStation_Id>129</FirstStation_Id>
@@ -16041,6 +16041,14 @@
       <Area>Jerusalem</Area>
       <FirstStation_Id>60413</FirstStation_Id>
       <LastStation_Id>27</LastStation_Id>
+      <IsActive>True</IsActive>
+    </Line>
+    <Line>
+      <ID>28</ID>
+      <LineNumber>845</LineNumber>
+      <Area>Jerusalem</Area>
+      <FirstStation_Id>30</FirstStation_Id>
+      <LastStation_Id>116</LastStation_Id>
       <IsActive>True</IsActive>
     </Line>
   </Lines>
@@ -16137,6 +16145,56 @@
       <Time>00:00:00.0001336</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>30</StationCode1>
+      <StationCode2>36</StationCode2>
+      <Distance>463.320417558876</Distance>
+      <Time>00:00:00.0000023</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>36</StationCode1>
+      <StationCode2>50</StationCode2>
+      <Distance>445.361171652084</Distance>
+      <Time>00:00:00.0000022</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>50</StationCode1>
+      <StationCode2>60414</StationCode2>
+      <Distance>3084.93156002008</Distance>
+      <Time>00:00:00.0000154</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>60414</StationCode1>
+      <StationCode2>86</StationCode2>
+      <Distance>6574.65932078586</Distance>
+      <Time>00:00:00.0000329</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>86</StationCode1>
+      <StationCode2>89</StationCode2>
+      <Distance>837.287111349333</Distance>
+      <Time>00:00:00.0000042</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>89</StationCode1>
+      <StationCode2>110</StationCode2>
+      <Distance>4690.25249185628</Distance>
+      <Time>00:00:00.0000235</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>110</StationCode1>
+      <StationCode2>116</StationCode2>
+      <Distance>460.138337194555</Distance>
+      <Time>00:00:00.0000023</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+  </AdjacentStations>
     <AdjacentStations>
       <StationCode1>61157</StationCode1>
       <StationCode2>27</StationCode2>
@@ -16245,44 +16303,6 @@
     <LineStation>
       <LineId>39</LineId>
       <StationNumber>28</StationNumber>
-      <LineStationIndex>4</LineStationIndex>
-      <PrevStation>29</PrevStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>47</LineId>
-      <StationNumber>60413</StationNumber>
-      <LineStationIndex>0</LineStationIndex>
-      <NextStation>61158</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>47</LineId>
-      <StationNumber>61158</StationNumber>
-      <LineStationIndex>1</LineStationIndex>
-      <PrevStation>60413</PrevStation>
-      <NextStation>61157</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>47</LineId>
-      <StationNumber>61157</StationNumber>
-      <LineStationIndex>2</LineStationIndex>
-      <PrevStation>61158</PrevStation>
-      <NextStation>29</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>47</LineId>
-      <StationNumber>29</StationNumber>
-      <LineStationIndex>3</LineStationIndex>
-      <PrevStation>61157</PrevStation>
-      <NextStation>27</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>47</LineId>
-      <StationNumber>27</StationNumber>
       <LineStationIndex>4</LineStationIndex>
       <PrevStation>29</PrevStation>
       <IsActive>True</IsActive>

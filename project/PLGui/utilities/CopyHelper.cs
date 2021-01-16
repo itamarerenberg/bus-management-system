@@ -50,8 +50,7 @@ namespace PLGui.ViewModels
                         if (target == null)
                         {
                             target = Activator.CreateInstance(propTo.PropertyType);
-                            //var colleItemType = propTo.PropertyType.GetGenericArguments()[0];
-                            //target = Activator.CreateInstance(typeof(Collection<colleItemType>));
+
                         }
                         propTo.PropertyType.GetMethod("Clear").Invoke(target, null);
                         foreach (var item in (value as IEnumerable))

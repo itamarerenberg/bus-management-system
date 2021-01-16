@@ -48,9 +48,10 @@ namespace PLGui.Models.PO
             get => stations;
             set
             {
-                SetProperty(ref stations, value, true);
-                OnPropertyChanged("LastStation");
-                OnPropertyChanged("FirstStation");
+                stations = value;
+                OnPropertyChanged(nameof(stations));
+                OnPropertyChanged(nameof(LastStation));
+                OnPropertyChanged(nameof(FirstStation));
             }
         }
 
