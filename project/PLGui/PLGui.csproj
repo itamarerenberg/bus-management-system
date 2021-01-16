@@ -124,10 +124,10 @@
     <Compile Include="Models\PO\Enums.cs" />
     <Compile Include="Models\PO\Exeptions.cs" />
     <Compile Include="Models\PO\Line.cs" />
+    <Compile Include="Models\PO\LineStation.cs" />
     <Compile Include="Models\PO\LineTrip.cs" />
     <Compile Include="Models\PO\Station.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserTrip.cs" />
     <Compile Include="utilities\PasswordBox.xaml.cs">
       <DependentUpon>PasswordBox.xaml</DependentUpon>
