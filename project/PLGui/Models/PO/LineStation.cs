@@ -7,9 +7,19 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace PLGui.Models.PO
 {
-    class LineStation : ObservableObject
+    public class LineStation : ObservableObject
     {
         private Station station;
+
+        bool notLast;
+        public bool NotLast 
+        {
+            get => notLast;
+            set
+            {
+                SetProperty(ref notLast, value);
+            }
+        }
 
         public Station Station
         {
@@ -20,9 +30,9 @@ namespace PLGui.Models.PO
             }
         }
 
-        private int distance;
+        private int? distance;
 
-        public int Distance
+        public int? Distance
         {
             get => distance;
             set
@@ -31,9 +41,9 @@ namespace PLGui.Models.PO
             }
         }
 
-        private int time;
+        private int? time;
 
-        public int Time
+        public int? Time
         {
             get => time;
             set

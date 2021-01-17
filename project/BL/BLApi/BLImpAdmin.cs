@@ -185,7 +185,7 @@ namespace BL
 
         #region Line
         /// <returns>the Serial number that given to the new line at the data layer</returns>
-        public int AddLine(Line line, IEnumerable<Station> stations)
+        public int AddLine(Line line, IEnumerable<Station> stations, List<int?> distances, List<int?> times)
         {
             try
             {
@@ -201,7 +201,7 @@ namespace BL
                 int lineId = dl.AddLine(DoLine);//add the line and save his id to return it
 
                 //add the addjecent stations:
-                List<AdjacentStations> adjStations = Calculate_dist(stations.ToList());//get the list of the AdjacentStations
+                List<AdjacentStations> adjStations = Calculate_dist(stations.ToList(), distances, times);//get the list of the AdjacentStations
                 foreach (AdjacentStations adjSt in adjStations)//add all the AdjacentStations to dl
                 {
                     dl.AddAdjacentStations(new DO.AdjacentStations()
@@ -639,28 +639,30 @@ namespace BL
 
         #region calculation methods
         /// <returns>colection of AdjacentStations accurding to this structer: { (st[1],st[2]), (st[2], st[3]),...,(st[n-1], st[n]) } where st stend for stations</returns>
-        List<BO.AdjacentStations> Calculate_dist(List<Station> stations)
+        List<BO.AdjacentStations> Calculate_dist(List<Station> stations, List<int?> distances, List<int?> times)
         {
             List<BO.AdjacentStations> result = new List<BO.AdjacentStations>();
             Station pre_station = stations[0];
             stations.RemoveAt(0);//remove the first station fro stations
+            int i = 0;//this will be use to add the correct distance and time to the adjasentStations acording to 'distances' and 'times'
             foreach (Station current in stations)//starting from the second station in the resepted list, the first is in prev_station
             {
                 result.Add(new BO.AdjacentStations()
                 {
                     StationCode1 = pre_station.Code,
                     StationCode2 = current.Code,
-                    Distance = GetDist(pre_station, current),
-                    Time = GetTime(pre_station, current, GetDist(pre_station, current))
+                    Distance = distances[i] != null? (int)distances[i] :GetDist(pre_station, current),//if the user inserted distance manualy then take the inserted distanse, else calculate defult distance
+                    Time = times[i] != null? new TimeSpan(0,(int)times[i],0) : GetTime(pre_station, current, GetDist(pre_station, current))//if the user inserted time manualy then take the inserted time, else calculate defult time
                 });
                 pre_station = current;
+                i++;
             }
             return result;
         }
 
-        private TimeSpan GetTime(Station station1, Station station2, double Dist)
+        private TimeSpan GetTime(Station station1, Station station2, double dist)
         {
-            return new TimeSpan((int)((new Random()).NextDouble() * Dist));
+            return new TimeSpan((int)((new Random()).NextDouble() * dist));
         }
 
         private double GetDist(Station station1, Station station2)

@@ -61,8 +61,28 @@
                 </y:Interaction.Triggers>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn x:Name="Name" Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
-                        <GridViewColumn x:Name="Code" Header="Code" Width="auto" DisplayMemberBinding="{Binding Code}" />
+                        <GridViewColumn x:Name="Name" Header="Name" Width="auto" DisplayMemberBinding="{Binding Station.Name}" />
+                        <GridViewColumn x:Name="Code" Header="Code" Width="auto" DisplayMemberBinding="{Binding Station.Code}" />
+                        <GridViewColumn x:Name="dist_to_next" Header="distance to next">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBox x:Name="meters" MinWidth="3" IsEnabled="{Binding NotLast}" Text="{Binding Distance, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    <TextBlock Text="{Binding ElementName=meters , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn x:Name="time_to_next" Header="time to next">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBox x:Name="minuts" MinWidth="3" IsEnabled="{Binding NotLast}" Text="{Binding Time, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        <TextBlock Text="{Binding ElementName=minuts , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
