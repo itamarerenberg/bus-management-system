@@ -52,7 +52,7 @@
       <Name>DLApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\DLXML\DLXML.csproj">
-      <Project>{6685551C-272D-4009-B4F2-F6609CDD94B4}</Project>
+      <Project>{6685551c-272d-4009-b4f2-f6609cdd94b4}</Project>
       <Name>DLXML</Name>
     </ProjectReference>
     <ProjectReference Include="..\DS\DS.csproj">
