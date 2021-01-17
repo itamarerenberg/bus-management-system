@@ -62,7 +62,7 @@ namespace PLGui.ViewModels
 
 
         public ObservableCollection<Station> DBStations { get; set; }//data base stations
-        public ObservableCollection<Station> Stations { get; set; }//new/updated line stations
+        public ObservableCollection<LineStation> Stations { get; set; }//new updated line stations
 
         public bool IsMinStation { get => Stations.Count >= 2; }
         public bool AddManually 
@@ -80,7 +80,7 @@ namespace PLGui.ViewModels
         public NewLineViewModel()
         {
             source = BLFactory.GetBL("admin");
-            Stations = new ObservableCollection<Station>();
+            Stations = new ObservableCollection<LineStation>();
             newLine.Stations = new ObservableCollection<BO.LineStation>();
             ComboList = new List<string>() { "Name", "Code", "Address" };
             loadData();
@@ -147,7 +147,9 @@ namespace PLGui.ViewModels
         {
             if ((sender as ListView).SelectedItem is Station selectedStation)
             {
-                Stations.Add(selectedStation);
+                if (Stations.Count > 0)
+                    Stations.Last().NotLast = true;//now the previus last station is no longer the last
+                Stations.Add(new LineStation() { Station = selectedStation, NotLast = false});//this is the last station in Stations
                 NewLine.Stations.Add(new BO.LineStation() 
                 { Address = selectedStation.Address, StationNumber = selectedStation.Code, LineStationIndex = newLine.Stations.Count });
                 DBStations.Remove(selectedStation);
@@ -162,12 +164,14 @@ namespace PLGui.ViewModels
         /// </summary>
         private void DeleteStation(object sender)
         {
-            if ((sender as ListView).SelectedItem is Station selectedStation)
+            if ((sender as ListView).SelectedItem is LineStation selectedStation)
             {
                 int index = (sender as ListView).SelectedIndex;
 
-                DBStations.Add(selectedStation);
+                DBStations.Add(selectedStation.Station);
                 Stations.Remove(selectedStation);
+                if (selectedStation.NotLast == false && Stations.Count > 0)//if the selectet station was the last station
+                    Stations.Last().NotLast = false;//set the new last station to not NotLast
                 newLine.Stations.RemoveAt(index);
                 OnPropertyChanged(nameof(IsMinStation));
 
@@ -264,7 +268,9 @@ namespace PLGui.ViewModels
                         LineNumber = (int)NewLine.LineNumber,
                         Area = (BO.AreasEnum)NewLine.Area
                     };
-                    source.AddLine(BOline, Stations.Select(st => st.BOstation));
+                    List<int?> distances = Stations.Select(lst => lst.Distance).ToList();
+                    List<int?> times = Stations.Select(lst => lst.Time).ToList();
+                    source.AddLine(BOline, Stations.Select(st => st.Station.BOstation), distances, times);
                 };//this function will execute in the BackgroundWorker thread
             creatNewLine.RunWorkerAsync();
 

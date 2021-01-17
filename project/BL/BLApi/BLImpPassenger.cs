@@ -301,7 +301,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public int AddLine(Line line, IEnumerable<Station> stations)
+        public int AddLine(Line line, IEnumerable<Station> stations, List<int?> distances, List<int?> Times)
         {
             throw new NotImplementedException();
         }

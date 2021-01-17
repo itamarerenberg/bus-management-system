@@ -38,7 +38,7 @@ namespace BLApi
 
         #region Line
         /// <returns>the Serial number that given to the new line at the data layer</returns>
-        int AddLine(Line line, IEnumerable<Station> stations);
+        int AddLine(Line line, IEnumerable<Station> stations, List<int?> distances, List<int?> Times);
         Line GetLine(int id);
         void UpdateLine(Line line);
         void DeleteLine(int id);
