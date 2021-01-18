@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Stations>
+  <Station>
+    <ID>2</ID>
+    <Name>Hapisga 21</Name>
+  </Station>
+  <Station>
+    <ID>2</ID>
+    <Name>Hapisga</Name>
+  </Station>
+</Stations>
