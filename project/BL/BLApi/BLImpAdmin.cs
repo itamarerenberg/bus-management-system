@@ -271,10 +271,13 @@ namespace BL
         /// </summary>
         public void UpdateLine(int lineId, IEnumerable<Station> stations, List<int?> distances, List<int?> times)
         {
+            //get all the line stations of this line from dl
+            List<DO.LineStation> oldListOfStations = dl.GetAllLineStationsBy(ls => ls.LineId == lineId && ls.IsActive).ToList();
+
             //delete all the line stations in this line
-            foreach(Station st in stations)
+            foreach(var st in oldListOfStations)
             {
-                dl.DeleteLineStation(lineId, st.Code);
+                dl.DeleteLineStation(lineId, st.StationNumber);
             }
 
             //add the new list of line stations of the line
@@ -578,7 +581,14 @@ namespace BL
         }
         public void UpdateStation(Station station)
         {
-            throw new NotImplementedException();
+            dl.UpdateStation(new DO.Station()
+            {
+                Code = station.Code,
+                Name = station.Name,
+                Longitude = station.Longitude,
+                Latitude = station.Latitude,
+                Address = station.Address,
+            });
         }
         public void DeleteStation(int code)
         {

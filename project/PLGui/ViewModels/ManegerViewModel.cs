@@ -108,49 +108,74 @@ namespace PLGui.ViewModels
         #endregion
 
         #region load data
-        BackgroundWorker load_data;
         private void loadData()
         {
-            if(load_data == null)
+            loadLines();
+            loadStations();
+            //...
+        }
+
+        BackgroundWorker loadLinesWorker;
+        private void loadLines()
+        {
+            if (loadLinesWorker == null)
             {
-                load_data = new BackgroundWorker();
+                loadLinesWorker = new BackgroundWorker();
             }
 
-            load_data.RunWorkerCompleted +=
+            loadLinesWorker.RunWorkerCompleted +=
                 (object sender, RunWorkerCompletedEventArgs args) =>
                 {
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated befor he done execute DoWork
-                        manegerModel = (ManegerModel)args.Result;
-                        OnPropertyChanged("Stations");
-                        OnPropertyChanged("Buses");
+                        manegerModel.Lines = (ObservableCollection<Line>)args.Result;
                         OnPropertyChanged("Lines");
                     }
                 };//this function will execute in the main thred
 
-            load_data.DoWork +=
+            loadLinesWorker.DoWork +=
                 (object sender, DoWorkEventArgs args) =>
                 {
                     BackgroundWorker worker = (BackgroundWorker)sender;
-                    ManegerModel result = new ManegerModel
-                    {
-                        Stations = new ObservableCollection<Station>(),
-                        Buses = new ObservableCollection<Bus>(),
-                        Lines = new ObservableCollection<Line>()
-                    };
-                    result.Stations = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));
-                    result.Lines = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));
-                    //source.GetAllLines().CollectionLine_BO_PO(result.Lines);
-                    //source.GetAllBuses().DeepCopyToCollection(result.Buses);
-
-
+                    ObservableCollection<Line> result = new ObservableCollection<Line>();
+                    result = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));//get all lines from source
                     args.Result = worker.CancellationPending ? null : result;
                 };//this function will execute in the BackgroundWorker thread
-            load_data.RunWorkerAsync();
+            loadLinesWorker.RunWorkerAsync();
+        }
+
+        BackgroundWorker loadStationWorker;
+        private void loadStations()
+        {
+            if (loadStationWorker == null)
+            {
+                loadStationWorker = new BackgroundWorker();
+            }
+
+            loadStationWorker.RunWorkerCompleted +=
+                (object sender, RunWorkerCompletedEventArgs args) =>
+                {
+                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                    {                                                   //terminated befor he done execute DoWork
+                        manegerModel.Stations = (ObservableCollection<Station>)args.Result;
+                        OnPropertyChanged("Stations");
+                    }
+                };//this function will execute in the main thred
+
+            loadStationWorker.DoWork +=
+                (object sender, DoWorkEventArgs args) =>
+                {
+                    BackgroundWorker worker = (BackgroundWorker)sender;
+                    ObservableCollection<Station> result = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));//get all lines from source
+                    args.Result = worker.CancellationPending ? null : result;
+                };//this function will execute in the BackgroundWorker thread
+            loadStationWorker.RunWorkerAsync();
         }
         #endregion
 
         #region commands
+
+        #region Icommands
         public ICommand SearchCommand { get; }
         public ICommand TabChangedCommand { get; }
         public ICommand ListChangedCommand { get; }
@@ -159,7 +184,8 @@ namespace PLGui.ViewModels
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand Enter_asAnotherUserCommand { get; }
-        public ICommand ManegerView_ClosingCommand { get; }
+        public ICommand ManegerView_ClosingCommand { get; } 
+        #endregion
 
         /// <summary>
         /// accured when search box is changing. replace the list in the window into list that contains the search box text.
@@ -245,13 +271,13 @@ namespace PLGui.ViewModels
         private void Add_newLine()
         {
             new NewLineView().ShowDialog();
-            loadData();
+            loadLines();
         }
 
         private void Add_newStation()
         {
             new NewStationView().ShowDialog();
-            loadData();
+            loadStations();
         }
 
         /// <summary>
@@ -328,7 +354,7 @@ namespace PLGui.ViewModels
                 if (result == MessageBoxResult.OK)
                 {
                     source.DeleteStation(station.Code);
-                    loadData();
+                    loadStations();
                     MessageBox.Show($"station: {station.Name} code: {station.Code} was deleted successfully!");
                 }
             }
@@ -341,7 +367,7 @@ namespace PLGui.ViewModels
                 if (result == MessageBoxResult.OK)
                 {
                     source.DeleteLine(line.ID);
-                    loadData();
+                    loadLines();
                     MessageBox.Show($"line number: {line.LineNumber} was deleted successfully!");
                 }
             }

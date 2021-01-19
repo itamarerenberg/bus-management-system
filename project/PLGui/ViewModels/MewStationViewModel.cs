@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,14 +18,14 @@ namespace PLGui.ViewModels
     public class MewStationViewModel : ObservableRecipient
     {
         IBL source;
-        private Station tempStation;
+        private Station station;
 
         #region properties
 
-        public Station TempStation
+        public Station Station
         {
-            get => tempStation;
-            set => SetProperty(ref tempStation, value);
+            get => station;
+            set => SetProperty(ref station, value);
         }
 
         public string ButtonCaption { get; set; }
@@ -36,9 +37,10 @@ namespace PLGui.ViewModels
 
         public MewStationViewModel()
         {
-            TempStation = WeakReferenceMessenger.Default.Send<RequestStation>();//requests the old station (if exist)
+            station = new Station();
+            Station = WeakReferenceMessenger.Default.Send<RequestStation>();//requests the old station (if exist)
 
-            if (tempStation != null)// we are on updateing mode
+            if (station != null)// we are on updateing mode
             {
                 NewStationMode = false;
                 ButtonCaption = "Update Station"; 
@@ -73,14 +75,35 @@ namespace PLGui.ViewModels
         #endregion
 
         #region Help methods
+        BackgroundWorker addStationWorker;
         private void AddStation()
         {
-            throw new NotImplementedException();
+            if(addStationWorker == null)
+            {
+                addStationWorker = new BackgroundWorker();
+            }
+            addStationWorker.DoWork +=
+                (object sender, DoWorkEventArgs args) =>
+                {
+                    BackgroundWorker worker = (BackgroundWorker)sender;
+                    source.AddStation(station.BOstation);
+                };//this function will execute in the BackgroundWorker thread
+            addStationWorker.RunWorkerAsync();
         }
 
+        BackgroundWorker updateStationWorker;
         private void UpdateStation()
         {
-            throw new NotImplementedException();
+            if (updateStationWorker == null)
+            {
+                updateStationWorker = new BackgroundWorker();
+            }
+            updateStationWorker.DoWork +=
+                (object sender, DoWorkEventArgs args) =>
+                {
+                    source.UpdateStation(station.BOstation);
+                };//this function will execute in the BackgroundWorker thread
+            updateStationWorker.RunWorkerAsync();
         }
         #endregion
     }

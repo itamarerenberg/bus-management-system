@@ -10,14 +10,6 @@
       <IsActive>True</IsActive>
     </Station>
     <Station>
-      <Code>60413</Code>
-      <Name>קבר רחל</Name>
-      <Longitude>35.202604</Longitude>
-      <Latitude>31.720193</Latitude>
-      <Address>רחוב:דרך חברון  עיר: ירושלים</Address>
-      <IsActive>True</IsActive>
-    </Station>
-    <Station>
       <Code>60414</Code>
       <Name>קבר רחל</Name>
       <Longitude>35.202433</Longitude>
@@ -16010,428 +16002,153 @@
       <IsActive>True</IsActive>
     </Station>
     <Station>
-      <Code>1417</Code>
-      <Name>יעקב אלעזר/הארי טרומן</Name>
-      <Longitude>35.208733</Longitude>
-      <Latitude>31.814885</Latitude>
-      <Address>רחוב:יעקב אלעזר 6 עיר: ירושלים</Address>
+      <Code>1234567</Code>
+      <Name>addc</Name>
+      <Longitude>35.217444</Longitude>
+      <Latitude>31.774668</Latitude>
+      <Address>acscx</Address>
       <IsActive>True</IsActive>
     </Station>
   </Stations>
   <Lines>
     <Line>
-      <ID>48</ID>
-      <LineNumber>1</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>60413</FirstStation_Id>
-      <LastStation_Id>29</LastStation_Id>
-      <IsActive>True</IsActive>
-    </Line>
-    <Line>
-      <ID>49</ID>
+      <ID>54</ID>
       <LineNumber>11</LineNumber>
       <Area>Jerusalem</Area>
-      <FirstStation_Id>61158</FirstStation_Id>
-      <LastStation_Id>28</LastStation_Id>
-      <IsActive>False</IsActive>
-    </Line>
-    <Line>
-      <ID>29</ID>
-      <LineNumber>458</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>28</FirstStation_Id>
-      <LastStation_Id>179</LastStation_Id>
+      <FirstStation_Id>62000</FirstStation_Id>
+      <LastStation_Id>29</LastStation_Id>
       <IsActive>True</IsActive>
-    </Line>
-    <Line>
-      <ID>30</ID>
-      <LineNumber>458</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>28</FirstStation_Id>
-      <LastStation_Id>179</LastStation_Id>
-      <IsActive>False</IsActive>
-    </Line>
-    <Line>
-      <ID>31</ID>
-      <LineNumber>458</LineNumber>
-      <Area>Jerusalem</Area>
-      <FirstStation_Id>28</FirstStation_Id>
-      <LastStation_Id>179</LastStation_Id>
-      <IsActive>False</IsActive>
     </Line>
   </Lines>
   <users />
   <AdjacentStations>
     <AdjacentStations>
-      <StationCode1>60413</StationCode1>
-      <StationCode2>61157</StationCode2>
-      <Distance>2</Distance>
-      <Time>00:03:00</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>61157</StationCode1>
-      <StationCode2>62000</StationCode2>
-      <Distance>3</Distance>
-      <Time>00:04:00</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
       <StationCode1>62000</StationCode1>
-      <StationCode2>28</StationCode2>
-      <Distance>4</Distance>
-      <Time>00:05:00</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>28</StationCode1>
-      <StationCode2>29</StationCode2>
-      <Distance>5</Distance>
-      <Time>00:06:00</Time>
+      <StationCode2>61158</StationCode2>
+      <Distance>1222.64259696764</Distance>
+      <Time>00:00:00.0001026</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
     <AdjacentStations>
       <StationCode1>61158</StationCode1>
-      <StationCode2>27</StationCode2>
-      <Distance>2</Distance>
-      <Time>00:02:00</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>27</StationCode1>
       <StationCode2>28</StationCode2>
-      <Distance>2</Distance>
-      <Time>00:02:00</Time>
+      <Distance>11990.1369580078</Distance>
+      <Time>00:00:00.0010066</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
     <AdjacentStations>
       <StationCode1>28</StationCode1>
-      <StationCode2>41</StationCode2>
-      <Distance>1272.38722912508</Distance>
-      <Time>00:00:00.0000537</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>41</StationCode1>
       <StationCode2>27</StationCode2>
-      <Distance>1270.86837357759</Distance>
-      <Time>00:00:00.0000536</Time>
+      <Distance>10.8521176610882</Distance>
+      <Time>00:00:00.0000009</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
     <AdjacentStations>
       <StationCode1>27</StationCode1>
-      <StationCode2>34</StationCode2>
-      <Distance>523.599999874199</Distance>
-      <Time>00:00:00.0000221</Time>
+      <StationCode2>30</StationCode2>
+      <Distance>154.724540393604</Distance>
+      <Time>00:00:00.0000129</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
     <AdjacentStations>
-      <StationCode1>34</StationCode1>
+      <StationCode1>30</StationCode1>
+      <StationCode2>29</StationCode2>
+      <Distance>41.5496370962052</Distance>
+      <Time>00:00:00.0000034</Time>
+      <IsActive>True</IsActive>
+    </AdjacentStations>
+    <AdjacentStations>
+      <StationCode1>29</StationCode1>
       <StationCode2>42</StationCode2>
-      <Distance>1259.01597318389</Distance>
-      <Time>00:00:00.0000531</Time>
+      <Distance>1285.45070941292</Distance>
+      <Time>00:00:00.0000293</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
     <AdjacentStations>
       <StationCode1>42</StationCode1>
-      <StationCode2>110</StationCode2>
-      <Distance>7169.08796482196</Distance>
-      <Time>00:00:00.0003028</Time>
+      <StationCode2>46</StationCode2>
+      <Distance>528.295043453115</Distance>
+      <Time>00:00:00.0000120</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
     <AdjacentStations>
-      <StationCode1>110</StationCode1>
-      <StationCode2>148</StationCode2>
-      <Distance>3576.17336086379</Distance>
-      <Time>00:00:00.0001510</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>148</StationCode1>
-      <StationCode2>187</StationCode2>
-      <Distance>4239.28183008199</Distance>
-      <Time>00:00:00.0001790</Time>
-      <IsActive>True</IsActive>
-    </AdjacentStations>
-    <AdjacentStations>
-      <StationCode1>187</StationCode1>
-      <StationCode2>179</StationCode2>
-      <Distance>1773.86587293545</Distance>
-      <Time>00:00:00.0000749</Time>
+      <StationCode1>46</StationCode1>
+      <StationCode2>48</StationCode2>
+      <Distance>1036.65504865266</Distance>
+      <Time>00:00:00.0000237</Time>
       <IsActive>True</IsActive>
     </AdjacentStations>
   </AdjacentStations>
   <BusesOnTrip />
   <LineStations>
     <LineStation>
-      <LineId>48</LineId>
-      <StationNumber>60413</StationNumber>
+      <LineId>54</LineId>
+      <StationNumber>62000</StationNumber>
       <LineStationIndex>0</LineStationIndex>
-      <NextStation>61157</NextStation>
+      <NextStation>61158</NextStation>
       <IsActive>False</IsActive>
     </LineStation>
     <LineStation>
-      <LineId>48</LineId>
-      <StationNumber>61157</StationNumber>
+      <LineId>54</LineId>
+      <StationNumber>61158</StationNumber>
       <LineStationIndex>1</LineStationIndex>
-      <PrevStation>60413</PrevStation>
-      <NextStation>62000</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>48</LineId>
-      <StationNumber>62000</StationNumber>
-      <LineStationIndex>2</LineStationIndex>
-      <PrevStation>61157</PrevStation>
+      <PrevStation>62000</PrevStation>
       <NextStation>28</NextStation>
       <IsActive>False</IsActive>
     </LineStation>
     <LineStation>
-      <LineId>48</LineId>
+      <LineId>54</LineId>
       <StationNumber>28</StationNumber>
-      <LineStationIndex>3</LineStationIndex>
-      <PrevStation>62000</PrevStation>
+      <LineStationIndex>0</LineStationIndex>
+      <NextStation>27</NextStation>
+      <IsActive>True</IsActive>
+    </LineStation>
+    <LineStation>
+      <LineId>54</LineId>
+      <StationNumber>27</StationNumber>
+      <LineStationIndex>1</LineStationIndex>
+      <PrevStation>28</PrevStation>
+      <NextStation>30</NextStation>
+      <IsActive>True</IsActive>
+    </LineStation>
+    <LineStation>
+      <LineId>54</LineId>
+      <StationNumber>30</StationNumber>
+      <LineStationIndex>2</LineStationIndex>
+      <PrevStation>27</PrevStation>
       <NextStation>29</NextStation>
       <IsActive>True</IsActive>
     </LineStation>
     <LineStation>
-      <LineId>48</LineId>
+      <LineId>54</LineId>
       <StationNumber>29</StationNumber>
-      <LineStationIndex>4</LineStationIndex>
-      <PrevStation>28</PrevStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>49</LineId>
-      <StationNumber>61158</StationNumber>
-      <LineStationIndex>0</LineStationIndex>
-      <NextStation>27</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>49</LineId>
-      <StationNumber>27</StationNumber>
-      <LineStationIndex>1</LineStationIndex>
-      <PrevStation>61158</PrevStation>
-      <NextStation>28</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>49</LineId>
-      <StationNumber>28</StationNumber>
-      <LineStationIndex>2</LineStationIndex>
-      <PrevStation>27</PrevStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>28</StationNumber>
-      <LineStationIndex>0</LineStationIndex>
-      <NextStation>41</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>41</StationNumber>
-      <LineStationIndex>1</LineStationIndex>
-      <PrevStation>28</PrevStation>
-      <NextStation>27</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>27</StationNumber>
-      <LineStationIndex>2</LineStationIndex>
-      <PrevStation>41</PrevStation>
-      <NextStation>34</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>34</StationNumber>
       <LineStationIndex>3</LineStationIndex>
-      <PrevStation>27</PrevStation>
+      <PrevStation>30</PrevStation>
       <NextStation>42</NextStation>
       <IsActive>True</IsActive>
     </LineStation>
     <LineStation>
-      <LineId>29</LineId>
+      <LineId>54</LineId>
       <StationNumber>42</StationNumber>
       <LineStationIndex>4</LineStationIndex>
-      <PrevStation>34</PrevStation>
-      <NextStation>110</NextStation>
+      <PrevStation>29</PrevStation>
+      <NextStation>46</NextStation>
       <IsActive>True</IsActive>
     </LineStation>
     <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>110</StationNumber>
+      <LineId>54</LineId>
+      <StationNumber>46</StationNumber>
       <LineStationIndex>5</LineStationIndex>
       <PrevStation>42</PrevStation>
-      <NextStation>148</NextStation>
+      <NextStation>48</NextStation>
       <IsActive>True</IsActive>
     </LineStation>
     <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>148</StationNumber>
+      <LineId>54</LineId>
+      <StationNumber>48</StationNumber>
       <LineStationIndex>6</LineStationIndex>
-      <PrevStation>110</PrevStation>
-      <NextStation>187</NextStation>
+      <PrevStation>46</PrevStation>
       <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>187</StationNumber>
-      <LineStationIndex>7</LineStationIndex>
-      <PrevStation>148</PrevStation>
-      <NextStation>179</NextStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>29</LineId>
-      <StationNumber>179</StationNumber>
-      <LineStationIndex>8</LineStationIndex>
-      <PrevStation>187</PrevStation>
-      <IsActive>True</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>28</StationNumber>
-      <LineStationIndex>0</LineStationIndex>
-      <NextStation>41</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>41</StationNumber>
-      <LineStationIndex>1</LineStationIndex>
-      <PrevStation>28</PrevStation>
-      <NextStation>27</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>27</StationNumber>
-      <LineStationIndex>2</LineStationIndex>
-      <PrevStation>41</PrevStation>
-      <NextStation>34</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>34</StationNumber>
-      <LineStationIndex>3</LineStationIndex>
-      <PrevStation>27</PrevStation>
-      <NextStation>42</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>42</StationNumber>
-      <LineStationIndex>4</LineStationIndex>
-      <PrevStation>34</PrevStation>
-      <NextStation>110</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>110</StationNumber>
-      <LineStationIndex>5</LineStationIndex>
-      <PrevStation>42</PrevStation>
-      <NextStation>148</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>148</StationNumber>
-      <LineStationIndex>6</LineStationIndex>
-      <PrevStation>110</PrevStation>
-      <NextStation>187</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>187</StationNumber>
-      <LineStationIndex>7</LineStationIndex>
-      <PrevStation>148</PrevStation>
-      <NextStation>179</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>30</LineId>
-      <StationNumber>179</StationNumber>
-      <LineStationIndex>8</LineStationIndex>
-      <PrevStation>187</PrevStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>28</StationNumber>
-      <LineStationIndex>0</LineStationIndex>
-      <NextStation>41</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>41</StationNumber>
-      <LineStationIndex>1</LineStationIndex>
-      <PrevStation>28</PrevStation>
-      <NextStation>27</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>27</StationNumber>
-      <LineStationIndex>2</LineStationIndex>
-      <PrevStation>41</PrevStation>
-      <NextStation>34</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>34</StationNumber>
-      <LineStationIndex>3</LineStationIndex>
-      <PrevStation>27</PrevStation>
-      <NextStation>42</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>42</StationNumber>
-      <LineStationIndex>4</LineStationIndex>
-      <PrevStation>34</PrevStation>
-      <NextStation>110</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>110</StationNumber>
-      <LineStationIndex>5</LineStationIndex>
-      <PrevStation>42</PrevStation>
-      <NextStation>148</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>148</StationNumber>
-      <LineStationIndex>6</LineStationIndex>
-      <PrevStation>110</PrevStation>
-      <NextStation>187</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>187</StationNumber>
-      <LineStationIndex>7</LineStationIndex>
-      <PrevStation>148</PrevStation>
-      <NextStation>179</NextStation>
-      <IsActive>False</IsActive>
-    </LineStation>
-    <LineStation>
-      <LineId>31</LineId>
-      <StationNumber>179</StationNumber>
-      <LineStationIndex>8</LineStationIndex>
-      <PrevStation>187</PrevStation>
-      <IsActive>False</IsActive>
     </LineStation>
   </LineStations>
   <LineTrips />
