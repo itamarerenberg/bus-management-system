@@ -249,25 +249,6 @@ namespace BL
 
                 throw msg;
             }
-            //try
-            //{
-            //    int id = dl.AddLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
-
-            //    if (line.Stations != null)
-            //    {
-            //        foreach (LineStation lStation in line.Stations)
-            //        {
-            //            dl.AddLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-            //            dl.AddAdjacentStations((DO.AdjacentStations)lStation.PrevToCurrent.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-            //            dl.AddAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-            //        }
-            //    }
-            //    return id;
-            //}
-            //catch (Exception msg)
-            //{
-            //    throw msg;
-            //}
         }
         public Line GetLine(int id)
         {
@@ -285,22 +266,60 @@ namespace BL
                 throw msg;
             }
         }
-        public void UpdateLine(Line line)
+        /// <summary>
+        /// update the stations of the line
+        /// </summary>
+        public void UpdateLine(int lineId, IEnumerable<Station> stations, List<int?> distances, List<int?> times)
         {
-            try
+            //delete all the line stations in this line
+            foreach(Station st in stations)
             {
-                dl.UpdateLine((DO.Line)line.CopyPropertiesToNew(typeof(DO.Line)));//creats DO line from BO line
-                foreach (LineStation lStation in line.Stations)
+                dl.DeleteLineStation(lineId, st.Code);
+            }
+
+            //add the new list of line stations of the line
+
+            //add the adjacentStations:
+            List<AdjacentStations> adjStations = Calculate_dist(stations.ToList(), distances, times);//get the list of the AdjacentStations
+            foreach (AdjacentStations adjSt in adjStations)//add all the AdjacentStations to dl
+            {
+                dl.AddAdjacentStations(new DO.AdjacentStations()
                 {
-                    dl.UpdateLineStation((DO.LineStation)lStation.CopyPropertiesToNew(typeof(DO.LineStation)));//creats DO Line Station from BO Line Station
-                    if (lStation.CurrentToNext == null) { break; } //if is the last station => break
-                    dl.UpdateAdjacentStations((DO.AdjacentStations)lStation.CurrentToNext.CopyPropertiesToNew(typeof(DO.AdjacentStations)));//creats DO AdjacentStations from BO Line Station
-                }
+                    StationCode1 = adjSt.StationCode1,
+                    StationCode2 = adjSt.StationCode2,
+                    Distance = adjSt.Distance,
+                    Time = adjSt.Time,
+                    IsActive = true
+                });
             }
-            catch (Exception msg)
+
+            //add tha LineStations:
+            DO.LineStation first_station = new DO.LineStation()//first station define sepretly
             {
-                throw msg;
+                LineId = lineId,
+                StationNumber = stations.ElementAt(0).Code,
+                LineStationIndex = 0,
+                PrevStation = null,
+                IsActive = true
+            };
+            DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
+            stations = stations.Skip(1);//remove the first station from stations (its allready take ceared)
+            int index = 1;//this will be use to define the fild LineStationIndex in the loop
+            foreach (Station st in stations)//! I think we shuld add in dl function that add a range of LineStation
+            {
+                prev_station.NextStation = st.Code;
+                dl.AddLineStation(prev_station);
+                DO.LineStation current = new DO.LineStation()
+                {
+                    LineId = lineId,
+                    StationNumber = st.Code,
+                    LineStationIndex = index++,
+                    PrevStation = prev_station.StationNumber,//! I think we shuld add to LineStation id fild
+                    IsActive = true
+                };
+                prev_station = current;
             }
+            dl.AddLineStation(prev_station);//add last station
         }
         public void DeleteLine(int id)
         {

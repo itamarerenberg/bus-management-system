@@ -16088,7 +16088,7 @@
       <StationNumber>60413</StationNumber>
       <LineStationIndex>0</LineStationIndex>
       <NextStation>61157</NextStation>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </LineStation>
     <LineStation>
       <LineId>48</LineId>
@@ -16104,7 +16104,7 @@
       <LineStationIndex>2</LineStationIndex>
       <PrevStation>61157</PrevStation>
       <NextStation>28</NextStation>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </LineStation>
     <LineStation>
       <LineId>48</LineId>
@@ -16119,7 +16119,7 @@
       <StationNumber>29</StationNumber>
       <LineStationIndex>4</LineStationIndex>
       <PrevStation>28</PrevStation>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </LineStation>
     <LineStation>
       <LineId>49</LineId>
