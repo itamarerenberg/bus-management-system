@@ -43,7 +43,6 @@ namespace DLXML
         static string UsersTripsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersTripsFileName); 
         #endregion
 
-        static XElement dsRoot;
         #region data Access
         #region files roots
         static XElement busesRoot;
@@ -185,26 +184,26 @@ namespace DLXML
         /// </summary>
         /// <param name="obj">the object to add</param>
         /// <param name="lable">the label to add the new object to</param>
-        public static void SaveObj(object obj, string lable)
-        {
-            if (obj == null)
-            {
-                return;
-            }
-            XElement newObj = new XElement(obj.GetType().Name);
-            foreach (var prop in obj.GetType().GetProperties())
-            {
-                object temp = prop.GetValue(obj);
+        //public static void SaveObj(object obj, string lable)
+        //{
+        //    if (obj == null)
+        //    {
+        //        return;
+        //    }
+        //    XElement newObj = new XElement(obj.GetType().Name);
+        //    foreach (var prop in obj.GetType().GetProperties())
+        //    {
+        //        object temp = prop.GetValue(obj);
 
-                if (temp != null)
-                {
-                    String val = temp != null ? temp.ToString() : "";
-                    newObj.Add(new XElement(prop.Name, val));//insert new label <prop.Name> prop.GetValue(prop).ToString() </prop.Name>
-                }
-            }
-            dsRoot.Element(lable).Add(newObj);
-            dsRoot.Save(FilePath);
-        }
+        //        if (temp != null)
+        //        {
+        //            String val = temp != null ? temp.ToString() : "";
+        //            newObj.Add(new XElement(prop.Name, val));//insert new label <prop.Name> prop.GetValue(prop).ToString() </prop.Name>
+        //        }
+        //    }
+        //    dsRoot.Element(lable).Add(newObj);
+        //    dsRoot.Save(FilePath);
+        //}
 
         static public void Save(string fileName)
         {
