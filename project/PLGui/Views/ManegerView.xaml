@@ -58,7 +58,7 @@
                 </y:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" SelectedIndex="0" Width="auto">
+        <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" SelectedIndex="0" Width="auto" >
             <y:Interaction.Triggers>
                 <y:EventTrigger EventName="SelectionChanged">
                     <y:InvokeCommandAction Command="{Binding TabChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -165,14 +165,23 @@
 
         <GroupBox Header="details" Grid.Row="3" Grid.Column="1" Margin="10">
             <StackPanel Margin="10" VerticalAlignment="Stretch">
-                <TextBlock x:Name="Header1" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <Label x:Name="content1" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header2" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <Label x:Name="content2" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header3" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <Label x:Name="content3" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header4" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <Label x:Name="content4" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header1"/>
+                <Label x:Name="content1" BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header2"/>
+                <Label x:Name="content2"  BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header3" />
+                <Label x:Name="content3"  BorderThickness="2" HorizontalAlignment="Right"/>
+                <TextBlock x:Name="Header4" />
+                <Label x:Name="content4"  BorderThickness="2" HorizontalAlignment="Right"/>
+                <ListView x:Name="LineStations_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" Visibility="Collapsed" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
+                            <GridViewColumn x:Name="Distance"  Header="Distance to next" Width="auto" DisplayMemberBinding="{Binding CurrentToNext.Distance}" />
+                            <GridViewColumn x:Name="Time"  Header="Estimate time" Width="auto" DisplayMemberBinding="{Binding CurrentToNext.Time}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                     <Button x:Name="DeleteButton" Content="delete" Margin="10" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                     <Button x:Name="UpdateButton" Content="update" Margin="10" Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
