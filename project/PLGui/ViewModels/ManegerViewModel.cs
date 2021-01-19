@@ -63,22 +63,28 @@ namespace PLGui.ViewModels
         public ObservableCollection<Bus> Buses
         {
             get => manegerModel.Buses;
-            set => SetProperty(ref manegerModel.Buses, value, true);
+            set => SetProperty(ref manegerModel.Buses, value);
         }
         public ObservableCollection<Line> Lines
         {
             get => manegerModel.Lines;
-            set => SetProperty(ref manegerModel.Lines, value, true);
+            set => SetProperty(ref manegerModel.Lines, value);
         }
         public ObservableCollection<Station> Stations
         {
             get => manegerModel.Stations;
-            set => SetProperty(ref manegerModel.Stations, value, true);
+            set => SetProperty(ref manegerModel.Stations, value);
         }
         public ObservableCollection<LineTrip> Linetrips
         {
             get => manegerModel.LineTrips;
-            set => SetProperty(ref manegerModel.LineTrips, value, true);
+            set => SetProperty(ref manegerModel.LineTrips, value);
+        }
+        ObservableCollection<BO.LineStation> lineStation;
+        public ObservableCollection<BO.LineStation> LineStations
+        {
+            get => lineStation;
+            set => SetProperty(ref lineStation, value);
         }
         #endregion
 
@@ -194,8 +200,13 @@ namespace PLGui.ViewModels
             {
                 ManegerView Mview = window as ManegerView;
                 GridView currentGridView = ((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView;
-                List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
-                Mview.ComboBoxSearch.ItemsSource = comboList;
+                if (currentGridView.se)
+                {
+                    List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
+                    Mview.ComboBoxSearch.ItemsSource = comboList;
+                    DetailsVisibility(Mview, false);
+                    Mview.LineStations_view.Visibility = Visibility.Collapsed; 
+                }
 
                 OnPropertyChanged(nameof(selectedTabItem));
                 OnPropertyChanged(nameof(IsSelcetdItemList));
@@ -222,19 +233,27 @@ namespace PLGui.ViewModels
 
                 Mview.Header4.Text = "Location:";
                 Mview.content4.Content = selectedStation.Location;
+
+                DetailsVisibility(Mview, true);
             }
 
             if ((sender as ListView).SelectedItem is Line selectedLine)
             {
+                Mview.LineStations_view.Visibility = Visibility.Visible;
+                LineStations = selectedLine.Stations;
+
                 Mview.Header1.Text = "Line Number:";
                 Mview.content1.Content = selectedLine.LineNumber;
 
                 Mview.Header2.Text = "Area:";
                 Mview.content2.Content = selectedLine.Area;
 
+                Mview.Header1.Visibility = Visibility.Visible;
+                Mview.content1.Visibility = Visibility.Visible;
+                Mview.Header2.Visibility = Visibility.Visible;
+                Mview.content2.Visibility = Visibility.Visible;
                 Mview.Header3.Visibility = Visibility.Collapsed;
                 Mview.content3.Visibility = Visibility.Collapsed;
-
                 Mview.Header4.Visibility = Visibility.Collapsed;
                 Mview.content4.Visibility = Visibility.Collapsed;
             }
@@ -351,13 +370,40 @@ namespace PLGui.ViewModels
         {
             lineToSend = line;
             new NewLineView().ShowDialog();
+            loadData();
         }
         private void UpdateStation(Station station)
         {
             stationToSend = station;
             new NewStationView().ShowDialog();
+            loadData();
         }
 
+        private void DetailsVisibility(ManegerView Mview, bool flag)
+        {
+            if (flag)
+            {
+                Mview.Header1.Visibility = Visibility.Visible;
+                Mview.content1.Visibility = Visibility.Visible;
+                Mview.Header2.Visibility = Visibility.Visible;
+                Mview.content2.Visibility = Visibility.Visible;
+                Mview.Header3.Visibility = Visibility.Visible;
+                Mview.content3.Visibility = Visibility.Visible;
+                Mview.Header4.Visibility = Visibility.Visible;
+                Mview.content4.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Mview.Header1.Visibility = Visibility.Collapsed;
+                Mview.content1.Visibility = Visibility.Collapsed;
+                Mview.Header2.Visibility = Visibility.Collapsed;
+                Mview.content2.Visibility = Visibility.Collapsed;
+                Mview.Header3.Visibility = Visibility.Collapsed;
+                Mview.content3.Visibility = Visibility.Collapsed;
+                Mview.Header4.Visibility = Visibility.Collapsed;
+                Mview.content4.Visibility = Visibility.Collapsed;
+            }
+        }
         #endregion
 
         #region Messenger
