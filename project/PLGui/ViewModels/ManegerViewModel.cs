@@ -196,6 +196,7 @@ namespace PLGui.ViewModels
                 GridView currentGridView = ((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView;
                 List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
                 Mview.ComboBoxSearch.ItemsSource = comboList;
+
                 OnPropertyChanged(nameof(selectedTabItem));
                 OnPropertyChanged(nameof(IsSelcetdItemList));
             }

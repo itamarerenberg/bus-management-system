@@ -78,6 +78,7 @@ namespace PLGui.ViewModels
             {
                 NewLineMode = true;
                 buttonCaption = "Add line";
+                tempLine = new Line();
             }
             
             //load data
@@ -144,8 +145,6 @@ namespace PLGui.ViewModels
                 if (Stations.Count > 0)
                     Stations.Last().NotLast = true;//now the previus last station is no longer the last
                 Stations.Add(new LineStation() { Station = selectedStation, NotLast = false});//this is the last station in Stations
-                TempLine.Stations.Add(new BO.LineStation() 
-                { Address = selectedStation.Address, StationNumber = selectedStation.Code, LineStationIndex = tempLine.Stations.Count });
                 DBStations.Remove(selectedStation);
                 OnPropertyChanged(nameof(IsMinStation));
 
