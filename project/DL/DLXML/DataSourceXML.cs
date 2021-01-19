@@ -10,6 +10,11 @@ using System.Xml.Linq;
 
 namespace DLXML
 {
+    class FileDetails
+    {
+        public XElement Root { get; set; }
+        public string Path { get; set; }
+    }
     static class DataSourceXML
     {
         static string FileName = "DataSource.xml";
@@ -130,16 +135,16 @@ namespace DLXML
         #endregion
         #endregion
 
-        static Dictionary<string, dynamic> files = new Dictionary<string, dynamic> {
-            ["Buses"] = {isChanged = false , root = busesRoot, path = BusesFilePath},
-            ["AdjacentStations"] = { isChanged = false, root = adjacentStationsRoot, path = AdjacentStationsFilePath },
-            ["Lines"] = { isChanged = false, root = linesRoot, path = LinesFilePath },
-            ["BusesOnTrip"] = { isChanged = false, root = busesOnTripRoot, path = BusesFilePath },
-            ["Stations"] = { isChanged = false, root = StationsRoot, path = StationsFilePath }, 
-            ["LineStations"] = { isChanged = false, root = LineStationsRoot, path = LineStationsFilePath },
-            ["LineTrips"] = { isChanged = false, root = LineTripsRoot, path = LineTripsFilePath },
-            ["Users"] = { isChanged = false, root = UsersRoot, path = UsersFilePath },
-            ["UsersTrips"] = { isChanged = false, root = UsersTripsRoot, path = UsersTripsFilePath }
+        static Dictionary<string, FileDetails> files = new Dictionary<string, FileDetails> {
+            ["Buses"] = new FileDetails{Root = busesRoot, Path = BusesFilePath},
+            ["AdjacentStations"] = new FileDetails { Root = adjacentStationsRoot, Path = AdjacentStationsFilePath },
+            ["Lines"] = new FileDetails { Root = linesRoot, Path = LinesFilePath },
+            ["BusesOnTrip"] = new FileDetails { Root = busesOnTripRoot, Path = BusesFilePath },
+            ["Stations"] = new FileDetails { Root = StationsRoot, Path = StationsFilePath }, 
+            ["LineStations"] = new FileDetails { Root = LineStationsRoot, Path = LineStationsFilePath },
+            ["LineTrips"] = new FileDetails { Root = LineTripsRoot, Path = LineTripsFilePath },
+            ["Users"] = new FileDetails { Root = UsersRoot, Path = UsersFilePath },
+            ["UsersTrips"] = new FileDetails { Root = UsersTripsRoot, Path = UsersTripsFilePath }
         };
 
         public static int serialLineID;
@@ -148,27 +153,17 @@ namespace DLXML
 
         static DataSourceXML()
         {
-            busesRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Buses"].isChanged = true;//if the xelement is changed then set IsChenged[BusesFilePath] to true
-            adjacentStationsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["AdjacentStations"].isChanged = true;//...IsChenged[AdjacentStationsFilePath]...
-            linesRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Lines"].isChanged = true;//...IsChenged[LinesFilePath]...
-            busesOnTripRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["BusesOnTrip"].isChanged = true;//...IsChenged[BusesOnTripFilePath]...
-            StationsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Stations"].isChanged = true;//...IsChenged[StationsFilePath]...
-            LineStationsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["LineStations"].isChanged = true;//...IsChenged[LineStationsFilePath]...
-            LineTripsRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["LineTrips"].isChanged = true;//...IsChenged[LineTripsFilePath]...
-            UsersRoot.Changed += (object sender, XObjectChangeEventArgs e) => files["Users"].isChanged = true;//...IsChenged[UsersFilePath]...
-            UsersTrips.Changed += (object sender, XObjectChangeEventArgs e) => files["UsersTrips"].isChanged = true;//...IsChenged[UsersTripsFilePath]...
-
             serialLineID = 0;
             foreach (var file in files)
             {
-                if (!File.Exists(file.Value.path))//if the file don't exist
+                if (!File.Exists(file.Value.Path))//if the file don't exist
                 {
-                    file.Value.root = new XElement(file.Key);//create new file with root <elements>
-                    file.Value.root.Save(file.Value.path);
+                    file.Value.Root = new XElement(file.Key);//create new file with root <elements>
+                    file.Value.Root.Save(file.Value.Path);
                 }
                 else
                 {
-                    file.Value.root = XElement.Load(file.Value.path);
+                    file.Value.Root = XElement.Load(file.Value.Path);
                 }
             }
         }
@@ -211,21 +206,18 @@ namespace DLXML
             dsRoot.Save(FilePath);
         }
 
-        static public void Save()
+        static public void Save(string fileName)
         {
-            foreach(var file in files)
+            if(!files.ContainsKey(fileName))
             {
-                if(file.Value.isChanged)
-                {
-                    file.Value.root.Save(file.Value.path);
-                    file.Value.isChanged = false;
-                }
+                throw new ArgumentException($"file {fileName} dont exist");
             }
+            files[fileName].Root.Save(files[fileName].Path);
         }
 
         public static void SaveListSerializer<T>(this List<T> list, string typename)
         {
-            XMLTools.SaveListToXMLSerializer<T>(list, files[typename].path);//save the list to the file that accur in files as the file of this intety
+            XMLTools.SaveListToXMLSerializer<T>(list, files[typename].Path);//save the list to the file that accur in files as the file of this intety
         }
         public static void SaveList(this XElement root,string typename)
         {
