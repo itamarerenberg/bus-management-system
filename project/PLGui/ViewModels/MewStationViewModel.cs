@@ -36,18 +36,19 @@ namespace PLGui.ViewModels
 
         public MewStationViewModel()
         {
-            //try to get a response
-            try
+            TempStation = WeakReferenceMessenger.Default.Send<RequestStation>();//requests the old station (if exist)
+
+            if (tempStation != null)// we are on updateing mode
             {
-                TempStation = WeakReferenceMessenger.Default.Send<RequestStation>();//requests the old station (if exist)
                 NewStationMode = false;
-                ButtonCaption = "Update Station";
+                ButtonCaption = "Update Station"; 
             }
-            catch (Exception)   // didn't get a response!  = we are on "new station mode"
+            else                    // we are on new station mode
             {
                 NewStationMode = true;
                 ButtonCaption = "Add Station";
             }
+
             source = BLFactory.GetBL("admin");
 
             ButtonCommand = new RelayCommand(Add_Update_Button);

@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace PLGui
 {
     /// <summary>
-    /// Interaction logic for User.xaml
+    /// Interaction logic for PassengerView.xaml
     /// </summary>
-    public partial class User : Window
+    public partial class PassengerView : Window
     {
-        public User()
+        public PassengerView()
         {
             InitializeComponent();
         }

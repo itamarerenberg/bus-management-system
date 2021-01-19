@@ -66,17 +66,21 @@ namespace PLGui.ViewModels
         /// </summary>
         public NewLineViewModel()
         {
-            try         //try to get a response
+
+            tempLine = WeakReferenceMessenger.Default.Send<RequestLine>();//requests the old line (if exist)
+
+            if (tempLine != null)// we are in update line mode
             {
-                tempLine = WeakReferenceMessenger.Default.Send<RequestLine>();//requests the old line (if exist)
                 NewLineMode = false;
                 buttonCaption = "Update line";
             }
-            catch (Exception)   // didn't get a response!  = we are on "new line mode"
+            else                // we are in new line mode
             {
                 NewLineMode = true;
                 buttonCaption = "Add line";
+                tempLine = new Line();
             }
+            
             //load data
             source = BLFactory.GetBL("admin");
             loadData();
@@ -107,6 +111,7 @@ namespace PLGui.ViewModels
                         {
                             getDataOfOldLine(DBStations, Stations, TempLine);
                             OnPropertyChanged(nameof(Stations));
+                            OnPropertyChanged(nameof(IsMinStation));
                         }
                         OnPropertyChanged(nameof(DBStations));
                     }
@@ -140,8 +145,6 @@ namespace PLGui.ViewModels
                 if (Stations.Count > 0)
                     Stations.Last().NotLast = true;//now the previus last station is no longer the last
                 Stations.Add(new LineStation() { Station = selectedStation, NotLast = false});//this is the last station in Stations
-                TempLine.Stations.Add(new BO.LineStation() 
-                { Address = selectedStation.Address, StationNumber = selectedStation.Code, LineStationIndex = tempLine.Stations.Count });
                 DBStations.Remove(selectedStation);
                 OnPropertyChanged(nameof(IsMinStation));
 
@@ -288,11 +291,13 @@ namespace PLGui.ViewModels
                         lineStation.Time = (int?)doLS.CurrentToNext.Time.TotalMinutes; 
                     }
                     lineStation.Index = doLS.LineStationIndex;
+                    lineStation.NotLast = true;
                     stations.Add(lineStation);
                     DBStations.Remove(lineStation.Station);//remove the station from the data base list
                 }
             }
             stations.OrderBy(l => l.Index);
+            stations.Last().NotLast = false;
 
             tempLine.LineNumber = line.LineNumber;
             tempLine.Area = line.Area;

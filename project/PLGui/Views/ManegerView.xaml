@@ -58,7 +58,7 @@
                 </y:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25"  SelectedIndex="0">
+        <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" SelectedIndex="0" Width="auto">
             <y:Interaction.Triggers>
                 <y:EventTrigger EventName="SelectionChanged">
                     <y:InvokeCommandAction Command="{Binding TabChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -115,6 +115,46 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            <TabItem x:Name="LineTrip_view" Header="Line trips" >
+                <ListView x:Name="LineTrip" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Linetrips}">
+                    <y:Interaction.Triggers>
+                        <y:EventTrigger EventName="SelectionChanged">
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type ListView},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                        </y:EventTrigger>
+                    </y:Interaction.Triggers>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn x:Name="LineId"  Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineId}" />
+                            <GridViewColumn x:Name="StartTime"  Header="Start Time" Width="auto" DisplayMemberBinding="{Binding StartTime}" />
+                            <GridViewColumn x:Name="Finish"  Header="Finish" Width="auto" DisplayMemberBinding="{Binding FinishAt}"/>
+                            <GridViewColumn x:Name="Frequency"  Header="Frequency" Width="auto" DisplayMemberBinding="{Binding Frequency}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            <TabItem x:Name="Bus_view" Header="Buses" >
+                <ListView x:Name="Buses" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Buses}">
+                    <y:Interaction.Triggers>
+                        <y:EventTrigger EventName="SelectionChanged">
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type ListView},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                        </y:EventTrigger>
+                    </y:Interaction.Triggers>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn x:Name="LicensNumber"  Header="Licens Number" Width="auto" DisplayMemberBinding="{Binding LicensNumber}" />
+                            <GridViewColumn x:Name="Stat"  Header="Status" Width="auto" DisplayMemberBinding="{Binding Stat}" />
+                            <GridViewColumn x:Name="Fuel"  Header="Fuel" Width="auto" DisplayMemberBinding="{Binding Fule}"/>
+                            <GridViewColumn x:Name="Kilometraz"  Header="Kilometraz" Width="auto" DisplayMemberBinding="{Binding Kilometraz}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
