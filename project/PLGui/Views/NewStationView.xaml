@@ -1,0 +1,68 @@
+﻿<Window x:Class="PLGui.NewStationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGui"
+        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
+        mc:Ignorable="d"
+        Title="add New Station" Height="200" Width="400">
+    <Window.DataContext>
+        <viewmodels:MewStationViewModel x:Name="vModel"/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <StackPanel Margin="10,0,0,0">
+                <TextBlock Text="Station code" HorizontalAlignment="Left"/>
+                <TextBox x:Name="SCode" Text="{Binding Station.Code, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewStationMode, Mode=OneTime}"/>
+            </StackPanel>
+            <StackPanel Margin="30,0,0,0">
+                <TextBlock Text="Name" HorizontalAlignment="Left"/>
+                <TextBox x:Name="SName" Text="{Binding Station.Name, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="120" Height="22" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <StackPanel Margin="10,0,0,0">
+                <TextBlock Text="Address" HorizontalAlignment="Left"/>
+                <TextBox x:Name="SAddress" Text="{Binding Station.Address, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" />
+            </StackPanel>
+            <StackPanel Margin="30,0,0,0">
+                <TextBlock Text="Longitude" HorizontalAlignment="Left"/>
+                <TextBox x:Name="SLong" Text="{Binding Station.Longitude, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewStationMode, Mode=OneTime}"/>
+            </StackPanel>
+            <StackPanel Margin="30,0,0,0">
+                <TextBlock Text="Latitude" HorizontalAlignment="Left"/>
+                <TextBox x:Name="SLat" Text="{Binding Station.Latitude, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewStationMode, Mode=OneTime}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Button x:Name="AddStationButton" Content="{Binding ButtonCaption, Mode=OneTime}" Command="{Binding ButtonCommand}" Grid.Row="3" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" HorizontalAlignment="Right">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="IsEnabled" Value="false" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ElementName=SCode, Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding ElementName=SName, Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding ElementName=SAddress, Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding ElementName=SLong, Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding ElementName=SLat, Path=(Validation.HasError)}" Value="false" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsEnabled" Value="true" />
+                            <Setter Property="FocusManager.IsFocusScope" Value="True"/>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </Grid>
+</Window>

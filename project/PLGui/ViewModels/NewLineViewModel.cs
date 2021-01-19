@@ -11,7 +11,9 @@ using BL.BLApi;
 using BLApi;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using PLGui.Models.PO;
+using PLGui.utilities;
 
 namespace PLGui.ViewModels
 {
@@ -20,85 +22,70 @@ namespace PLGui.ViewModels
 
         #region fields
         IBL source;
-        BackgroundWorker load_data;
+        BackgroundWorker loadDataWorker;
         BackgroundWorker creatNewLine;
 
-        Line newLine = new Line();
-        private BO.AdjacentStations toNext;
-        private BO.AdjacentStations toBack;
+        Line tempLine;
         private bool addManually;
 
         #endregion
 
         #region properties
-        public List<string> ComboList { get; set; }
 
-        public Line NewLine
+        public Line TempLine
         {
-            get => newLine;
+            get => tempLine;
             set
             {
-                SetProperty(ref newLine, value);
+                SetProperty(ref tempLine, value);
             }
         }
-
-        public BO.AdjacentStations ToNext
+        public bool AddManually
         {
-            get => toNext;
-            set
-            {
-                SetProperty(ref toNext, value);
-            }
-        }
-
-        public BO.AdjacentStations ToBack
-        {
-            get => toBack;
-            set
-            {
-                SetProperty(ref toBack, value);
-            }
-        }
-
-
-        public ObservableCollection<Station> DBStations { get; set; }//data base stations
-        public ObservableCollection<LineStation> Stations { get; set; }//new updated line stations
-
-        public bool IsMinStation { get => Stations.Count >= 2; }
-        public bool AddManually 
-        { 
             get => addManually;
             set
             {
                 SetProperty(ref addManually, value);
             }
         }
+        public string buttonCaption { get; set; }
+        public bool NewLineMode{ get; set; }
+        public bool IsMinStation { get => Stations.Count >= 2; }
+
+        public ObservableCollection<Station> DBStations { get; set; }//data base stations
+        public ObservableCollection<LineStation> Stations { get; set; } = new ObservableCollection<LineStation>();//new updated line stations
+        public List<string> ComboList { get; set; } = new List<string>() { "Name", "Code", "Address" };
+
 
         #endregion
 
         #region constructors
+        /// <summary>
+        /// view model for generating/updating line. the constructor send a message to the sender
+        /// to determaine the mode of the view model(generating a new line or updating an existing one)
+        /// </summary>
         public NewLineViewModel()
         {
+            try         //try to get a response
+            {
+                tempLine = WeakReferenceMessenger.Default.Send<RequestLine>();//requests the old line (if exist)
+                NewLineMode = false;
+                buttonCaption = "Update line";
+            }
+            catch (Exception)   // didn't get a response!  = we are on "new line mode"
+            {
+                NewLineMode = true;
+                buttonCaption = "Add line";
+            }
+            //load data
             source = BLFactory.GetBL("admin");
-            Stations = new ObservableCollection<LineStation>();
-            newLine.Stations = new ObservableCollection<BO.LineStation>();
-            ComboList = new List<string>() { "Name", "Code", "Address" };
             loadData();
 
+            //commands initalizing
             SelectDBStationCommand = new RelayCommand<object>(SelectDBStation);
-            SelectStationCommand = new RelayCommand<Window>(SelectStation);
-            SaveButton = new RelayCommand<Window>(saveButton);
-            AddLineButton = new RelayCommand(AddLineButton_click);
+            AddLineButton = new RelayCommand(Add_Update_LineButton);
             DeleteStationCommand = new RelayCommand<object>(DeleteStation);
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
-        }
-        /// <summary>
-        /// updating an existing line
-        /// </summary>
-        /// <param name="oldLine"></param>
-        public NewLineViewModel(Line oldLine)//constructor for updating purpose
-        {
-
         }
 
         #endregion
@@ -106,21 +93,26 @@ namespace PLGui.ViewModels
         #region load data
         private void loadData()
         {
-            if (load_data == null)
+            if (loadDataWorker == null)
             {
-                load_data = new BackgroundWorker();
+                loadDataWorker = new BackgroundWorker();
             }
-            load_data.RunWorkerCompleted +=
+            loadDataWorker.RunWorkerCompleted +=
                 (object sender, RunWorkerCompletedEventArgs args) =>
                 {
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated before he done execute DoWork
                         DBStations = (ObservableCollection<Station>)args.Result;
-                        OnPropertyChanged("DBStations");
+                        if (NewLineMode == false)//if the view model on "updating mode"
+                        {
+                            getDataOfOldLine(DBStations, Stations, TempLine);
+                            OnPropertyChanged(nameof(Stations));
+                        }
+                        OnPropertyChanged(nameof(DBStations));
                     }
                 };//this function will execute in the main thred
 
-            load_data.DoWork +=
+            loadDataWorker.DoWork +=
                 (object sender, DoWorkEventArgs args) =>
                 {
                     BackgroundWorker worker = (BackgroundWorker)sender;
@@ -128,15 +120,13 @@ namespace PLGui.ViewModels
                     result = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));
                     args.Result = worker.CancellationPending ? null : result;
                 };//this function will execute in the BackgroundWorker thread
-            load_data.RunWorkerAsync();
+            loadDataWorker.RunWorkerAsync();
         }
         #endregion
 
         #region commands
         public ICommand SelectDBStationCommand { get; }
-        public ICommand SelectStationCommand { get; }
         public ICommand DeleteStationCommand { get; }
-        public ICommand SaveButton { get; }
         public ICommand AddLineButton { get; }
         public ICommand SearchCommand { get; }
 
@@ -150,8 +140,8 @@ namespace PLGui.ViewModels
                 if (Stations.Count > 0)
                     Stations.Last().NotLast = true;//now the previus last station is no longer the last
                 Stations.Add(new LineStation() { Station = selectedStation, NotLast = false});//this is the last station in Stations
-                NewLine.Stations.Add(new BO.LineStation() 
-                { Address = selectedStation.Address, StationNumber = selectedStation.Code, LineStationIndex = newLine.Stations.Count });
+                TempLine.Stations.Add(new BO.LineStation() 
+                { Address = selectedStation.Address, StationNumber = selectedStation.Code, LineStationIndex = tempLine.Stations.Count });
                 DBStations.Remove(selectedStation);
                 OnPropertyChanged(nameof(IsMinStation));
 
@@ -172,7 +162,7 @@ namespace PLGui.ViewModels
                 Stations.Remove(selectedStation);
                 if (selectedStation.NotLast == false && Stations.Count > 0)//if the selectet station was the last station
                     Stations.Last().NotLast = false;//set the new last station to not NotLast
-                newLine.Stations.RemoveAt(index);
+                tempLine.Stations.RemoveAt(index);
                 OnPropertyChanged(nameof(IsMinStation));
 
                 NewLineView Lview = (((sender as ListView).Parent as StackPanel).Parent as Grid).Parent as NewLineView;
@@ -180,71 +170,15 @@ namespace PLGui.ViewModels
             }
         }
         /// <summary>
-        /// when a station in the new line's stations is selected. add an option to add a distance and time between the stations
-        /// </summary>
-        private void SelectStation(Window window)
-        {
-            NewLineView newLineView = window as NewLineView;
-            if (newLineView.StationList.SelectedItem is Station selectedStation)
-            {
-                newLineView.StationName.Text = selectedStation.Name;
-
-                int index = newLineView.StationList.SelectedIndex;
-                int lastIndex = newLineView.StationList.Items.Count - 1;
-
-                //preventing the option to add distance to back/next if the station's index is first/last respectivly
-                if (index == 0)
-                {
-                    newLineView.DisToBack.IsEnabled = false;
-                    newLineView.TimeToBack.IsEnabled = false;
-                    newLineView.DisToNext.IsEnabled = true;
-                    newLineView.TimeToNext.IsEnabled = true;
-                }
-                else
-                {
-                    if (index == lastIndex)
-                    {
-                        newLineView.DisToBack.IsEnabled = true;
-                        newLineView.TimeToBack.IsEnabled = true;
-                        newLineView.DisToNext.IsEnabled = false;
-                        newLineView.TimeToNext.IsEnabled = false;
-                    }
-                    else
-                    {
-                        newLineView.DisToBack.IsEnabled = true;
-                        newLineView.TimeToBack.IsEnabled = true;
-                        newLineView.DisToNext.IsEnabled = true;
-                        newLineView.TimeToNext.IsEnabled = true;
-                    }
-                }
-
-                toNext = newLine.Stations[index].CurrentToNext;
-                toBack = newLine.Stations[index].PrevToCurrent;
-                OnPropertyChanged(nameof(toNext));
-                OnPropertyChanged(nameof(toBack));
-            }
-        }
-        /// <summary>
         /// save the changes of distance/time
         /// </summary>
-        private void saveButton(Window window)
+        private void Add_Update_LineButton()
         {
-            NewLineView newLineView = window as NewLineView;
-            if (newLineView.StationList.SelectedItem is Station selectedStation)
+            if (NewLineMode == false)//if the view model on "updating mode"
             {
-                int index = newLineView.StationList.SelectedIndex;
-
-                newLine.Stations[index].CurrentToNext = toNext;
-                newLine.Stations[index].PrevToCurrent = toBack;
-
-                ToNext = null;
-                toBack = null;
-                OnPropertyChanged(nameof(toNext));
-                OnPropertyChanged(nameof(toBack));
+                UpdateLine();
+                return;
             }
-        }
-        private void AddLineButton_click()
-        {
             if (creatNewLine == null)
             {
                 creatNewLine = new BackgroundWorker();
@@ -265,8 +199,8 @@ namespace PLGui.ViewModels
 
                     BO.Line BOline = new BO.Line()//creating new BO line
                     {
-                        LineNumber = (int)NewLine.LineNumber,
-                        Area = (BO.AreasEnum)NewLine.Area
+                        LineNumber = (int)TempLine.LineNumber,
+                        Area = (BO.AreasEnum)TempLine.Area
                     };
                     List<int?> distances = Stations.Select(lst => lst.Distance).ToList();
                     List<int?> times = Stations.Select(lst => lst.Time).ToList();
@@ -275,9 +209,14 @@ namespace PLGui.ViewModels
             creatNewLine.RunWorkerAsync();
 
         }
+        private void UpdateLine()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// accured when search box is changing. replace the list in the window into list that contains the search box text.
-        /// the search is according to the conbo box picking
+        /// the search is according to the combo box picking
         /// </summary>
         private void SearchBox_TextChanged(object sender)
         {
@@ -305,8 +244,35 @@ namespace PLGui.ViewModels
         #endregion
 
         #region help methods
+        /// <summary>
+        /// help method for "updating mode". initalize the stations from the line's and data base's stations. 
+        /// </summary>
+        /// <param name="DBstations">data base stations</param>
+        /// <param name="stations">empty collection<LineStation></LineStation></param>
+        /// <param name="line">the old line</param>
+        private void getDataOfOldLine(Collection<Station> DBstations, Collection<LineStation> stations, Line line )
+        {
+            foreach (var doLS in line.Stations)
+            {
+                LineStation lineStation = new LineStation();
+                lineStation.Station = DBStations.Where(s => s.Code == doLS.StationNumber).FirstOrDefault();//get the station from the data base
+                if (lineStation.Station != null)//if the station is exist get the rest details from the old line's station
+                {
+                    if (doLS.CurrentToNext != null)
+                    {
+                        lineStation.Distance = (int?)doLS.CurrentToNext.Distance;
+                        lineStation.Time = (int?)doLS.CurrentToNext.Time.TotalMinutes; 
+                    }
+                    lineStation.Index = doLS.LineStationIndex;
+                    stations.Add(lineStation);
+                    DBStations.Remove(lineStation.Station);//remove the station from the data base list
+                }
+            }
+            stations.OrderBy(l => l.Index);
 
-
+            tempLine.LineNumber = line.LineNumber;
+            tempLine.Area = line.Area;
+        }
 
         #endregion
     }

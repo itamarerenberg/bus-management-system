@@ -12,16 +12,22 @@ using BL.BLApi;
 using BLApi;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
+using Microsoft.Toolkit.Mvvm.Messaging.Messages;
 using PLGui.Models;
 using PLGui.Models.PO;
+using PLGui.utilities;
 
 namespace PLGui.ViewModels
 {
     public class ManegerViewModel : ObservableRecipient 
     {
+        #region fileds
+
         ManegerModel manegerModel;
         IBL source;
-        TabItem selectedTabItem;
+        TabItem selectedTabItem; 
+        #endregion
 
         #region help properties
         public TabItem SelectedTabItem 
@@ -51,7 +57,6 @@ namespace PLGui.ViewModels
             }
         } 
         #endregion
-
 
         #region collections
 
@@ -86,9 +91,15 @@ namespace PLGui.ViewModels
             TabChangedCommand = new RelayCommand<Window>(tab_selactionChange);
             ListChangedCommand = new RelayCommand<object>(List_SelectionChanged);
             NewLine = new RelayCommand(Add_newLine);
-            DeleteCommand = new RelayCommand<Window>(delete);
+            NewStation = new RelayCommand(Add_newStation);
+            UpdateCommand = new RelayCommand<Window>(Update);
+            DeleteCommand = new RelayCommand<Window>(Delete);
             Enter_asAnotherUserCommand = new RelayCommand<Window>(enter_asAnotherUser);
-            manegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
+            ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
+
+            //messengers initalize
+            RequestStationMessege();
+            RequestLineMessege();
         }
 
         #endregion
@@ -141,9 +152,11 @@ namespace PLGui.ViewModels
         public ICommand TabChangedCommand { get; }
         public ICommand ListChangedCommand { get; }
         public ICommand NewLine { get; }
+        public ICommand NewStation { get; }
+        public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand Enter_asAnotherUserCommand { get; }
-        public ICommand manegerView_ClosingCommand { get; }
+        public ICommand ManegerView_ClosingCommand { get; }
 
         /// <summary>
         /// accured when search box is changing. replace the list in the window into list that contains the search box text.
@@ -180,6 +193,7 @@ namespace PLGui.ViewModels
                 GridView currentGridView = ((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView;
                 List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
                 Mview.ComboBoxSearch.ItemsSource = comboList;
+                OnPropertyChanged(nameof(selectedTabItem));
                 OnPropertyChanged(nameof(IsSelcetdItemList));
             }
         }
@@ -214,22 +228,46 @@ namespace PLGui.ViewModels
                 Mview.Header2.Text = "Area:";
                 Mview.content2.Content = selectedLine.Area;
 
-                //Mview.Header3.Text = "Address:";
-                //Mview.content3.Content = selectedLine.Address;
+                Mview.Header3.Visibility = Visibility.Collapsed;
+                Mview.content3.Visibility = Visibility.Collapsed;
 
-                //Mview.Header4.Text = "Location:";
-                //Mview.content4.Content = selectedLine.Location;
+                Mview.Header4.Visibility = Visibility.Collapsed;
+                Mview.content4.Visibility = Visibility.Collapsed;
             }
+            OnPropertyChanged(nameof(selectedTabItem));
             OnPropertyChanged(nameof(IsSelcetdItemList));
         }
 
         private void Add_newLine()
         {
-            NewLineView newLineView = new NewLineView();
-            newLineView.ShowDialog();
+            new NewLineView().ShowDialog();
             loadData();
         }
 
+        private void Add_newStation()
+        {
+            new NewStationView().ShowDialog();
+            loadData();
+        }
+
+        /// <summary>
+        /// generic update command
+        /// </summary>
+        private void Update(Window window)
+        {
+            ManegerView Mview = window as ManegerView;
+
+            if (Mview.Stations_view.IsSelected)//station
+            {
+                Station station = Mview.StationList.SelectedItem as Station;
+                UpdateStation(station);
+            }
+            if (Mview.Lines_view.IsSelected)//line
+            {
+                Line line = Mview.LinesList.SelectedItem as Line;
+                Update_Line(line);
+            }
+        }
         private void MouseRightButtonDown(object sender)
         {
             ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
@@ -244,56 +282,102 @@ namespace PLGui.ViewModels
         /// generic delete command
         /// </summary>
         /// <param name="window"></param>
-        private void delete(Window window)
+        private void Delete(Window window)
         {
             if (window is ManegerView)
             {
                 ManegerView Mview = window as ManegerView;
-                //station
-                if (Mview.Stations_view.IsSelected)
+                
+                if (Mview.Stations_view.IsSelected)//station
                 {
                     Station station = Mview.StationList.SelectedItem as Station;
-                    if (station != null)
-                    {
-                        MessageBoxResult result = MessageBox.Show($"station: {station.Name} code: {station.Code} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
-                        if (result == MessageBoxResult.OK)
-                        {
-                            source.DeleteStation(station.Code);
-                            loadData();
-                            MessageBox.Show($"station: {station.Name} code: {station.Code} was deleted successfully!");
-                        } 
-                    }
+                    DeleteStation(station);
                 }
-                //Line
-                if (Mview.Lines_view.IsSelected)
+                if (Mview.Lines_view.IsSelected)//Line
                 {
                     Line line = Mview.LinesList.SelectedItem as Line;
-                    if (line != null)
-                    {
-                        MessageBoxResult result = MessageBox.Show($"line number: {line.LineNumber} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
-                        if (result == MessageBoxResult.OK)
-                        {
-                            source.DeleteLine(line.ID);
-                            loadData();
-                            MessageBox.Show($"line number: {line.LineNumber} was deleted successfully!");
-                        }
-                    }
+                    DeleteLine(line);
                 }
             }
         }
         private void enter_asAnotherUser(Window window)
         {
-            ManegerView Mview = window as ManegerView;
-            Mview.Close();
-
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
+
+            ManegerView Mview = window as ManegerView;
+            Mview.Close();
         }
         private void manegerView_Closing(Window window)
         {
             //Environment.Exit(Environment.ExitCode);
             window.Close();
         }
+        #endregion
+
+        #region help methods
+        private void DeleteStation(Station station)
+        {
+            if (station != null)
+            {
+                MessageBoxResult result = MessageBox.Show($"station: {station.Name} code: {station.Code} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+                    source.DeleteStation(station.Code);
+                    loadData();
+                    MessageBox.Show($"station: {station.Name} code: {station.Code} was deleted successfully!");
+                }
+            }
+        }
+        private void DeleteLine(Line line)
+        {
+            if (line != null)
+            {
+                MessageBoxResult result = MessageBox.Show($"line number: {line.LineNumber} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+                    source.DeleteLine(line.ID);
+                    loadData();
+                    MessageBox.Show($"line number: {line.LineNumber} was deleted successfully!");
+                }
+            }
+        }
+
+        private void Update_Line(Line line)
+        {
+            lineToSend = line;
+            new NewLineView().ShowDialog();
+        }
+        private void UpdateStation(Station station)
+        {
+            stationToSend = station;
+            new NewStationView().ShowDialog();
+        }
+
+        #endregion
+
+        #region Messenger
+
+        private Line lineToSend;
+        private Station stationToSend;
+
+        private void RequestStationMessege()
+        {
+            //reply to the RequestLine messege by sending the line
+            WeakReferenceMessenger.Default.Register<ManegerViewModel, RequestStation>(this, (r, m) =>
+            {
+                m.Reply(r.stationToSend);
+            });
+        }
+        private void RequestLineMessege()
+        {
+            //reply to the RequestLine messege by sending the line
+            WeakReferenceMessenger.Default.Register<ManegerViewModel, RequestLine>(this, (r, m) =>
+            {
+                m.Reply(r.lineToSend);
+            });
+        }
+
         #endregion
     }
 }

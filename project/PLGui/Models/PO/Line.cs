@@ -57,6 +57,7 @@ namespace PLGui.Models.PO
 
         public BO.LineStation FirstStation { get => Stations.First(); }
         public BO.LineStation LastStation { get => Stations.Last(); }
+        public ObservableCollection<int> StationsNums { get => new ObservableCollection<int>(Stations.Select(c => c.StationNumber)) { }; }
 
         private void Line_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {

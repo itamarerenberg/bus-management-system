@@ -32,7 +32,7 @@
             <MenuItem Header="new" Height="25">
                 <MenuItem Header="new line" Command="{Binding NewLine}"/>
                 <MenuItem Header="new bus" />
-                <MenuItem Header="new station" />
+                <MenuItem Header="new station" Command="{Binding NewStation}"/>
             </MenuItem>
             <MenuItem Header="update">
                 <MenuItem Header="update line"/>
@@ -111,7 +111,7 @@
                             <GridViewColumn x:Name="Stations"  Header="Stations" Width="auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox x:Name="LinesComboBox" BindingGroup="{Binding Stations}"/>
+                                        <ComboBox x:Name="LinesComboBox" ItemsSource="{Binding StationsNums}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -135,7 +135,7 @@
                 <Label x:Name="content4" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BorderThickness="2" HorizontalAlignment="Right"/>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                     <Button x:Name="DeleteButton" Content="delete" Margin="10" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button x:Name="UpdateButton" Content="update" Margin="10" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button x:Name="UpdateButton" Content="update" Margin="10" Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>

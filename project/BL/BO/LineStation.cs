@@ -10,11 +10,6 @@
 
         public AdjacentStations PrevToCurrent { get; set; }
         public AdjacentStations CurrentToNext { get; set; }
-        
-        public double DistanceBack { get => PrevToCurrent.Distance; }
-        public double DistanceNext { get => CurrentToNext.Distance; }
-
-
 
     }
 }

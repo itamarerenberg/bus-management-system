@@ -19,6 +19,14 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <viewmodels:Bool_converter_to_visibility x:Key="Bool_converter_to_visibility" />
+
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self},Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,17 +45,16 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel>
                     <TextBlock Text="line number" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="LNum" Text="{Binding NewLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" />
-                    <TextBlock Text="{Binding ElementName=LNum , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
+                    <TextBox x:Name="LNum" Text="{Binding TempLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewLineMode, Mode=OneTime}"/>
                 </StackPanel>
                 <StackPanel Margin="15,0,0,0">
                     <TextBlock Text="Area" HorizontalAlignment="Left"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=NewLine.Area}" HorizontalAlignment="Left" MinWidth="80"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=TempLine.Area}" HorizontalAlignment="Left" MinWidth="80" IsEditable="{Binding NewLineMode, Mode=OneTime}"/>
                 </StackPanel>
                 <CheckBox Content="add dis/time manually" IsChecked="{Binding AddManually}" VerticalAlignment="Bottom" Margin="15,0,0,0"/>
             </StackPanel>
 
-            <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" >
+            <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" Width="auto">
                 <y:Interaction.Triggers>
                     <y:EventTrigger EventName="MouseDoubleClick">
                         <y:InvokeCommandAction Command="{Binding DeleteStationCommand}" CommandParameter="{Binding RelativeSource=
@@ -55,31 +62,22 @@
                                            AncestorType={x:Type ListView},
                                            AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
                     </y:EventTrigger>
-                    <y:EventTrigger EventName="SelectionChanged">
-                        <y:InvokeCommandAction Command="{Binding SelectStationCommand}" CommandParameter="{Binding ElementName=NewLineWindow}"/>
-                    </y:EventTrigger>
                 </y:Interaction.Triggers>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn x:Name="Name" Header="Name" Width="auto" DisplayMemberBinding="{Binding Station.Name}" />
                         <GridViewColumn x:Name="Code" Header="Code" Width="auto" DisplayMemberBinding="{Binding Station.Code}" />
-                        <GridViewColumn x:Name="dist_to_next" Header="distance to next">
+                        <GridViewColumn x:Name="dist_to_next" Header="distance to next" Width="{Binding Path=AddManually, Converter={StaticResource Bool_converter_to_visibility}}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <TextBox x:Name="meters" MinWidth="3" IsEnabled="{Binding NotLast}" Text="{Binding Distance, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                    <TextBlock Text="{Binding ElementName=meters , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
-                                    </StackPanel>
+                                        <TextBox x:Name="meters" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Distance, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn x:Name="time_to_next" Header="time to next">
+                        <GridViewColumn x:Name="time_to_next" Header="time to next"  Width="{Binding Path=AddManually, Converter={StaticResource Bool_converter_to_visibility}}" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <TextBox x:Name="minuts" MinWidth="3" IsEnabled="{Binding NotLast}" Text="{Binding Time, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                        <TextBlock Text="{Binding ElementName=minuts , Path= (Validation.Errors)[0].ErrorContent}" Foreground="Red"/>
-                                    </StackPanel>
+                                        <TextBox x:Name="minuts" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Time, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -124,28 +122,8 @@
                 </y:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
-                    Visibility="{Binding Path=AddManually, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
-            <TextBox x:Name="TimeToBack" Text="{Binding Path=ToBack.Time}" MinWidth="50"/>
-            <TextBlock Text="min" VerticalAlignment="Bottom" Margin="0,0,10,0"/>
-            <TextBox x:Name="DisToBack" Text="{Binding Path=ToBack.Distance}" MinWidth="50"/>
-            <TextBlock Text="meters" VerticalAlignment="Bottom" Margin="0,0,10,0"/>
-            <StackPanel>
-                <TextBlock Text="distance to back"  Margin="10,0,10,0"/>
-                <Label/>
-            </StackPanel>
-            <TextBlock x:Name="StationName" MinWidth="90" Margin="10,0,10,0"/>
-            <StackPanel>
-                <TextBlock Text="distance to next"  Margin="10,0,10,0"/>
-                <Label/>
-            </StackPanel>
-            <TextBox x:Name="TimeToNext" Text="{Binding Path=ToNext.Time}" MinWidth="50"/>
-            <TextBlock Text="min" VerticalAlignment="Bottom" Margin="0,0,10,0"/>
-            <TextBox x:Name="DisToNext" Text="{Binding Path=ToNext.Distance}" MinWidth="50" Margin="10,0,0,0" />
-            <TextBlock Text="meters" VerticalAlignment="Bottom" Margin="0,0,10,0"/>
-            <Button x:Name="Save" Content="save" Command="{Binding SaveButton}" CommandParameter="{Binding ElementName=NewLineWindow}"/>
-        </StackPanel>
-        <Button x:Name="AddLineButton" Content="Add line" Command="{Binding AddLineButton}"  Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" HorizontalAlignment="Right">
+        
+        <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" Command="{Binding AddLineButton}"  Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" HorizontalAlignment="Right">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="IsEnabled" Value="false" />

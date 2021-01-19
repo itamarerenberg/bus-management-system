@@ -129,6 +129,7 @@
     <Compile Include="Models\PO\Station.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserTrip.cs" />
+    <Compile Include="utilities\MessengerCenter.cs" />
     <Compile Include="utilities\PasswordBox.xaml.cs">
       <DependentUpon>PasswordBox.xaml</DependentUpon>
     </Compile>
@@ -136,12 +137,16 @@
     <Compile Include="utilities\Bool_converter_to_visibility.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManegerViewModel.cs" />
+    <Compile Include="ViewModels\MewStationViewModel.cs" />
     <Compile Include="ViewModels\NewLineViewModel.cs" />
     <Compile Include="Views\ManegerView.xaml.cs">
       <DependentUpon>ManegerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewLineView.xaml.cs">
       <DependentUpon>NewLineView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewStationView.xaml.cs">
+      <DependentUpon>NewStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\User.xaml.cs">
       <DependentUpon>User.xaml</DependentUpon>
@@ -167,6 +172,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewLineView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewStationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,50 +16,18 @@ namespace PLGui.ViewModels
         {
             if (value is bool flag)
             {
+                if (targetType.Name == "Double")//if the target type is property "width"
+                {
+                    if (flag)
+                        return "auto";
+                    return 0;
+                }
+
                 if (flag)
                     return Visibility.Visible;
                 return Visibility.Collapsed;
             }
-            //if (value is TabControl tab)
-            //{
-            //    if (tab.IsFocused || tab.SelectedItem != null)
-            //    {                   
-            //        if ((tab.SelectedItem as TabItem).Content is ListView selectedList)
-            //        {
-            //            if(selectedList.SelectedItem != null)
-            //            {
-            //                return Visibility.Visible;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        return Visibility.Collapsed;
-            //    }
-            //}
-            //צריך למחוק
-            //if (value is TextBlock)
-            //{
-            //    if (value as TextBlock == null)
-            //    {
-            //        return Visibility.Collapsed;
-            //    }
-            //    else
-            //    {
-            //        return Visibility.Visible;
-            //    }
-            //}
-            //if (value is Label)
-            //{
-            //    if (value as Label == null)
-            //    {
-            //        return Visibility.Collapsed;
-            //    }
-            //    else
-            //    {
-            //        return Visibility.Visible;
-            //    }
-            //}
+            
             return null;
         }
 
