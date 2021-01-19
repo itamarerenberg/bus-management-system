@@ -87,7 +87,7 @@ namespace PLGui.ViewModels
 
             //commands initalizing
             SelectDBStationCommand = new RelayCommand<object>(SelectDBStation);
-            AddLineButton = new RelayCommand(Add_Update_LineButton);
+            AddLineButton = new RelayCommand<Window>(Add_Update_LineButton);
             DeleteStationCommand = new RelayCommand<object>(DeleteStation);
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
         }
@@ -175,11 +175,12 @@ namespace PLGui.ViewModels
         /// <summary>
         /// save the changes of distance/time
         /// </summary>
-        private void Add_Update_LineButton()
+        private void Add_Update_LineButton(Window window)
         {
             if (NewLineMode == false)//if the view model on "updating mode"
             {
                 UpdateLine();
+                window.Close();
                 return;
             }
             if (creatNewLine == null)
@@ -191,7 +192,7 @@ namespace PLGui.ViewModels
                 {
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated before he done execute DoWork
-
+                        window.Close();
                     }
                 };//this function will execute in the main thread
 
