@@ -1655,7 +1655,7 @@
       <Longitude>35.219287</Longitude>
       <Latitude>31.801371</Latitude>
       <Address>רחוב:מעגלי הרי''ם לוין 38 עיר: ירושלים</Address>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </Station>
     <Station>
       <Code>369</Code>
@@ -16033,7 +16033,7 @@
       <Area>Jerusalem</Area>
       <FirstStation_Id>61158</FirstStation_Id>
       <LastStation_Id>28</LastStation_Id>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </Line>
   </Lines>
   <users />
@@ -16126,7 +16126,7 @@
       <StationNumber>61158</StationNumber>
       <LineStationIndex>0</LineStationIndex>
       <NextStation>27</NextStation>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </LineStation>
     <LineStation>
       <LineId>49</LineId>
@@ -16134,14 +16134,14 @@
       <LineStationIndex>1</LineStationIndex>
       <PrevStation>61158</PrevStation>
       <NextStation>28</NextStation>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </LineStation>
     <LineStation>
       <LineId>49</LineId>
       <StationNumber>28</StationNumber>
       <LineStationIndex>2</LineStationIndex>
       <PrevStation>27</PrevStation>
-      <IsActive>True</IsActive>
+      <IsActive>False</IsActive>
     </LineStation>
   </LineStations>
   <LineTrips />

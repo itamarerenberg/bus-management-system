@@ -72,6 +72,10 @@ namespace BL.BLApi
 
         public static AdjacentStations GetAdjacentStations(int? stationCode1,int? stationCode2)
         {
+            if (stationCode1 == null || stationCode2 == null)
+            {
+                return null;
+            }
             try
             {
                 AdjacentStations adjacentStations = (AdjacentStations)dl.GetAdjacentStation(stationCode1,stationCode2).CopyPropertiesToNew(typeof(AdjacentStations));

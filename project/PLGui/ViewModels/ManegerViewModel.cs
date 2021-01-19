@@ -65,7 +65,6 @@ namespace PLGui.ViewModels
             get => manegerModel.Buses;
             set => SetProperty(ref manegerModel.Buses, value, true);
         }
-
         public ObservableCollection<Line> Lines
         {
             get => manegerModel.Lines;
@@ -76,7 +75,11 @@ namespace PLGui.ViewModels
             get => manegerModel.Stations;
             set => SetProperty(ref manegerModel.Stations, value, true);
         }
-
+        public ObservableCollection<LineTrip> Linetrips
+        {
+            get => manegerModel.LineTrips;
+            set => SetProperty(ref manegerModel.LineTrips, value, true);
+        }
         #endregion
 
         #region constractor

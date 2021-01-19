@@ -17,5 +17,8 @@ namespace PLGui.Models
         public ObservableCollection<Line> Lines;
 
         public ObservableCollection<Station> Stations;
+
+        public ObservableCollection<LineTrip> LineTrips;
+
     }
 }

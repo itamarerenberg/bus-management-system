@@ -66,17 +66,20 @@ namespace PLGui.ViewModels
         /// </summary>
         public NewLineViewModel()
         {
-            try         //try to get a response
+
+            tempLine = WeakReferenceMessenger.Default.Send<RequestLine>();//requests the old line (if exist)
+
+            if (tempLine != null)// we are in update line mode
             {
-                tempLine = WeakReferenceMessenger.Default.Send<RequestLine>();//requests the old line (if exist)
                 NewLineMode = false;
                 buttonCaption = "Update line";
             }
-            catch (Exception)   // didn't get a response!  = we are on "new line mode"
+            else                // we are in new line mode
             {
                 NewLineMode = true;
                 buttonCaption = "Add line";
             }
+            
             //load data
             source = BLFactory.GetBL("admin");
             loadData();
@@ -107,6 +110,7 @@ namespace PLGui.ViewModels
                         {
                             getDataOfOldLine(DBStations, Stations, TempLine);
                             OnPropertyChanged(nameof(Stations));
+                            OnPropertyChanged(nameof(IsMinStation));
                         }
                         OnPropertyChanged(nameof(DBStations));
                     }
@@ -264,11 +268,13 @@ namespace PLGui.ViewModels
                         lineStation.Time = (int?)doLS.CurrentToNext.Time.TotalMinutes; 
                     }
                     lineStation.Index = doLS.LineStationIndex;
+                    lineStation.NotLast = true;
                     stations.Add(lineStation);
                     DBStations.Remove(lineStation.Station);//remove the station from the data base list
                 }
             }
             stations.OrderBy(l => l.Index);
+            stations.Last().NotLast = false;
 
             tempLine.LineNumber = line.LineNumber;
             tempLine.Area = line.Area;

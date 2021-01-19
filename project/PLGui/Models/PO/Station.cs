@@ -19,19 +19,6 @@ namespace PLGui.Models.PO
             this.PropertyChanged += Station_PropertyChanged;
         }
 
-        private void Station_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != nameof(HasErrors))
-            {
-                OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change
-            }
-        }
-
-        private void Station_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private BO.Station station;
         public BO.Station BOstation {
             get 
@@ -61,9 +48,8 @@ namespace PLGui.Models.PO
             get => station.Code;
             set
             {
-                int temp = station.Code;//לא הבנתי מה היה ליפני אז סירבלתי קצת
-                SetProperty(ref temp, value, true);
-                station.Code = temp;
+                SetProperty(ref code, value, true);
+                station.Code = code;
             }
         }
 
@@ -73,9 +59,8 @@ namespace PLGui.Models.PO
             get => station.Name;
             set
             {
-                string temp = station.Name;
-                SetProperty(ref temp, value, true);
-                station.Name = temp;
+                SetProperty(ref name, value, true);
+                station.Name = name;
             }
         }
 
@@ -86,9 +71,8 @@ namespace PLGui.Models.PO
             get => station.Location.Longitude;
             set
             {
-                double temp = station.Location.Longitude;
-                SetProperty(ref temp, value, true);
-                station.Location.Longitude = temp;
+                SetProperty(ref longitude, value, true);
+                station.Location.Longitude = longitude;
                 OnPropertyChanged("Location");
             }
         }
@@ -100,9 +84,8 @@ namespace PLGui.Models.PO
             get => station.Location.Latitude;
             set
             {
-                double temp = station.Location.Latitude;
-                SetProperty(ref temp, value, true);
-                station.Location.Latitude = temp;
+                SetProperty(ref latitude, value, true);
+                station.Location.Latitude = latitude;
                 OnPropertyChanged("Location");
             }
         }
@@ -113,9 +96,8 @@ namespace PLGui.Models.PO
             get => station.Address;
             set
             {
-                string temp = station.Address;
                 SetProperty(ref address, value, true);
-                station.Address = temp;
+                station.Address = address;
             }
         }
 
@@ -133,6 +115,20 @@ namespace PLGui.Models.PO
                 SetProperty(ref linesNums, value, true);
                 station.LinesNums = linesNums.ToList();
             }
+        }
+
+
+        private void Station_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(HasErrors))
+            {
+                OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change
+            }
+        }
+
+        private void Station_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
