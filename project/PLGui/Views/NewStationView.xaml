@@ -36,11 +36,11 @@
             </StackPanel>
             <StackPanel Margin="30,0,0,0">
                 <TextBlock Text="Longitude" HorizontalAlignment="Left"/>
-                <TextBox x:Name="SLong" Text="{Binding Station.Longitude, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewStationMode, Mode=OneTime}"/>
+                <TextBox x:Name="SLong" Text="{Binding Station.Longitude, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewStationMode, Mode=OneTime}"/>
             </StackPanel>
             <StackPanel Margin="30,0,0,0">
                 <TextBlock Text="Latitude" HorizontalAlignment="Left"/>
-                <TextBox x:Name="SLat" Text="{Binding Station.Latitude, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewStationMode, Mode=OneTime}"/>
+                <TextBox x:Name="SLat" Text="{Binding Station.Latitude, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewStationMode, Mode=OneTime}"/>
             </StackPanel>
         </StackPanel>
 

@@ -17,6 +17,8 @@ namespace PLGui.Models.PO
         {
             this.ErrorsChanged += Station_ErrorsChanged;
             this.PropertyChanged += Station_PropertyChanged;
+            station = new BO.Station() { Location = new GeoCoordinate(), LinesNums = new List<int>() };
+            linesNums = new ObservableCollection<int>();
         }
 
         private BO.Station station;

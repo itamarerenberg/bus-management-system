@@ -306,7 +306,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public void UpdateLine(Line line)
+        public void UpdateLine(int lineId, IEnumerable<Station> stations, List<int?> distances, List<int?> times)
         {
             throw new NotImplementedException();
         }
