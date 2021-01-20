@@ -8,7 +8,12 @@
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PLGui.Models.PO"
         mc:Ignorable="d"
-        Title="NewLineView" x:Name="NewLineWindow" Height="600" Width="900">
+        Title="NewLineView" x:Name="NewLineWindow" Height="600" Width="900" >
+    <y:Interaction.Triggers>
+        <y:EventTrigger EventName="Loaded">
+            <y:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=NewLineWindow}"/>
+        </y:EventTrigger>
+    </y:Interaction.Triggers>
     <Window.DataContext>
         <viewmodels:NewLineViewModel x:Name="vModel"/>
     </Window.DataContext>
@@ -45,7 +50,7 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel>
                     <TextBlock Text="line number" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="LNum" Text="{Binding TempLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewLineMode, Mode=OneTime}"/>
+                    <TextBox x:Name="LNum" Text="{Binding TempLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewLineMode, Mode=OneTime}" />
                 </StackPanel>
                 <StackPanel Margin="15,0,0,0">
                     <TextBlock Text="Area" HorizontalAlignment="Left"/>
@@ -123,7 +128,7 @@
             </TextBox>
         </StackPanel>
         
-        <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" Command="{Binding AddLineButton}"  Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" HorizontalAlignment="Right">
+        <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" Command="{Binding AddLineButton}" CommandParameter="{Binding ElementName=NewLineWindow}"  Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" HorizontalAlignment="Right" >
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="IsEnabled" Value="false" />

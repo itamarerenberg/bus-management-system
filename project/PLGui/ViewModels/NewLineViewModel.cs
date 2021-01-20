@@ -25,7 +25,7 @@ namespace PLGui.ViewModels
         BackgroundWorker loadDataWorker;
         BackgroundWorker creatNewLine;
 
-        Line tempLine;
+        Line tempLine = new Line();
         private bool addManually;
 
         #endregion
@@ -90,6 +90,7 @@ namespace PLGui.ViewModels
             AddLineButton = new RelayCommand<Window>(Add_Update_LineButton);
             DeleteStationCommand = new RelayCommand<object>(DeleteStation);
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
+            LoadedCommand = new RelayCommand<NewLineView>(Loaded);
         }
 
         #endregion
@@ -134,6 +135,8 @@ namespace PLGui.ViewModels
         public ICommand DeleteStationCommand { get; }
         public ICommand AddLineButton { get; }
         public ICommand SearchCommand { get; }
+        public ICommand LoadedCommand { get; }
+
 
         /// <summary>
         /// double click on data base station, the station will be added to the new/updated line stations
@@ -244,6 +247,12 @@ namespace PLGui.ViewModels
                     Lview.DBStationList.ItemsSource = tempList.Where(c => c.GetType().GetProperty(Lview.ComboBoxSearch.Text).GetValue(c, null).ToString().Contains(Lview.SearchBox.Text));
                 }
             }
+        }
+
+        private void Loaded(NewLineView Lview)
+        {
+            Lview.LNum.Focus();
+            Lview.LNum.SelectAll();
         }
         #endregion
 
