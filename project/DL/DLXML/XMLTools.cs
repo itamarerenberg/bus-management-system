@@ -142,6 +142,11 @@ namespace DL
         {
             foreach (var prop in from.GetType().GetProperties())
             {
+                if(prop.GetValue(from) == null)
+                {
+                    to.Element(prop.Name).Value = "NaN";
+                    continue;
+                }
                 string val = prop.GetValue(from).ToString();
                 to.Element(prop.Name).Value = val;//insert new label <prop.Name> prop.GetValue(prop).ToString() </prop.Name>
             }

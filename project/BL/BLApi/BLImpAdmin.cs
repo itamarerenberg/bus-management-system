@@ -221,6 +221,7 @@ namespace BL
                     StationNumber = stations.ElementAt(0).Code,
                     LineStationIndex = 0,
                     PrevStation = null,
+                    Address = stations.ElementAt(0).Address,
                     IsActive = true
                 };
                 DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
@@ -236,6 +237,7 @@ namespace BL
                         StationNumber = st.Code,
                         LineStationIndex = index++,
                         PrevStation = prev_station.StationNumber,//! I think we shuld add to LineStation id fild
+                        Address = st.Address,
                         IsActive = true
                     };
                     prev_station = current;
