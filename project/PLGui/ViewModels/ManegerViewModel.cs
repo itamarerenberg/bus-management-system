@@ -20,7 +20,7 @@ using PLGui.utilities;
 
 namespace PLGui.ViewModels
 {
-    public class ManegerViewModel : ObservableRecipient 
+    public class ManegerViewModel : ObservableRecipient  
     {
         #region fileds
 
