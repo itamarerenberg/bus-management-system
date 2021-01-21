@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AdjacentStations>
+  <AdjacentStations>
+    <StationCode1>28</StationCode1>
+    <StationCode2>29</StationCode2>
+    <Distance>187.216149528879</Distance>
+    <Time>00:00:00.0000012</Time>
+    <IsActive>True</IsActive>
+  </AdjacentStations>
+  <AdjacentStations>
+    <StationCode1>29</StationCode1>
+    <StationCode2>30</StationCode2>
+    <Distance>41.5496370962052</Distance>
+    <Time>00:00:00.0000002</Time>
+    <IsActive>True</IsActive>
+  </AdjacentStations>
+  <AdjacentStations>
+    <StationCode1>30</StationCode1>
+    <StationCode2>32</StationCode2>
+    <Distance>205.464201716712</Distance>
+    <Time>00:00:00.0000013</Time>
+    <IsActive>True</IsActive>
+  </AdjacentStations>
+  <AdjacentStations>
+    <StationCode1>32</StationCode1>
+    <StationCode2>33</StationCode2>
+    <Distance>168.461924442122</Distance>
+    <Time>00:00:00.0000011</Time>
+    <IsActive>True</IsActive>
+  </AdjacentStations>
+</AdjacentStations>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -18,7 +19,8 @@ namespace DLXML
     static class DataSourceXML
     {
         static string FileName = "DataSource.xml";
-
+        const int tryAginIn = 10;
+        const int tryNtimes = 10;
         #region files Names
         static string LinesFileName = "Lines.xml";
         static string BusesFileName = "Buses.xml";
@@ -40,111 +42,142 @@ namespace DLXML
         static string LineStationsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", LineStationsFileName);
         static string LineTripsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", LineTripsFileName);
         static string UsersFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersFileName);
-        static string UsersTripsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersTripsFileName); 
+        static string UsersTripsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersTripsFileName);
         #endregion
+
+        static Dictionary<string, FileDetails> files = new Dictionary<string, FileDetails>
+        {
+            ["Buses"] = new FileDetails { Path = BusesFilePath },
+            ["AdjacentStations"] = new FileDetails { Path = AdjacentStationsFilePath },
+            ["Lines"] = new FileDetails { Path = LinesFilePath },
+            ["BusesOnTrip"] = new FileDetails { Path = BusesOnTripFilePath },
+            ["Stations"] = new FileDetails { Path = StationsFilePath },
+            ["LineStations"] = new FileDetails { Path = LineStationsFilePath },
+            ["LineTrips"] = new FileDetails { Path = LineTripsFilePath },
+            ["Users"] = new FileDetails { Path = UsersFilePath },
+            ["UsersTrips"] = new FileDetails { Path = UsersTripsFilePath }
+        };
 
         #region data Access
-        #region files roots
-        static XElement busesRoot;
-        static XElement adjacentStationsRoot;
-        static XElement linesRoot;
-        static XElement busesOnTripRoot;
-        static XElement StationsRoot;
-        static XElement LineStationsRoot;
-        static XElement LineTripsRoot;
-        static XElement UsersRoot;
-        static XElement UsersTripsRoot;
-        #endregion
-
-        #region data acces properties
-
-
         public static XElement Buses
         {
             get
             {
-                busesRoot = XElement.Load(BusesFilePath);
-                return busesRoot;
+                string index = "Buses";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root;
             }
         }
         public static XElement AdjacentStations
         {
             get
             {
-                adjacentStationsRoot = XElement.Load(AdjacentStationsFilePath);
-                return adjacentStationsRoot;
+                string index = "AdjacentStations";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root;
             }
         }
         public static XElement Lines
         {
             get
             {
-                linesRoot = XElement.Load(LinesFilePath);
-                return linesRoot;
+                string index = "Lines";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root;
             }
         }
         public static XElement BusesOnTrip
         {
             get
             {
-                busesOnTripRoot = XElement.Load(BusesOnTripFilePath);
-                return busesOnTripRoot;
+                string index = "BusesOnTrip";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root;
             }
         }
         public static XElement Stations
         {
             get
             {
-                StationsRoot = XElement.Load(StationsFilePath);
-                return StationsRoot;
+                string index = "Stations";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root; 
             }
         }
         public static XElement LineStations
         {
             get
             {
-                LineStationsRoot = XElement.Load(LineStationsFilePath);
-                return LineStationsRoot;
+                string index = "LineStations";
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
+                return files[index].Root;
             }
         }
         public static XElement LineTrips
         {
             get
             {
-                LineTripsRoot = XElement.Load(LineTripsFilePath);
-                return LineTripsRoot;
+                string index = "LineTrips";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root;
             }
         }
         public static XElement Users
         {
             get
             {
-                UsersRoot = XElement.Load(UsersFilePath);
-                return UsersRoot;
+                string index = "Users";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root;
             }
         }
         public static XElement UsersTrips
         {
             get
             {
-                UsersTripsRoot = XElement.Load(UsersTripsFilePath);
-                return UsersTripsRoot;
+                string index = "UsersTrips";
+                if (files[index].Root != null)
+                    files[index].Root.Save(files[index].Path);
+                files[index].Root = XElement.Load(files[index].Path);
+                return files[index].Root;
             }
         } 
         #endregion
-        #endregion
 
-        static Dictionary<string, FileDetails> files = new Dictionary<string, FileDetails> {
-            ["Buses"] = new FileDetails{Root = busesRoot, Path = BusesFilePath},
-            ["AdjacentStations"] = new FileDetails { Root = adjacentStationsRoot, Path = AdjacentStationsFilePath },
-            ["Lines"] = new FileDetails { Root = linesRoot, Path = LinesFilePath },
-            ["BusesOnTrip"] = new FileDetails { Root = busesOnTripRoot, Path = BusesFilePath },
-            ["Stations"] = new FileDetails { Root = StationsRoot, Path = StationsFilePath }, 
-            ["LineStations"] = new FileDetails { Root = LineStationsRoot, Path = LineStationsFilePath },
-            ["LineTrips"] = new FileDetails { Root = LineTripsRoot, Path = LineTripsFilePath },
-            ["Users"] = new FileDetails { Root = UsersRoot, Path = UsersFilePath },
-            ["UsersTrips"] = new FileDetails { Root = UsersTripsRoot, Path = UsersTripsFilePath }
-        };
+        
 
         public static int serialLineID;
         static string dataBasePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database");
@@ -160,22 +193,6 @@ namespace DLXML
                     file.Value.Root = new XElement(file.Key);//create new file with root <elements>
                     file.Value.Root.Save(file.Value.Path);
                 }
-                else
-                {
-                    file.Value.Root = XElement.Load(file.Value.Path);
-                }
-            }
-        }
-
-        public static XElement LoadData(string path = "")
-        {
-            try
-            {
-                return XElement.Load(path);
-            }
-            catch
-            {
-                throw new Exception($"{path} File upload problem");
             }
         }
 
@@ -211,7 +228,24 @@ namespace DLXML
             {
                 throw new ArgumentException($"file {fileName} dont exist");
             }
-            files[fileName].Root.Save(files[fileName].Path);
+            try
+            {
+                for (int i = 0; i < tryNtimes; i++)
+                {
+                    try
+                    {
+                        files[fileName].Root.Save(files[fileName].Path);
+                    }
+                    catch (IOException)
+                    {
+                        Thread.Sleep(tryAginIn);
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                throw new FileLoadException(files[fileName].Path);
+            }
         }
 
         public static void SaveListSerializer<T>(this List<T> list, string typename)

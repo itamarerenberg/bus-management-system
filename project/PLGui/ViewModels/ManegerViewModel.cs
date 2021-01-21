@@ -118,7 +118,7 @@ namespace PLGui.ViewModels
         {
             loadLines();
             loadStations();
-            //...
+            loadBuses();
         }
 
         BackgroundWorker loadLinesWorker;
@@ -172,10 +172,38 @@ namespace PLGui.ViewModels
                 (object sender, DoWorkEventArgs args) =>
                 {
                     BackgroundWorker worker = (BackgroundWorker)sender;
-                    ObservableCollection<Station> result = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));//get all lines from source
+                    ObservableCollection<Station> result = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));//get all Stations from source
                     args.Result = worker.CancellationPending ? null : result;
                 };//this function will execute in the BackgroundWorker thread
             loadStationWorker.RunWorkerAsync();
+        }
+
+        BackgroundWorker loadBusesWorker;
+        private void loadBuses()
+        {
+            if (loadBusesWorker == null)
+            {
+                loadBusesWorker = new BackgroundWorker();
+            }
+
+            loadBusesWorker.RunWorkerCompleted +=
+                (object sender, RunWorkerCompletedEventArgs args) =>
+                {
+                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                    {                                                   //terminated befor he done execute DoWork
+                        manegerModel.Buses = (ObservableCollection<Bus>)args.Result;
+                        OnPropertyChanged("Buses");
+                    }
+                };//this function will execute in the main thred
+
+            loadBusesWorker.DoWork +=
+                (object sender, DoWorkEventArgs args) =>
+                {
+                    BackgroundWorker worker = (BackgroundWorker)sender;
+                    ObservableCollection<Bus> result = new ObservableCollection<Bus>(source.GetAllBuses().Select(bus => new Bus() { BObus = bus }));//get all buses from source
+                    args.Result = worker.CancellationPending ? null : result;
+                };//this function will execute in the BackgroundWorker thread
+            loadBusesWorker.RunWorkerAsync();
         }
         #endregion
 

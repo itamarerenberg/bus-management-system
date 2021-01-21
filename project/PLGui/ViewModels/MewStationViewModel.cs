@@ -37,7 +37,6 @@ namespace PLGui.ViewModels
 
         public MewStationViewModel()
         {
-            station = new Station();
             Station = WeakReferenceMessenger.Default.Send<RequestStation>();//requests the old station (if exist)
 
             if (station != null)// we are on updateing mode
@@ -47,6 +46,7 @@ namespace PLGui.ViewModels
             }
             else                    // we are on new station mode
             {
+                station = new Station();
                 NewStationMode = true;
                 ButtonCaption = "Add Station";
             }
