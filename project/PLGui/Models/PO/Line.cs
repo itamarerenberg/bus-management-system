@@ -28,6 +28,7 @@ namespace PLGui.Models.PO
 
         private int? lineNumber;
         [Required(ErrorMessage = "line number cannot be empty")]
+        [Range(1, 999, ErrorMessage = "line number should be between 1 - 999")]
         public int? LineNumber 
         {
             get => lineNumber;

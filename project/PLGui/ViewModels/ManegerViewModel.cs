@@ -225,8 +225,8 @@ namespace PLGui.ViewModels
             if (window is ManegerView)
             {
                 ManegerView Mview = window as ManegerView;
-                GridView currentGridView = ((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView;
-                if (currentGridView.se)
+                ListView currentListView = (Mview.mainTab.SelectedItem as TabItem).Content as ListView;
+                if (currentListView.SelectedItem == null)
                 {
                     List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
                     Mview.ComboBoxSearch.ItemsSource = comboList;
