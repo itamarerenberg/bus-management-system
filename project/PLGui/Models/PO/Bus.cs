@@ -10,58 +10,67 @@ namespace PLGui.Models.PO
     public class Bus : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private string licensNumber;
-        public string LicensNumber 
+        private BO.Bus boBus;
+        public BO.Bus BObus 
         {
-            get => licensNumber;
+            get => boBus;
             set
             {
-                licensNumber = value;
+                boBus = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicensNumber"));//all the properties changed
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicenesDate"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Kilometraz"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Fule"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stat"));
+            }
+        }
+
+        public string LicensNumber 
+        {
+            get => boBus.LicensNumber;
+            set
+            {
+                boBus.LicensNumber = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicensNumber"));
             }
         }
 
-        private DateTime licenesDate;
         public DateTime LicenesDate 
         {
-            get => licenesDate;
+            get => boBus.LicenesDate;
             set
             {
-                licenesDate = value;
+                boBus.LicenesDate = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicenesDate"));
             }
         }
 
-        private float kilometraz;
         public float Kilometraz 
         {
-            get => kilometraz;
+            get => boBus.Kilometraz;
             set
             {
-                kilometraz = value;
+                boBus.Kilometraz = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Kilometraz"));
             }
         }
 
-        private float fule;
         public float Fule 
         {
-            get => fule;
+            get => boBus.Fule;
             set
             {
-                fule = value;
+                boBus.Fule = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Fule"));
             }
         }
 
-        private BO.BusStatus stat;
         public BO.BusStatus Stat 
         {
-            get => stat;
+            get => boBus.Stat;
             set
             {
-                stat = value;
+                boBus.Stat = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stat"));
             }
         }

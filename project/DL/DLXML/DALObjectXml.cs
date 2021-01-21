@@ -39,6 +39,7 @@ namespace DL
             }
             DataSourceXML.Save("Buses");//Save Chenges
         }
+
         public Bus GetBus(string licenseNum)
         {
             XElement bus = (from b in DataSourceXML.Buses.Elements()//get the bus from the data source
@@ -318,9 +319,11 @@ namespace DL
 
         public IEnumerable<Station> GetAllStations()
         {
-            return from st in DataSourceXML.Stations.Elements()//get and return all the active station from the data source 
-                   where bool.Parse(st.Element("IsActive").Value)
-                   select XMLTools.xelement_to_new_object<Station>(st);//create a new instance of station from 'st'
+            var ret = from st in DataSourceXML.Stations.Elements()//get and return all the active station from the data source 
+                      where bool.Parse(st.Element("IsActive").Value)
+                      select XMLTools.xelement_to_new_object<Station>(st);//create a new instance of station from 'st'
+            DataSourceXML.Save("Stations");
+            return ret;
         }
 
         public IEnumerable<Station> GetAllStationBy(Predicate<Station> predicate)
@@ -415,17 +418,22 @@ namespace DL
 
         public IEnumerable<LineStation> GetAllLineStations()
         {
-            return from ls in DataSourceXML.LineStations.Elements()//return all the active stations in the data source
-                   where bool.Parse(ls.Element("IsActive").Value)
-                   select XMLTools.xelement_to_new_object<LineStation>(ls);
+
+            var ret = from ls in DataSourceXML.LineStations.Elements()//return all the active stations in the data source
+                      where bool.Parse(ls.Element("IsActive").Value)
+                      select XMLTools.xelement_to_new_object<LineStation>(ls);
+            DataSourceXML.Save("LineStations");
+            return ret;
         }
 
         public IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> predicate)
         {
-            return from ls in DataSourceXML.LineStations.Elements()
+            var ret = from ls in DataSourceXML.LineStations.Elements()
                    let temp = Cloning.xelement_to_new_object<LineStation>(ls)//create a new instence of LineStation from 'ls' so it can send to peredicate
                    where predicate(temp)
                    select temp;
+            DataSourceXML.Save("LineStations");
+            return ret;
         }
         #endregion
         
@@ -580,16 +588,19 @@ namespace DL
             if (tempUser == null)//if ther is no such user allready in the data source
             {
                 DataSourceXML.Users.Add(user.to_new_xelement("User"));//add the user
+                DataSourceXML.Save("Users");
             }
             //in case the user is allready in the data base: checks if he is active
             else if (!bool.Parse(tempUser.Element("IsActive").Value))//if the user in the data base is unactive
             {
+                DataSourceXML.Save("Users");
                 XMLTools.object_to_xelement(user, tempUser);//override the unactive user with the new user
             }
             else//if the user in the data base is active
             {
                 throw new DuplicateExeption("the user is allready exist");
             }
+           
         }
 
         public User GetUser(string name)

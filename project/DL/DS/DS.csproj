@@ -85,7 +85,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataBase\AdjacentStations.xml" />
+    <Content Include="DataBase\Buses.xml" />
     <Content Include="DataBase\DataSource.xml" />
+    <Content Include="DataBase\Lines.xml" />
+    <Content Include="DataBase\LineStations.xml" />
+    <Content Include="DataBase\LineTrips.xml" />
+    <Content Include="DataBase\Stations.xml" />
+    <Content Include="DataBase\Users.xml" />
+    <Content Include="DataBase\UsersTrips.xml" />
     <Content Include="DataSource.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

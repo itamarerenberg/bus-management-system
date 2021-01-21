@@ -154,6 +154,11 @@ namespace DL
         public static XElement to_new_xelement<T>(this T from, string label) where T : new()
         {
             XElement newXElement = new XElement(label);
+            foreach(var prop in typeof(T).GetProperties())
+            {
+                if(prop.DeclaringType == typeof(T))
+                    newXElement.Add(new XElement(prop.Name));
+            }
             object_to_xelement(from, newXElement);
             return newXElement;
         }

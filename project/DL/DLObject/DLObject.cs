@@ -23,112 +23,84 @@ namespace DL
         #region Bus
         public void AddBus(Bus bus)
         {
-            DataSource.LoadData();
-            XElement Same_LicenseNum = (from b in DataSource.dsRoot.Element("Buses").Elements()
-                                        where b.Element("LicenseNum").Value == bus.LicenseNum
+            Bus Same_LicenseNum = (from b in DataSource.Buses
+                                        where b.LicenseNum == bus.LicenseNum
                                         select b).FirstOrDefault();
             if (Same_LicenseNum == null)//if no bus have the same LicenseNum
             {
-                DataSource.SaveObj(bus, "Buses");//add bus to label Buses
+                DataSource.Buses.Add(bus);//add bus to label Buses
             }
             else//in case the bus is allready in the data base: checks if he is active
             {
-                if (Same_LicenseNum.Element("IsActive").Value == true.ToString())//if the bus is activ
+                if (Same_LicenseNum.IsActive)//if the bus is activ
                 {
                     throw new DuplicateExeption("bus with identical License's num allready exist");
                 }
-                Same_LicenseNum.Element("IsActive").Value = true.ToString();
-                DataSource.Save();//Save Chenges
+                Same_LicenseNum = bus;//if the 'Same_LicenseNum' is unactive then override it with the new bus
             }
         }
+
         public Bus GetBus(string licenseNum)
         {
-            DataSource.LoadData();
-            XElement bus = (from b in DataSource.dsRoot.Elements("Buses")
-                       where b.Element("LicenseNum").Value == licenseNum
+            Bus bus = (from b in DataSource.Buses
+                       where b.LicenseNum == licenseNum
                        select b).FirstOrDefault();
 
-            if (bus == null)
+            if (bus == null)//if the bus not found
             {
                 throw new NotExistExeption("bus with this License's num not exist");
             }
-
-            Cloning.xelement_to_object(bus, out Bus ret);
-            return ret;//                       ^^^^^^^
+            return bus.Clone(); 
         }
 
         public void UpdateBus(Bus newBus)
         {
-            DataSource.LoadData();
-            XElement oldBus = (from b in DataSource.dsRoot.Element("Buses").Elements()
-                               where b.Element("LisenceNum").Value == newBus.LicenseNum
+            Bus oldBus = (from b in DataSource.Buses
+                               where b.LicenseNum == newBus.LicenseNum
                                select b).FirstOrDefault();
 
-            if (oldBus == null)
+            if (oldBus == null)//if the old bus dosn't found
             {
                 throw new NotExistExeption("bus with License's num like 'bus' not exist");
             }
-            Cloning.object_to_xelement(newBus, oldBus);
-            DataSource.Save();
+            oldBus = newBus;//set the old bus to be the update bus
         }
 
         public void DeleteBus(string licenseNum)
         {
-            DataSource.LoadData();
-            XElement bus = (from b in DataSource.dsRoot.Element("Buses").Elements()
-                            where b.Element("LicenseNum").Value == licenseNum && b.Element("IsActive").Value == true.ToString()
-                            select b).FirstOrDefault();
-            if (bus != null)
+            Bus bus = (from b in DataSource.Buses
+                            where b.LicenseNum == licenseNum && b.IsActive
+                            select b.Clone()).FirstOrDefault();
+            if (bus != null)//if ther is such bus
             {
-                bus.Element("IsActive").Value = false.ToString();
+                bus.IsActive = false;//set the bus to be unavtive
             }
             else
             {
                 throw new NotExistExeption("bus with this License's num not exist");
             }
-            DataSource.Save();
         }
 
         public IEnumerable<Bus> GetAllBuses()
         {
-            DataSource.LoadData();
-            return from b in DataSource.dsRoot.Element("Buses").Elements()
-            where b.Element("IsActive").Value == true.ToString()
-            select Cloning.xelement_to_new_object<Bus>(b);
+            var ret = from b in DataSource.Buses
+                      where b.IsActive
+                      select b.Clone();
+            return ret;
         }
 
         public IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> predicate)
         {
-            DataSource.LoadData();
-            return from b in DataSource.dsRoot.Element("Buses").Elements()
-                   let temp = Cloning.xelement_to_new_object<Bus>(b)
-                   where predicate(temp) && temp.IsActive == true
-                   select temp;
+            return from b in DataSource.Buses
+                   where predicate(b) && b.IsActive
+                   select b.Clone();
         }
 
         #endregion
 
         #region Line
-        //void IDL.AddLine(Line line)
-        //{
-        //    Line tempLine = DataSource.Lines.FirstOrDefault(l => l.ID == line.ID);
-        //    if (tempLine == null)
-        //    {
-        //        DataSource.Lines.Add(line);
-        //    }
-        //    //in case the Line is allready in the data base: checks if he is active
-        //    else
-        //    {
-        //        if (tempLine.IsActive == true)
-        //        {
-        //            throw new DuplicateExeption("line with identical ID allready exist");
-        //        }
-        //        tempLine.IsActive = true;
-        //    }
-        //}
         public int AddLine(Line line)
         {
-            DataSource.LoadData();
             try
             {
                 line.ID = SerialNumbers.GetLineId;
@@ -137,73 +109,64 @@ namespace DL
             {
                 throw e;
             }
-            DataSource.SaveObj(line, "Lines");
-            DataSource.Save();
+            DataSource.Lines.Add(line);
             return line.ID;
         }
 
         public Line GetLine(int id)
         {
-            DataSource.LoadData();
-            XElement line = (from l in DataSource.dsRoot.Element("Lines").Elements()
-                             where l.Element("ID").Value == id.ToString() &&
-                                   l.Element("IsActive").Value == true.ToString()
+            Line line = (from l in DataSource.Lines
+                             where l.ID == id &&
+                                   l.IsActive
                              select l).FirstOrDefault();
             if (line == null)
             {
                 throw new NotExistExeption("line with this id not exist");
             }
-            return Cloning.xelement_to_new_object<Line>(line);
+            return line.Clone();
         }
 
         public void UpdateLine(Line newLine)
         {
-            DataSource.LoadData();
-            XElement oldLine = (from l in DataSource.dsRoot.Element("Lines").Elements()
-                                where l.Element("ID").Value == newLine.ID.ToString() &&
-                                      l.Element("IsActive").Value == true.ToString()
+            Line oldLine = (from l in DataSource.Lines
+                                where l.ID == newLine.ID 
+                                      && l.IsActive
                                 select l).FirstOrDefault();
-            if (oldLine == null)
+            if (oldLine == null)//if the old line dont exist in the data source
             {
                 throw new NotExistExeption("line with id like 'line' not exist");
             }
-            Cloning.object_to_xelement(newLine, oldLine);//insert the ditailes of the new line to the xelement of the old line
-            DataSource.Save();
+            oldLine = newLine;//override the old line with the new one
         }
 
         public void DeleteLine(int id)
         {
-            DataSource.LoadData();
-            XElement line = (from l in DataSource.dsRoot.Element("Lines").Elements()
-                             where l.Element("ID").Value == id.ToString() &&
-                                   l.Element("IsActive").Value == true.ToString()
+            Line line = (from l in DataSource.Lines
+                             where l.ID == id
+                                   && l.IsActive
                              select l).FirstOrDefault();
             if (line != null)
             {
-                line.Element("IsActive").Value = false.ToString();
+                line.IsActive = false;//set the line to be unactive
             }
             else
             {
                 throw new NotExistExeption("line with this id not exist");
             }
-            DataSource.Save();
         }
 
         public IEnumerable<Line> GetAllLines()
         {
-            DataSource.LoadData();
-            return from l in DataSource.dsRoot.Element("Lines").Elements()
-                   where l.Element("IsActive").Value == true.ToString()
-                   select Cloning.xelement_to_new_object<Line>(l);
+            return from l in DataSource.Lines
+                   where l.IsActive
+                   select l.Clone();
         }
 
         public IEnumerable<Line> GetAllLinesBy(Predicate<Line> predicate)
         {
-            DataSource.LoadData();
-            return from l in DataSource.dsRoot.Element("Lines").Elements()
-                   let temp = Cloning.xelement_to_new_object<Line>(l)
-                   where temp.IsActive == true && predicate(temp)
-                   select temp;
+            return from l in DataSource.Lines
+                   where l.IsActive && predicate(l)
+                   select l.Clone();
         }
 
         #endregion
@@ -365,104 +328,79 @@ namespace DL
 
         public void AddLineStation(LineStation lineStation)
         {
-            DataSource.LoadData();
-            XElement tempLineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
-                                        where ls.Element("LineId").Value == lineStation.LineId.ToString()
-                                              && ls.Element("StationNumber").Value == lineStation.StationNumber.ToString()
-                                        select ls).FirstOrDefault();
-            if (tempLineStation == null)
+            LineStation tempLineStation = (from ls in DataSource.LineStations
+                                           where ls.LineId == lineStation.LineId
+                                              && ls.StationNumber == lineStation.StationNumber
+                                           select ls).FirstOrDefault();
+            if (tempLineStation == null)//if ther no such line station in the data sorce allready
             {
-                DataSource.SaveObj(lineStation, "LineStations");
+                DataSource.LineStations.Add(lineStation);
             }
             //in case the Line station is allready in the data base: checks if he is active
             else
             {
-                if (tempLineStation.Element("IsActive").Value == true.ToString())
+                if (tempLineStation.IsActive)
                 {
                     throw new DuplicateExeption("the line station is allready exist");
                 }
-                tempLineStation.Remove();
-                DataSource.SaveObj(lineStation, "LineStations");
+                tempLineStation = lineStation;//override the old unactive lineStation with the new line station
             }
-            DataSource.Save();
         }
 
         public LineStation GetLineStation(int lineId, int stationNum)
         {
-            DataSource.LoadData();
-            XElement lineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
-                                    where ls.Element("LineId").Value == lineId.ToString()
-                                          && ls.Element("StationNumber").Value == stationNum.ToString()
-                                    select ls).FirstOrDefault();
-            if (lineStation == null)
+            LineStation lineStation = (from ls in DataSource.LineStations
+                                       where ls.LineId == lineId
+                                             && ls.StationNumber == stationNum
+                                       select ls).FirstOrDefault();
+            if (lineStation == null)//if the line station dont exist
             {
                 throw new NotExistExeption("the line doesn't exist or it doesn't have such a station");
             }
-            return Cloning.xelement_to_new_object<LineStation>(lineStation);
+            return lineStation.Clone();
         }
 
         public LineStation GetLineStationByIndex(int lineId, int index)
         {
-            DataSource.LoadData();
-            XElement lineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
-                                    where ls.Element("LineId").Value == lineId.ToString()
-                                          && ls.Element("LineStationIndex").Value == index.ToString()
-                                    select ls).FirstOrDefault();
-            if (lineStation == null)
+            LineStation lineStation = (from ls in DataSource.LineStations//serch for the line station in the data source
+                                       where ls.LineId == lineId
+                                             && ls.LineStationIndex == index
+                                       select ls).FirstOrDefault();
+            if (lineStation == null)//if such line station don't exist in the data source
             {
                 throw new NotExistExeption("the line doesn't exist or the index is out of range");
             }
-            return Cloning.xelement_to_new_object<LineStation>(lineStation);
+            return lineStation.Clone();
         }
 
         public void UpdateLineStation(LineStation newLineStation)
         {
-            DataSource.LoadData();
-            XElement oldLineStation = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
-                                       where ls.Element("LineId").Value == newLineStation.LineId.ToString()
-                                             && ls.Element("StationNumber").Value == newLineStation.StationNumber.ToString()
-                                       select ls).FirstOrDefault();
-            if (oldLineStation == null)
+            LineStation oldLineStation = (from ls in DataSource.LineStations
+                                          where ls.LineId == newLineStation.LineId
+                                                && ls.StationNumber == newLineStation.StationNumber
+                                          select ls).FirstOrDefault();
+            if (oldLineStation == null)//if the old Line Station dont exist in the data source
             {
                 throw new NotExistExeption("the line station doesn't exist");
             }
-            Cloning.object_to_xelement(newLineStation, oldLineStation);
-            DataSource.Save();
+            oldLineStation = newLineStation;//override the old lineStation
         }
 
         public void DeleteLineStation(int lineId, int stationNum)
         {
-            DataSource.LoadData();
-            XElement lineS = (from ls in DataSource.dsRoot.Element("LineStations").Elements()
-                              where ls.Element("LineId").Value == lineId.ToString()
-                                    && ls.Element("StationNumber").Value == stationNum.ToString()
-                              select ls).FirstOrDefault();
-            if (lineS != null)
-            {
-                lineS.Element("IsActive").Value = false.ToString();
-            }
-            else
-            {
-                throw new NotExistExeption("the line station doesn't exist");
-            }
-            DataSource.Save();
+            DataSource.LineStations.RemoveAll(ls => ls.LineId == lineId && ls.StationNumber == stationNum);
         }
 
         public IEnumerable<LineStation> GetAllLineStations()
         {
-            DataSource.LoadData();
-            return from ls in DataSource.dsRoot.Element("LineStations").Elements()
-                   where ls.Element("IsActive").Value == true.ToString()
-                   select Cloning.xelement_to_new_object<LineStation>(ls);
+            return DataSource.LineStations.Select(ls => ls.Clone());
         }
 
         public IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> predicate)
         {
-            DataSource.LoadData();
-            return from ls in DataSource.dsRoot.Element("LineStations").Elements()
-                   let temp = Cloning.xelement_to_new_object<LineStation>(ls)
-                   where predicate(temp)
-                   select temp;
+            return from ls in DataSource.LineStations
+                   where predicate(ls)
+                   select ls.Clone();
         }
         #endregion
 
@@ -472,62 +410,51 @@ namespace DL
         {
             if (adjacentStations == null)
                 return;
-            XElement tempStations = (from adjSt in DataSource.AdjacentStationsXML
-                                     where int.Parse(adjSt.Element("StationCode1").Value) == adjacentStations.StationCode1
-                                           && int.Parse(adjSt.Element("StationCode2").Value) == adjacentStations.StationCode2
-                                     select adjSt).FirstOrDefault();
-            if (tempStations == null)
+            AdjacentStations tempStations = (from adjSt in DataSource.AdjacentStations
+                                             where adjSt.StationCode1 == adjacentStations.StationCode1
+                                                   && adjSt.StationCode2 == adjacentStations.StationCode2
+                                             select adjSt).FirstOrDefault();
+            if (tempStations == null)//if ther is no such AdjacentStations
             {
-                DataSource.SaveObj(adjacentStations, "AdjacentStations");
-                DataSource.Save();
+                DataSource.AdjacentStations.Add(tempStations);
             }            
-
+            //else do nothing (it's not an exeption) 
         }
+
         public AdjacentStations GetAdjacentStation(int? stationCode1, int? stationCode2)
         {
-            XElement tempStations = (from adjSt in DataSource.AdjacentStationsXML
-                                     where int.Parse(adjSt.Element("StationCode1").Value) == stationCode1
-                                           && int.Parse(adjSt.Element("StationCode2").Value) == stationCode2
-                                     select adjSt).FirstOrDefault();
-            if (tempStations == null)
-                return null;
-            return Cloning.xelement_to_new_object<AdjacentStations>(tempStations);
+            AdjacentStations tempStations = (from adjSt in DataSource.AdjacentStations
+                                             where adjSt.StationCode1 == stationCode1
+                                             && adjSt.StationCode2 == stationCode2
+                                             select adjSt.Clone()).FirstOrDefault();
+            return tempStations;
         }
 
         public void UpdateAdjacentStations(AdjacentStations newAdjacentStations)
         {
-            XElement oldAdjacentStations = (from adjSt in DataSource.AdjacentStationsXML
-                                            where int.Parse(adjSt.Element("StationCode1").Value) == newAdjacentStations.StationCode1
-                                                  && int.Parse(adjSt.Element("StationCode2").Value) == newAdjacentStations.StationCode2
-                                            select adjSt).FirstOrDefault();
+            AdjacentStations oldAdjacentStations = (from adjSt in DataSource.AdjacentStations
+                                                    where adjSt.StationCode1 == newAdjacentStations.StationCode1
+                                                          && adjSt.StationCode2 == newAdjacentStations.StationCode2
+                                                    select adjSt).FirstOrDefault();
             if (oldAdjacentStations == null)
             {
                 throw new NotExistExeption("the Adjacent Stations doesn't exist");
             }
-            Cloning.object_to_xelement(newAdjacentStations, oldAdjacentStations);
-            DataSource.Save();
+            oldAdjacentStations = newAdjacentStations;//override the old AdjacentStations with the up to date one
         }
 
         public bool DeleteAdjacentStations(int? stationCode1, int? stationCode2)
         {
-            XElement tempAdjacentStations = (from adjSt in DataSource.dsRoot.Element("AdjacentStations").Elements()
-                                             where int.Parse(adjSt.Element("StationCode1").Value) == stationCode1
-                                                   && int.Parse(adjSt.Element("StationCode2").Value) == stationCode2
-                                             select adjSt).FirstOrDefault();
-            if (tempAdjacentStations == null)
-                return false;
-            //DataSource.AdjacentStations.Remove(tempAdjacentStations);
-            tempAdjacentStations.Element("IsActive").Value = false.ToString();
-            DataSource.Save();
-            return true;
+            //if ther is such AdjacentStations in the data source then the method 'RemoveAll()' returns more then 0
+            return (0 < DataSource.AdjacentStations.RemoveAll(adjst => adjst.StationCode1 == stationCode1 && adjst.StationCode2 == stationCode2));
         }
 
         /// <returns>true: if the object deleted sucsesfuly, false: if the object dont exist or allready not active</returns>
         public bool DeleteAdjacentStations(AdjacentStations adjacentStations)
         {
-            XElement temp = (from adjSt in DataSource.AdjacentStationsXML//extracting the object from the data base
-                             where int.Parse(adjSt.Element("StationCode1").Value) == adjacentStations.StationCode1
-                                   && int.Parse(adjSt.Element("StationCode2").Value) == adjacentStations.StationCode2
+            AdjacentStations temp = (from adjSt in DataSource.AdjacentStations//extracting the object from the data base
+                             where adjSt.StationCode1 == adjacentStations.StationCode1
+                                   && adjSt.StationCode2 == adjacentStations.StationCode2
                              select adjSt).FirstOrDefault();
 
             if(temp == null)//if this object dont exist
@@ -535,22 +462,16 @@ namespace DL
                 return false;
             }
 
-            if(bool.Parse(temp.Element("IsActive").Value) == false)//if this objec is allready not active
-            {
-                return false;
-            }
-
-            temp.Element("IsActive").Value = false.ToString();//set the object to be not active
+            DataSource.AdjacentStations.Remove(temp);
             return true;
         }
 
         ///<returns>all the objects where predicate returns true for them(active and not active)</returns>
         public IEnumerable<AdjacentStations> GetAllAdjacentStationsBy(Predicate<AdjacentStations> predicate)
         {
-            return from adjSt in DataSource.AdjacentStationsXML
-                   let temp = Cloning.xelement_to_new_object<AdjacentStations>(adjSt)
-                   where predicate(temp)
-                   select temp;
+            return from adjSt in DataSource.AdjacentStations
+                   where predicate(adjSt)
+                   select adjSt.Clone();
         }
         
 
