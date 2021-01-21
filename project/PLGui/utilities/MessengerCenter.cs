@@ -14,4 +14,7 @@ namespace PLGui.utilities
     public class RequestStation : RequestMessage<Station>
     {
     }
+    public class RequestLineTrip : RequestMessage<LineTrip>
+    {
+    }
 }

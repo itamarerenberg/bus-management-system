@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="add New Station" Height="200" Width="400">
     <Window.DataContext>
-        <viewmodels:MewStationViewModel x:Name="vModel"/>
+        <viewmodels:NewStationViewModel x:Name="vModel"/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>

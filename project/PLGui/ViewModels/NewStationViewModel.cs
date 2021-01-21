@@ -15,7 +15,7 @@ using PLGui.utilities;
 
 namespace PLGui.ViewModels
 {
-    public class MewStationViewModel : ObservableRecipient
+    public class NewStationViewModel : ObservableRecipient
     {
         IBL source;
         private Station station;
@@ -35,7 +35,7 @@ namespace PLGui.ViewModels
 
         #region constructor
 
-        public MewStationViewModel()
+        public NewStationViewModel()
         {
             station = new Station();
             Station = WeakReferenceMessenger.Default.Send<RequestStation>();//requests the old station (if exist)
