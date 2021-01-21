@@ -10,7 +10,7 @@ namespace PLGui.Models.PO
     public class LineTrip : ObservableValidator
     {
         private int id;
-        private string lineId;
+        private int lineId;
         private TimeSpan startTime;
         private TimeSpan frequency;
         private TimeSpan finishAt;
@@ -23,7 +23,7 @@ namespace PLGui.Models.PO
                 SetProperty(ref id, value, true);
             }
         }
-        public string LineId
+        public int LineId
         { 
             get => lineId;
             set

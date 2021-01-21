@@ -157,8 +157,6 @@
             </TabItem>
         </TabControl>
 
-
-
         <GroupBox Header="details" Grid.Row="3" Grid.Column="1" Margin="10">
             <StackPanel Margin="10" VerticalAlignment="Stretch" >
                 <TextBlock x:Name="Header1"/>

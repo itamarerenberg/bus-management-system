@@ -45,7 +45,6 @@
 <DL/>
 
 <שונות>
-	תיקון config.xml
 	תיעוד
 		IBL
 			viewModel maneger/passenger/mainWindow

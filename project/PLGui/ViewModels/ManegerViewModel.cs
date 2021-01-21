@@ -101,6 +101,7 @@ namespace PLGui.ViewModels
             ListChangedCommand = new RelayCommand<object>(List_SelectionChanged);
             NewLine = new RelayCommand(Add_newLine);
             NewStation = new RelayCommand(Add_newStation);
+            NewLineTrip = new RelayCommand(Add_newLineTrip);
             UpdateCommand = new RelayCommand<Window>(Update);
             DeleteCommand = new RelayCommand<Window>(Delete);
             Enter_asAnotherUserCommand = new RelayCommand<Window>(enter_asAnotherUser);
@@ -109,6 +110,7 @@ namespace PLGui.ViewModels
             //messengers initalize
             RequestStationMessege();
             RequestLineMessege();
+            RequestLineTripMessege();
         }
 
         #endregion
@@ -215,6 +217,7 @@ namespace PLGui.ViewModels
         public ICommand ListChangedCommand { get; }
         public ICommand NewLine { get; }
         public ICommand NewStation { get; }
+        public ICommand NewLineTrip { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand Enter_asAnotherUserCommand { get; }
@@ -326,6 +329,11 @@ namespace PLGui.ViewModels
             new NewStationView().ShowDialog();
             loadStations();
         }
+        private void Add_newLineTrip()
+        {
+            new NewLineTripsView().ShowDialog();
+            //loadLineTrips();///////////////////////////////////////////////////////////////////////
+        }
 
         /// <summary>
         /// generic update command
@@ -344,7 +352,14 @@ namespace PLGui.ViewModels
                 Line line = Mview.LinesList.SelectedItem as Line;
                 Update_Line(line);
             }
+            if (Mview.LineTrip_view.IsSelected)//lineTrip
+            {
+                LineTrip lineTrip = Mview.LineTrip.SelectedItem as LineTrip;
+                Line line = Lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault();
+                UpdateLineTrip(lineTrip, line);
+            }
         }
+
         private void MouseRightButtonDown(object sender)
         {
             ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
@@ -387,7 +402,7 @@ namespace PLGui.ViewModels
         }
         private void manegerView_Closing(Window window)
         {
-            //Environment.Exit(Environment.ExitCode);
+            new MainWindow().Show();
             window.Close();
         }
         #endregion
@@ -424,13 +439,20 @@ namespace PLGui.ViewModels
         {
             lineToSend = line;
             new NewLineView().ShowDialog();
-            loadData();
+            loadLines();
         }
         private void UpdateStation(Station station)
         {
             stationToSend = station;
             new NewStationView().ShowDialog();
             loadData();
+        }
+        private void UpdateLineTrip(LineTrip lineTrip, Line line)
+        {
+            lineToSend = line;
+            lineTripToSend = lineTrip;
+            new NewLineTripsView();
+            //loadLineTrips();///////////////////////////////////////////////////////////////////////
         }
 
         private void DetailsVisibility(ManegerView Mview, bool flag)
@@ -464,10 +486,11 @@ namespace PLGui.ViewModels
 
         private Line lineToSend;
         private Station stationToSend;
+        private LineTrip lineTripToSend;
 
         private void RequestStationMessege()
         {
-            //reply to the RequestLine messege by sending the line
+            //reply to the RequestStation messege by sending the station
             WeakReferenceMessenger.Default.Register<ManegerViewModel, RequestStation>(this, (r, m) =>
             {
                 m.Reply(r.stationToSend);
@@ -479,6 +502,14 @@ namespace PLGui.ViewModels
             WeakReferenceMessenger.Default.Register<ManegerViewModel, RequestLine>(this, (r, m) =>
             {
                 m.Reply(r.lineToSend);
+            });
+        }
+        private void RequestLineTripMessege()
+        {
+            //reply to the RequestLineTrip messege by sending the lineTrip
+            WeakReferenceMessenger.Default.Register<ManegerViewModel, RequestLineTrip>(this, (r, m) =>
+            {
+                m.Reply(r.lineTripToSend);
             });
         }
 
