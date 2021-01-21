@@ -168,7 +168,6 @@ namespace PLGui.ViewModels
                 Stations.Remove(selectedStation);
                 if (selectedStation.NotLast == false && Stations.Count > 0)//if the selectet station was the last station
                     Stations.Last().NotLast = false;//set the new last station to not NotLast
-                tempLine.Stations.RemoveAt(index);
                 OnPropertyChanged(nameof(IsMinStation));
 
                 NewLineView Lview = (((sender as ListView).Parent as StackPanel).Parent as Grid).Parent as NewLineView;
