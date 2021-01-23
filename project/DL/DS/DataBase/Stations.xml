@@ -10257,14 +10257,6 @@
     <IsActive>True</IsActive>
   </Station>
   <Station>
-    <Code>3585</Code>
-    <Name>בן חמו/בר לביא</Name>
-    <Longitude>35.223116</Longitude>
-    <Latitude>31.723335</Latitude>
-    <Address>רחוב:שמעון בן חמו 5 עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
-  </Station>
-  <Station>
     <Code>3591</Code>
     <Name>יגאל אלון/שדרות גולדה מאיר</Name>
     <Longitude>35.200992</Longitude>

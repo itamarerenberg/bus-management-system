@@ -356,7 +356,7 @@ namespace DL
             {
                 throw new DuplicateExeption("the line station is allready exist");
             }
-            DataSourceXML.Save("LineStation");//save the changes
+            DataSourceXML.Save("LineStations");//save the changes
         }
 
         public LineStation GetLineStation(int lineId, int stationNum)

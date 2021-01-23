@@ -1,2 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LineStations />
+<LineStations>
+  <LineStation>
+    <LineId>66</LineId>
+    <StationNumber>62000</StationNumber>
+    <Address>רחוב:דרך רמאללה  עיר: ירושלים</Address>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>27</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>66</LineId>
+    <StationNumber>27</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>62000</PrevStation>
+    <NextStation>28</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>66</LineId>
+    <StationNumber>28</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <LineStationIndex>2</LineStationIndex>
+    <PrevStation>27</PrevStation>
+    <NextStation>29</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>66</LineId>
+    <StationNumber>29</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <LineStationIndex>3</LineStationIndex>
+    <PrevStation>28</PrevStation>
+    <NextStation>30</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>66</LineId>
+    <StationNumber>30</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <LineStationIndex>4</LineStationIndex>
+    <PrevStation>29</PrevStation>
+    <NextStation>32</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>66</LineId>
+    <StationNumber>32</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <LineStationIndex>5</LineStationIndex>
+    <PrevStation>30</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+</LineStations>
