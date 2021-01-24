@@ -528,11 +528,12 @@ namespace DL
         #endregion
         
         #region LineTrip
-        public void AddLineTrip(LineTrip lineTrip)
+        public int AddLineTrip(LineTrip lineTrip)
         {
             lineTrip.ID = SerialNumbers.GetLineTripId;//get the serial id for this line trip
             DataSourceXML.LineTrips.Add(lineTrip.to_new_xelement("LineTrip"));
             DataSourceXML.Save("LineTrips");
+            return lineTrip.ID;
         }
 
         public LineTrip GetLineTrip(int id)
@@ -649,11 +650,12 @@ namespace DL
         #endregion
 
         #region UserTrip
-        public void AddUserTrip(UserTrip userTrip)
+        public int AddUserTrip(UserTrip userTrip)
         {
             userTrip.TripId = SerialNumbers.GetUserTripId;//get a serial number from SerialNumbers for the id
             DataSourceXML.UsersTrips.Add(userTrip.to_new_xelement("LineTrip"));//add the userTrip to the data source
             DataSourceXML.Save("UserTrips");//save the changes
+            return userTrip.TripId;
         }
 
         public UserTrip GetUserTrip(int id)

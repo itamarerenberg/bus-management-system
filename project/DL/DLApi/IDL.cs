@@ -93,7 +93,12 @@ namespace DLApi
         #endregion
 
         #region LineTrip
-        void AddLineTrip(LineTrip lineTrip);
+        /// <summary>
+        /// add new line trip to the data source
+        /// </summary>
+        /// <param name="lineTrip">new line trip to add</param>
+        /// <returns>the serial number of this line trip</returns>
+        int AddLineTrip(LineTrip lineTrip);
         LineTrip GetLineTrip(int id);
         void UpdateLineTrip(LineTrip lineTrip);
         IEnumerable<LineTrip> GetAllLineTrips();
@@ -108,7 +113,7 @@ namespace DLApi
         #endregion
 
         #region UserTrip
-        void AddUserTrip(UserTrip userTrip);
+        int AddUserTrip(UserTrip userTrip);
         UserTrip GetUserTrip(int id);
         void UpdateUserTrip(UserTrip userTrip);
         IEnumerable<UserTrip> GetAllUserTrips();
