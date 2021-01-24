@@ -1,2 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LineTrips />
+<LineTrips>
+  <LineTrip>
+    <ID>0</ID>
+    <LineId>0</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>00:00:00</Frequency>
+    <FinishAt>00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>1</ID>
+    <LineId>0</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>00:00:00</Frequency>
+    <FinishAt>00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+</LineTrips>
