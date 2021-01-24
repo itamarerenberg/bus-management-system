@@ -9,50 +9,69 @@ namespace PLGui.Models.PO
 {
     public class LineTrip : ObservableValidator
     {
-        private int id;
-        private int lineId;
-        private TimeSpan startTime;
-        private TimeSpan frequency;
-        private TimeSpan finishAt;
+
+        private BO.LineTrip bOlineTrip;
+        public BO.LineTrip BOlineTrip {
+            get => bOlineTrip;
+            set
+            {
+                SetProperty(ref bOlineTrip, value, true);
+                OnPropertyChanged("ID");
+                OnPropertyChanged("LineId");
+                OnPropertyChanged("StartTime");
+                OnPropertyChanged("Frequency");
+                OnPropertyChanged("FinishAt");
+            }
+        }
 
         public int ID 
         { 
-            get => id;
+            get => bOlineTrip.ID;
             set
             {
-                SetProperty(ref id, value, true);
+                int temp = bOlineTrip.ID;
+                SetProperty(ref temp, value, true);
+                bOlineTrip.ID = temp;
             }
         }
         public int LineId
         { 
-            get => lineId;
+            get => bOlineTrip.LineId;
             set
             {
-                SetProperty(ref lineId, value, true);
+                int temp = bOlineTrip.LineId;
+                SetProperty(ref temp, value, true);
+                bOlineTrip.LineId = temp;
             }
         }
         public TimeSpan StartTime
         {
-            get => startTime;
+            get => bOlineTrip.StartTime;
             set
             {
-                SetProperty(ref startTime, value, true);
+                TimeSpan temp = bOlineTrip.StartTime;
+                SetProperty(ref temp, value, true);
+                bOlineTrip.StartTime = temp;
             }
         }
         public TimeSpan Frequency
         {
-            get => frequency;
+            get => bOlineTrip.Frequency;
             set
             {
-                SetProperty(ref frequency, value, true);
+                TimeSpan temp = bOlineTrip.Frequency;
+                SetProperty(ref temp, value, true);
+                bOlineTrip.Frequency = temp;
             }
         }
         public TimeSpan FinishAt
         { 
-            get => finishAt; 
+            get => bOlineTrip.FinishAt; 
             set
             {
-                SetProperty(ref finishAt, value, true);
+                TimeSpan temp = bOlineTrip.FinishAt;
+                SetProperty(ref temp, value, true);
+                bOlineTrip.FinishAt = temp;
             }
         }
     }

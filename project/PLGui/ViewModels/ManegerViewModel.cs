@@ -121,6 +121,7 @@ namespace PLGui.ViewModels
             loadLines();
             loadStations();
             loadBuses();
+            loadLineTrips();
         }
 
         BackgroundWorker loadLinesWorker;
@@ -207,6 +208,35 @@ namespace PLGui.ViewModels
                 };//this function will execute in the BackgroundWorker thread
             loadBusesWorker.RunWorkerAsync();
         }
+
+        BackgroundWorker loadLineTripesWorker;
+        private void loadLineTrips()
+        {
+            if (loadLineTripesWorker == null)
+            {
+                loadLineTripesWorker = new BackgroundWorker();
+            }
+
+            loadLineTripesWorker.RunWorkerCompleted +=
+                (object sender, RunWorkerCompletedEventArgs args) =>
+                {
+                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                    {                                                   //terminated befor he done execute DoWork
+                        manegerModel.LineTrips = (ObservableCollection<LineTrip>)args.Result;
+                        OnPropertyChanged("LineTrips");
+                    }
+                };//this function will execute in the main thred
+
+            loadLineTripesWorker.DoWork +=
+                (object sender, DoWorkEventArgs args) =>
+                {
+                    BackgroundWorker worker = (BackgroundWorker)sender;
+                    ObservableCollection<LineTrip> result = new ObservableCollection<LineTrip>(source.GetAllLineTrips().Select(lineTrip => new LineTrip() { BOlineTrip = lineTrip }));//get all line trips from source
+                    args.Result = worker.CancellationPending ? null : result;
+                };//this function will execute in the BackgroundWorker thread
+            loadLineTripesWorker.RunWorkerAsync();
+        }
+
         #endregion
 
         #region commands
