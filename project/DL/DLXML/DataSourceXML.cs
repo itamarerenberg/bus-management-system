@@ -21,6 +21,7 @@ namespace DLXML
         static string FileName = "DataSource.xml";
         const int tryAginIn = 10;
         const int tryNtimes = 10;
+
         #region files Names
         static string LinesFileName = "Lines.xml";
         static string BusesFileName = "Buses.xml";
@@ -64,9 +65,26 @@ namespace DLXML
             get
             {
                 string index = "Buses";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root;
             }
         }
@@ -75,9 +93,26 @@ namespace DLXML
             get
             {
                 string index = "AdjacentStations";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root;
             }
         }
@@ -86,9 +121,26 @@ namespace DLXML
             get
             {
                 string index = "Lines";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root;
             }
         }
@@ -97,9 +149,26 @@ namespace DLXML
             get
             {
                 string index = "BusesOnTrip";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root;
             }
         }
@@ -108,9 +177,26 @@ namespace DLXML
             get
             {
                 string index = "Stations";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root; 
             }
         }
@@ -147,9 +233,26 @@ namespace DLXML
             get
             {
                 string index = "LineTrips";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root;
             }
         }
@@ -158,9 +261,26 @@ namespace DLXML
             get
             {
                 string index = "Users";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root;
             }
         }
@@ -169,9 +289,26 @@ namespace DLXML
             get
             {
                 string index = "UsersTrips";
-                if (files[index].Root != null)
-                    files[index].Root.Save(files[index].Path);
-                files[index].Root = XElement.Load(files[index].Path);
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
                 return files[index].Root;
             }
         } 
