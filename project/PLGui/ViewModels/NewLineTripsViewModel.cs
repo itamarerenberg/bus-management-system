@@ -107,7 +107,7 @@ namespace PLGui.ViewModels
                 (object sender, DoWorkEventArgs args) =>
                 {
                     BackgroundWorker worker = (BackgroundWorker)sender;
-                    source.AddLineTrip((BO.LineTrip)LTrip.DeepCopyToNew(typeof(BO.LineTrip)));
+                    source.AddLineTrip(LTrip.BOlineTrip);
                 };//this function will execute in the BackgroundWorker thread
             addLineTripWorker.RunWorkerAsync();
         }
@@ -122,7 +122,7 @@ namespace PLGui.ViewModels
                 (object sender, DoWorkEventArgs args) =>
                 {
                     BackgroundWorker worker = (BackgroundWorker)sender;
-                    source.UpdateLineTrip((BO.LineTrip)LTrip.DeepCopyToNew(typeof(BO.LineTrip)));
+                    source.UpdateLineTrip(LTrip.BOlineTrip);
                 };//this function will execute in the BackgroundWorker thread
             updateLineTripWorker.RunWorkerAsync();
         }

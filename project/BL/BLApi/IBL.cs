@@ -84,6 +84,7 @@ namespace BLApi
         void AddLineTrip(LineTrip lineTrip);
         LineTrip GetLineTrip(int id);
         void UpdateLineTrip(LineTrip lineTrip);
+        void DeleteLineTrip(LineTrip lineTrip);
         IEnumerable<LineTrip> GetAllLineTrips();
         IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate);
 

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:PLGui"
         xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
         mc:Ignorable="d"
-        Title="NewLineTripsView" x:Name="newLineTripsView" Height="150" Width="400">
+        Title="NewLineTripsView" x:Name="newLineTripsView" Height="180" Width="400">
     <Window.DataContext>
         <viewmodels:NewLineTripsViewModel x:Name="vModel"/>
     </Window.DataContext>

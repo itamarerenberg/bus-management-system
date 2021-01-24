@@ -584,6 +584,24 @@ namespace DL
             oldLineTrip = newLineTrip;//override the old line trip with the new one
         }
 
+        public void DeleteLineTrip(LineTrip lineTrip)
+        {
+            LineTrip lineT = (from l in DataSource.LineTrips
+                         where l.ID == lineTrip.ID
+                               && l.LineId == lineTrip.LineId
+                               && l.IsActive
+                         select l).FirstOrDefault();
+            if (lineT != null)
+            {
+                lineT.IsActive = false;//set the line trip to be unactive
+            }
+            else
+            {
+                throw new NotExistExeption("the line Trip doesn't exist");
+            }
+        }
+
+
         /// <summary>
         /// returns a clones of all the active line trips in the data source
         /// </summary>

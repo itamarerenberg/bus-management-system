@@ -363,8 +363,7 @@ namespace PLGui.ViewModels
         {
             lineToSend = Mview.LinesList.SelectedItem as Line;
             new NewLineTripsView().ShowDialog();
-            //loadLineTrips();///////////////////////////////////////////////////////////////////////
-            loadData();
+            loadLineTrips();
         }
 
         /// <summary>
@@ -420,8 +419,14 @@ namespace PLGui.ViewModels
                     Line line = Mview.LinesList.SelectedItem as Line;
                     DeleteLine(line);
                 }
+                if (Mview.LineTrip_view.IsSelected)//LineTrip
+                {
+                    LineTrip lineTrip = Mview.LineTrip.SelectedItem as LineTrip;
+                    DeleteLineTrip(lineTrip);
+                }
             }
         }
+
         private void enter_asAnotherUser(Window window)
         {
             MainWindow mainWindow = new MainWindow();
@@ -445,7 +450,14 @@ namespace PLGui.ViewModels
                 MessageBoxResult result = MessageBox.Show($"station: {station.Name} code: {station.Code} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
-                    source.DeleteStation(station.Code);
+                    try
+                    {
+                        source.DeleteStation(station.Code);
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "ERROR");
+                    }
                     loadStations();
                     MessageBox.Show($"station: {station.Name} code: {station.Code} was deleted successfully!");
                 }
@@ -458,9 +470,38 @@ namespace PLGui.ViewModels
                 MessageBoxResult result = MessageBox.Show($"line number: {line.LineNumber} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
-                    source.DeleteLine(line.ID);
+                    try
+                    {
+                        source.DeleteLine(line.ID);
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "ERROR");
+                    }
                     loadLines();
                     MessageBox.Show($"line number: {line.LineNumber} was deleted successfully!");
+                }
+            }
+        }
+        private void DeleteLineTrip(LineTrip lineTrip)
+        {
+            if (lineTrip != null)
+            {
+                int? lineNum = Lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault().LineNumber;
+
+                MessageBoxResult result = MessageBox.Show($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+                    try
+                    {
+                        source.DeleteLineTrip(lineTrip.BOlineTrip);
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "ERROR");
+                    }
+                    loadLineTrips();
+                    MessageBox.Show($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) was deleted successfully!");
                 }
             }
         }
@@ -482,7 +523,7 @@ namespace PLGui.ViewModels
             lineToSend = line;
             lineTripToSend = lineTrip;
             new NewLineTripsView();
-            //loadLineTrips();///////////////////////////////////////////////////////////////////////
+            loadLineTrips();
         }
 
         private void DetailsVisibility(ManegerView Mview, bool flag)

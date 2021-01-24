@@ -498,6 +498,17 @@ namespace BL
                 throw msg;
             }
         }
+        public void DeleteLineTrip(LineTrip lineTrip)
+        {
+            try
+            {
+                dl.DeleteLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
         public IEnumerable<LineTrip> GetAllLineTrips()
         {
             return from LTripDO in dl.GetAllLineTrips()

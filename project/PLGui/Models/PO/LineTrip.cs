@@ -10,7 +10,7 @@ namespace PLGui.Models.PO
     public class LineTrip : ObservableValidator
     {
 
-        private BO.LineTrip bOlineTrip;
+        private BO.LineTrip bOlineTrip = new BO.LineTrip();
         public BO.LineTrip BOlineTrip {
             get => bOlineTrip;
             set

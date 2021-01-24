@@ -43,12 +43,13 @@ namespace PLGui.utilities
             if (value < 23)
             {
                 Hour.Text = (value + 1) <= 9 ? "0" + (++value).ToString() : (++value).ToString();
+                Time += TimeSpan.FromHours(1);
             }
             else if (value == 23)
             {
                 Hour.Text = "01";
+                Time -= TimeSpan.FromHours(22);
             }
-            Time += TimeSpan.FromHours(1);
         }
 
         private void BtnUpMinute_OnClick(object sender, RoutedEventArgs e)
@@ -57,12 +58,13 @@ namespace PLGui.utilities
             if (value < 59)
             {
                 Minute.Text = (value + 1) <= 9 ? "0" + (++value).ToString() : (++value).ToString();
+                Time += TimeSpan.FromMinutes(1);
             }
             else if (value == 59)
             {
                 Minute.Text = "01";
+                Time -= TimeSpan.FromMinutes(58);
             }
-            Time += TimeSpan.FromMinutes(1);
         }
 
         private void BtnDownHour_OnClick(object sender, RoutedEventArgs e)
@@ -71,12 +73,13 @@ namespace PLGui.utilities
             if (value > 0)
             {
                 Hour.Text = (value - 1) <= 9 ? "0" + (--value).ToString() : (--value).ToString();
+                Time -= TimeSpan.FromHours(1);
             }
             else if (value == 0)
             {
                 Hour.Text = "23";
+                Time += TimeSpan.FromHours(22);
             }
-            Time -= TimeSpan.FromHours(1);
         }
 
         private void BtnDownMinute_OnClick(object sender, RoutedEventArgs e)
@@ -85,12 +88,13 @@ namespace PLGui.utilities
             if (value > 0)
             {
                 Minute.Text = (value - 1) <= 9 ? "0" + (--value).ToString() : (--value).ToString();
+                Time -= TimeSpan.FromMinutes(1);
             }
             else if (value == 0)
             {
                 Minute.Text = "59";
+                Time += TimeSpan.FromMinutes(58);
             }
-            Time -= TimeSpan.FromMinutes(1);
         }
 
         private void Hour_OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

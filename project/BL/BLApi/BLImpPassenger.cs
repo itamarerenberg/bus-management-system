@@ -353,6 +353,10 @@ namespace BL
         {
             throw new NotImplementedException();
         }
+        public void DeleteLineTrip(LineTrip lineTrip)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
     }

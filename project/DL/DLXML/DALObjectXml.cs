@@ -563,7 +563,23 @@ namespace DL
             XMLTools.object_to_xelement(newLineTrip, oldLineTrip);//override the old lineTrip with the new one in the data source 
             DataSourceXML.Save("LineTrips");//save the changes
         }
-
+        public void DeleteLineTrip(LineTrip lineTrip)
+        {
+            XElement lineT = (from lt in DataSourceXML.LineTrips.Elements()//get the line trip from the data source
+                              where lt.Element("ID").Value == lineTrip.ID.ToString()
+                                    && lt.Element("LineId").Value == lineTrip.LineId.ToString()
+                                    && lt.Element("IsActive").Value == true.ToString()
+                              select lt).FirstOrDefault();
+            if (lineT != null)
+            {
+                lineT.Element("IsActive").Value = false.ToString();//set the line trip to be unactive
+            }
+            else
+            {
+                throw new NotExistExeption("the line Trip doesn't exist");
+            }
+            DataSourceXML.Save("LineTrips");//save the changes
+        }
         public IEnumerable<LineTrip> GetAllLineTrips()
         {
             return from lt in DataSourceXML.LineTrips.Elements()//return all the active lineTrips from the data source

@@ -16,4 +16,20 @@
     <FinishAt>00:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
+  <LineTrip>
+    <ID>2</ID>
+    <LineId>0</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>00:00:00</Frequency>
+    <FinishAt>00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>4</ID>
+    <LineId>55</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>00:00:00</Frequency>
+    <FinishAt>00:00:00</FinishAt>
+    <IsActive>False</IsActive>
+  </LineTrip>
 </LineTrips>
