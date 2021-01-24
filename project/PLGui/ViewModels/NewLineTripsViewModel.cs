@@ -69,11 +69,25 @@ namespace PLGui.ViewModels
         {
             if (NewLineTripMode == false)//if the view model on "updating mode"
             {
-                UpdateLineTrip();
+                try
+                {
+                    UpdateLineTrip();
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }            
             }
             else                        //New LineTrip Mode
             {
-                AddLineTrip();
+                try
+                {
+                    AddLineTrip();
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }
             }
             window.Close();
         }

@@ -127,7 +127,6 @@ namespace PLGui.ViewModels
         private void debugButton()
         {
             new ManegerView().ShowDialog();
-            mangerBl.AddManagar("Admin", "1234");
         }
 
         private void MainWindow_Closing()

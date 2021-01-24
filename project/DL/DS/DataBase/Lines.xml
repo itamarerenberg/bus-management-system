@@ -8,4 +8,28 @@
     <LastStation_Id>32</LastStation_Id>
     <IsActive>True</IsActive>
   </Line>
+  <Line>
+    <ID>41</ID>
+    <LineNumber>546</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>35</FirstStation_Id>
+    <LastStation_Id>45</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>55</ID>
+    <LineNumber>673</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>160</FirstStation_Id>
+    <LastStation_Id>172</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>59</ID>
+    <LineNumber>745</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>130</FirstStation_Id>
+    <LastStation_Id>137</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
 </Lines>
