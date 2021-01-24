@@ -182,9 +182,8 @@
         </ListView>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="1">
             <Button x:Name="DeleteButton" Content="delete" Margin="10" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <Button x:Name="SetLineTrip" Content="Set line trip" Margin="10" Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Button x:Name="UpdateButton" Content="update" Margin="10" Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-
+            <Button x:Name="SetLineTrip" Content="Set line trip" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" />
         </StackPanel>
     </Grid>
     

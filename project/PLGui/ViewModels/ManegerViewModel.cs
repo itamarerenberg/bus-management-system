@@ -101,8 +101,8 @@ namespace PLGui.ViewModels
             ListChangedCommand = new RelayCommand<object>(List_SelectionChanged);
             NewLine = new RelayCommand(Add_newLine);
             NewStation = new RelayCommand(Add_newStation);
-            NewLineTrip = new RelayCommand(Add_newLineTrip);
-            UpdateCommand = new RelayCommand<Window>(Update);
+            NewLineTrip = new RelayCommand<ManegerView>(Add_newLineTrip);
+            UpdateCommand = new RelayCommand<ManegerView>(Update);
             DeleteCommand = new RelayCommand<Window>(Delete);
             Enter_asAnotherUserCommand = new RelayCommand<Window>(enter_asAnotherUser);
             ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
@@ -359,19 +359,19 @@ namespace PLGui.ViewModels
             new NewStationView().ShowDialog();
             loadStations();
         }
-        private void Add_newLineTrip()
+        private void Add_newLineTrip(ManegerView Mview)
         {
+            lineToSend = Mview.LinesList.SelectedItem as Line;
             new NewLineTripsView().ShowDialog();
             //loadLineTrips();///////////////////////////////////////////////////////////////////////
+            loadData();
         }
 
         /// <summary>
         /// generic update command
         /// </summary>
-        private void Update(Window window)
+        private void Update(ManegerView Mview)
         {
-            ManegerView Mview = window as ManegerView;
-
             if (Mview.Stations_view.IsSelected)//station
             {
                 Station station = Mview.StationList.SelectedItem as Station;
