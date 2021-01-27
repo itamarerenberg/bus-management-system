@@ -160,7 +160,7 @@
             </TabItem>
         </TabControl>
 
-        <Grid x:Name="LineDetails" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+        <Grid x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
@@ -179,7 +179,7 @@
                 </WrapPanel>
             </GroupBox>
             <GroupBox Header="Line stations list" Grid.Row="1" Margin="5">
-                <ListView x:Name="LineStations_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" >
+                <ListView x:Name="LineStations_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" ToolTip="press twice and see the station details" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
@@ -229,7 +229,7 @@
                 </WrapPanel>
             </GroupBox>
             <GroupBox Header="Line Passes list" Grid.Row="1" Margin="5">
-                <ListView x:Name="LinePasses_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding}" >
+                <ListView x:Name="LinePasses_view" Margin="10" VerticalAlignment="Top" >
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
