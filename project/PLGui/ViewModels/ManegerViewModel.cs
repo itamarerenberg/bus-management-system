@@ -550,11 +550,11 @@ namespace PLGui.utilities
             GetLineTripWorker.RunWorkerCompleted +=
                (object sender, RunWorkerCompletedEventArgs args) =>
                {
-                   if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                   {                                                   //terminated befor he done execute DoWork
-                        return  (ObservableCollection<LineTrip>)args.Result;
-                       OnPropertyChanged(nameof(LineTrips));
-                   }
+                   //if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                   //{                                                   //terminated befor he done execute DoWork
+                   //     return  (ObservableCollection<LineTrip>)args.Result;
+                   //    OnPropertyChanged(nameof(LineTrips));
+                   //}
                };//this function will execute in the main thred
             GetLineTripWorker.DoWork +=
                 (object sender, DoWorkEventArgs args) =>
