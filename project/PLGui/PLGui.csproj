@@ -132,6 +132,7 @@
     <Compile Include="utilities\TimeSpanPicker.xaml.cs">
       <DependentUpon>TimeSpanPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="utilities\Type_converter_to_visibility.cs" />
     <Compile Include="ViewModels\NewLineTripsViewModel.cs" />
     <Compile Include="ViewModels\PassengerViewModel.cs" />
     <Compile Include="utilities\MessengerCenter.cs" />

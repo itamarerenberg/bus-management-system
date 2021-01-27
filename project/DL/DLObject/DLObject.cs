@@ -28,7 +28,7 @@ namespace DL
                                         select b).FirstOrDefault();
             if (Same_LicenseNum == null)//if no bus have the same LicenseNum
             {
-                DataSource.Buses.Add(bus);//add bus to label Buses
+                DataSource.Buses.Add(bus.Clone());//add bus to label Buses
             }
             else//in case the bus is allready in the data base: checks if he is active
             {
@@ -36,7 +36,7 @@ namespace DL
                 {
                     throw new DuplicateExeption("bus with identical License's num allready exist");
                 }
-                Same_LicenseNum = bus;//if the 'Same_LicenseNum' is unactive then override it with the new bus
+                Same_LicenseNum = bus.Clone();//if the 'Same_LicenseNum' is unactive then override it with the new bus
             }
         }
 
@@ -63,7 +63,7 @@ namespace DL
             {
                 throw new NotExistExeption("bus with License's num like 'bus' not exist");
             }
-            oldBus = newBus;//set the old bus to be the update bus
+            oldBus = newBus.Clone();//set the old bus to be the update bus
         }
 
         public void DeleteBus(string licenseNum)
@@ -109,7 +109,7 @@ namespace DL
             {
                 throw e;
             }
-            DataSource.Lines.Add(line);
+            DataSource.Lines.Add(line.Clone());
             return line.ID;
         }
 
@@ -136,7 +136,7 @@ namespace DL
             {
                 throw new NotExistExeption("line with id like 'line' not exist");
             }
-            oldLine = newLine;//override the old line with the new one
+            oldLine = newLine.Clone();//override the old line with the new one
         }
 
         public void DeleteLine(int id)
@@ -247,7 +247,7 @@ namespace DL
                                        select bs).FirstOrDefault();      
             if (tempBusStation == null)//if not found
             {
-                DataSource.Stations.Add(busStation);//add to the data source
+                DataSource.Stations.Add(busStation.Clone());//add to the data source
             }
             else//in case the bus station is allready in the data base: checks if he is active
             {
@@ -255,7 +255,7 @@ namespace DL
                 {
                     throw new DuplicateExeption("bus station with identical License's num allready exist");
                 }
-                tempBusStation = busStation;//override the unactiv station with the new one
+                tempBusStation = busStation.Clone();//override the unactiv station with the new one
             }
         }
 
@@ -291,7 +291,7 @@ namespace DL
             {
                 throw new NotExistExeption("the station doesn't not exist");
             }
-            oldBusStation = newBusStation;//override the old station with the new one
+            oldBusStation = newBusStation.Clone();//override the old station with the new one
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace DL
         /// </summary>
         public IEnumerable<Station> GetAllStations()
         {
-            return from bs in DataSource.Stations//return all the activ stations
+            return from bs in DataSource.Stations//return all the active stations
                    where bs.IsActive
                    select bs.Clone();
         }
@@ -353,7 +353,7 @@ namespace DL
                                            select ls).FirstOrDefault();
             if (tempLineStation == null)//if ther no such line station in the data sorce allready
             {
-                DataSource.LineStations.Add(lineStation);
+                DataSource.LineStations.Add(lineStation.Clone());
             }
             //in case the Line station is allready in the data base: checks if he is active
             else
@@ -362,7 +362,7 @@ namespace DL
                 {
                     throw new DuplicateExeption("the line station is allready exist");
                 }
-                tempLineStation = lineStation;//override the old unactive lineStation with the new line station
+                tempLineStation = lineStation.Clone();//override the old unactive lineStation with the new line station
             }
         }
 
@@ -414,7 +414,7 @@ namespace DL
             {
                 throw new NotExistExeption("the line station doesn't exist");
             }
-            oldLineStation = newLineStation;//override the old lineStation
+            oldLineStation = newLineStation.Clone();//override the old lineStation
         }
 
         /// <summary>
@@ -464,7 +464,7 @@ namespace DL
                                              select adjSt).FirstOrDefault();
             if (tempStations == null)//if ther is no such AdjacentStations
             {
-                DataSource.AdjacentStations.Add(tempStations);
+                DataSource.AdjacentStations.Add(tempStations.Clone());
             }            
             //else do nothing (it's not an exeption) 
         }
@@ -495,7 +495,7 @@ namespace DL
             {
                 throw new NotExistExeption("the Adjacent Stations doesn't exist");
             }
-            oldAdjacentStations = newAdjacentStations;//override the old AdjacentStations with the up to date one
+            oldAdjacentStations = newAdjacentStations.Clone();//override the old AdjacentStations with the up to date one
         }
 
         /// <returns>
@@ -546,7 +546,7 @@ namespace DL
         public int AddLineTrip(LineTrip lineTrip)
         {
             lineTrip.ID = DataSource.SerialLineTripID;
-            DataSource.LineTrips.Add(lineTrip);
+            DataSource.LineTrips.Add(lineTrip.Clone());
             return lineTrip.ID;
         }
 
@@ -581,7 +581,7 @@ namespace DL
             {
                 throw new NotExistExeption("the line trip doesn't exist");
             }
-            oldLineTrip = newLineTrip;//override the old line trip with the new one
+            oldLineTrip = newLineTrip.Clone();//override the old line trip with the new one
         }
 
         public void DeleteLineTrip(LineTrip lineTrip)
@@ -636,7 +636,7 @@ namespace DL
             User tempUser = DataSource.Users.FirstOrDefault(l => l.Name == user.Name);//serch for user with the same name
             if (tempUser == null)//if not found
             {
-                DataSource.Users.Add(user);
+                DataSource.Users.Add(user.Clone());
             }
             //in case the user is allready in the data base: checks if he is active
             else
@@ -645,7 +645,7 @@ namespace DL
                 {
                     throw new DuplicateExeption("the user is allready exist");
                 }
-                tempUser = user;//override the unactive user
+                tempUser = user.Clone();//override the unactive user
             }
         }
 
@@ -674,7 +674,7 @@ namespace DL
             {
                 throw new NotExistExeption("the user doesn't exist");
             }
-            oldUser = newUser;
+            oldUser = newUser.Clone();
         }
 
         /// <summary>
@@ -697,11 +697,10 @@ namespace DL
 
         #region UserTrip
 
-
         public int AddUserTrip(UserTrip userTrip)
         {
             userTrip.TripId = DataSource.SerialUserTripID;//get a serial number from SerialNumbers for the id
-            DataSource.UsersTrips.Add(userTrip);//add to the data source
+            DataSource.UsersTrips.Add(userTrip.Clone());//add to the data source
             return userTrip.TripId;
         }
 
@@ -722,7 +721,7 @@ namespace DL
             {
                 throw new NotExistExeption("the user trip doesn't exist");
             }
-            oldUserTrip = newUserTrip;
+            oldUserTrip = newUserTrip.Clone();
         }
 
         public IEnumerable<UserTrip> GetAllUserTrips()

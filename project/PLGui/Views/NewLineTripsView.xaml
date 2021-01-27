@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utilities="clr-namespace:PLGui.utilities"
         xmlns:local="clr-namespace:PLGui"
-        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
+        xmlns:viewmodels="clr-namespace:PLGui.utilities"
         mc:Ignorable="d"
         Title="NewLineTripsView" x:Name="newLineTripsView" Height="180" Width="400">
     <Window.DataContext>

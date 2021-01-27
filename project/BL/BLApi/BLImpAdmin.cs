@@ -701,15 +701,16 @@ namespace BL
             }
             return result;
         }
-
+        static Random r = new Random(DateTime.Now.Millisecond);
         private TimeSpan GetTime(Station station1, Station station2, double dist)
         {
-            return new TimeSpan((int)((new Random()).NextDouble() * dist));
+            double rand = r.NextDouble() * 1.8 + 1.2;//random number in the range 1.2 - 3
+            return TimeSpan.FromMinutes(rand * dist);//calculating the time by distance driving around 20 - 50 kmh
         }
 
         private double GetDist(Station station1, Station station2)
         {
-            return station1.Location.GetDistanceTo(station2.Location);
+            return station1.Location.GetDistanceTo(station2.Location)/1000;
         }
         #endregion
 

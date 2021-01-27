@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
-        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
+        xmlns:viewmodels="clr-namespace:PLGui.utilities"
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PLGui.Models.PO"
         mc:Ignorable="d"
@@ -72,14 +72,14 @@
                     <GridView>
                         <GridViewColumn x:Name="Name" Header="Name" Width="auto" DisplayMemberBinding="{Binding Station.Name}" />
                         <GridViewColumn x:Name="Code" Header="Code" Width="auto" DisplayMemberBinding="{Binding Station.Code}" />
-                        <GridViewColumn x:Name="dist_to_next" Header="distance to next" Width="{Binding Path=AddManually, Converter={StaticResource Bool_converter_to_visibility}}">
+                        <GridViewColumn x:Name="dist_to_next" Header="distance to next" Width="{Binding AddManually, Converter={StaticResource Bool_converter_to_visibility}}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                         <TextBox x:Name="meters" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Distance, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn x:Name="time_to_next" Header="time to next"  Width="{Binding Path=AddManually, Converter={StaticResource Bool_converter_to_visibility}}" >
+                        <GridViewColumn x:Name="time_to_next" Header="time to next" Width="{Binding AddManually, Converter={StaticResource Bool_converter_to_visibility}}" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                         <TextBox x:Name="minuts" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Time, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>

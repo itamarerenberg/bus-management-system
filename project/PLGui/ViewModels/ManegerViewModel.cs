@@ -18,7 +18,7 @@ using PLGui.Models;
 using PLGui.Models.PO;
 using PLGui.utilities;
 
-namespace PLGui.ViewModels
+namespace PLGui.utilities
 {
     public class ManegerViewModel : ObservableRecipient  
     {
@@ -75,7 +75,7 @@ namespace PLGui.ViewModels
             get => manegerModel.Stations;
             set => SetProperty(ref manegerModel.Stations, value);
         }
-        public ObservableCollection<LineTrip> Linetrips
+        public ObservableCollection<LineTrip> LineTrips
         {
             get => manegerModel.LineTrips;
             set => SetProperty(ref manegerModel.LineTrips, value);
@@ -83,7 +83,21 @@ namespace PLGui.ViewModels
         ObservableCollection<BO.LineStation> lineStation;
         public ObservableCollection<BO.LineStation> LineStations
         {
-            get => lineStation;
+            get 
+            {
+                if (lineStation != null && lineStation.Count > 1)
+                {
+                    ObservableCollection<BO.LineStation> temp = new ObservableCollection<BO.LineStation>() { lineStation[0], lineStation[1] };
+                    for (int i = 2; i < lineStation.Count; i++)
+                    {
+                        temp.Add(lineStation[i]);
+                        temp[i].PrevToCurrent.Distance += temp[i - 1].PrevToCurrent.Distance;
+                        temp[i].PrevToCurrent.Time += temp[i - 1].PrevToCurrent.Time;
+                    }
+                    return temp;
+                }
+                return lineStation;
+            }
             set => SetProperty(ref lineStation, value);
         }
         #endregion
@@ -97,8 +111,8 @@ namespace PLGui.ViewModels
 
             //commands initialize
             SearchCommand = new RelayCommand<Window>(SearchBox_TextChanged);
-            TabChangedCommand = new RelayCommand<Window>(tab_selactionChange);
-            ListChangedCommand = new RelayCommand<object>(List_SelectionChanged);
+            TabChangedCommand = new RelayCommand<ManegerView>(tab_selactionChange);
+            ListChangedCommand = new RelayCommand<ManegerView>(List_SelectionChanged);
             NewLine = new RelayCommand(Add_newLine);
             NewStation = new RelayCommand(Add_newStation);
             NewLineTrip = new RelayCommand<ManegerView>(Add_newLineTrip);
@@ -106,6 +120,8 @@ namespace PLGui.ViewModels
             DeleteCommand = new RelayCommand<Window>(Delete);
             Enter_asAnotherUserCommand = new RelayCommand<Window>(enter_asAnotherUser);
             ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
+            WindowLoaded_Command = new RelayCommand<ManegerView>(Window_Loaded);
+            LostFocus_Command = new RelayCommand<ManegerView>(LostFocus);
 
             //messengers initalize
             RequestStationMessege();
@@ -223,7 +239,7 @@ namespace PLGui.ViewModels
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated befor he done execute DoWork
                         manegerModel.LineTrips = (ObservableCollection<LineTrip>)args.Result;
-                        OnPropertyChanged("LineTrips");
+                        OnPropertyChanged(nameof(LineTrips));
                     }
                 };//this function will execute in the main thred
 
@@ -251,7 +267,10 @@ namespace PLGui.ViewModels
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand Enter_asAnotherUserCommand { get; }
-        public ICommand ManegerView_ClosingCommand { get; } 
+        public ICommand ManegerView_ClosingCommand { get; }
+        public ICommand WindowLoaded_Command { get; }
+        public ICommand LostFocus_Command { get; }
+
         #endregion
 
         /// <summary>
@@ -266,106 +285,98 @@ namespace PLGui.ViewModels
             {
                 //get the current presented List, get his name, and create a copy collection for searching
                 ListView currentList = ((Mview.mainTab.SelectedItem as TabItem).Content as ListView);
-                string listName = ((Mview.mainTab.SelectedItem as TabItem).Header.ToString());
-                var tempList = Mview.vModel.GetType().GetProperty(listName).GetValue(Mview.vModel, null) as IEnumerable<dynamic>;
+                string listName = ((Mview.mainTab.SelectedItem as TabItem).Header.ToString()).Replace(" ","");
+                var tempList = Mview.vModel.GetType().GetProperty(listName).GetValue(Mview.vModel, null) as IEnumerable<object>;
                 if (tempList != null)
                 {
                     //return a new collection according to the searching letters
-                    currentList.ItemsSource = tempList.Where(c => c.GetType().GetProperty(string.Concat(Mview.ComboBoxSearch.Text.Where(s => !char.IsWhiteSpace(s)))).GetValue(c, null).ToString().Contains(Mview.SearchBox.Text));
+                    //currentList.ItemsSource = (from c in tempList
+                    //                           let v = c.GetType().GetProperty(string.Concat(Mview.ComboBoxSearch.Text.Where(s => !char.IsWhiteSpace(s)))).GetValue(c, null)
+                    //                           where v != null
+                    //                           select v.ToString().Contains(Mview.SearchBox.Text)).ToList();
+                    currentList.ItemsSource = tempList.Where(c => c != null && c.GetType().GetProperty(string.Concat(Mview.ComboBoxSearch.Text.Where(s => !char.IsWhiteSpace(s)))).GetValue(c, null).ToString().Contains(Mview.SearchBox.Text));
                 }
             }
-
         }
 
         /// <summary>
         /// when the tab selection is changed. replace the option in the combo box according to the entity's properties of the current list
         /// </summary>
         /// <param name="window"></param>
-        private void tab_selactionChange(Window window)
+        private void tab_selactionChange(ManegerView Mview)
         {
-            if (window is ManegerView)
-            {
-                ManegerView Mview = window as ManegerView;
-                ListView currentListView = (Mview.mainTab.SelectedItem as TabItem).Content as ListView;
-                if (currentListView.SelectedItem == null)
-                {
-                    List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns.Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
-                    Mview.ComboBoxSearch.ItemsSource = comboList;
-                    DetailsVisibility(Mview, false);
-                    Mview.LineStations_view.Visibility = Visibility.Collapsed; 
-                }
+            ListView currentListView = (Mview.mainTab.SelectedItem as TabItem).Content as ListView;
 
-                OnPropertyChanged(nameof(selectedTabItem));
-                OnPropertyChanged(nameof(IsSelcetdItemList));
-            }
-        }
+            List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns
+                                      .Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
+            Mview.ComboBoxSearch.ItemsSource = comboList;
+            Mview.ComboBoxSearch.SelectedIndex = 0;//display the first item in the combo box
 
-        /// <summary>
-        /// when a row in the list has selected. show in the window his properties deatails etc.
-        /// </summary>
-        /// <param name="sender"></param>
-        private void List_SelectionChanged(object sender)
-        {
-            ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
-            if ((sender as ListView).SelectedItem is Station selectedStation)
-            {
-                Mview.Header1.Text = "Name:";
-                Mview.content1.Content = selectedStation.Name;
-
-                Mview.Header2.Text = "Code:";
-                Mview.content2.Content = selectedStation.Code;
-
-                Mview.Header3.Text = "Address:";
-                Mview.content3.Content = selectedStation.Address;
-
-                Mview.Header4.Text = "Location:";
-                Mview.content4.Content = selectedStation.Location;
-
-                DetailsVisibility(Mview, true);
-            }
-
-            if ((sender as ListView).SelectedItem is Line selectedLine)
-            {
-                Mview.LineStations_view.Visibility = Visibility.Visible;
-                LineStations = selectedLine.Stations;
-
-                Mview.Header1.Text = "Line Number:";
-                Mview.content1.Content = selectedLine.LineNumber;
-
-                Mview.Header2.Text = "Area:";
-                Mview.content2.Content = selectedLine.Area;
-
-                Mview.Header1.Visibility = Visibility.Visible;
-                Mview.content1.Visibility = Visibility.Visible;
-                Mview.Header2.Visibility = Visibility.Visible;
-                Mview.content2.Visibility = Visibility.Visible;
-                Mview.Header3.Visibility = Visibility.Collapsed;
-                Mview.content3.Visibility = Visibility.Collapsed;
-                Mview.Header4.Visibility = Visibility.Collapsed;
-                Mview.content4.Visibility = Visibility.Collapsed;
-            }
-            OnPropertyChanged(nameof(selectedTabItem));
+            OnPropertyChanged(nameof(SelectedTabItem));
             OnPropertyChanged(nameof(IsSelcetdItemList));
         }
 
+        /// <summary>
+        /// when a row in the list has selected. show in the window his properties deatails, etc.
+        /// </summary>
+        /// <param name="sender"></param>
+        private void List_SelectionChanged(ManegerView Mview)
+        {
+            if ((selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation)
+            {
+                Mview.VName.Content = SelectedStation.Name;
+                Mview.VCode.Content = SelectedStation.Code;
+                Mview.VAddress.Content = SelectedStation.Address;
+                Mview.VLocation.Content = SelectedStation.Location;
+                return;
+            }
+            if ((selectedTabItem.Content as ListView).SelectedItem is Line selectedLine)
+            {
+                LineStations = selectedLine.Stations;
+                Mview.LineTrip_Details.DataContext = GetLineTripDetails(selectedLine.ID);
+
+                Mview.VLineNumber.Content = selectedLine.LineNumber;
+                Mview.VArea.Content = selectedLine.Area;
+                return;
+            }
+        }
+       
+        private void LostFocus( ManegerView MView)
+        {
+            if (SelectedTabItem != null)
+            {
+
+            }
+            //MView.StationList.SelectedItem = null;
+            //MView.LinesList.SelectedItem = null;
+            //MView.LineTripList.SelectedItem = null;
+            //MView.BusesList.SelectedItem = null;
+        }
         private void Add_newLine()
         {
+            lineToSend = null;
             new NewLineView().ShowDialog();
             loadLines();
         }
-
         private void Add_newStation()
         {
+            stationToSend = null;
             new NewStationView().ShowDialog();
             loadStations();
         }
         private void Add_newLineTrip(ManegerView Mview)
         {
-            lineToSend = Mview.LinesList.SelectedItem as Line;
-            new NewLineTripsView().ShowDialog();
-            loadLineTrips();
+            if (Mview.LinesList.SelectedItem != null)
+            {
+                lineToSend = Mview.LinesList.SelectedItem as Line;
+                new NewLineTripsView().ShowDialog();
+                loadLineTrips();
+            }
+            else
+            {
+                MessageBox.Show("please select a line", "ERROR");
+            }
         }
-
         /// <summary>
         /// generic update command
         /// </summary>
@@ -383,12 +394,11 @@ namespace PLGui.ViewModels
             }
             if (Mview.LineTrip_view.IsSelected)//lineTrip
             {
-                LineTrip lineTrip = Mview.LineTrip.SelectedItem as LineTrip;
+                LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
                 Line line = Lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault();
                 UpdateLineTrip(lineTrip, line);
             }
         }
-
         private void MouseRightButtonDown(object sender)
         {
             ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
@@ -421,16 +431,14 @@ namespace PLGui.ViewModels
                 }
                 if (Mview.LineTrip_view.IsSelected)//LineTrip
                 {
-                    LineTrip lineTrip = Mview.LineTrip.SelectedItem as LineTrip;
+                    LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
                     DeleteLineTrip(lineTrip);
                 }
             }
         }
-
         private void enter_asAnotherUser(Window window)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
+            new MainWindow().Show();
 
             ManegerView Mview = window as ManegerView;
             Mview.Close();
@@ -440,9 +448,14 @@ namespace PLGui.ViewModels
             new MainWindow().Show();
             window.Close();
         }
+        private void Window_Loaded(ManegerView MView)
+        {
+            tab_selactionChange(MView);
+        }
         #endregion
 
         #region help methods
+        //------------------------------------------------------------------------------------------------
         private void DeleteStation(Station station)
         {
             if (station != null)
@@ -526,31 +539,25 @@ namespace PLGui.ViewModels
             loadLineTrips();
         }
 
-        private void DetailsVisibility(ManegerView Mview, bool flag)
+        BackgroundWorker GetLineTripWorker;
+        private IEnumerable<LineTrip> GetLineTripDetails(int lineId)
         {
-            if (flag)
+            ObservableCollection<LineTrip> result = new ObservableCollection<LineTrip>();
+            if (GetLineTripWorker == null)
             {
-                Mview.Header1.Visibility = Visibility.Visible;
-                Mview.content1.Visibility = Visibility.Visible;
-                Mview.Header2.Visibility = Visibility.Visible;
-                Mview.content2.Visibility = Visibility.Visible;
-                Mview.Header3.Visibility = Visibility.Visible;
-                Mview.content3.Visibility = Visibility.Visible;
-                Mview.Header4.Visibility = Visibility.Visible;
-                Mview.content4.Visibility = Visibility.Visible;
+                GetLineTripWorker = new BackgroundWorker();
             }
-            else
-            {
-                Mview.Header1.Visibility = Visibility.Collapsed;
-                Mview.content1.Visibility = Visibility.Collapsed;
-                Mview.Header2.Visibility = Visibility.Collapsed;
-                Mview.content2.Visibility = Visibility.Collapsed;
-                Mview.Header3.Visibility = Visibility.Collapsed;
-                Mview.content3.Visibility = Visibility.Collapsed;
-                Mview.Header4.Visibility = Visibility.Collapsed;
-                Mview.content4.Visibility = Visibility.Collapsed;
-            }
+            GetLineTripWorker.DoWork +=
+                (object sender, DoWorkEventArgs args) =>
+                {
+                    BackgroundWorker worker = (BackgroundWorker)sender;
+                    result = new ObservableCollection<LineTrip>(source.GetAllLineTripBy(lt => lt.LineId == lineId)
+                        .Select(lineTrip => new LineTrip() { BOlineTrip = lineTrip }));//get all line trips from source
+                };//this function will execute in the BackgroundWorker thread
+            GetLineTripWorker.RunWorkerAsync();
+            return result;
         }
+
         #endregion
 
         #region Messenger

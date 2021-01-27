@@ -15,7 +15,7 @@ using Microsoft.Toolkit.Mvvm.Messaging;
 using PLGui.Models.PO;
 using PLGui.utilities;
 
-namespace PLGui.ViewModels
+namespace PLGui.utilities
 {
     public class NewLineViewModel : ObservableRecipient
     {

@@ -10,30 +10,27 @@ using System.Windows.Data;
 
 namespace PLGui.utilities
 {
-    class Bool_converter_to_visibility : IValueConverter
+    class Type_converter_to_visibility : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool flag)
+            if (value is TabItem currentTab)
             {
-                if (targetType.Name == "Double")//if the target type is property "width"
+                if (parameter is TabItem parameterTab)
                 {
-                    if (flag)
-                        return "auto";
-                    return 0;
+                    if (currentTab == parameterTab)
+                    {
+                        return Visibility.Visible;
+                    }
                 }
-
-                if (flag)
-                    return Visibility.Visible;
-                return Visibility.Collapsed;
             }
-            
-            return null;
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
+
     }
 }

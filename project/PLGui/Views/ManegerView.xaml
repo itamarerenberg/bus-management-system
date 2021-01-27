@@ -4,14 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
+        xmlns:viewmodels="clr-namespace:PLGui.utilities"
+        xmlns:utilities="clr-namespace:PLGui.utilities"
         mc:Ignorable="d"
         Title="Maneger" x:Name="ManegerWindow" MinHeight="700" MinWidth="1000">
+    <y:Interaction.Triggers>
+        <y:EventTrigger EventName="Loaded">
+            <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+        </y:EventTrigger>
+    </y:Interaction.Triggers>
     <Window.DataContext>
         <viewmodels:ManegerViewModel x:Name="vModel"/>
     </Window.DataContext>
     <Window.Resources>
-        <viewmodels:Bool_converter_to_visibility x:Key="Bool_converter_to_visibility" />
+        <utilities:Bool_converter_to_visibility x:Key="Bool_converter_to_visibility" />
+        <utilities:Type_converter_to_visibility x:Key="Type_converter_to_visibility" />
         <ContextMenu x:Key="rightClickMenuStrip">
             <MenuItem Header="update"/>
             <MenuItem Header="delete"/>
@@ -19,15 +26,15 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left"  Grid.ColumnSpan="2" Grid.Row="0">
             <MenuItem Header="new" Height="25">
@@ -49,7 +56,7 @@
             <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
             <ComboBox x:Name="ComboBoxSearch" MinWidth="70" />
         </StackPanel>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="100,0,0,0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="140,0,0,0">
             <TextBlock Text="search:" HorizontalAlignment="Left"/>
             <TextBox x:Name="SearchBox" MinWidth="70" Height="22"  >
                 <y:Interaction.Triggers>
@@ -66,17 +73,13 @@
                 </y:EventTrigger>
             </y:Interaction.Triggers>
             <TabItem x:Name="Stations_view" Header="Stations" >
-                <ListView x:Name="StationList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" SelectedIndex="0">
+                <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" >
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
-                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" 
-                                                   CommandParameter="{Binding RelativeSource={ RelativeSource FindAncestor, AncestorType={x:Type ListView}, AncestorLevel=1}}"
-                                                   PassEventArgsToCommand="True"/>
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
-                        <y:EventTrigger EventName="MouseRightButtonDown">
-                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" 
-                                                   CommandParameter="{Binding RelativeSource={ RelativeSource FindAncestor, AncestorType={x:Type ListView}, AncestorLevel=1}}"
-                                                   PassEventArgsToCommand="True"/>
+                        <y:EventTrigger EventName="LostFocus">
+                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -99,30 +102,30 @@
                 <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Lines}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
-                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding RelativeSource=
-                                         { RelativeSource FindAncestor, 
-                                           AncestorType={x:Type ListView},
-                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+                        </y:EventTrigger>
+                        <y:EventTrigger EventName="LostFocus">
+                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="LineNumber"  Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineNumber}" />
                             <GridViewColumn x:Name="Area"  Header="Area" Width="auto" DisplayMemberBinding="{Binding Area}" />
-                            <GridViewColumn x:Name="FStation" Header="First Station" DisplayMemberBinding="{Binding FirstStation}" Width="auto"/>
-                            <GridViewColumn x:Name="LStation" Header="Last Station" DisplayMemberBinding="{Binding LastStation}" Width="auto"/>
+                            <GridViewColumn x:Name="FStation" Header="First Station" DisplayMemberBinding="{Binding FirstStation.StationNumber}" Width="auto"/>
+                            <GridViewColumn x:Name="LStation" Header="Last Station" DisplayMemberBinding="{Binding LastStation.StationNumber}" Width="auto"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="LineTrip_view" Header="Line trips" >
-                <ListView x:Name="LineTrip" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Linetrips}">
+            <TabItem x:Name="LineTrip_view" Header="Line Trips" >
+                <ListView x:Name="LinesTripList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineTrips}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
-                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding RelativeSource=
-                                         { RelativeSource FindAncestor, 
-                                           AncestorType={x:Type ListView},
-                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+                        </y:EventTrigger>
+                        <y:EventTrigger EventName="LostFocus">
+                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -136,13 +139,13 @@
                 </ListView>
             </TabItem>
             <TabItem x:Name="Bus_view" Header="Buses" >
-                <ListView x:Name="Buses" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Buses}">
+                <ListView x:Name="BusesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Buses}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
-                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding RelativeSource=
-                                         { RelativeSource FindAncestor, 
-                                           AncestorType={x:Type ListView},
-                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                            <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+                        </y:EventTrigger>
+                        <y:EventTrigger EventName="LostFocus">
+                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -157,33 +160,90 @@
             </TabItem>
         </TabControl>
 
-        <GroupBox Header="details" Grid.Row="3" Grid.Column="1" Margin="10">
-            <StackPanel Margin="10" VerticalAlignment="Stretch" >
-                <TextBlock x:Name="Header1"/>
-                <Label x:Name="content1" BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header2"/>
-                <Label x:Name="content2"  BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header3" />
-                <Label x:Name="content3"  BorderThickness="2" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="Header4" />
-                <Label x:Name="content4"  BorderThickness="2" HorizontalAlignment="Right"/>
-                
-                
-            </StackPanel>
-        </GroupBox>
-        <ListView x:Name="LineStations_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" Visibility="Collapsed" Grid.Column="1" Grid.Row="3">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
-                    <GridViewColumn x:Name="Distance"  Header="Distance to next" Width="auto" DisplayMemberBinding="{Binding CurrentToNext.Distance}" />
-                    <GridViewColumn x:Name="Time"  Header="Estimate time" Width="auto" DisplayMemberBinding="{Binding CurrentToNext.Time}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="1">
+        <Grid x:Name="LineDetails" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="Line details" Grid.Row="0" Margin="5">
+                <WrapPanel>
+                    <StackPanel>
+                        <TextBlock Text="Line Number:"/>
+                        <Label x:Name="VLineNumber" BorderThickness="2" HorizontalAlignment="Right" />
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="Area"/>
+                        <Label x:Name="VArea"  BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </WrapPanel>
+            </GroupBox>
+            <GroupBox Header="Line stations list" Grid.Row="1" Margin="5">
+                <ListView x:Name="LineStations_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
+                            <GridViewColumn x:Name="Distance"  Header="Distance from start" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Distance, StringFormat={}{0:F2}km}" />
+                            <GridViewColumn x:Name="Time"  Header="Estimate time" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Time, StringFormat={}{0:hh':'mm':'ss}}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+            <GroupBox Header="Line trips" Grid.Row="2" Margin="5">
+                <ListView x:Name="LineTrip_Details" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Start Time" Width="auto" DisplayMemberBinding="{Binding StartTime}" />
+                            <GridViewColumn Header="Finish" Width="auto" DisplayMemberBinding="{Binding FinishAt}"/>
+                            <GridViewColumn Header="Frequency" Width="auto" DisplayMemberBinding="{Binding Frequency}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+            <Button Content="New line trip" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" />
+        </Grid>
+
+        <Grid x:Name="StationDetails" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="Station details" Grid.Row="0" Margin="5">
+                <WrapPanel>
+                    <StackPanel>
+                        <TextBlock Text="Name:"/>
+                        <Label x:Name="VName" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="Code:"/>
+                        <Label x:Name="VCode"  BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0" >
+                        <TextBlock Text="Address:" />
+                        <Label x:Name="VAddress" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="Location:" />
+                        <Label x:Name="VLocation"  BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </WrapPanel>
+            </GroupBox>
+            <GroupBox Header="Line Passes list" Grid.Row="1" Margin="5">
+                <ListView x:Name="LinePasses_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding}" >
+                    <ListView.View>
+                        <GridView>
+                            <!--<GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
+                            <GridViewColumn x:Name="Distance"  Header="Distance from start" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Distance, StringFormat={}{0:F2}km}" />
+                            <GridViewColumn x:Name="Time"  Header="Estimate time" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Time, StringFormat={}{0:hh':'mm':'ss}}" />-->
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="3" Grid.Column="1">
             <Button x:Name="DeleteButton" Content="delete" Margin="10" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Button x:Name="UpdateButton" Content="update" Margin="10" Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <Button x:Name="SetLineTrip" Content="Set line trip" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" />
         </StackPanel>
     </Grid>
     

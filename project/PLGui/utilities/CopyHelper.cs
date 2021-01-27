@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PLGui.Models.PO;
 
-namespace PLGui.ViewModels
+namespace PLGui.utilities
 {
     public static class CopyHelper
     {

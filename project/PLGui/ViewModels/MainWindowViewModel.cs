@@ -9,7 +9,7 @@ using BLApi;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 
-namespace PLGui.ViewModels
+namespace PLGui.utilities
 {
     public class MainWindowViewModel : ObservableRecipient
     {

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:p="clr-namespace:PLGui.utilities"
-        xmlns:viewmodels="clr-namespace:PLGui.ViewModels"
+        xmlns:viewmodels="clr-namespace:PLGui.utilities"
         mc:Ignorable="d"
         Title="statrt" x:Name="ThisWindow" Height="200" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >
     <y:Interaction.Triggers>
