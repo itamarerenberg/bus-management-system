@@ -115,7 +115,8 @@ namespace PLGui.utilities
                 ID = from.ID,
                 LineNumber = from.LineNumber,
                 Area = (AreasEnum)from.Area,
-                Stations = new ObservableCollection<BO.LineStation>(from.Stations)
+                Stations = new ObservableCollection<BO.LineStation>(from.Stations),
+                LineTrips = new ObservableCollection<BO.LineTrip>(from.LineTrips)
             };
             return result;
         }

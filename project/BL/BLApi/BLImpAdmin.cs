@@ -257,10 +257,25 @@ namespace BL
             try
             {
                 Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
-                line.Stations = (from lineStationDO in dl.GetAllLineStationsBy(l => l.LineId == id)
-                                 let lineStationBO = HelpMethods.GetLineStation(lineStationDO.LineId, lineStationDO.StationNumber)
-                                 orderby lineStationBO.LineStationIndex
-                                 select lineStationBO).ToList();
+
+                //set the line stations
+                List<DO.LineStation> releventLineStations = dl.GetAllLineStationsBy(ls => ls.LineId == id).ToList();//set 'releventLineStations' to contin all the line stations of the line
+                List <DO.AdjacentStations> releventAdjacentStations =
+                    //get all the adjscent stations that required to build this line
+                    dl.GetAllAdjacentStationsBy(adjs => releventLineStations.Exists(ls => ls.StationNumber == adjs.StationCode1 && ls.NextStation != null && ls.NextStation == adjs.StationCode2)).ToList();
+                line.Stations = LineStations_Do_Bo(releventLineStations, releventAdjacentStations).ToList();
+
+                //set the line tripes
+                line.LineTrips = (from DOlineTripe in dl.GetAllLineTripBy(lt => lt.LineId == id)
+                                  select new BO.LineTrip()
+                                  {
+                                      ID = DOlineTripe.ID,
+                                      LineId = DOlineTripe.LineId,
+                                      StartTime = DOlineTripe.StartTime,
+                                      Frequency = DOlineTripe.Frequency,
+                                      FinishAt = DOlineTripe.FinishAt
+                                  }).ToList();
+
                 return line;
             }
             catch (Exception msg)
@@ -347,16 +362,29 @@ namespace BL
             try
             {
                 var LineStationsGroups = dl.GetAllLineStationsBy(lst => lst.IsActive).GroupBy(lst => lst.LineId).ToArray();//get all line stations and goup them by they Line id
-                List<DO.AdjacentStations> adjacentStations = dl.GetAllAdjacentStationsBy(adjSt=>true).ToList();
+                List<DO.AdjacentStations> allAdjacentStations = dl.GetAllAdjacentStationsBy(adjSt=>true).ToList();
+                List<DO.LineTrip> AllLineTrips = dl.GetAllLineTripBy(lt => lt.IsActive).ToList();
                 IEnumerable<BO.Line> result = from doLine in dl.GetAllLinesBy(l => l.IsActive)
+                                              //prepare the LineStations
                                               let doStations = LineStationsGroups.Where(gr => gr.Key == doLine.ID).FirstOrDefault().ToList()//get the list of the LineStation of the current line
-                                              let boStations = LineStations_Do_Bo(doStations, adjacentStations)//convert the LineStations to BO's LineStations 
+                                              let boStations = LineStations_Do_Bo(doStations, allAdjacentStations)//convert the LineStations to BO's LineStations 
+                                              //Prepare the line trips
+                                              let doLineTrips = AllLineTrips.Where(lt => lt.LineId == doLine.ID)//extract from allLinetrips the lineTrips of ths line
+                                              let boLineTrips = doLineTrips.Select(doLt => new BO.LineTrip()//convert to BO.Linetrip
+                                                                                                          {
+                                                                                                            ID = doLt.ID,
+                                                                                                            LineId = doLt.LineId,
+                                                                                                            StartTime = doLt.StartTime,
+                                                                                                            Frequency = doLt.Frequency,
+                                                                                                            FinishAt = doLt.FinishAt
+                                                                                                          })
                                               select new BO.Line()
                                               {
                                                   ID = doLine.ID,
                                                   LineNumber = doLine.LineNumber,
                                                   Area = (BO.AreasEnum)Enum.Parse(typeof(BO.AreasEnum), doLine.Area.ToString()),
                                                   Stations = boStations,
+                                                  LineTrips = boLineTrips.ToList()
                                               };
                 return result;
             }
@@ -680,6 +708,7 @@ namespace BL
         #region private methods
 
         #region calculation methods
+
         /// <returns>colection of AdjacentStations accurding to this structer: { (st[1],st[2]), (st[2], st[3]),...,(st[n-1], st[n]) } where st stend for stations</returns>
         List<BO.AdjacentStations> Calculate_dist(List<Station> stations, List<int?> distances, List<int?> times)
         {
@@ -729,13 +758,17 @@ namespace BL
 
             List<LineStation> result = new List<LineStation>();
             lineStations.OrderBy(lst => lst.LineStationIndex);//order by the index of the lineStation in the line
+            double distance_from_start = 0;
+            TimeSpan time_from_start = new TimeSpan(0);
             LineStation first_station = new LineStation()
             {
                 LineId = lineStations[0].LineId,
                 StationNumber = lineStations[0].StationNumber,
                 LineStationIndex = lineStations[0].LineStationIndex,
                 PrevToCurrent = null,//ther is no previus station so it's null
-                Address = lineStations[0].Address
+                Address = lineStations[0].Address,
+                Distance_from_start = distance_from_start,// = 0// because it's the first station
+                Time_from_start = time_from_start// = 0:0:0// because it's the first station
                 //the fild CurrentToNext will be set inside the loop
             };
             lineStations.RemoveAt(0);//remove the first line station for its been Taken care allready
@@ -747,7 +780,11 @@ namespace BL
                 {
                     throw new missAdjacentStations($"miss adjacentStations ({prev_lineStation.StationNumber}, {lst.StationNumber}");
                 }
-                AdjacentStations prev_to_current = (BO.AdjacentStations)temp.CopyPropertiesToNew(typeof(BO.AdjacentStations));//I used tep to shorts the row
+                AdjacentStations prev_to_current = (BO.AdjacentStations)temp.CopyPropertiesToNew(typeof(BO.AdjacentStations));//I used temp to shorts the row
+
+                distance_from_start += prev_to_current.Distance;//add the distance from the previus station to distanse from start
+                time_from_start += prev_to_current.Time;//        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
                 prev_lineStation.CurrentToNext = prev_to_current;//the fild PrevToCurrent of current is CurrentToNext of prev_lineStation
                 result.Add(prev_lineStation);
                 prev_lineStation = new LineStation()
@@ -755,7 +792,9 @@ namespace BL
                     LineId = lst.LineId,
                     StationNumber = lst.StationNumber,
                     LineStationIndex = lst.LineStationIndex,
-                    PrevToCurrent = prev_to_current
+                    PrevToCurrent = prev_to_current,
+                    Distance_from_start = distance_from_start,
+                    Time_from_start = time_from_start
                 };
                 
             }

@@ -14,5 +14,6 @@ namespace BO
         public LineStation FirstStation { get => Stations.First(); }
         public LineStation LastStation { get => Stations.Last(); }
         public List<LineStation> Stations { get; set; }
+        public List<LineTrip> LineTrips { get; set; }
     }
 }

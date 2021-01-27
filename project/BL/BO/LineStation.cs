@@ -1,4 +1,6 @@
-﻿namespace BO
+﻿using System;
+
+namespace BO
 {
     public class LineStation
     {
@@ -10,6 +12,9 @@
 
         public AdjacentStations PrevToCurrent { get; set; }
         public AdjacentStations CurrentToNext { get; set; }
+
+        public double Distance_from_start { get; set; }
+        public TimeSpan Time_from_start { get; set; }
 
     }
 }
