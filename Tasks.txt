@@ -3,9 +3,6 @@
 
 <PL>
 	<view>
-		<manegerView>
-			טאבים לLineTrip/bus/BusOnTrip
-		<manegerView/>
 		<passengerView>
 			הצגת LineTrip/userTrip/Lines
 		<passengerView/>
