@@ -334,16 +334,14 @@ namespace PLGui.utilities
                 Mview.VCode.Content = SelectedStation.Code;
                 Mview.VAddress.Content = SelectedStation.Address;
                 Mview.VLocation.Content = SelectedStation.Location;
-                return;
             }
-            if ((selectedTabItem.Content as ListView).SelectedItem is Line selectedLine)
+            else if ((selectedTabItem.Content as ListView).SelectedItem is Line selectedLine)
             {
                 LineStations = selectedLine.Stations;
-                Mview.LineTrip_Details.DataContext = GetLineTripDetails(selectedLine.ID);
+                Mview.LineTrip_Details.DataContext = selectedLine.LineTrips;
 
                 Mview.VLineNumber.Content = selectedLine.LineNumber;
                 Mview.VArea.Content = selectedLine.Area;
-                return;
             }
         }
         private void Station_DoubleClick(ManegerView Mview)
