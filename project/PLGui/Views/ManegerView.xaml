@@ -66,6 +66,9 @@
                 </y:Interaction.Triggers>
             </TextBox>
         </StackPanel>
+
+        <Button Content="back to Previous Line" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding BackToLineCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsPreviousLine, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Margin="0,0,30,0" Height="25"/>
+
         <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="25,0,25,25" SelectedIndex="0" Width="auto" >
             <y:Interaction.Triggers>
                 <y:EventTrigger EventName="SelectionChanged">
@@ -180,6 +183,11 @@
             </GroupBox>
             <GroupBox Header="Line stations list" Grid.Row="1" Margin="5">
                 <ListView x:Name="LineStations_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" ToolTip="press twice and see the station details" >
+                    <y:Interaction.Triggers>
+                        <y:EventTrigger EventName="MouseDoubleClick">
+                            <y:InvokeCommandAction Command="{Binding Station_DoubleClickCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+                        </y:EventTrigger>
+                    </y:Interaction.Triggers>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />

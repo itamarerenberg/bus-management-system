@@ -55,7 +55,9 @@ namespace PLGui.utilities
                 }
                 return false;
             }
-        } 
+        }
+        public Line PreviousLine{ get; set; }
+        public bool IsPreviousLine { get => PreviousLine != null; }
         #endregion
 
         #region collections
@@ -122,6 +124,8 @@ namespace PLGui.utilities
             ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
             WindowLoaded_Command = new RelayCommand<ManegerView>(Window_Loaded);
             LostFocus_Command = new RelayCommand<ManegerView>(LostFocus);
+            Station_DoubleClickCommand = new RelayCommand<ManegerView>(Station_DoubleClick);
+            BackToLineCommand = new RelayCommand<ManegerView>(BackToLine);
 
             //messengers initalize
             RequestStationMessege();
@@ -270,6 +274,8 @@ namespace PLGui.utilities
         public ICommand ManegerView_ClosingCommand { get; }
         public ICommand WindowLoaded_Command { get; }
         public ICommand LostFocus_Command { get; }
+        public ICommand Station_DoubleClickCommand { get; }
+        public ICommand BackToLineCommand { get; }
 
         #endregion
 
@@ -340,7 +346,39 @@ namespace PLGui.utilities
                 return;
             }
         }
-       
+        private void Station_DoubleClick(ManegerView Mview)
+        {
+            if (Mview.LineStations_view.SelectedItem is BO.LineStation SelectedLineStation)
+            {
+                PreviousLine = Mview.LinesList.SelectedItem as Line;
+                Station SelectedStation = Stations.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
+                if (SelectedStation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show($"do you want to see the full details of station number: {SelectedStation.Code} \npress ok to continue..", "Attention", MessageBoxButton.OKCancel);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        //Mview.StationList.Items.MoveCurrentTo(SelectedStation);
+                        Mview.mainTab.SelectedIndex = 0;
+                        Mview.StationList.SelectedIndex = Mview.StationList.Items.IndexOf(SelectedStation);
+                        Mview.StationList.ScrollIntoView(SelectedStation);
+                    }
+                    else
+                    {
+                        PreviousLine = null;
+                    }
+                    OnPropertyChanged(nameof(IsPreviousLine));
+                }
+            }
+        }
+        private void BackToLine(ManegerView Mview)
+        {
+            Mview.mainTab.SelectedIndex = 1;
+            Mview.LinesList.SelectedIndex = Mview.LinesList.Items.IndexOf(PreviousLine);
+            Mview.LinesList.ScrollIntoView(PreviousLine);
+
+            PreviousLine = null;
+            OnPropertyChanged(nameof(IsPreviousLine));
+        }
         private void LostFocus( ManegerView MView)
         {
             if (SelectedTabItem != null)
@@ -460,7 +498,7 @@ namespace PLGui.utilities
         {
             if (station != null)
             {
-                MessageBoxResult result = MessageBox.Show($"station: {station.Name} code: {station.Code} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                MessageBoxResult result = MessageBox.Show($"station: {station.Name} code: {station.Code} will be deleted! do you want to continue?", "Attention", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
                     try
@@ -480,7 +518,7 @@ namespace PLGui.utilities
         {
             if (line != null)
             {
-                MessageBoxResult result = MessageBox.Show($"line number: {line.LineNumber} will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                MessageBoxResult result = MessageBox.Show($"line number: {line.LineNumber} will be deleted! do you want to continue?", "Attention", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
                     try
@@ -502,7 +540,7 @@ namespace PLGui.utilities
             {
                 int? lineNum = Lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault().LineNumber;
 
-                MessageBoxResult result = MessageBox.Show($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) will be deleted! do you want to continue?", "Atantion", MessageBoxButton.OKCancel);
+                MessageBoxResult result = MessageBox.Show($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) will be deleted! do you want to continue?", "Attention", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
                     try
@@ -547,15 +585,6 @@ namespace PLGui.utilities
             {
                 GetLineTripWorker = new BackgroundWorker();
             }
-            GetLineTripWorker.RunWorkerCompleted +=
-               (object sender, RunWorkerCompletedEventArgs args) =>
-               {
-                   //if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                   //{                                                   //terminated befor he done execute DoWork
-                   //     return  (ObservableCollection<LineTrip>)args.Result;
-                   //    OnPropertyChanged(nameof(LineTrips));
-                   //}
-               };//this function will execute in the main thred
             GetLineTripWorker.DoWork +=
                 (object sender, DoWorkEventArgs args) =>
                 {

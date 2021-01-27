@@ -1,35 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LineTrips>
   <LineTrip>
-    <ID>0</ID>
-    <LineId>0</LineId>
-    <StartTime>00:00:00</StartTime>
-    <Frequency>00:00:00</Frequency>
-    <FinishAt>00:00:00</FinishAt>
+    <ID>8</ID>
+    <LineId>64</LineId>
+    <StartTime>10:00:00</StartTime>
+    <Frequency>00:19:00</Frequency>
+    <FinishAt>19:00:00</FinishAt>
     <IsActive>True</IsActive>
-  </LineTrip>
-  <LineTrip>
-    <ID>1</ID>
-    <LineId>0</LineId>
-    <StartTime>00:00:00</StartTime>
-    <Frequency>00:00:00</Frequency>
-    <FinishAt>00:00:00</FinishAt>
-    <IsActive>True</IsActive>
-  </LineTrip>
-  <LineTrip>
-    <ID>2</ID>
-    <LineId>0</LineId>
-    <StartTime>00:00:00</StartTime>
-    <Frequency>00:00:00</Frequency>
-    <FinishAt>00:00:00</FinishAt>
-    <IsActive>True</IsActive>
-  </LineTrip>
-  <LineTrip>
-    <ID>4</ID>
-    <LineId>55</LineId>
-    <StartTime>00:00:00</StartTime>
-    <Frequency>00:00:00</Frequency>
-    <FinishAt>00:00:00</FinishAt>
-    <IsActive>False</IsActive>
   </LineTrip>
 </LineTrips>
