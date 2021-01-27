@@ -85,21 +85,7 @@ namespace PLGui.utilities
         ObservableCollection<BO.LineStation> lineStation;
         public ObservableCollection<BO.LineStation> LineStations
         {
-            get 
-            {
-                if (lineStation != null && lineStation.Count > 1)
-                {
-                    ObservableCollection<BO.LineStation> temp = new ObservableCollection<BO.LineStation>() { lineStation[0], lineStation[1] };
-                    for (int i = 2; i < lineStation.Count; i++)
-                    {
-                        temp.Add(lineStation[i]);
-                        temp[i].PrevToCurrent.Distance += temp[i - 1].PrevToCurrent.Distance;
-                        temp[i].PrevToCurrent.Time += temp[i - 1].PrevToCurrent.Time;
-                    }
-                    return temp;
-                }
-                return lineStation;
-            }
+            get => lineStation;
             set => SetProperty(ref lineStation, value);
         }
         #endregion
@@ -304,7 +290,6 @@ namespace PLGui.utilities
                 }
             }
         }
-
         /// <summary>
         /// when the tab selection is changed. replace the option in the combo box according to the entity's properties of the current list
         /// </summary>
@@ -321,7 +306,6 @@ namespace PLGui.utilities
             OnPropertyChanged(nameof(SelectedTabItem));
             OnPropertyChanged(nameof(IsSelcetdItemList));
         }
-
         /// <summary>
         /// when a row in the list has selected. show in the window his properties deatails, etc.
         /// </summary>

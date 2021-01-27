@@ -638,7 +638,7 @@ namespace BL
                 dl.DeleteStation(code);
                 foreach (DO.LineStation lineS in dl.GetAllLineStationsBy(s => s.StationNumber == code))
                 {
-                    dl.DeleteLineStation(lineS.LineId, lineS.StationNumber);
+                    DeleteLineStation(lineS.LineId, lineS.StationNumber);
                 }
                 foreach (DO.AdjacentStations AjaS in dl.GetAllAdjacentStationsBy(a => a.StationCode1 == code || a.StationCode2 == code))
                 {
