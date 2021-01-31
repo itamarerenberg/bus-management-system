@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using BL.BLApi;
 using BLApi;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.Messaging;
@@ -39,6 +40,7 @@ namespace PLGui.utilities
                 OnPropertyChanged(nameof(IsSelcetdItemList));
             }
         }
+        public ManegerView Mview { get; set; }
         public bool IsSelcetdItemList
         {
             get
@@ -58,6 +60,9 @@ namespace PLGui.utilities
         }
         public Line PreviousLine{ get; set; }
         public bool IsPreviousLine { get => PreviousLine != null; }
+        public Stack<object> MemoryStack { get; set; } = new Stack<object>();
+        public bool StackIsNotEmpty{ get => MemoryStack.Count > 0; }
+        public SnackbarMessageQueue MyMessageQueue { get; set; } = new SnackbarMessageQueue();
         #endregion
 
         #region collections
@@ -104,14 +109,13 @@ namespace PLGui.utilities
             NewLine = new RelayCommand(Add_newLine);
             NewStation = new RelayCommand(Add_newStation);
             NewLineTrip = new RelayCommand<ManegerView>(Add_newLineTrip);
-            UpdateCommand = new RelayCommand<ManegerView>(Update);
-            DeleteCommand = new RelayCommand<Window>(Delete);
+            UpdateCommand = new RelayCommand(Update);
+            DeleteCommand = new RelayCommand(Delete);
             Enter_asAnotherUserCommand = new RelayCommand<Window>(enter_asAnotherUser);
             ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
             WindowLoaded_Command = new RelayCommand<ManegerView>(Window_Loaded);
             LostFocus_Command = new RelayCommand<ManegerView>(LostFocus);
-            Station_DoubleClickCommand = new RelayCommand<ManegerView>(Station_DoubleClick);
-            BackToLineCommand = new RelayCommand<ManegerView>(BackToLine);
+            BackCommand = new RelayCommand<ManegerView>(Back);
 
             //messengers initalize
             RequestStationMessege();
@@ -260,8 +264,7 @@ namespace PLGui.utilities
         public ICommand ManegerView_ClosingCommand { get; }
         public ICommand WindowLoaded_Command { get; }
         public ICommand LostFocus_Command { get; }
-        public ICommand Station_DoubleClickCommand { get; }
-        public ICommand BackToLineCommand { get; }
+        public ICommand BackCommand { get; }
 
         #endregion
 
@@ -328,39 +331,6 @@ namespace PLGui.utilities
                 Mview.VArea.Content = selectedLine.Area;
             }
         }
-        private void Station_DoubleClick(ManegerView Mview)
-        {
-            if (Mview.LineStations_view.SelectedItem is BO.LineStation SelectedLineStation)
-            {
-                PreviousLine = Mview.LinesList.SelectedItem as Line;
-                Station SelectedStation = Stations.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
-                if (SelectedStation != null)
-                {
-                    MessageBoxResult result = MessageBox.Show($"do you want to see the full details of station number: {SelectedStation.Code} \npress ok to continue..", "Attention", MessageBoxButton.OKCancel);
-                    if (result == MessageBoxResult.OK)
-                    {
-                        //Mview.StationList.Items.MoveCurrentTo(SelectedStation);
-                        Mview.mainTab.SelectedIndex = 0;
-                        Mview.StationList.SelectedIndex = Mview.StationList.Items.IndexOf(SelectedStation);
-                        Mview.StationList.ScrollIntoView(SelectedStation);
-                    }
-                    else
-                    {
-                        PreviousLine = null;
-                    }
-                    OnPropertyChanged(nameof(IsPreviousLine));
-                }
-            }
-        }
-        private void BackToLine(ManegerView Mview)
-        {
-            Mview.mainTab.SelectedIndex = 1;
-            Mview.LinesList.SelectedIndex = Mview.LinesList.Items.IndexOf(PreviousLine);
-            Mview.LinesList.ScrollIntoView(PreviousLine);
-
-            PreviousLine = null;
-            OnPropertyChanged(nameof(IsPreviousLine));
-        }
         private void LostFocus( ManegerView MView)
         {
             if (SelectedTabItem != null)
@@ -400,59 +370,59 @@ namespace PLGui.utilities
         /// <summary>
         /// generic update command
         /// </summary>
-        private void Update(ManegerView Mview)
+        private void Update()
         {
-            if (Mview.Stations_view.IsSelected)//station
+            if (Mview != null)
             {
-                Station station = Mview.StationList.SelectedItem as Station;
-                UpdateStation(station);
-            }
-            if (Mview.Lines_view.IsSelected)//line
-            {
-                Line line = Mview.LinesList.SelectedItem as Line;
-                Update_Line(line);
-            }
-            if (Mview.LineTrip_view.IsSelected)//lineTrip
-            {
-                LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
-                Line line = Lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault();
-                UpdateLineTrip(lineTrip, line);
+                if (Mview.Stations_view.IsSelected)//station
+                {
+                    Station station = Mview.StationList.SelectedItem as Station;
+                    UpdateStation(station);
+                }
+                else if (Mview.Lines_view.IsSelected)//line
+                {
+                    Line line = Mview.LinesList.SelectedItem as Line;
+                    Update_Line(line);
+                }
+                else if (Mview.LineTrip_view.IsSelected)//lineTrip
+                {
+                    LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
+                    Line line = Lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault();
+                    UpdateLineTrip(lineTrip, line);
+                } 
             }
         }
-        private void MouseRightButtonDown(object sender)
-        {
-            ManegerView Mview = (((((sender as ListView).Parent as TabItem).Parent as TabControl).Parent as Grid).Parent) as ManegerView;
-            ContextMenu CMenu = Mview.FindResource("rightClickMenuStrip") as ContextMenu;
-            ListView currentList = sender as ListView;
-            currentList.ContextMenu = CMenu;
-            //CMenu.Show(this, new Point(e.X, e.Y));
-            //if ((sender as ListView).SelectedItem is Station selectedStation) ;
-
-        }
+        
         /// <summary>
         /// generic delete command
         /// </summary>
         /// <param name="window"></param>
-        private void Delete(Window window)
+        private void Delete()
         {
-            if (window is ManegerView)
+            if (Mview.Stations_view.IsSelected)//station
             {
-                ManegerView Mview = window as ManegerView;
-                
-                if (Mview.Stations_view.IsSelected)//station
+                Station station = Mview.StationList.SelectedItem as Station;
+                if (DeleteStation(station))
                 {
-                    Station station = Mview.StationList.SelectedItem as Station;
-                    DeleteStation(station);
+                    MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} was deleted successfully!");
+                    OnPropertyChanged(nameof(MyMessageQueue));
                 }
-                if (Mview.Lines_view.IsSelected)//Line
+            }
+            else if (Mview.Lines_view.IsSelected)//Line
+            {
+                Line line = Mview.LinesList.SelectedItem as Line;
+                if (DeleteLine(line))
                 {
-                    Line line = Mview.LinesList.SelectedItem as Line;
-                    DeleteLine(line);
+                    MyMessageQueue.Enqueue($"line number: {line.LineNumber} was deleted successfully!");
+                    OnPropertyChanged(nameof(MyMessageQueue));
                 }
-                if (Mview.LineTrip_view.IsSelected)//LineTrip
+            }
+            else if (Mview.LineTrip_view.IsSelected)//LineTrip
+            {
+                LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
+                if (DeleteLineTrip(lineTrip))
                 {
-                    LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
-                    DeleteLineTrip(lineTrip);
+                    OnPropertyChanged(nameof(MyMessageQueue));
                 }
             }
         }
@@ -468,15 +438,102 @@ namespace PLGui.utilities
             new MainWindow().Show();
             window.Close();
         }
-        private void Window_Loaded(ManegerView MView)
+        private void Window_Loaded(ManegerView manegerView)
         {
-            tab_selactionChange(MView);
+            Mview = manegerView;
+
+            tab_selactionChange(manegerView);
+
+            manegerView.LinesList.MouseDoubleClick += List_MouseDoubleClick;
+            manegerView.LineTrip_Details.MouseDoubleClick += List_MouseDoubleClick;
+            manegerView.LineStations_view.MouseDoubleClick += List_MouseDoubleClick;
+
+            manegerView.StationList.MouseRightButtonUp += List_MouseRightButtonUp;
+            manegerView.LinesList.MouseRightButtonUp += List_MouseRightButtonUp;
+            manegerView.LinesTripList.MouseRightButtonUp += List_MouseRightButtonUp;
+            manegerView.BusesList.MouseRightButtonUp += List_MouseRightButtonUp;
+
+        }
+
+        private void List_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Control control)
+            {
+                ManegerView Mview = control.FindWindowOfType<ManegerView>();//find the window instance
+
+                ContextMenu CMenu = Mview.FindResource("RightClickMenuStrip") as ContextMenu;
+                if (sender is ListView currentList)
+                {
+                    currentList.ContextMenu = CMenu;
+                    CMenu.IsOpen = true;
+                }
+            }
+        }
+
+        private void List_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Control control)
+            {
+                ManegerView Mview = control.FindWindowOfType<ManegerView>();// try to get the source window
+                if (sender is ListView listV)
+                {
+                    if (listV == Mview.LineStations_view)
+                    {
+                        if (listV.SelectedItem is BO.LineStation SelectedLineStation)
+                        {
+                            MemoryStack.Push(Mview.LinesList.SelectedItem);// push the line into the stack
+                            Station SelectedStation = Stations.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
+                            if (SelectedStation != null)
+                            {
+                                Mview.mainTab.SelectedIndex = 0;
+                                Mview.StationList.SelectedIndex = Mview.StationList.Items.IndexOf(SelectedStation);
+                                Mview.StationList.ScrollIntoView(SelectedStation);
+                                OnPropertyChanged(nameof(StackIsNotEmpty));
+                            }
+                        }
+                    }
+                    if (listV == Mview.LinePasses_view)
+                    {
+                        if (listV.SelectedItem is Line SelectedLine)
+                        {
+                            MemoryStack.Push(Mview.StationList.SelectedItem);// push the station into the stack
+                            //Line line = Lines.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
+                            if (SelectedLine != null)
+                            {
+                                Mview.mainTab.SelectedIndex = 1;
+                                Mview.LinesList.SelectedIndex = Mview.LinesList.Items.IndexOf(SelectedLine);
+                                Mview.LinesList.ScrollIntoView(SelectedLine);
+                                OnPropertyChanged(nameof(StackIsNotEmpty));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private void Back(ManegerView Mview)
+        {
+            object obj = MemoryStack.Pop();
+
+            if (obj is Line line)
+            {
+                Mview.mainTab.SelectedIndex = 1;
+                Mview.LinesList.SelectedIndex = Mview.LinesList.Items.IndexOf(line);
+                Mview.LinesList.ScrollIntoView(line);
+            }
+            if (obj is Station station)
+            {
+                Mview.mainTab.SelectedIndex = 0;
+                Mview.StationList.SelectedIndex = Mview.StationList.Items.IndexOf(station);
+                Mview.StationList.ScrollIntoView(station);
+            }
+            OnPropertyChanged(nameof(StackIsNotEmpty));
+
         }
         #endregion
 
         #region help methods
         //------------------------------------------------------------------------------------------------
-        private void DeleteStation(Station station)
+        private bool DeleteStation(Station station)
         {
             if (station != null)
             {
@@ -486,17 +543,18 @@ namespace PLGui.utilities
                     try
                     {
                         source.DeleteStation(station.Code);
+                        return true;
                     }
                     catch (Exception msg)
                     {
                         MessageBox.Show(msg.Message, "ERROR");
                     }
                     loadStations();
-                    MessageBox.Show($"station: {station.Name} code: {station.Code} was deleted successfully!");
                 }
             }
+            return false;
         }
-        private void DeleteLine(Line line)
+        private bool DeleteLine(Line line)
         {
             if (line != null)
             {
@@ -506,17 +564,18 @@ namespace PLGui.utilities
                     try
                     {
                         source.DeleteLine(line.ID);
+                        return true;
                     }
                     catch (Exception msg)
                     {
                         MessageBox.Show(msg.Message, "ERROR");
                     }
                     loadLines();
-                    MessageBox.Show($"line number: {line.LineNumber} was deleted successfully!");
                 }
             }
+            return false;
         }
-        private void DeleteLineTrip(LineTrip lineTrip)
+        private bool DeleteLineTrip(LineTrip lineTrip)
         {
             if (lineTrip != null)
             {
@@ -528,15 +587,17 @@ namespace PLGui.utilities
                     try
                     {
                         source.DeleteLineTrip(lineTrip.BOlineTrip);
+                        MyMessageQueue.Enqueue($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) was deleted successfully!");
+                        return true;
                     }
                     catch (Exception msg)
                     {
                         MessageBox.Show(msg.Message, "ERROR");
                     }
                     loadLineTrips();
-                    MessageBox.Show($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) was deleted successfully!");
                 }
             }
+            return false;
         }
 
         private void Update_Line(Line line)
@@ -549,7 +610,8 @@ namespace PLGui.utilities
         {
             stationToSend = station;
             new NewStationView().ShowDialog();
-            loadData();
+            loadStations();
+            loadLines();
         }
         private void UpdateLineTrip(LineTrip lineTrip, Line line)
         {

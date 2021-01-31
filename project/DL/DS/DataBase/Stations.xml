@@ -46,7 +46,7 @@
     <Longitude>35.23667</Longitude>
     <Latitude>31.737062</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>28</Code>
@@ -54,7 +54,7 @@
     <Longitude>35.236632</Longitude>
     <Latitude>31.737154</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>29</Code>
@@ -62,7 +62,7 @@
     <Longitude>35.237298</Longitude>
     <Latitude>31.738738</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>30</Code>
@@ -78,7 +78,7 @@
     <Longitude>35.236768</Longitude>
     <Latitude>31.740175</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>33</Code>
@@ -94,7 +94,7 @@
     <Longitude>35.234317</Longitude>
     <Latitude>31.74132</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>35</Code>
@@ -1158,7 +1158,7 @@
     <Longitude>35.173651</Longitude>
     <Latitude>31.788077</Latitude>
     <Address>רחוב:הרב רפאל קצנלבוגן 16 עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>234</Code>
