@@ -54,6 +54,7 @@
     <Compile Include="BO\Enums.cs" />
     <Compile Include="BO\Line.cs" />
     <Compile Include="BO\LineStation.cs" />
+    <Compile Include="BO\LineTiming.cs" />
     <Compile Include="BO\LineTrip.cs" />
     <Compile Include="BO\Manager.cs" />
     <Compile Include="BO\Managment.cs" />
@@ -62,6 +63,8 @@
     <Compile Include="BO\UserTrip.cs" />
     <Compile Include="BLApi\IBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="simulator\SimulationClock.cs" />
+    <Compile Include="simulator\TravelsExecuter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DL\DLApi\DLApi.csproj">
