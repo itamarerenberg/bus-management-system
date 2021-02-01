@@ -4,10 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewmodels="clr-namespace:PLGui.utilities"
         xmlns:utilities="clr-namespace:PLGui.utilities"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
-        Title="Maneger" x:Name="ManegerWindow" MinHeight="700" MinWidth="1000">
+        Title="Maneger window" x:Name="ManegerWindow" MinHeight="700" MinWidth="1000"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True">
     <y:Interaction.Triggers>
         <y:EventTrigger EventName="Loaded">
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -19,9 +26,9 @@
     <Window.Resources>
         <utilities:Bool_converter_to_visibility x:Key="Bool_converter_to_visibility" />
         <utilities:Type_converter_to_visibility x:Key="Type_converter_to_visibility" />
-        <ContextMenu x:Key="rightClickMenuStrip">
-            <MenuItem Header="update"/>
-            <MenuItem Header="delete"/>
+        <ContextMenu x:Key="RightClickMenuStrip" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+            <MenuItem Header="Update" Icon="{materialDesign:PackIcon Kind=Update}" Command="{Binding UpdateCommand, diag:PresentationTraceSources.TraceLevel=High}" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+            <MenuItem Header="Delete" Icon="{materialDesign:PackIcon Kind=Delete}"  />
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -36,29 +43,27 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left"  Grid.ColumnSpan="2" Grid.Row="0">
-            <MenuItem Header="new" Height="25">
-                <MenuItem Header="new line" Command="{Binding NewLine}"/>
-                <MenuItem Header="new bus" />
-                <MenuItem Header="new station" Command="{Binding NewStation}"/>
+        <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="0" Margin="20,0,0,0">
+            <MenuItem Header="New" Height="25">
+                <MenuItem Header="new line" Command="{Binding NewLine}" Icon="{materialDesign:PackIcon Kind=Plus}"/>
+                <MenuItem Header="new bus" Icon="{materialDesign:PackIcon Kind=Plus}"/>
+                <MenuItem Header="new station" Command="{Binding NewStation}" Icon="{materialDesign:PackIcon Kind=Plus}"/>
             </MenuItem>
-            <MenuItem Header="update">
-                <MenuItem Header="update line"/>
+            <MenuItem Header="Update" Height="25">
+                <MenuItem Header="update line" Command="{Binding UpdateCommand}"/>
                 <MenuItem Header="update bus" />
                 <MenuItem Header="update station" />
             </MenuItem>
-            <MenuItem Header="exit">
-                <MenuItem Header="enter as another user" Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
-                <MenuItem Header="exit" Command="{Binding manegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+            <MenuItem Header="Exit" Height="25">
+                <MenuItem Header="Log out" Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
+                <MenuItem Header="Exit" Command="{Binding manegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
             </MenuItem>
         </Menu>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="25,0,0,0">
-            <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
-            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" />
-        </StackPanel>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="140,0,0,0">
-            <TextBlock Text="search:" HorizontalAlignment="Left"/>
-            <TextBox x:Name="SearchBox" MinWidth="70" Height="22"  >
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="0,0,25,0">
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by"/>
+            <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <TextBox x:Name="SearchBox" MinWidth="100" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            materialDesign:TextFieldAssist.DecorationVisibility="Hidden">
                 <y:Interaction.Triggers>
                     <y:EventTrigger EventName="TextChanged">
                         <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" />
@@ -67,22 +72,31 @@
             </TextBox>
         </StackPanel>
 
-        <Button Content="back to Previous Line" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding BackToLineCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsPreviousLine, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Margin="0,0,30,0" Height="25"/>
+        <Button Content="{materialDesign:PackIcon Kind=BackupRestore, Size=25}" ToolTip="Back" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                Command="{Binding BackCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"
+                IsEnabled="{Binding StackIsNotEmpty}"
+            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
 
-        <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="25,0,25,25" SelectedIndex="0" Width="auto" >
+        <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="25,0,25,25"
+                    SelectedIndex="0" Width="auto" 
+                    Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="PrimaryMid" TabStripPlacement="Left" 
+                      materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <y:Interaction.Triggers>
                 <y:EventTrigger EventName="SelectionChanged">
                     <y:InvokeCommandAction Command="{Binding TabChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                 </y:EventTrigger>
             </y:Interaction.Triggers>
-            <TabItem x:Name="Stations_view" Header="Stations" >
-                <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" >
+            <TabItem x:Name="Stations_view" 
+                     Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <Grid ToolTip="Station">
+                        <Label Content="{materialDesign:PackIcon Kind=BusStopCovered, Size=24}"/>
+                    </Grid>
+                </TabItem.Header>
+                <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" FontSize="12">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
                             <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
-                        </y:EventTrigger>
-                        <y:EventTrigger EventName="LostFocus">
-                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -101,14 +115,17 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="Lines_view" Header="Lines" >
+            <TabItem x:Name="Lines_view"  
+                     Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <Grid ToolTip="Lines">
+                        <Label Content="{materialDesign:PackIcon Kind=TransitConnection, Size=24}"/>
+                    </Grid>
+                </TabItem.Header>
                 <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Lines}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
                             <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
-                        </y:EventTrigger>
-                        <y:EventTrigger EventName="LostFocus">
-                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -121,14 +138,17 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="LineTrip_view" Header="Line Trips" >
+            <TabItem x:Name="LineTrip_view"
+                     Style="{StaticResource MaterialDesignNavigationRailTabItem}" Tag="">
+                <TabItem.Header>
+                    <Grid ToolTip="Line trips">
+                        <Label Content="{materialDesign:PackIcon Kind=BusClock, Size=24}" />
+                    </Grid>
+                </TabItem.Header>
                 <ListView x:Name="LinesTripList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineTrips}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
                             <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
-                        </y:EventTrigger>
-                        <y:EventTrigger EventName="LostFocus">
-                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -141,14 +161,17 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="Bus_view" Header="Buses" >
+            <TabItem x:Name="Bus_view" 
+                     Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TabItem.Header>
+                    <Grid ToolTip="Buses">
+                        <Label Content="{materialDesign:PackIcon Kind=BusMultiple, Size=24}" />
+                    </Grid>
+                </TabItem.Header>
                 <ListView x:Name="BusesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Buses}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
                             <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
-                        </y:EventTrigger>
-                        <y:EventTrigger EventName="LostFocus">
-                            <y:InvokeCommandAction Command="{Binding LostFocus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                         </y:EventTrigger>
                     </y:Interaction.Triggers>
                     <ListView.View>
@@ -163,7 +186,7 @@
             </TabItem>
         </TabControl>
 
-        <Grid x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+        <Grid x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
@@ -182,12 +205,7 @@
                 </WrapPanel>
             </GroupBox>
             <GroupBox Header="Line stations list" Grid.Row="1" Margin="5">
-                <ListView x:Name="LineStations_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" ToolTip="press twice and see the station details" >
-                    <y:Interaction.Triggers>
-                        <y:EventTrigger EventName="MouseDoubleClick">
-                            <y:InvokeCommandAction Command="{Binding Station_DoubleClickCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
-                        </y:EventTrigger>
-                    </y:Interaction.Triggers>
+                <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" ToolTip="press twice and see the station details" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
@@ -208,12 +226,13 @@
                     </ListView.View>
                 </ListView>
             </GroupBox>
-            <Button Content="New line trip" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" />
+            <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add new line trip" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
         </Grid>
 
-        <Grid x:Name="StationDetails" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+        <Grid x:Name="StationDetails" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <GroupBox Header="Station details" Grid.Row="0" Margin="5">
@@ -248,11 +267,22 @@
                 </ListView>
             </GroupBox>
         </Grid>
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="3" Grid.Column="1">
-            <Button x:Name="DeleteButton" Content="delete" Margin="10" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <Button x:Name="UpdateButton" Content="update" Margin="10" Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
+        <!--<materialDesign:PopupBox Grid.Row="1" Grid.Column="1" PlacementMode="BottomAndAlignCentres" ToolTipService.Placement="Right" ToolTip="x" HorizontalAlignment="Right"
+                             >
+            <StackPanel>
+                <Button    ToolTip="One with custom opacity"    Opacity="0.5"    Content="1" />
+                <Button  ToolTip="Two"   Content="2" />
+                <Button  ToolTip="Three"  Content="3" />
+            </StackPanel>
+        </materialDesign:PopupBox>-->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1">
+            <Button x:Name="DeleteButton" Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="10" Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+            <Button x:Name="UpdateButton" Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" Margin="10" Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
         </StackPanel>
+
+        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Background="#FFB3EF7C" Foreground="#FF080000"/>
+
     </Grid>
-    
+
+
 </Window>

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:viewmodels="clr-namespace:PLGui.utilities"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PLGui.Models.PO"
         mc:Ignorable="d"
@@ -39,7 +40,7 @@
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="55"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -110,13 +111,13 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="80,0,0,0">
-            <TextBlock Text="sort by:" HorizontalAlignment="Left"/>
-            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" ItemsSource="{Binding ComboList}"/>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="180,0,0,0">
-            <TextBlock Text="search:" HorizontalAlignment="Left"/>
-            <TextBox x:Name="SearchBox" MinWidth="70" Height="22"  >
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,25,0">
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" ItemsSource="{Binding ComboList}"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by"/>
+            <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <TextBox x:Name="SearchBox" MinWidth="100" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            materialDesign:TextFieldAssist.DecorationVisibility="Hidden">
                 <y:Interaction.Triggers>
                     <y:EventTrigger EventName="TextChanged">
                         <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding RelativeSource=

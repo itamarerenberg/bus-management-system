@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using PLGui.Models.PO;
 
 namespace PLGui.utilities
@@ -128,5 +130,51 @@ namespace PLGui.utilities
                 to.Add(line);
             }
         }
+
+
+        public static T FindParentOfType<T>(this Control aParent) where T : Control
+        {
+            if (aParent is T)
+            {
+                return (T)aParent;
+            }
+            if (aParent.Parent != null && aParent.Parent is Control bParent)
+            {
+                return FindParentOfType<T>(bParent);
+            }
+            return null;
+        }
+
+        public static T FindWindowOfType<T>(this Control aParent) where T : Control 
+        {
+            if (aParent.Parent is T)
+            {
+                return (T)aParent.Parent;
+            }
+            if (aParent.Parent != null && aParent.Parent is Control bParent)
+            {
+                return FindWindowOfType<T>(bParent);
+            }
+            if (aParent.Parent is Grid grid)
+            {
+                while (grid != null)
+                {
+                    if (grid.Parent is T)
+                    {
+                        return (T)grid.Parent;
+                    }
+                    if (grid.Parent is Grid temp)
+                    {
+                        grid = temp;
+                    }
+                    else
+                    {
+                        return null;
+                    } 
+                }
+            }
+            return null;
+        }
     }
+
 }

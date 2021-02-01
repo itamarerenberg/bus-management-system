@@ -10,8 +10,8 @@
 
 	<viewModel>
 		<manegerViewModel>
-			אפשרות הוספה לLine(צריך לסיים)/LineStation/LineTrip/bus/BusOnTrip
-			אפשרות עדכון לLine/Station/LineTrip/bus/BusOnTrip
+			אפשרות הוספה ל bus/BusOnTrip
+			אפשרות עדכון לLineTrip/bus/BusOnTrip
 			אפשרות מחיקה לLineTrip/bus
 		<manegerViewModel/>
 		<passengerViewModel>
@@ -36,10 +36,6 @@
 		BusOnTrip	
 	<BO/>
 <BL/>
-
-<DL>
-	DLXml serielizer
-<DL/>
 
 <שונות>
 	תיעוד
