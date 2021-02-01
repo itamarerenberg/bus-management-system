@@ -13,19 +13,10 @@ namespace BL.simulator
     {
         #region singelton
 
+        static readonly SimulationClock instance = new SimulationClock();
+        static SimulationClock() { }
         SimulationClock() { }
-        SimulationClock instance;
-        public SimulationClock Instance 
-        {
-            get
-            {
-                if(instance == null)
-                {
-                    instance = new SimulationClock();
-                }
-                return instance;
-            }
-        }
+        public static SimulationClock Instance { get => instance; }
 
         #endregion
 
@@ -41,7 +32,7 @@ namespace BL.simulator
             {
                 this.Time = _time;
             }
-            public TimeSpan Time { get; set; }
+            public TimeSpan Time { get; }
             public int Seconds { get => Time.Seconds; }
             public int Minutes { get => Time.Minutes; }
             public int Hours { get => Time.Hours; }
@@ -50,9 +41,10 @@ namespace BL.simulator
         public TimeSpan Time 
         {
             get => clock.Time;
-            set => clock.Time = value;
+            private set => clock = new Clock(value);
         }
 
+        public int Rate { get; set; }
 
         internal volatile bool Cancel;
 
@@ -66,6 +58,7 @@ namespace BL.simulator
 
             Cancel = false;
             Observer = _observer;
+            Rate = rate;
 
             Stopwatch tempStopWach = new Stopwatch();
             tempStopWach.Start();//while waiting to the clockWorker to finish start count the time for for more acurecy
