@@ -19,8 +19,9 @@ namespace BL.simulator
         #region singelton
 
         TravelsExecuter() {}
+        static TravelsExecuter(){}
         TravelsExecuter instance;
-        public TravelsExecuter Instance
+        static public TravelsExecuter Instance
         {
             get
             {
@@ -34,8 +35,8 @@ namespace BL.simulator
 
         #endregion
 
-        event Action<LineTiming> observer;
-        List<int> stationsInTrack;//list of all the station that in tracking
+        Action<LineTiming> observer;
+        List<int> stationsInTrack = new List<int>();//list of all the station that in tracking
 
         IBL source = BLFactory.GetBL("admin");//get a BL instance to load data from the dal(its more convenient then to use directly with dal)
 
@@ -45,9 +46,10 @@ namespace BL.simulator
         SimulationClock clock;
 
         BackgroundWorker travelsExecuterWorker;
-        public void StartExecute(Action<LineTiming> _observer)
+        public void StartExecute(Action<LineTiming> _observer = null)
         {
             clock = SimulationClock.Instance;
+            observer = _observer != null ? _observer : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
 
             //load the lineTrips and lines
             lineTrips = source.GetAllLineTrips().ToList();
@@ -65,13 +67,13 @@ namespace BL.simulator
                 {
                     int timeToNextTravel = (int)((lineTrips[i].StartTime - clock.Time).TotalMilliseconds);
                     Thread.Sleep(timeToNextTravel / clock.Rate);
-                    //execute the travel
-                    executeTravel(lineTrips[i], _observer);
+                    
+                    executeTravel(lineTrips[i]);//execute the travel
                 }
             };
         }
 
-        private void executeTravel(LineTrip lineTrip, Action<LineTiming> _observer)
+        private void executeTravel(LineTrip lineTrip)
         {
             BackgroundWorker newTravel = new BackgroundWorker();
             newTravel.DoWork += (object sender, DoWorkEventArgs args) =>
@@ -102,7 +104,7 @@ namespace BL.simulator
                                     StationCode = stations[i].StationNumber
                                 };
                             underTruck[stations[i].StationNumber].ArrivalTime = calcTime;//update the Arrival time
-                            _observer(underTruck[stations[i].StationNumber]);//update the observer
+                            observer(underTruck[stations[i].StationNumber]);//update the observer
                         }
                     }
 
@@ -126,7 +128,7 @@ namespace BL.simulator
                         foreach (var timing in underTruck)//update the observer for all the stations that under truck
                         {
                             timing.Value.ArrivalTime -= new TimeSpan(0, 0, 0, (int)sleep * clock.Rate);//substract the time passed during the sleep from the arival time
-                            _observer(timing.Value);//update the observer 
+                            observer(timing.Value);//update the observer 
                         }
                     }
                     stopwatch.Stop();

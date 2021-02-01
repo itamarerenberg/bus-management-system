@@ -49,7 +49,7 @@ namespace BL.simulator
         internal volatile bool Cancel;
 
         BackgroundWorker clockWorker;
-        void StartClock(TimeSpan startTime, int rate, Action<TimeSpan> _observer)
+        public void StartClock(TimeSpan startTime, int rate, Action<TimeSpan> _observer)
         {
             if(clockWorker == null)
             {
