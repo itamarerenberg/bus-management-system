@@ -23,7 +23,7 @@ namespace DL
         public void AddBus(Bus bus)
         {
             XElement Same_LicenseNum = (from b in DataSourceXML.Buses.Elements()
-                                        where b.Element("LicenseNum").Value == bus.LicenseNum
+                                        where b.Element("LicenseNumber").Value == bus.LicenseNumber
                                         select b).FirstOrDefault();
             if (Same_LicenseNum == null)//if no bus have the same LicenseNum
             {
@@ -43,7 +43,7 @@ namespace DL
         public Bus GetBus(string licenseNum)
         {
             XElement bus = (from b in DataSourceXML.Buses.Elements()//get the bus from the data source
-                            where b.Element("LicenseNum").Value == licenseNum
+                            where b.Element("LicenseNumber").Value == licenseNum
                             select b).FirstOrDefault();
 
             if (bus == null)//if ther is no such bus in the data source
@@ -58,7 +58,7 @@ namespace DL
         public void UpdateBus(Bus newBus)
         {
             XElement oldBus = (from b in DataSourceXML.Buses.Elements()//get the old bus from the data source acording to the licens num
-                               where b.Element("LisenceNum").Value == newBus.LicenseNum
+                               where b.Element("LicenseNumber").Value == newBus.LicenseNumber
                                select b).FirstOrDefault();
 
             if (oldBus == null)//if ther is no such bus
@@ -72,7 +72,7 @@ namespace DL
         public void DeleteBus(string licenseNum)
         {
             XElement bus = (from b in DataSourceXML.Buses.Elements()//search in the data source to a bus with this licenseNum that active
-                            where b.Element("LicenseNum").Value == licenseNum && b.Element("IsActive").Value == true.ToString()
+                            where b.Element("LicenseNumber").Value == licenseNum && b.Element("IsActive").Value == true.ToString()
                             select b).FirstOrDefault();
             if (bus != null)//if such bus founded
             {
@@ -88,6 +88,7 @@ namespace DL
         public IEnumerable<Bus> GetAllBuses()
         {
             return from b in DataSourceXML.Buses.Elements()//return all the buses
+                   where b.Element("IsActive").Value == true.ToString()
                    select Cloning.xelement_to_new_object<Bus>(b);
         }
 

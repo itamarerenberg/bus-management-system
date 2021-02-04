@@ -46,8 +46,14 @@ namespace DL
                     case "Double":
                         prop.SetValue(to, double.Parse(val));
                         break;
+                    case "Single":
+                        prop.SetValue(to, float.Parse(val));
+                        break;
                     case "AreasEnum":
                         prop.SetValue(to, Enum.Parse(typeof(AreasEnum), val));
+                        break;
+                    case "BusStatus":
+                        prop.SetValue(to, Enum.Parse(typeof(BusStatus), val));
                         break;
                     case "Nullable`1":
                         break;

@@ -16,11 +16,11 @@ namespace PLGui.Models.PO
             set
             {
                 SetProperty(ref bOlineTrip, value, true);
-                OnPropertyChanged("ID");
-                OnPropertyChanged("LineId");
-                OnPropertyChanged("StartTime");
-                OnPropertyChanged("Frequency");
-                OnPropertyChanged("FinishAt");
+                OnPropertyChanged(nameof(ID));
+                OnPropertyChanged(nameof(LineId));
+                OnPropertyChanged(nameof(StartTime));
+                OnPropertyChanged(nameof(Frequency));
+                OnPropertyChanged(nameof(Finish));
             }
         }
 
@@ -64,7 +64,7 @@ namespace PLGui.Models.PO
                 bOlineTrip.Frequency = temp;
             }
         }
-        public TimeSpan FinishAt
+        public TimeSpan Finish
         { 
             get => bOlineTrip.FinishAt; 
             set

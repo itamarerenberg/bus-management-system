@@ -10,9 +10,9 @@
 
 	<viewModel>
 		<manegerViewModel>
-			אפשרות הוספה ל bus/BusOnTrip
-			אפשרות עדכון לLineTrip/bus/BusOnTrip
-			אפשרות מחיקה לLineTrip/bus
+			אפשרות הוספה ל bus
+			אפשרות עדכון ל bus
+			אפשרות מחיקה ל bus
 		<manegerViewModel/>
 		<passengerViewModel>
 			אפשרות הוספה/עדכון/מחיקה userTrip
@@ -27,15 +27,6 @@
 	<model/>
 <PL/>
 
-<BL>
-	<IBL implement>
-		BusOnTrip
-	<IBL implement/>
-
-	<BO>
-		BusOnTrip	
-	<BO/>
-<BL/>
 
 <שונות>
 	תיעוד

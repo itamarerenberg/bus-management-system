@@ -11,9 +11,9 @@ namespace DO
     /// </summary>
     public class Bus
     {
-        public string LicenseNum { get; set; }
+        public string LicenseNumber { get; set; }
         public DateTime LicenesDate { get; set; }
-        public float Kilometraz { get; set; }
+        public double Kilometraz { get; set; }
         public float Fule { get; set; }
         public BusStatus Stat { get; set; }
         public double KmAfterTreat { get; set; }

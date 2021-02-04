@@ -24,7 +24,7 @@ namespace DL
         public void AddBus(Bus bus)
         {
             Bus Same_LicenseNum = (from b in DataSource.Buses
-                                        where b.LicenseNum == bus.LicenseNum
+                                        where b.LicenseNumber == bus.LicenseNumber
                                         select b).FirstOrDefault();
             if (Same_LicenseNum == null)//if no bus have the same LicenseNum
             {
@@ -43,7 +43,7 @@ namespace DL
         public Bus GetBus(string licenseNum)
         {
             Bus bus = (from b in DataSource.Buses
-                       where b.LicenseNum == licenseNum
+                       where b.LicenseNumber == licenseNum
                        select b).FirstOrDefault();
 
             if (bus == null)//if the bus not found
@@ -56,7 +56,7 @@ namespace DL
         public void UpdateBus(Bus newBus)
         {
             Bus oldBus = (from b in DataSource.Buses
-                               where b.LicenseNum == newBus.LicenseNum
+                               where b.LicenseNumber == newBus.LicenseNumber
                                select b).FirstOrDefault();
 
             if (oldBus == null)//if the old bus dosn't found
@@ -69,7 +69,7 @@ namespace DL
         public void DeleteBus(string licenseNum)
         {
             Bus bus = (from b in DataSource.Buses
-                            where b.LicenseNum == licenseNum && b.IsActive
+                            where b.LicenseNumber == licenseNum && b.IsActive
                             select b.Clone()).FirstOrDefault();
             if (bus != null)//if ther is such bus
             {

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PLGui"
         xmlns:viewmodels="clr-namespace:PLGui.utilities"
         mc:Ignorable="d"
-        Title="add New Station" Height="200" Width="400">
+        Title="add New Station" Height="200" Width="400" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <viewmodels:NewStationViewModel x:Name="vModel"/>
     </Window.DataContext>

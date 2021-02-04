@@ -30,6 +30,32 @@ namespace PLGui.utilities
             set => SetProperty(ref lTrip, value);
         }
 
+        private DateTime start;
+
+        public DateTime Start
+        {
+            get => start;
+            set => SetProperty(ref start, value);
+        }
+
+        private DateTime finish;
+
+        public DateTime Finish
+        {
+            get => finish;
+            set => SetProperty(ref finish, value);
+        }
+
+        private DateTime frequency;
+
+        public DateTime Frequency
+        {
+            get => frequency;
+            set => SetProperty(ref frequency, value);
+        }
+
+
+
         public bool NewLineTripMode { get; set; }
         public string ButtonCaption { get; set; }
         public string WindowCaption { get; set; }
@@ -49,6 +75,10 @@ namespace PLGui.utilities
                 NewLineTripMode = false;
                 ButtonCaption = "Update";
                 WindowCaption = $"Update the line trip of line number: {tempLine.LineNumber}";
+
+                Start += LTrip.StartTime;
+                Finish += LTrip.Finish;
+                Frequency += LTrip.Frequency;
             }
             else                    // we are on new LineTrip mode
             {
@@ -67,6 +97,15 @@ namespace PLGui.utilities
 
         private void Set_Update_Button(Window window)
         {
+            if (Frequency == new DateTime())//Frequency is empty
+            {
+                MessageBox.Show("Frequency cannot be empty", "ERROR");
+                return;
+            }
+            LTrip.StartTime = Start.TimeOfDay;
+            LTrip.Finish = Finish.TimeOfDay;
+            LTrip.Frequency = Frequency.TimeOfDay;
+
             if (NewLineTripMode == false)//if the view model on "updating mode"
             {
                 try

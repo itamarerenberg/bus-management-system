@@ -1,2 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Buses />
+<Buses>
+  <Bus>
+    <LicenseNumber>87229595</LicenseNumber>
+    <LicenesDate>14/07/2019 00:00:00</LicenesDate>
+    <Kilometraz>92233</Kilometraz>
+    <Fule>669</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>1318</KmAfterTreat>
+    <LastTreatDate>06/09/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>92818130</LicenseNumber>
+    <LicenesDate>14/02/2018 00:00:00</LicenesDate>
+    <Kilometraz>91796</Kilometraz>
+    <Fule>1102</Fule>
+    <Stat>Need_treatment</Stat>
+    <KmAfterTreat>1549</KmAfterTreat>
+    <LastTreatDate>14/01/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>13311964</LicenseNumber>
+    <LicenesDate>16/07/2019 00:00:00</LicenesDate>
+    <Kilometraz>85732</Kilometraz>
+    <Fule>134</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>19766</KmAfterTreat>
+    <LastTreatDate>27/08/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>97912515</LicenseNumber>
+    <LicenesDate>08/04/2018 00:00:00</LicenesDate>
+    <Kilometraz>81360</Kilometraz>
+    <Fule>963</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>4967</KmAfterTreat>
+    <LastTreatDate>07/05/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>19256872</LicenseNumber>
+    <LicenesDate>23/09/2019 00:00:00</LicenesDate>
+    <Kilometraz>64500</Kilometraz>
+    <Fule>1060</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>1246</KmAfterTreat>
+    <LastTreatDate>03/07/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>31505362</LicenseNumber>
+    <LicenesDate>19/01/2019 00:00:00</LicenesDate>
+    <Kilometraz>73823</Kilometraz>
+    <Fule>382</Fule>
+    <Stat>Need_treatment</Stat>
+    <KmAfterTreat>16085</KmAfterTreat>
+    <LastTreatDate>11/01/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+</Buses>

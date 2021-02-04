@@ -28,5 +28,10 @@ namespace PLGui
         {
             InitializeComponent();
         }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

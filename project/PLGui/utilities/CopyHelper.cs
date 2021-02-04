@@ -118,7 +118,7 @@ namespace PLGui.utilities
                 LineNumber = from.LineNumber,
                 Area = (AreasEnum)from.Area,
                 Stations = new ObservableCollection<BO.LineStation>(from.Stations),
-                LineTrips = new ObservableCollection<BO.LineTrip>(from.LineTrips)
+                LineTrips = new ObservableCollection<LineTrip>(from.LineTrips.Select(lineTrip => new LineTrip() { BOlineTrip = lineTrip }))
             };
             return result;
         }
@@ -144,7 +144,12 @@ namespace PLGui.utilities
             }
             return null;
         }
-
+        /// <summary>
+        /// find the Ancestor window of the control
+        /// </summary>
+        /// <typeparam name="T"> type of the window</typeparam>
+        /// <param name="aParent">the control</param>
+        /// <returns>a reference of the window</returns>
         public static T FindWindowOfType<T>(this Control aParent) where T : Control 
         {
             if (aParent.Parent is T)

@@ -8,12 +8,22 @@ namespace BO
 {
     public class Bus 
     {
-        public string LicensNumber { get; set; }
+        public string LicenseNumber { get; set; }
         public DateTime LicenesDate { get; set; }
-        public float Kilometraz { get; set; }
+        public double Kilometraz { get; set; }
         public float Fule { get; set; }
         public BusStatus Stat { get; set; }
         public  double KmAfterTreat { get; set; }
         public DateTime LastTreatDate { get; set; }
+        public TimeSpan TimeUntilReady { get; set; }
+        public bool IsBusy
+        {
+            get
+            {
+                if (this.Stat == BusStatus.In_refueling || this.Stat == BusStatus.In_treatment || this.Stat == BusStatus.Traveling)
+                    return true;
+                return false;
+            }
+        }
     }
 }

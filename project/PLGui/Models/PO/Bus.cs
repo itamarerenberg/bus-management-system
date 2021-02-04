@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace PLGui.Models.PO
 {
-    public class Bus : INotifyPropertyChanged
+    public class Bus : ObservableValidator
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         private BO.Bus boBus;
         public BO.Bus BObus 
         {
@@ -17,62 +17,75 @@ namespace PLGui.Models.PO
             set
             {
                 boBus = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicensNumber"));//all the properties changed
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicenesDate"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Kilometraz"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Fule"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stat"));
+                OnPropertyChanged(nameof(LicenseNumber));
+                OnPropertyChanged(nameof(LicenesDate));
+                OnPropertyChanged(nameof(Kilometraz));
+                OnPropertyChanged(nameof(Fule));
+                OnPropertyChanged(nameof(Stat));
             }
         }
 
-        public string LicensNumber 
+        private string licenseNumber;
+        public string LicenseNumber 
         {
-            get => boBus.LicensNumber;
+            get => boBus.LicenseNumber;
             set
             {
-                boBus.LicensNumber = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicensNumber"));
+                SetProperty(ref licenseNumber, value);
+                boBus.LicenseNumber = licenseNumber;
             }
         }
-
+        private DateTime licenesDate;
         public DateTime LicenesDate 
         {
             get => boBus.LicenesDate;
             set
             {
-                boBus.LicenesDate = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LicenesDate"));
+                SetProperty(ref licenesDate, value);
+                boBus.LicenesDate = licenesDate;
             }
         }
-
-        public float Kilometraz 
+        private double kilometraz;
+        public double Kilometraz 
         {
             get => boBus.Kilometraz;
             set
             {
-                boBus.Kilometraz = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Kilometraz"));
+                SetProperty(ref kilometraz, value);
+                boBus.Kilometraz = kilometraz;
             }
         }
-
+        private float fule;
         public float Fule 
         {
             get => boBus.Fule;
             set
             {
-                boBus.Fule = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Fule"));
+                SetProperty(ref fule, value);
+                boBus.Fule = fule;
             }
         }
-
+        private BO.BusStatus stat;
         public BO.BusStatus Stat 
         {
             get => boBus.Stat;
             set
             {
-                boBus.Stat = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Stat"));
+                SetProperty(ref stat, value);
+                boBus.Stat = stat;
             }
         }
+        private TimeSpan timeUntilReady;
+
+        public TimeSpan MyProperty
+        {
+            get => boBus.TimeUntilReady;
+            set
+            {
+                SetProperty(ref timeUntilReady, value);
+                boBus.TimeUntilReady = timeUntilReady;
+            }
+        }
+
     }
 }
