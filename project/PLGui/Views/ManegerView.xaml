@@ -15,7 +15,7 @@
         Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True">
+        FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True" WindowState="Maximized">
     <y:Interaction.Triggers>
         <y:EventTrigger EventName="Loaded">
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -69,7 +69,7 @@
         <!--#region Clock Dialog -->
         <materialDesign:DialogHost x:Name="ClockDialog" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" >
-                <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}"/>
+                <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}" MaxLength="4"/>
                 <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
                 <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
                     Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom">
@@ -112,11 +112,38 @@
         <!--#endregion-->
 
         <!--#region buttons -->
-        <Button Content="{materialDesign:PackIcon Kind=BackupRestore, Size=25}" ToolTip="Back" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Content="{materialDesign:PackIcon Kind=BackupRestore, Size=25}" ToolTip="Back" 
                 Command="{Binding BackCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"
                 IsEnabled="{Binding StackIsNotEmpty}"
             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
 
+            <materialDesign:DialogHost x:Name="LiveDialog" >
+                <Button Style="{StaticResource MaterialDesignRaisedButton}"  materialDesign:ButtonProgressAssist.Value="-1"  
+                materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"  materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                Content="Live"   Margin="2,0"  Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom">
+                    <Button.CommandParameter>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ListView x:Name="LineTimingList" HorizontalAlignment="Left" ItemsSource="{Binding LineTimingsList}" SelectionMode="Single" FontSize="12">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Line number" Width="auto" DisplayMemberBinding="{Binding lineNum}" />
+                                        <GridViewColumn Header="Last station" Width="auto" DisplayMemberBinding="{Binding LastStation}" />
+                                        <GridViewColumn Header="Address" Width="auto" DisplayMemberBinding="{Binding ArrivalTime}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="CLOSE" Margin="8" Grid.Row="1"/>
+                        </Grid>
+                    </Button.CommandParameter>
+                </Button>
+            </materialDesign:DialogHost>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1">
             <Button x:Name="DeleteButton" Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="10" Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
             <Button x:Name="UpdateButton" Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" Margin="10" Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
