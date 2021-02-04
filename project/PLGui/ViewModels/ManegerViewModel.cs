@@ -72,12 +72,14 @@ namespace PLGui.utilities
                 return false;
             }
         }
-        public Line PreviousLine{ get; set; }
-        public bool IsPreviousLine { get => PreviousLine != null; }
         public Stack<object> MemoryStack { get; set; } = new Stack<object>();
         public bool StackIsNotEmpty{ get => MemoryStack.Count > 0; }
         public SnackbarMessageQueue MyMessageQueue { get; set; } = new SnackbarMessageQueue();
-        public DateTime Time{ get; set; }
+        private DateTime time;
+        public DateTime Time{
+            get => time;
+            set => SetProperty(ref time, value); 
+        }
 
         public Station StationDisplay
         {
@@ -105,16 +107,16 @@ namespace PLGui.utilities
 
         #region collections
 
-        public ObservableCollection<Bus> buses
+        private ObservableCollection<Bus> buses
         {
             get => manegerModel.Buses;
             set => SetProperty(ref manegerModel.Buses, value);
         }
         public ICollectionView Buses
         {
-            get { return CollectionViewSource.GetDefaultView(buses); }
+            get { return CollectionViewSource.GetDefaultView(buses);}
         }
-        public ObservableCollection<Line> lines
+        private ObservableCollection<Line> lines
         {
             get => manegerModel.Lines;
             set => SetProperty(ref manegerModel.Lines, value);
@@ -123,7 +125,7 @@ namespace PLGui.utilities
         {
             get { return CollectionViewSource.GetDefaultView(lines); }
         }
-        public ObservableCollection<Station> stations
+        private ObservableCollection<Station> stations
         {
             get => manegerModel.Stations;
             set => SetProperty(ref manegerModel.Stations, value);
@@ -132,7 +134,7 @@ namespace PLGui.utilities
         {
             get { return CollectionViewSource.GetDefaultView(stations); }
         }
-        public ObservableCollection<LineTrip> lineTrips
+        private ObservableCollection<LineTrip> lineTrips
         {
             get => manegerModel.LineTrips;
             set => SetProperty(ref manegerModel.LineTrips, value);
@@ -141,6 +143,7 @@ namespace PLGui.utilities
         {
             get { return CollectionViewSource.GetDefaultView(lineTrips); }
         }
+
         public ObservableCollection<BO.LineStation> LineStations
         {
             get => lineStation;
@@ -262,25 +265,25 @@ namespace PLGui.utilities
             {
                 loadBusesWorker = new BackgroundWorker();
                 loadBusesWorker.WorkerSupportsCancellation = true;
-            }
 
-            loadBusesWorker.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated befor he done execute DoWork
-                        manegerModel.Buses = (ObservableCollection<Bus>)args.Result;
-                        OnPropertyChanged(nameof(Buses));
-                    }
-                };//this function will execute in the main thred
+                loadBusesWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                        {                                                   //terminated befor he done execute DoWork
+                            manegerModel.Buses = (ObservableCollection<Bus>)args.Result;
+                            OnPropertyChanged(nameof(Buses));
+                        }
+                    };//this function will execute in the main thred
 
-            loadBusesWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    ObservableCollection<Bus> result = new ObservableCollection<Bus>(source.GetAllBuses().Select(bus => new Bus() { BObus = bus }));//get all buses from source
+                loadBusesWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        ObservableCollection<Bus> result = new ObservableCollection<Bus>(source.GetAllBuses().Select(bus => new Bus() { BObus = bus }));//get all buses from source
                     args.Result = worker.CancellationPending ? null : result;
-                };//this function will execute in the BackgroundWorker thread
+                    };//this function will execute in the BackgroundWorker thread
+            }
             loadBusesWorker.RunWorkerAsync();
 
         }
@@ -681,29 +684,29 @@ namespace PLGui.utilities
             {
                 GetRandomBusWorker = new BackgroundWorker();
                 GetRandomBusWorker.WorkerSupportsCancellation = true;
+
+                GetRandomBusWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                        {                                                   //terminated befor he done execute DoWork
+                            loadBuses();
+                        }
+                    };//this function will execute in the main thred
+
+                GetRandomBusWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        try
+                        {
+                            source.AddRandomBus();
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
+                        }
+                    };//this function will execute in the BackgroundWorker thread
             }
-
-            GetRandomBusWorker.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated befor he done execute DoWork
-                        loadBuses();
-                    }
-                };//this function will execute in the main thred
-
-            GetRandomBusWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    try
-                    {
-                        source.AddRandomBus();
-                    }
-                    catch (Exception msg)
-                    {
-                        MessageBox.Show(msg.Message, "ERROR");
-                    }
-                };//this function will execute in the BackgroundWorker thread
             GetRandomBusWorker.RunWorkerAsync();
             
         }

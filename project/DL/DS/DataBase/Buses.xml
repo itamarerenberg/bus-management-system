@@ -60,4 +60,194 @@
     <LastTreatDate>11/01/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
+  <Bus>
+    <LicenseNumber>72093779</LicenseNumber>
+    <LicenesDate>27/02/2019 00:00:00</LicenesDate>
+    <Kilometraz>46179</Kilometraz>
+    <Fule>15</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>7419</KmAfterTreat>
+    <LastTreatDate>29/03/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>23896976</LicenseNumber>
+    <LicenesDate>20/10/2019 00:00:00</LicenesDate>
+    <Kilometraz>88478</Kilometraz>
+    <Fule>302</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>9188</KmAfterTreat>
+    <LastTreatDate>25/06/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>66775814</LicenseNumber>
+    <LicenesDate>10/04/2018 00:00:00</LicenesDate>
+    <Kilometraz>69259</Kilometraz>
+    <Fule>118</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>16545</KmAfterTreat>
+    <LastTreatDate>27/10/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>23805797</LicenseNumber>
+    <LicenesDate>18/11/2019 00:00:00</LicenesDate>
+    <Kilometraz>79669</Kilometraz>
+    <Fule>366</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>17983</KmAfterTreat>
+    <LastTreatDate>07/03/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>98064440</LicenseNumber>
+    <LicenesDate>02/03/2018 00:00:00</LicenesDate>
+    <Kilometraz>53085</Kilometraz>
+    <Fule>1152</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>25</KmAfterTreat>
+    <LastTreatDate>11/02/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>96629815</LicenseNumber>
+    <LicenesDate>06/07/2019 00:00:00</LicenesDate>
+    <Kilometraz>66855</Kilometraz>
+    <Fule>781</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>1801</KmAfterTreat>
+    <LastTreatDate>23/10/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>81620621</LicenseNumber>
+    <LicenesDate>12/11/2019 00:00:00</LicenesDate>
+    <Kilometraz>99663</Kilometraz>
+    <Fule>209</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>4041</KmAfterTreat>
+    <LastTreatDate>16/09/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>71315117</LicenseNumber>
+    <LicenesDate>04/08/2019 00:00:00</LicenesDate>
+    <Kilometraz>63430</Kilometraz>
+    <Fule>803</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>18872</KmAfterTreat>
+    <LastTreatDate>26/08/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>30795174</LicenseNumber>
+    <LicenesDate>14/03/2019 00:00:00</LicenesDate>
+    <Kilometraz>91740</Kilometraz>
+    <Fule>381</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>18717</KmAfterTreat>
+    <LastTreatDate>30/06/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>72842846</LicenseNumber>
+    <LicenesDate>16/11/2019 00:00:00</LicenesDate>
+    <Kilometraz>66934</Kilometraz>
+    <Fule>494</Fule>
+    <Stat>Need_treatment</Stat>
+    <KmAfterTreat>239</KmAfterTreat>
+    <LastTreatDate>22/01/2020 00:00:00</LastTreatDate>
+    <IsActive>False</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>80383483</LicenseNumber>
+    <LicenesDate>07/09/2018 00:00:00</LicenesDate>
+    <Kilometraz>71707</Kilometraz>
+    <Fule>708</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>7649</KmAfterTreat>
+    <LastTreatDate>08/08/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>70112998</LicenseNumber>
+    <LicenesDate>22/06/2019 00:00:00</LicenesDate>
+    <Kilometraz>65800</Kilometraz>
+    <Fule>1036</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>6967</KmAfterTreat>
+    <LastTreatDate>27/11/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>36410659</LicenseNumber>
+    <LicenesDate>21/11/2019 00:00:00</LicenesDate>
+    <Kilometraz>68195</Kilometraz>
+    <Fule>181</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>14071</KmAfterTreat>
+    <LastTreatDate>14/03/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>87097010</LicenseNumber>
+    <LicenesDate>14/09/2018 00:00:00</LicenesDate>
+    <Kilometraz>68249</Kilometraz>
+    <Fule>690</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>3015</KmAfterTreat>
+    <LastTreatDate>16/05/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>35150190</LicenseNumber>
+    <LicenesDate>07/04/2018 00:00:00</LicenesDate>
+    <Kilometraz>93360</Kilometraz>
+    <Fule>611</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>6609</KmAfterTreat>
+    <LastTreatDate>27/05/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>12820261</LicenseNumber>
+    <LicenesDate>21/10/2019 00:00:00</LicenesDate>
+    <Kilometraz>61798</Kilometraz>
+    <Fule>806</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>1440</KmAfterTreat>
+    <LastTreatDate>04/08/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>70176093</LicenseNumber>
+    <LicenesDate>10/09/2018 00:00:00</LicenesDate>
+    <Kilometraz>97290</Kilometraz>
+    <Fule>84</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>6864</KmAfterTreat>
+    <LastTreatDate>19/07/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>92611957</LicenseNumber>
+    <LicenesDate>02/08/2019 00:00:00</LicenesDate>
+    <Kilometraz>79970</Kilometraz>
+    <Fule>1095</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>2202</KmAfterTreat>
+    <LastTreatDate>02/08/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>82289601</LicenseNumber>
+    <LicenesDate>22/02/2019 00:00:00</LicenesDate>
+    <Kilometraz>51854</Kilometraz>
+    <Fule>604</Fule>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>15778</KmAfterTreat>
+    <LastTreatDate>17/04/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
 </Buses>
