@@ -69,7 +69,7 @@ namespace BL.simulator
                 BackgroundWorker worker = (BackgroundWorker)sender;
                 TimeSpan start = startTime;
                 Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
+                stopwatch.Restart();
                 while(!Cancel)
                 {
                     clock = new Clock(startTime + new TimeSpan(stopwatch.ElapsedTicks * rate));

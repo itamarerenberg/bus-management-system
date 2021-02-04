@@ -23,6 +23,7 @@ namespace BL
         IDL dl = DLFactory.GetDL();
 
         #region Passenger
+
         public Passenger GetPassenger(string name, string password)
         {
             try
@@ -91,6 +92,7 @@ namespace BL
         {
             throw new NotImplementedException();
         }
+
         #endregion
 
         #region User Trip
@@ -378,8 +380,30 @@ namespace BL
         {
             throw new NotImplementedException();
         }
+
+        #region simulator
+        public void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StopSimulator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add_stationPanel(int stationCode, Action<LineTiming> updateBus)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove_stationPanel(int stationCode)
+        {
+            throw new NotImplementedException();
+        } 
+        #endregion
         #endregion
 
-        
+
     }
 }

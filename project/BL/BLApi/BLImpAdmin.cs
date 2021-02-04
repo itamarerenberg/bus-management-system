@@ -773,13 +773,15 @@ namespace BL
         public void Add_stationPanel(int stationCode, Action<LineTiming> updateBus)
         {
             Station station = GetStation(stationCode);
-
         }
 
         /// <summary>
         /// removes the station from the list of the stations that under truck
         /// </summary>
-        public void Remove_stationPanel(int stationCode);
+        public void Remove_stationPanel(int stationCode)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 

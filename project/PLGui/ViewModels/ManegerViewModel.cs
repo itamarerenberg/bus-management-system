@@ -639,11 +639,13 @@ namespace PLGui.utilities
             {
                 Mview.PlayButton.Content = new PackIcon() { Kind = PackIconKind.Stop, Foreground = System.Windows.Media.Brushes.Red };
                 Mview.PlayButton.ToolTip = "Stop";
+                source.StartSimulator(Time.TimeOfDay, 1, (upToDateTime) => { Time += upToDateTime - Time.TimeOfDay; });//(upToDateTime) => { Time.TimeOfDay = upToDateTime; }=>this is what the Action does
             }
             else
             {
                 Mview.PlayButton.Content = new PackIcon() { Kind = PackIconKind.Play };
                 Mview.PlayButton.ToolTip = "Play";
+                source.StopSimulator();
             }
         }
         private void Back(ManegerView Mview)

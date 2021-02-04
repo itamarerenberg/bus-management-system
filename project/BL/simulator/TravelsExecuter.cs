@@ -18,9 +18,12 @@ namespace BL.simulator
     {
         #region singelton
 
-        TravelsExecuter() {}
+        TravelsExecuter() 
+        {
+            source = BLFactory.GetBL("admin");//get a BL instance to load data from the dal(its more convenient then to use directly with dal)
+        }
         static TravelsExecuter(){}
-        TravelsExecuter instance;
+        static TravelsExecuter instance;
         static public TravelsExecuter Instance
         {
             get
@@ -38,7 +41,7 @@ namespace BL.simulator
         Action<LineTiming> observer;
         List<int> stationsInTrack = new List<int>();//list of all the station that in tracking
 
-        IBL source = BLFactory.GetBL("admin");//get a BL instance to load data from the dal(its more convenient then to use directly with dal)
+        IBL source;
 
         private List<LineTrip> lineTrips;
         private List<Line> lines;
@@ -48,6 +51,11 @@ namespace BL.simulator
         BackgroundWorker travelsExecuterWorker;
         public void StartExecute(Action<LineTiming> _observer = null)
         {
+            if(source == null)
+            {
+                source = BLFactory.GetBL("admin");
+            }
+
             clock = SimulationClock.Instance;
             observer = _observer != null ? _observer : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
 
