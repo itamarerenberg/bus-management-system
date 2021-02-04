@@ -36,8 +36,9 @@ namespace PLGui.utilities
         private Line lineDisplay;
         private LineTrip lineTripDisplay;
         private Bus busDisplay;
+        private DateTime time;
 
-        ObservableCollection<BO.LineStation> lineStation;
+        private ObservableCollection<BO.LineStation> lineStation;
         private ObservableCollection<LineTrip> lineTripsOfLine;
         private ObservableCollection<Line> linesOfStation;
 
@@ -75,10 +76,16 @@ namespace PLGui.utilities
         public Stack<object> MemoryStack { get; set; } = new Stack<object>();
         public bool StackIsNotEmpty{ get => MemoryStack.Count > 0; }
         public SnackbarMessageQueue MyMessageQueue { get; set; } = new SnackbarMessageQueue();
-        private DateTime time;
         public DateTime Time{
             get => time;
             set => SetProperty(ref time, value); 
+        }
+        public int Rate { get; set; }
+        private bool isSimulatorOn;
+        public bool IsSimulatorOff
+        {
+            get => isSimulatorOn;
+            set => SetProperty(ref isSimulatorOn, value);
         }
 
         public Station StationDisplay
@@ -188,6 +195,8 @@ namespace PLGui.utilities
             RequestStationMessege();
             RequestLineMessege();
             RequestLineTripMessege();
+
+            IsSimulatorOff = true;
         }
 
         #endregion
