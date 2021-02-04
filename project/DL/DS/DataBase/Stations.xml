@@ -38,7 +38,7 @@
     <Longitude>35.228724</Longitude>
     <Latitude>31.845808</Latitude>
     <Address>רחוב:דרך רמאללה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>27</Code>
@@ -86,7 +86,7 @@
     <Longitude>35.235249</Longitude>
     <Latitude>31.740964</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>34</Code>
