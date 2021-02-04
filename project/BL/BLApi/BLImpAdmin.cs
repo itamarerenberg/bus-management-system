@@ -772,7 +772,7 @@ namespace BL
         /// </summary>
         public void Add_stationPanel(int stationCode, Action<LineTiming> updateBus)
         {
-            Station station = GetStation(stationCode);
+            travelsExecuter.Add_station_to_truck(stationCode);
         }
 
         /// <summary>
@@ -780,7 +780,7 @@ namespace BL
         /// </summary>
         public void Remove_stationPanel(int stationCode)
         {
-            throw new NotImplementedException();
+            travelsExecuter.Add_station_to_truck(stationCode);
         }
 
         #endregion

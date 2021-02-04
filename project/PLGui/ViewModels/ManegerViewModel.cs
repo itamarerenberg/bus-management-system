@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using BL.BLApi;
+using BL.BO;
 using BLApi;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -80,7 +81,7 @@ namespace PLGui.utilities
             get => time;
             set => SetProperty(ref time, value); 
         }
-        public int Rate { get; set; }
+        public int Rate { get; set; } = 1;
         private bool isSimulatorOn;
         public bool IsSimulatorOff
         {
@@ -166,6 +167,8 @@ namespace PLGui.utilities
             get => linesOfStation;
             set => SetProperty(ref linesOfStation, value);
         }
+
+        public ObservableCollection<LineTiming> LineTimingsList { get; set; }
         #endregion
 
         #region constractor
@@ -446,8 +449,13 @@ namespace PLGui.utilities
         {
             if ((selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation)
             {
+                if (StationDisplay != null)
+                    Stop_truck_station_panel(stationDisplay.Code);//stop truking the privius selected station's panel
                 GetLineOfStation(SelectedStation);
                 StationDisplay = SelectedStation;
+                LineTimingsList = SelectedStation.LineTimings;
+                Truck_station_panel(StationDisplay);//start truking the selected station's panel
+
             }
             else if ((selectedTabItem.Content as ListView).SelectedItem is Line selectedLine)
             {
@@ -651,13 +659,19 @@ namespace PLGui.utilities
             {
                 Mview.PlayButton.Content = new PackIcon() { Kind = PackIconKind.Stop, Foreground = System.Windows.Media.Brushes.Red };
                 Mview.PlayButton.ToolTip = "Stop";
-                source.StartSimulator(Time.TimeOfDay, 1, (upToDateTime) => { Time += upToDateTime - Time.TimeOfDay; });//(upToDateTime) => { Time.TimeOfDay = upToDateTime; }=>this is what the Action does
+                IsSimulatorOff = false;
+                var worker = Start_simulator(Time.TimeOfDay, Rate);
+                worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+                {
+                    Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
+                };
             }
             else
             {
                 Mview.PlayButton.Content = new PackIcon() { Kind = PackIconKind.Play };
                 Mview.PlayButton.ToolTip = "Play";
-                source.StopSimulator();
+                IsSimulatorOff = true;
+                Stop_simulator();
             }
         }
         private void Back(ManegerView Mview)
@@ -984,6 +998,61 @@ namespace PLGui.utilities
             });
         }
 
+        #endregion
+
+        #region simulator
+
+        BackgroundWorker simulatorWorker;
+        private BackgroundWorker Start_simulator(TimeSpan startTime, int rate)
+        {
+            if(simulatorWorker == null)
+            {
+                simulatorWorker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true };
+            }
+            else
+            {
+                while (simulatorWorker.IsBusy) ;//wait for the simulator worker to finish the last task
+                simulatorWorker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true};
+            }
+
+            simulatorWorker.DoWork += (object sender, DoWorkEventArgs args) =>
+            {
+                BackgroundWorker worker = (BackgroundWorker)sender;
+                source.StartSimulator(startTime, rate,
+                                     (upToDateTime) => 
+                                     { 
+                                         worker.ReportProgress(0, upToDateTime); 
+                                     });
+                while(!worker.CancellationPending)
+                {
+                    Thread.Sleep(1000);
+                }
+                source.StopSimulator();
+            };
+            simulatorWorker.RunWorkerAsync();
+            return simulatorWorker;
+        }
+
+        private void Stop_simulator()
+        {
+            simulatorWorker.CancelAsync();
+        }
+
+        private void Truck_station_panel(Station st)
+        {
+            source.Add_stationPanel(st.Code, (lineTiming) => 
+            {
+                //insted of implementing class LineTiming for the pl that is an oservable  
+                //object I remove the line timing and add it back evry time there is an update
+                st.LineTimings.Remove(st.LineTimings.FirstOrDefault(lt0 => lt0.LineId == lineTiming.LineId));
+                st.LineTimings.Add(lineTiming);
+            });
+        }
+
+        private void Stop_truck_station_panel(int stationCode)
+        {
+            source.Remove_stationPanel(stationCode);
+        }
         #endregion
     }
 }

@@ -62,8 +62,8 @@ namespace BL.simulator
 
             Stopwatch tempStopWach = new Stopwatch();
             tempStopWach.Start();//while waiting to the clockWorker to finish start count the time for for more acurecy
-            while (clockWorker.IsBusy) ;//waite for the clock forker to finish 
-
+            while (clockWorker.IsBusy);//waite for the clock worker to finish 
+            clockWorker = new BackgroundWorker();
             clockWorker.DoWork += (object sender, DoWorkEventArgs args) =>
             {
                 BackgroundWorker worker = (BackgroundWorker)sender;
@@ -74,7 +74,7 @@ namespace BL.simulator
                 {
                     clock = new Clock(startTime + new TimeSpan(stopwatch.ElapsedTicks * rate));
                     observer(new TimeSpan(clock.Hours, clock.Minutes, clock.Seconds));
-                    Thread.Sleep(1000);
+                    Thread.Sleep(1000 / rate);
                 }
                 stopwatch.Stop();
             };//this function will execute in the BackgroundWorker thread

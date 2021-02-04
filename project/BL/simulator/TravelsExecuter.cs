@@ -102,6 +102,7 @@ namespace BL.simulator
                         if (stationsInTrack.Contains(stations[i].StationNumber))//if this station under truck then update the arival time to this station
                         {
                             if (underTruck[stations[i].StationNumber] == null)//if this station new in stationsInTrack(added after the trip started)
+                            {
                                 underTruck[stations[i].StationNumber] =//add to the under truck dictionery
                                 new LineTiming()
                                 {
@@ -111,6 +112,7 @@ namespace BL.simulator
                                     StatrtTime = lineTrip.StartTime,
                                     StationCode = stations[i].StationNumber
                                 };
+                            }
                             underTruck[stations[i].StationNumber].ArrivalTime = calcTime;//update the Arrival time
                             observer(underTruck[stations[i].StationNumber]);//update the observer
                         }

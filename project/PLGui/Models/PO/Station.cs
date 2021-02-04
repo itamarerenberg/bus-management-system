@@ -7,6 +7,7 @@ using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BL.BO;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace PLGui.Models.PO
@@ -119,6 +120,7 @@ namespace PLGui.Models.PO
             }
         }
 
+        public ObservableCollection<LineTiming> LineTimings { get; set; }
 
         private void Station_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
