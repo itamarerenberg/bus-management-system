@@ -69,6 +69,7 @@
         <!--#region Clock Dialog -->
         <materialDesign:DialogHost x:Name="ClockDialog" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" >
+                <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}"/>
                 <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
                 <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
                     Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom">
@@ -100,7 +101,7 @@
             <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by"/>
             <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <TextBox x:Name="SearchBox" MinWidth="100" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-            materialDesign:TextFieldAssist.DecorationVisibility="Hidden">
+            materialDesign:TextFieldAssist.DecorationVisibility="Hidden" MaxLength="25">
                 <y:Interaction.Triggers>
                     <y:EventTrigger EventName="TextChanged">
                         <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" />
