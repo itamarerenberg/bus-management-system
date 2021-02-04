@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:utilities="clr-namespace:PLGui.utilities"
         xmlns:local="clr-namespace:PLGui"
         xmlns:viewmodels="clr-namespace:PLGui.utilities"
         mc:Ignorable="d"
-        Title="NewLineTripsView" x:Name="newLineTripsView" Height="180" Width="400">
+        Title="NewLineTripsView" x:Name="newLineTripsView" Height="180" Width="450" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.DataContext>
         <viewmodels:NewLineTripsViewModel x:Name="vModel"/>
     </Window.DataContext>
@@ -20,26 +21,35 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="set line trip" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1" VerticalAlignment="Center">
+        <!--<StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1" VerticalAlignment="Center">
             <TextBlock Text="strat:" VerticalAlignment="Center"/>
             <utilities:TimeSpanPicker Time="{Binding LTrip.StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
             <TextBlock Text="finish:" VerticalAlignment="Center"/>
-            <utilities:TimeSpanPicker Time="{Binding LTrip.FinishAt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <utilities:TimeSpanPicker Time="{Binding LTrip.Finish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
         </StackPanel>
         
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center">
             <TextBlock Text="frequency:" VerticalAlignment="Center"/>
             <utilities:TimeSpanPicker Time="{Binding LTrip.Frequency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-        </StackPanel>
+        </StackPanel>-->
 
+        <materialDesign:TimePicker Grid.Column="0" Grid.Row="1" materialDesign:HintAssist.Hint="Start" Style="{StaticResource MaterialDesignOutlinedTimePicker}"
+                                   Is24Hours="True" Width="110" SelectedTime="{Binding Start, Mode=TwoWay}" IsInvalidTextAllowed="False" ToolTip="set the start time"/>
+
+        <materialDesign:TimePicker Grid.Column="1" Grid.Row="1" materialDesign:HintAssist.Hint="Finish" Style="{StaticResource MaterialDesignOutlinedTimePicker}"
+                                   Is24Hours="True" Width="110" SelectedTime="{Binding Finish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="set the finish time" IsInvalidTextAllowed="False"/>
+
+        <materialDesign:TimePicker Grid.Column="3" Grid.Row="1" materialDesign:HintAssist.Hint="Frequency" Style="{StaticResource MaterialDesignOutlinedTimePicker}"
+                                   Is24Hours="True" Width="110" SelectedTime="{Binding Frequency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="set the Frequency of the line trip in the day" IsInvalidTextAllowed="False"/>
+        
         <Button x:Name="Set" Content="Set" Command="{Binding ButtonCommand}" CommandParameter="{Binding ElementName=newLineTripsView}" Grid.Column="2" Grid.Row="2" Margin="30,0,30,5"/>
     </Grid>
 </Window>

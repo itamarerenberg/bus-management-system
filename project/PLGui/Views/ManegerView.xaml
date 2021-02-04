@@ -9,6 +9,7 @@
         xmlns:utilities="clr-namespace:PLGui.utilities"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
+        
         Title="Maneger window" x:Name="ManegerWindow" MinHeight="700" MinWidth="1000"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
@@ -30,7 +31,9 @@
             <MenuItem Header="Update" Icon="{materialDesign:PackIcon Kind=Update}" Command="{Binding UpdateCommand, diag:PresentationTraceSources.TraceLevel=High}" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
             <MenuItem Header="Delete" Icon="{materialDesign:PackIcon Kind=Delete}"  />
         </ContextMenu>
+
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -43,6 +46,8 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <!--#region Menu -->
         <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="0" Margin="20,0,0,0">
             <MenuItem Header="New" Height="25">
                 <MenuItem Header="new line" Command="{Binding NewLine}" Icon="{materialDesign:PackIcon Kind=Plus}"/>
@@ -59,6 +64,38 @@
                 <MenuItem Header="Exit" Command="{Binding manegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
             </MenuItem>
         </Menu>
+        <!--#endregion-->
+
+        <!--#region Clock Dialog -->
+        <materialDesign:DialogHost x:Name="ClockDialog" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" >
+                <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
+                <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
+                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom">
+                    <Button.CommandParameter>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <materialDesign:Clock DisplayAutomation="ToSeconds" Is24Hours="True" x:Name="Clock" />
+                            <StackPanel Grid.Row="1"  Margin="8" HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="0"  Content="CANCEL" />
+                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="1"  Content="OK" />
+                            </StackPanel>
+                        </Grid>
+                    </Button.CommandParameter>
+                    <materialDesign:PackIcon  Kind="ClockOutline"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignIconButton}" x:Name="PlayButton" ToolTip="Play" 
+                        Command="{Binding Play_Command}">
+                    <materialDesign:PackIcon Kind="Play" Width="40" Height="40" />
+                </Button>
+            </StackPanel>
+        </materialDesign:DialogHost>
+        <!--#endregion-->
+
+        <!--#region search area -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="0,0,25,0">
             <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by"/>
             <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
@@ -71,12 +108,21 @@
                 </y:Interaction.Triggers>
             </TextBox>
         </StackPanel>
+        <!--#endregion-->
 
+        <!--#region buttons -->
         <Button Content="{materialDesign:PackIcon Kind=BackupRestore, Size=25}" ToolTip="Back" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
                 Command="{Binding BackCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"
                 IsEnabled="{Binding StackIsNotEmpty}"
             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
 
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1">
+            <Button x:Name="DeleteButton" Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="10" Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+            <Button x:Name="UpdateButton" Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" Margin="10" Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+        </StackPanel>
+        <!--#endregion-->
+
+        <!--#region Tab control -->
         <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="25,0,25,25"
                     SelectedIndex="0" Width="auto" 
                     Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="PrimaryMid" TabStripPlacement="Left" 
@@ -86,7 +132,9 @@
                     <y:InvokeCommandAction Command="{Binding TabChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
                 </y:EventTrigger>
             </y:Interaction.Triggers>
-            <TabItem x:Name="Stations_view" 
+
+            <!--#region stations -->
+            <TabItem x:Name="Stations_view" Tag="Stations"
                      Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>
                     <Grid ToolTip="Station">
@@ -115,7 +163,10 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="Lines_view"  
+            <!--#endregion-->
+
+            <!--#region Lines -->
+            <TabItem x:Name="Lines_view" Tag="Lines"
                      Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>
                     <Grid ToolTip="Lines">
@@ -138,8 +189,11 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="LineTrip_view"
-                     Style="{StaticResource MaterialDesignNavigationRailTabItem}" Tag="">
+            <!--#endregion-->
+
+            <!--#region Line Trips -->
+            <TabItem x:Name="LineTrip_view" Tag="LineTrips"
+                     Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>
                     <Grid ToolTip="Line trips">
                         <Label Content="{materialDesign:PackIcon Kind=BusClock, Size=24}" />
@@ -153,22 +207,25 @@
                     </y:Interaction.Triggers>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn x:Name="LineId"  Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineId}" />
+                            <GridViewColumn x:Name="LineId"  Header="Line Id" Width="auto" DisplayMemberBinding="{Binding LineId}" />
                             <GridViewColumn x:Name="StartTime"  Header="Start Time" Width="auto" DisplayMemberBinding="{Binding StartTime}" />
-                            <GridViewColumn x:Name="Finish"  Header="Finish" Width="auto" DisplayMemberBinding="{Binding FinishAt}"/>
+                            <GridViewColumn x:Name="Finish"  Header="Finish" Width="auto" DisplayMemberBinding="{Binding Finish}"/>
                             <GridViewColumn x:Name="Frequency"  Header="Frequency" Width="auto" DisplayMemberBinding="{Binding Frequency}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </TabItem>
-            <TabItem x:Name="Bus_view" 
+            <!--#endregion-->
+
+            <!--#region Buses -->
+            <TabItem x:Name="Bus_view" Tag="Buses"
                      Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <TabItem.Header>
                     <Grid ToolTip="Buses">
                         <Label Content="{materialDesign:PackIcon Kind=BusMultiple, Size=24}" />
                     </Grid>
                 </TabItem.Header>
-                <ListView x:Name="BusesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Buses}">
+                <ListView x:Name="BusesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Buses, UpdateSourceTrigger=PropertyChanged}">
                     <y:Interaction.Triggers>
                         <y:EventTrigger EventName="SelectionChanged">
                             <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -176,7 +233,7 @@
                     </y:Interaction.Triggers>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn x:Name="LicensNumber"  Header="Licens Number" Width="auto" DisplayMemberBinding="{Binding LicensNumber}" />
+                            <GridViewColumn x:Name="LicensNumber" Header="License Number" Width="auto" DisplayMemberBinding="{Binding LicenseNumber, StringFormat=000-00-000}"  />
                             <GridViewColumn x:Name="Stat"  Header="Status" Width="auto" DisplayMemberBinding="{Binding Stat}" />
                             <GridViewColumn x:Name="Fuel"  Header="Fuel" Width="auto" DisplayMemberBinding="{Binding Fule}"/>
                             <GridViewColumn x:Name="Kilometraz"  Header="Kilometraz" Width="auto" DisplayMemberBinding="{Binding Kilometraz}"/>
@@ -184,28 +241,33 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
-        </TabControl>
+            <!--#endregion-->
 
-        <Grid x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="5">
+        </TabControl>
+        <!--#endregion-->
+
+        <!--#region Line Details -->
+        <Grid x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="5"
+                    Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Line details" Grid.Row="0" Margin="5">
-                <WrapPanel>
+            <Expander Header="Line details" Grid.Row="0" Margin="5" Background="#FFB3EF7C">
+                <WrapPanel Background="White" DataContext="{Binding LineDisplay}" >
                     <StackPanel>
                         <TextBlock Text="Line Number:"/>
-                        <Label x:Name="VLineNumber" BorderThickness="2" HorizontalAlignment="Right" />
+                        <Label Content="{Binding LineNumber}" BorderThickness="2" HorizontalAlignment="Right" />
                     </StackPanel>
                     <StackPanel Margin="10,0,0,0">
                         <TextBlock Text="Area"/>
-                        <Label x:Name="VArea"  BorderThickness="2" HorizontalAlignment="Right"/>
+                        <Label Content="{Binding Area}" BorderThickness="2" HorizontalAlignment="Right"/>
                     </StackPanel>
                 </WrapPanel>
-            </GroupBox>
+            </Expander>
             <GroupBox Header="Line stations list" Grid.Row="1" Margin="5">
-                <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding LineStations}" ToolTip="press twice and see the station details" >
+                <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding LineDisplay.Stations}" ToolTip="press twice and see the station details" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
@@ -216,11 +278,11 @@
                 </ListView>
             </GroupBox>
             <GroupBox Header="Line trips" Grid.Row="2" Margin="5">
-                <ListView x:Name="LineTrip_Details" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" >
+                <ListView x:Name="LineTrip_Details" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineDisplay.LineTrips}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Start Time" Width="auto" DisplayMemberBinding="{Binding StartTime}" />
-                            <GridViewColumn Header="Finish" Width="auto" DisplayMemberBinding="{Binding FinishAt}"/>
+                            <GridViewColumn Header="Finish" Width="auto" DisplayMemberBinding="{Binding Finish}"/>
                             <GridViewColumn Header="Frequency" Width="auto" DisplayMemberBinding="{Binding Frequency}"/>
                         </GridView>
                     </ListView.View>
@@ -228,59 +290,115 @@
             </GroupBox>
             <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add new line trip" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
         </Grid>
+        <!--#endregion-->
 
-        <Grid x:Name="StationDetails" Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="5">
+        <!--#region Station Details -->
+        <Grid x:Name="StationDetails" Margin="5" Grid.Row="2" Grid.Column="1"  
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Station details" Grid.Row="0" Margin="5">
-                <WrapPanel>
+            <Expander Header="Station details" Grid.Row="0" Margin="5" Background="#FFB3EF7C">
+                <WrapPanel Background="White" DataContext="{Binding StationDisplay}">
                     <StackPanel>
                         <TextBlock Text="Name:"/>
-                        <Label x:Name="VName" BorderThickness="2" HorizontalAlignment="Right"/>
+                        <Label Content="{Binding Name}" BorderThickness="2" HorizontalAlignment="Right"/>
                     </StackPanel>
                     <StackPanel Margin="10,0,0,0">
                         <TextBlock Text="Code:"/>
-                        <Label x:Name="VCode"  BorderThickness="2" HorizontalAlignment="Right"/>
+                        <Label Content="{Binding Code}" BorderThickness="2" HorizontalAlignment="Right"/>
                     </StackPanel>
                     <StackPanel Margin="10,0,0,0" >
                         <TextBlock Text="Address:" />
-                        <Label x:Name="VAddress" BorderThickness="2" HorizontalAlignment="Right"/>
+                        <Label Content="{Binding Address}" BorderThickness="2" HorizontalAlignment="Right"/>
                     </StackPanel>
                     <StackPanel Margin="10,0,0,0">
                         <TextBlock Text="Location:" />
-                        <Label x:Name="VLocation"  BorderThickness="2" HorizontalAlignment="Right"/>
+                        <Label Content="{Binding Location}" BorderThickness="2" HorizontalAlignment="Right"/>
                     </StackPanel>
                 </WrapPanel>
-            </GroupBox>
+            </Expander>
             <GroupBox Header="Line Passes list" Grid.Row="1" Margin="5">
-                <ListView x:Name="LinePasses_view" Margin="10" VerticalAlignment="Top" >
+                <ListView x:Name="LinePasses_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LinesOfStation}">
                     <ListView.View>
                         <GridView>
-                            <!--<GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
-                            <GridViewColumn x:Name="Distance"  Header="Distance from start" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Distance, StringFormat={}{0:F2}km}" />
-                            <GridViewColumn x:Name="Time"  Header="Estimate time" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Time, StringFormat={}{0:hh':'mm':'ss}}" />-->
+                            <GridViewColumn Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineNumber}" />
+                            <GridViewColumn Header="Area" Width="auto" DisplayMemberBinding="{Binding Area}" />
+                            <GridViewColumn Header="First Station" DisplayMemberBinding="{Binding FirstStation.StationNumber}" Width="auto"/>
+                            <GridViewColumn Header="Last Station" DisplayMemberBinding="{Binding LastStation.StationNumber}" Width="auto"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </GroupBox>
         </Grid>
-        <!--<materialDesign:PopupBox Grid.Row="1" Grid.Column="1" PlacementMode="BottomAndAlignCentres" ToolTipService.Placement="Right" ToolTip="x" HorizontalAlignment="Right"
-                             >
-            <StackPanel>
-                <Button    ToolTip="One with custom opacity"    Opacity="0.5"    Content="1" />
-                <Button  ToolTip="Two"   Content="2" />
-                <Button  ToolTip="Three"  Content="3" />
-            </StackPanel>
-        </materialDesign:PopupBox>-->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1">
-            <Button x:Name="DeleteButton" Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="10" Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
-            <Button x:Name="UpdateButton" Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" Margin="10" Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
-        </StackPanel>
+        <!--#endregion-->
 
-        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Background="#FFB3EF7C" Foreground="#FF080000"/>
+        <!--#region Line trip Details -->
+        <Grid x:Name="LineTripDetails" Grid.Row="2" Grid.Column="1" Margin="5"
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference LineTrip_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Expander Header="Line trip details" Grid.Row="0" Margin="5" Background="#FFB3EF7C">
+                <WrapPanel Background="White" DataContext="{Binding LineTripDisplay}" >
+                    <StackPanel>
+                        <TextBlock Text="Start:"/>
+                        <Label Content="{Binding StartTime}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="Finish:"/>
+                        <Label Content="{Binding Finish}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0" >
+                        <TextBlock Text="Frequency:" />
+                        <Label Content="{Binding Frequency}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </WrapPanel>
+            </Expander>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Bus Details -->
+        <Grid x:Name="BusDetails" Grid.Row="2" Grid.Column="1" Margin="5"
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Bus_view }, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Expander Header="Bus details" Grid.Row="0" Margin="5" Background="#FFB3EF7C">
+                <WrapPanel Background="White" DataContext="{Binding BusDisplay}">
+                    <StackPanel>
+                        <TextBlock Text="Licens Number:"/>
+                        <Label Content="{Binding LicenseNumber}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="Status:"/>
+                        <Label Content="{Binding Stat}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0" >
+                        <TextBlock Text="Licenes date:" />
+                        <Label Content="{Binding LicenesDate}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0" >
+                        <TextBlock Text="Fuel:" />
+                        <Label Content="{Binding Fule}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0" >
+                        <TextBlock Text="Kilometraz:" />
+                        <Label Content="{Binding Kilometraz}" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </WrapPanel>
+            </Expander>
+            <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a random bus" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding RandomBus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+        </Grid>
+        <!--#endregion-->
+
+        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Background="#FF016306" />
 
     </Grid>
 

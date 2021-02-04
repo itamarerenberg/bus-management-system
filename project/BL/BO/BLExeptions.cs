@@ -49,4 +49,23 @@ namespace BL
     {
         public missAdjacentStations(string msg) : base(msg) { }
     }
+    class Busy : Exception
+    {
+        public Busy(string massege) : base(massege) { }
+    }
+
+    class NeedTreatment : Exception
+    {
+        public NeedTreatment(string massege) : base(massege) { }
+    }
+
+    class Danger : Exception
+    {
+        public Danger(string massege) : base(massege) { }
+    }
+
+    class NotEnoughFule : Exception
+    {
+        public NotEnoughFule(string massege) : base(massege) { }
+    }
 }

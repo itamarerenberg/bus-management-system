@@ -111,16 +111,16 @@ namespace BL
         public void AddBus(Bus bus)
         {
             //check if the langth of the LicenseNum fit to the LicensDate
-            if (bus.LicenesDate.Year > 2018)
+            if (bus.LicenesDate.Year >= 2018)
             {
-                if (bus.LicensNumber.Length != 8)
+                if (bus.LicenseNumber.Length != 8)
                 {
                     throw new InvalidInput("Licens number is not fit to the licens date");
                 }
             }
             else
             {
-                if (bus.LicensNumber.Length != 7)
+                if (bus.LicenseNumber.Length != 7)
                 {
                     throw new InvalidInput("Licens number is not fit to the licens date");
                 }
@@ -166,7 +166,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public IEnumerable<Bus> GetAllBuses()
@@ -180,6 +180,43 @@ namespace BL
                    let bus = (Bus)BObus.CopyPropertiesToNew(typeof(Bus))
                    where pred(bus)
                    select bus;
+        }
+        public void Ride(Bus bus, float km)
+        {
+            try
+            {
+                bus.Ride(km);
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
+        }
+        public void Refuel(Bus bus)
+        {
+            try
+            {
+                bus.Refule();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+        public void Treatment(Bus bus)
+        {
+            try
+            {
+                bus.Treatment();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+        public void AddRandomBus()
+        {
+            AddBus(HelpMethods.RandomBus());
         }
         #endregion
 

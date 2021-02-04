@@ -60,9 +60,9 @@ namespace PLGui.Models.PO
         public BO.LineStation LastStation { get => Stations.Last(); }
         public ObservableCollection<int> StationsNums { get => new ObservableCollection<int>(Stations.Select(c => c.StationNumber)) { }; }
 
-        private ObservableCollection<BO.LineTrip> lineTrips;
+        private ObservableCollection<LineTrip> lineTrips;
 
-        public ObservableCollection<BO.LineTrip> LineTrips
+        public ObservableCollection<LineTrip> LineTrips
         {
             get => lineTrips;
             set => SetProperty(ref lineTrips, value);

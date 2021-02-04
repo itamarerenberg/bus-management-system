@@ -8,17 +8,55 @@ namespace BLApi
     {
 
         #region Manager
+        /// <summary>
+        /// generates a user with Manager permission
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
         void AddManagar(string name, string password);
+        /// <summary>
+        /// looks for a user with Manager permission
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <returns>
+        /// <br>true: if a user with Manager permission exist.</br>  <br>the user doesn't exist or he doesn't have a Manager permission </br>
+        /// </returns>
         bool GetManagar(string name, string password);
-        void UpdateManagar(string name, string password,string oldName, string oldPassword);
+        /// <summary>
+        /// update a user with Manager permission
+        /// </summary>
+        void UpdateManagar(string name, string password, string oldName, string oldPassword);
+        /// <summary>
+        /// Delete a user with Manager permission
+        /// </summary>
         void DeleteManagar(string name, string password);
 
         #endregion
 
         #region Passenger
+        /// <summary>
+        /// generates a user with Passenger permission
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
         void AddPassenger(string name, string password);
+        /// <summary>
+        /// looks for a user with passenger permission  
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <returns>
+        /// the passenger with his trips history
+        /// </returns>
         Passenger GetPassenger(string name, string password);
+        /// <summary>
+        /// update a user with Passenger permission
+        /// </summary>
         void UpdatePassenger(string name, string password, string newName, string newPassword);
+        /// <summary>
+        /// Delete a user with Passenger permission
+        /// </summary>
         void DeletePassenger(string name, string password);
 
         #endregion
@@ -27,13 +65,17 @@ namespace BLApi
         void AddBus(Bus bus);
 
         /// <summary>
-        /// get the bus with this licensNum
+        /// get the bus by the license Number
         /// </summary>
         Bus GetBus(string licensNum);
         void UpdateBus(Bus bus);
         void DeleteBus(string licensNum);
         IEnumerable<Bus> GetAllBuses();
         IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> pred);
+        void Ride(Bus bus, float km);
+        void Refuel(Bus bus);
+        void Treatment(Bus bus);
+        void AddRandomBus();
         #endregion
 
         #region Line

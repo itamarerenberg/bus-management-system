@@ -357,6 +357,26 @@ namespace BL
         {
             throw new NotImplementedException();
         }
+
+        void IBL.Ride(Bus bus, float km)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IBL.Refuel(Bus bus)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IBL.Treatment(Bus bus)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IBL.AddRandomBus()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
     }
