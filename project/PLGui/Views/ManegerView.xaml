@@ -68,31 +68,35 @@
 
         <!--#region Clock Dialog -->
         <materialDesign:DialogHost x:Name="ClockDialog" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal" >
-                <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}" MaxLength="4"/>
-                <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
-                <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
-                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom">
-                    <Button.CommandParameter>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <materialDesign:Clock DisplayAutomation="ToSeconds" Is24Hours="True" x:Name="Clock" />
-                            <StackPanel Grid.Row="1"  Margin="8" HorizontalAlignment="Right" Orientation="Horizontal">
-                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="0"  Content="CANCEL" />
-                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="1"  Content="OK" />
-                            </StackPanel>
-                        </Grid>
-                    </Button.CommandParameter>
-                    <materialDesign:PackIcon  Kind="ClockOutline"/>
-                </Button>
-                <Button Style="{StaticResource MaterialDesignIconButton}" x:Name="PlayButton" ToolTip="Play" 
+            <materialDesign:Card UniformCornerRadius="6" Background="#FFB3EF7C">
+                <Border BorderThickness="3" Background="White" BorderBrush="#FFB3EF7C" CornerRadius="6">
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}" MaxLength="4"/>
+                        <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
+                        <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
+                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom">
+                            <Button.CommandParameter>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:Clock DisplayAutomation="ToSeconds" Is24Hours="True" x:Name="Clock" />
+                                    <StackPanel Grid.Row="1"  Margin="8" HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="0"  Content="CANCEL" />
+                                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="1"  Content="OK" />
+                                    </StackPanel>
+                                </Grid>
+                            </Button.CommandParameter>
+                            <materialDesign:PackIcon  Kind="ClockOutline"/>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignIconButton}" x:Name="PlayButton" ToolTip="Play" 
                         Command="{Binding Play_Command}">
-                    <materialDesign:PackIcon Kind="Play" Width="40" Height="40" />
-                </Button>
-            </StackPanel>
+                            <materialDesign:PackIcon Kind="Play" Width="40" Height="40" />
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </materialDesign:Card>
         </materialDesign:DialogHost>
         <!--#endregion-->
 
@@ -144,10 +148,7 @@
                 </Button>
             </materialDesign:DialogHost>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1">
-            <Button x:Name="DeleteButton" Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="10" Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
-            <Button x:Name="UpdateButton" Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" Margin="10" Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
-        </StackPanel>
+        
         <!--#endregion-->
 
         <!--#region Tab control -->
@@ -275,8 +276,7 @@
         <!--#endregion-->
 
         <!--#region Line Details -->
-        <Grid x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="5"
-                    Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+        <!--<Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
@@ -317,50 +317,151 @@
                 </ListView>
             </GroupBox>
             <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add new line trip" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
-        </Grid>
-        <!--#endregion-->
+        </Grid>-->
 
-        <!--#region Station Details -->
-        <Grid x:Name="StationDetails" Margin="5" Grid.Row="2" Grid.Column="1"  
-                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Expander Header="Station details" Grid.Row="0" Margin="5" Background="#FFB3EF7C">
-                <WrapPanel Background="White" DataContext="{Binding StationDisplay}">
-                    <StackPanel>
-                        <TextBlock Text="Name:"/>
-                        <Label Content="{Binding Name}" BorderThickness="2" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                    <StackPanel Margin="10,0,0,0">
-                        <TextBlock Text="Code:"/>
-                        <Label Content="{Binding Code}" BorderThickness="2" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                    <StackPanel Margin="10,0,0,0" >
-                        <TextBlock Text="Address:" />
-                        <Label Content="{Binding Address}" BorderThickness="2" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                    <StackPanel Margin="10,0,0,0">
-                        <TextBlock Text="Location:" />
-                        <Label Content="{Binding Location}" BorderThickness="2" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </WrapPanel>
-            </Expander>
-            <GroupBox Header="Line Passes list" Grid.Row="1" Margin="5">
-                <ListView x:Name="LinePasses_view" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LinesOfStation}">
+        <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="5" UniformCornerRadius="6"
+                    Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
+                    ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Border Background="#FFB3EF7C">
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
+                            <TextBlock Text="{Binding LineDisplay.LineNumber}" FontSize="20" FontWeight="ExtraBold"/>
+                            <TextBlock Text="{Binding LineDisplay.Area}"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">
+                            <TextBlock>
+                        <Run Text="First station: "/>
+                        <Run Text="{Binding LineDisplay.FirstStation.Name}"/>
+                            </TextBlock>
+                            <TextBlock>
+                        <Run Text="Last station: "/>
+                        <Run Text="{Binding LineDisplay.LastStation.Name}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="200,0,0,-10">
+                    <Button Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="0,0,15,0"
+                            Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                    <Button Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" 
+                            Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                </StackPanel>
+                
+                <materialDesign:Card  Grid.Row="1" Margin="5" 
+                                     Padding="8" UniformCornerRadius="6">
+                    <TextBlock Text="Station:" FontSize="20" FontWeight="Bold"/>
+                </materialDesign:Card>
+                
+                <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding LineDisplay.Stations}" 
+                          ToolTip="press twice and see the station details" Grid.Row="2">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineNumber}" />
-                            <GridViewColumn Header="Area" Width="auto" DisplayMemberBinding="{Binding Area}" />
-                            <GridViewColumn Header="First Station" DisplayMemberBinding="{Binding FirstStation.StationNumber}" Width="auto"/>
-                            <GridViewColumn Header="Last Station" DisplayMemberBinding="{Binding LastStation.StationNumber}" Width="auto"/>
+                            <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
+                            <GridViewColumn x:Name="Distance"  Header="Distance from start" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Distance, StringFormat={}{0:F2}km}" />
+                            <GridViewColumn x:Name="Time"  Header="Estimate time" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Time, StringFormat={}{0:hh':'mm':'ss}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
-            </GroupBox>
-        </Grid>
+
+                <materialDesign:Card Background="#FFB3EF7C" Grid.Row="3" Margin="5"
+                                     Padding="8" UniformCornerRadius="6">
+                    <TextBlock Text="Station:" FontSize="20" FontWeight="Bold"/>
+                </materialDesign:Card>
+                
+                <ListView x:Name="LineTrip_Details" HorizontalAlignment="Left" Margin="10" Grid.Row="4"
+                          VerticalAlignment="Top" ItemsSource="{Binding LineDisplay.LineTrips}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Start Time" Width="auto" DisplayMemberBinding="{Binding StartTime}" />
+                            <GridViewColumn Header="Finish" Width="auto" DisplayMemberBinding="{Binding Finish}"/>
+                            <GridViewColumn Header="Frequency" Width="auto" DisplayMemberBinding="{Binding Frequency}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                
+                
+            </Grid>
+        </materialDesign:Card>
+        <!--#endregion-->
+
+        <!--#region Station Details -->
+        
+        <materialDesign:Card  x:Name="StationDetails" Margin="5" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6"
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
+                ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Background="#FFB3EF7C">
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
+                            <TextBlock Text="{Binding StationDisplay.Name}" FontSize="20" FontWeight="ExtraBold" TextWrapping="Wrap" FlowDirection="RightToLeft"/>
+                            <TextBlock Text="{Binding StationDisplay.Address}" TextWrapping="Wrap" MaxWidth="200" FlowDirection="RightToLeft"/>
+                        </StackPanel>
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Run Text="Code: "/>
+                        <Run Text="{Binding StationDisplay.Code}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Location" Margin="10,0,0,0"/>
+                            <TextBlock Text="{Binding StationDisplay.Location}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="200,0,0,-10">
+                    <Button Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="0,0,15,0"
+                            Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                    <Button Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" 
+                            Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                </StackPanel>
+
+                <ItemsControl x:Name="LinePasses_view" ItemsSource="{Binding }" Grid.IsSharedSizeScope="True" Grid.Row="2">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate >
+                            <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource MaterialDesignDivider}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition  SharedSizeGroup="Checkerz" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Margin="8 0 0 0"  Grid.Column="1">
+                                        <TextBlock Text="{Binding }" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Description}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                    <Setter TargetName="Border" Property="Background"  Value="{DynamicResource MaterialDesignSelection}"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </Grid>
+        </materialDesign:Card>
+       
         <!--#endregion-->
 
         <!--#region Line trip Details -->

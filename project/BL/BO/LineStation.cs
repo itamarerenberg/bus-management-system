@@ -9,6 +9,8 @@ namespace BO
         public int LineStationIndex { get; set; }
         public int Location { get; set; }
         public string Address { get; set; }
+        public string Name { get; set; }
+
 
         public AdjacentStations PrevToCurrent { get; set; }
         public AdjacentStations CurrentToNext { get; set; }
