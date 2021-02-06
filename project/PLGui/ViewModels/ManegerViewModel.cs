@@ -32,6 +32,7 @@ namespace PLGui.utilities
         ManegerModel manegerModel = new ManegerModel();
         IBL source;
         TabItem selectedTabItem;
+        public int rate;
 
         private Station stationDisplay;
         private Line lineDisplay;
@@ -81,12 +82,16 @@ namespace PLGui.utilities
             get => time;
             set => SetProperty(ref time, value); 
         }
-        public int Rate { get; set; } = 1;
-        private bool isSimulatorOn;
+        public int Rate
+        {
+            get => rate > 0 ? rate : 1;
+            set => SetProperty(ref rate, value);
+        }
+        private bool isSimulatorOff;
         public bool IsSimulatorOff
         {
-            get => isSimulatorOn;
-            set => SetProperty(ref isSimulatorOn, value);
+            get => isSimulatorOff;
+            set => SetProperty(ref isSimulatorOff, value);
         }
 
         public Station StationDisplay

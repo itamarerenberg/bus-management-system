@@ -263,6 +263,7 @@ namespace BL
                     LineStationIndex = 0,
                     PrevStation = null,
                     Address = stations.ElementAt(0).Address,
+                    Name = stations.ElementAt(0).Name,
                     IsActive = true
                 };
                 DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
@@ -278,6 +279,7 @@ namespace BL
                         StationNumber = st.Code,
                         LineStationIndex = index++,
                         PrevStation = prev_station.StationNumber,//! I think we shuld add to LineStation id fild
+                        Name = st.Name,
                         Address = st.Address,
                         IsActive = true
                     };
@@ -877,6 +879,7 @@ namespace BL
                 LineStationIndex = lineStations[0].LineStationIndex,
                 PrevToCurrent = null,//ther is no previus station so it's null
                 Address = lineStations[0].Address,
+                Name = lineStations[0].Name,
                 Distance_from_start = distance_from_start,// = 0// because it's the first station
                 Time_from_start = time_from_start// = 0:0:0// because it's the first station
                 //the fild CurrentToNext will be set inside the loop
@@ -902,6 +905,8 @@ namespace BL
                     LineId = lst.LineId,
                     StationNumber = lst.StationNumber,
                     LineStationIndex = lst.LineStationIndex,
+                    Address = lst.Address,
+                    Name = lst.Name,
                     PrevToCurrent = prev_to_current,
                     Distance_from_start = distance_from_start,
                     Time_from_start = time_from_start
