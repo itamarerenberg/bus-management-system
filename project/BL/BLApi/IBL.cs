@@ -109,6 +109,12 @@ namespace BLApi
         void AddStation(Station station);
         Station GetStation(int code);
         void UpdateStation(Station station);
+        /// <summary>
+        /// <br>remove the station and all</br>
+        /// <br>the line stations of the station from all lines</br>
+        /// <br>and all the adjecent stations with the deleding station</br>
+        /// </summary>
+        /// <param name="code"></param>
         void DeleteStation(int code);
         IEnumerable<Station> GetAllStations();
         IEnumerable<Station> GetAllStationsBy(Predicate<Station> pred);

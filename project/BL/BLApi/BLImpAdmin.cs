@@ -17,10 +17,12 @@ namespace BL
     {
 
         #region singelton
+
         static readonly BLImpAdmin instance = new BLImpAdmin();
         static BLImpAdmin() { }
         BLImpAdmin() { }
         public static BLImpAdmin Instance { get => instance; }
+
         #endregion
 
         IDL dl = DLFactory.GetDL();
@@ -504,13 +506,41 @@ namespace BL
         public void DeleteLineStation(int lineNumber, int StationNumber)
         {
             Line line = GetLine(lineNumber);
-            LineStation lineStation = HelpMethods.GetLineStation(lineNumber, StationNumber);
 
-            if (lineStation.PrevToCurrent != null)//the deleted station is not in the first location
+            if(line.Stations.Count <= 2)//if the line has only two stations then delete the line becouse now it will have only one station and its iligal
             {
-                HelpMethods.DeleteAdjacentStations(line.Stations[lineStation.LineStationIndex - 1].CurrentToNext);
+                DeleteLine(lineNumber);
             }
-            if (lineStation.CurrentToNext != null)//the deleted station is not in the last location
+
+            LineStation lineStation = line.Stations.FirstOrDefault(ls => ls.StationNumber == StationNumber);
+
+            if (lineStation.PrevToCurrent == null)//the deleted station is the first stop of the line
+            {
+                //update the second line station of the line (now is the first line station)
+                LineStation temp = line.Stations[1];//for convenience save the second line station in the line(now the first line station)
+                dl.UpdateLineStation(new DO.LineStation()
+                {
+                    LineId = temp.LineId,
+                    StationNumber = temp.StationNumber,
+                    Address = temp.Address,
+                    PrevStation = null,//becouse now its the first line station
+                    NextStation = temp.CurrentToNext.StationCode2,
+                    IsActive = true
+                    //the fild LineStationIndex will be update after with all the rest line stations of this line
+                });
+
+                //update the line (the FirstStation_Id fild)
+                dl.UpdateLine(new DO.Line()
+                {
+                    ID = line.ID,
+                    LineNumber = line.LineNumber,
+                    Area = (DO.AreasEnum)Enum.Parse(typeof(DO.AreasEnum), line.Area.ToString()),//Area = line.Area
+                    LastStation_Id = line.LastStation.StationNumber,
+                    IsActive = true,
+                    FirstStation_Id = line.Stations[1].StationNumber//the second station in the line now is the first station
+                });
+            }
+            if (lineStation.CurrentToNext == null)//if the station is the last stop of the line
             {
                 HelpMethods.DeleteAdjacentStations(line.Stations[lineStation.LineStationIndex + 1].PrevToCurrent);
             }
@@ -674,15 +704,15 @@ namespace BL
         {
             try
             {
-                dl.DeleteStation(code);
-                foreach (DO.LineStation lineS in dl.GetAllLineStationsBy(s => s.StationNumber == code))
+                foreach (DO.LineStation lineS in dl.GetAllLineStationsBy(s => s.StationNumber == code))//delete all the line stations of the deleted station from all the lines
                 {
                     DeleteLineStation(lineS.LineId, lineS.StationNumber);
                 }
-                foreach (DO.AdjacentStations AjaS in dl.GetAllAdjacentStationsBy(a => a.StationCode1 == code || a.StationCode2 == code))
+                foreach (DO.AdjacentStations AjaS in dl.GetAllAdjacentStationsBy(a => a.StationCode1 == code || a.StationCode2 == code))//delete all the adjecentStations that involve the deleted station
                 {
                     dl.DeleteAdjacentStations(AjaS);
                 }
+                dl.DeleteStation(code);//delete the station
             }
             catch (Exception msg)
             {
@@ -784,7 +814,6 @@ namespace BL
         }
 
         #endregion
-
 
         #region private methods
 
