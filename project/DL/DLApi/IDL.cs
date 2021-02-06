@@ -115,6 +115,11 @@ namespace DLApi
         /// <param name="newLineStation">up to date line station</param>
         void UpdateLineStation(LineStation lineStation);
         /// <summary>
+        /// <br>preform 'action' on the line station with 'LineId' = 'lineId' and 'StationNumber' = stationNumber</br>
+        /// and override the line station with the result of the action
+        /// </summary>
+        void UpdateLineStation(Action<LineStation> action, int lineId, int stationNumber);
+        /// <summary>
         /// <br>delete the line station with LineId = 'lineId' and StationNumber = 'stationNum'</br>
         /// </summary>
         /// <param name="lineId"></param>

@@ -400,6 +400,24 @@ namespace DL
             DataSourceXML.Save("LineStations");//save changes
         }
 
+        public void UpdateLineStation(Action<LineStation> action, int lineId, int stationNumber)
+        {
+            XElement oldLineStation = (from ls in DataSourceXML.LineStations.Elements()//search for the line station in the data source
+                                       where int.Parse(ls.Element("LineId").Value) == lineId
+                                             && int.Parse(ls.Element("StationNumber").Value) == stationNumber
+                                       select ls).FirstOrDefault();
+            if (oldLineStation == null)//if ther is no such station in th data source
+            {
+                throw new NotExistExeption("the line station doesn't exist");
+            }
+
+            LineStation newLineStation = XMLTools.xelement_to_new_object<LineStation>(oldLineStation);//insert the ditils of the old lineStation to a new LineStation object
+            action(newLineStation);//do 'action' on the new LineStation object
+
+            XMLTools.object_to_xelement(newLineStation, oldLineStation);//insert the new line station insted of the old one
+            DataSourceXML.Save("LineStations");//save the changes
+        }
+
         public void DeleteLineStation(int lineId, int stationNum)
         {
             XElement lineS = (from ls in DataSourceXML.LineStations.Elements()//serch for the line station in the data source

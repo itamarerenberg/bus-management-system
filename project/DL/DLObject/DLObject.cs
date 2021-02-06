@@ -417,6 +417,19 @@ namespace DL
             oldLineStation = newLineStation.Clone();//override the old lineStation
         }
 
+        public void UpdateLineStation(Action<LineStation> action, int lineId, int stationNumber)
+        {
+            LineStation oldLineStation = (from ls in DataSource.LineStations
+                                          where ls.LineId == lineId
+                                                && ls.StationNumber == stationNumber
+                                          select ls).FirstOrDefault();
+            if (oldLineStation == null)//if the old Line Station dont exist in the data source
+            {
+                throw new NotExistExeption("the line station doesn't exist");
+            }
+            action(oldLineStation);//do 'action' on the old line station
+        }
+
         /// <summary>
         /// <br>delete the line station with LineId = 'lineId' and StationNumber = 'stationNum'</br>
         /// </summary>

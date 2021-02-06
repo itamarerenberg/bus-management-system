@@ -514,22 +514,18 @@ namespace BL
                 DeleteLine(lineNumber);
             }
 
+            line.Stations.OrderBy(ls => ls.LineStationIndex);//Make sure the line stations in 'line' are ordered by the fild 'LineStationIndex'
+
             LineStation lineStation = line.Stations.FirstOrDefault(ls => ls.StationNumber == StationNumber);
 
-            if (lineStation.PrevToCurrent == null)//the deleted station is the first stop of the line
+            int indexInLine = lineStation.LineStationIndex;
+
+            //the deleted station is the first stop of the line
+            if (indexInLine == 0)
             {
                 //update the second line station of the line (now is the first line station)
-                LineStation temp = line.Stations[1];//for convenience save the second line station in the line(now the first line station)
-                dl.UpdateLineStation(new DO.LineStation()
-                {
-                    LineId = temp.LineId,
-                    StationNumber = temp.StationNumber,
-                    Address = temp.Address,
-                    PrevStation = null,//becouse now its the first line station
-                    NextStation = temp.CurrentToNext.StationCode2,
-                    IsActive = true
-                    //the fild LineStationIndex will be update after with all the rest line stations of this line
-                });
+                LineStation temp = line.Stations[1];//for convenience save a reference to the second line station in the line(now the first line station)
+                dl.UpdateLineStation(ls => ls.PrevStation = null, line.ID, temp.StationNumber);//set the fild 'PrevStation' of the second line station in line to be null because now its the first line station in line
 
                 //update the line (the FirstStation_Id fild)
                 dl.UpdateLine(new DO.Line()
@@ -538,27 +534,60 @@ namespace BL
                     LineNumber = line.LineNumber,
                     Area = (DO.AreasEnum)Enum.Parse(typeof(DO.AreasEnum), line.Area.ToString()),//Area = line.Area
                     LastStation_Id = line.LastStation.StationNumber,
-                    IsActive = true,
-                    FirstStation_Id = line.Stations[1].StationNumber//the second station in the line now is the first station
+                    FirstStation_Id = line.Stations[1].StationNumber,//the second station in the line now is the first station
+                    IsActive = true
+                });
+
+            }
+            //if the station is the last stop of the line
+            else if (indexInLine == line.Stations.Count())
+            {
+                LineStation temp = line.Stations[line.Stations[lineStation.LineStationIndex - 1].StationNumber];//for convenience save a reference to second from last line station in the line(now the last line station)
+                dl.UpdateLineStation(ls => ls.NextStation = null, line.ID, temp.StationNumber);//set the fild 'NextStation' of the second from end line station to be null because now its the last line station in line
+
+                //update the line (the LastStation_Id fild)
+                dl.UpdateLine(new DO.Line()
+                {
+                    ID = line.ID,
+                    LineNumber = line.LineNumber,
+                    Area = (DO.AreasEnum)Enum.Parse(typeof(DO.AreasEnum), line.Area.ToString()),//Area = line.Area
+                    LastStation_Id = line.Stations[lineStation.LineStationIndex - 1].StationNumber,//now the last station is the station before the delets line station
+                    FirstStation_Id = line.FirstStation.StationNumber,
+                    IsActive = true
                 });
             }
-            if (lineStation.CurrentToNext == null)//if the station is the last stop of the line
+            //if the line station to delete is not the first and not the last in the line
+            else
             {
-                HelpMethods.DeleteAdjacentStations(line.Stations[lineStation.LineStationIndex + 1].PrevToCurrent);
+                //save arefernce to the preius station and to the next for convenience
+                LineStation prevInLine = line.Stations[indexInLine - 1];
+                LineStation nextInLine = line.Stations[indexInLine + 1];
+
+                //update the privius and next stations of the line:
+                //privius station:
+                dl.UpdateLineStation(ls => ls.NextStation = nextInLine.StationNumber, line.ID, prevInLine.StationNumber);
+                //next station:
+                dl.UpdateLineStation(ls => ls.PrevStation = prevInLine.StationNumber, line.ID, nextInLine.StationNumber);
+
+
+                //add new adjecent station for (prevInLine, nextInLine)
+                dl.AddAdjacentStations(new DO.AdjacentStations()
+                {
+                    StationCode1 = prevInLine.StationNumber,
+                    StationCode2 = nextInLine.StationNumber,
+                    Distance = lineStation.PrevToCurrent.Distance + lineStation.CurrentToNext.Distance,//rughly assuming that the distance between the 'prevInLine' and the 'nextInLine' is the sum of the distances from them to the deletes line station
+                    Time = lineStation.PrevToCurrent.Time + lineStation.CurrentToNext.Time,//same as above^^^^
+                    IsActive = true
+                });
             }
-            if (lineStation.PrevToCurrent != null && lineStation.CurrentToNext != null)//the deleted station is niether in the first and last
+
+            //update the index of all the line stations after the deletes line station to be less in 1(LineStationIndex--)
+            for (int i = indexInLine; i < line.Stations.Count(); i++)
             {
-                HelpMethods.AddAdjacentStations(lineStation.PrevToCurrent.StationCode1, lineStation.CurrentToNext.StationCode2);
-                AdjacentStations newAdjacentStations = HelpMethods.GetAdjacentStations(lineStation.PrevToCurrent.StationCode1, lineStation.CurrentToNext.StationCode2);
-                line.Stations[lineStation.LineStationIndex - 1].CurrentToNext = newAdjacentStations;
-                line.Stations[lineStation.LineStationIndex + 1].PrevToCurrent = newAdjacentStations;
+                dl.UpdateLineStation(ls => ls.LineStationIndex--, line.ID, line.Stations[i].StationNumber);
             }
-            for (int i = line.Stations.Count - 1; i > lineStation.LineStationIndex; i--)
-            {
-                line.Stations[i].LineStationIndex--;
-            }
-            line.Stations.RemoveAt(lineStation.LineStationIndex);
-            dl.DeleteLineStation(lineNumber, StationNumber);
+
+            dl.DeleteLineStation(line.ID, lineStation.StationNumber);//Finally delete the line station 
         }
 
         #endregion

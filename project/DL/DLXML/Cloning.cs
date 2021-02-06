@@ -55,7 +55,15 @@ namespace DL
                     case "BusStatus":
                         prop.SetValue(to, Enum.Parse(typeof(BusStatus), val));
                         break;
-                    case "Nullable`1":
+                    case "Nullable`1"://int?
+                        try
+                        {
+                            prop.SetValue(to, int.Parse(val));
+                        }
+                        catch (Exception)//if val is null
+                        {
+                            prop.SetValue(to, null);
+                        }
                         break;
                     case "TimeSpan":
                         prop.SetValue(to, TimeSpan.Parse(val));
