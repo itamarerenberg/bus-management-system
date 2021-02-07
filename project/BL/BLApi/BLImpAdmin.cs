@@ -302,7 +302,7 @@ namespace BL
                 Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
 
                 //set the line stations
-                List<DO.LineStation> releventLineStations = dl.GetAllLineStationsBy(ls => ls.LineId == id).ToList();//set 'releventLineStations' to contin all the line stations of the line
+                List<DO.LineStation> releventLineStations = dl.GetAllLineStationsBy(ls => ls.LineId == id && ls.IsActive).ToList();//set 'releventLineStations' to contin all the line stations of the line
                 List <DO.AdjacentStations> releventAdjacentStations =
                     //get all the adjscent stations that required to build this line
                     dl.GetAllAdjacentStationsBy(adjs => releventLineStations.Exists(ls => ls.StationNumber == adjs.StationCode1 && ls.NextStation != null && ls.NextStation == adjs.StationCode2)).ToList();
@@ -389,10 +389,8 @@ namespace BL
             Line line = GetLine(id);
             try
             {
-                foreach (LineStation lStation in line.Stations)
-                {
-                    DeleteLineStation(id, lStation.StationNumber);
-                }
+                delete_lineStations(id, line.Stations.Select(ls => ls.StationNumber).ToList());//delete all the lineStations of the line
+                delete_lineTrips(line.LineTrips.Select(lt => lt.ID).ToList());//delete all the lineTrips of the line
                 dl.DeleteLine(id);
             }
             catch (Exception msg)
@@ -509,11 +507,6 @@ namespace BL
         {
             Line line = GetLine(lineNumber);
 
-            if(line.Stations.Count <= 2)//if the line has only two stations then delete the line becouse now it will have only one station and its iligal
-            {
-                DeleteLine(lineNumber);
-            }
-
             line.Stations.OrderBy(ls => ls.LineStationIndex);//Make sure the line stations in 'line' are ordered by the fild 'LineStationIndex'
 
             LineStation lineStation = line.Stations.FirstOrDefault(ls => ls.StationNumber == StationNumber);
@@ -540,9 +533,9 @@ namespace BL
 
             }
             //if the station is the last stop of the line
-            else if (indexInLine == line.Stations.Count())
+            else if (indexInLine == line.Stations.Count() - 1)
             {
-                LineStation temp = line.Stations[line.Stations[lineStation.LineStationIndex - 1].StationNumber];//for convenience save a reference to second from last line station in the line(now the last line station)
+                LineStation temp = line.Stations[indexInLine - 1];//for convenience save a reference to second from last line station in the line(now the last line station)
                 dl.UpdateLineStation(ls => ls.NextStation = null, line.ID, temp.StationNumber);//set the fild 'NextStation' of the second from end line station to be null because now its the last line station in line
 
                 //update the line (the LastStation_Id fild)
@@ -589,7 +582,21 @@ namespace BL
 
             dl.DeleteLineStation(line.ID, lineStation.StationNumber);//Finally delete the line station 
         }
-
+        void delete_lineStations(int lineId, List<int> lineStationsNumbers)
+        {
+            foreach (var lsNumber in lineStationsNumbers)
+            {
+                try
+                {
+                    dl.DeleteLineStation(lineId, lsNumber);
+                }
+                catch (DO.NotExistExeption)
+                {
+                    continue;
+                    throw;
+                }
+            }
+        }
         #endregion
 
         #region Line trip
@@ -630,11 +637,18 @@ namespace BL
         {
             try
             {
-                dl.DeleteLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
+                dl.DeleteLineTrip(lineTrip.ID);
             }
             catch (Exception msg)
             {
                 throw msg;
+            }
+        }
+        void delete_lineTrips(List<int> lineTripsIds)
+        {
+            foreach (var ltId in lineTripsIds)
+            {
+                dl.DeleteLineTrip(ltId);
             }
         }
         public IEnumerable<LineTrip> GetAllLineTrips()

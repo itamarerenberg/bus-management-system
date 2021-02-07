@@ -1,303 +1,173 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LineStations>
   <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>211</StationNumber>
-    <Address>רחוב:שמואל הנביא 47 עיר: ירושלים</Address>
-    <LineStationIndex>-1</LineStationIndex>
+    <LineId>4</LineId>
+    <StationNumber>30</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <Name>אלמדינה אלמנורה/ביר אלזחלוק</Name>
+    <LineStationIndex>0</LineStationIndex>
     <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
+    <NextStation>37</NextStation>
     <IsActive>False</IsActive>
-    <Name>שמואל הנביא/יקים</Name>
   </LineStation>
   <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>277</StationNumber>
-    <Address>רחוב:כנפי נשרים 11 עיר: ירושלים</Address>
-    <LineStationIndex>0</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>מרכז שטנר/כנפי נשרים</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>350</StationNumber>
-    <Address>רחוב:המ''ג 34 עיר: ירושלים</Address>
-    <LineStationIndex>1</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>המ''ג/זכרון יעקב</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>442</StationNumber>
-    <Address>רחוב:טריק אל מדארס  עיר: ירושלים</Address>
-    <LineStationIndex>2</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>חטיבת ביניים/טריק אלמדארס</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>514</StationNumber>
-    <Address>רחוב:  עיר: ירושלים</Address>
-    <LineStationIndex>3</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>צומת הבנקים/דרך חברון</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>557</StationNumber>
-    <Address>רחוב:בית וגן 85 עיר: ירושלים</Address>
-    <LineStationIndex>4</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>בית וגן/הרב אלפיה</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>733</StationNumber>
-    <Address>רחוב:שייח' ענבר 16 עיר: ירושלים</Address>
-    <LineStationIndex>5</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>ענבר/אל כליה</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>773</StationNumber>
-    <Address>רחוב:חיי אל מדארס  עיר: ירושלים</Address>
-    <LineStationIndex>6</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>חי אלמדארס/ג'אמע אל זאוויה</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>839</StationNumber>
-    <Address>רחוב:בית פאגי 24 עיר: ירושלים</Address>
-    <LineStationIndex>7</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>בית פאג'/צומת אל חרדוב</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>899</StationNumber>
-    <Address>רחוב:חיי אל מדארס  עיר: ירושלים</Address>
-    <LineStationIndex>8</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>חי אלמדארס/סרור</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>948</StationNumber>
-    <Address>רחוב:שח''ל 24 עיר: ירושלים</Address>
-    <LineStationIndex>9</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>'שח''ל ב</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>63</LineId>
-    <StationNumber>982</StationNumber>
-    <Address>רחוב:שדרות הרצל 71 עיר: ירושלים</Address>
-    <LineStationIndex>10</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>ככר האפט/שדרות הרצל</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>148</StationNumber>
-    <Address>רחוב:בנימין מינץ 23 עיר: ירושלים</Address>
-    <LineStationIndex>0</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>192</NextStation>
-    <IsActive>True</IsActive>
-    <Name>מינץ/שיף מזרח</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>192</StationNumber>
-    <Address>רחוב:הרב יצחק חי טייב 43 עיר: ירושלים</Address>
-    <LineStationIndex>1</LineStationIndex>
-    <PrevStation>148</PrevStation>
-    <NextStation>232</NextStation>
-    <IsActive>True</IsActive>
-    <Name>חי טייב/אבן דנן</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>232</StationNumber>
-    <Address>רחוב:הרב רפאל קצנלבוגן 16 עיר: ירושלים</Address>
-    <LineStationIndex>2</LineStationIndex>
-    <PrevStation>192</PrevStation>
-    <NextStation>291</NextStation>
-    <IsActive>True</IsActive>
-    <Name>קצנלבוגן/מעלות בוסטון</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>291</StationNumber>
-    <Address>רחוב:הרב מאיר חדש 11 עיר: ירושלים</Address>
-    <LineStationIndex>3</LineStationIndex>
-    <PrevStation>232</PrevStation>
-    <NextStation>352</NextStation>
-    <IsActive>True</IsActive>
-    <Name>מאיר חדש/חזון איש</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>352</StationNumber>
-    <Address>רחוב:פנים מאירות 14 עיר: ירושלים</Address>
-    <LineStationIndex>4</LineStationIndex>
-    <PrevStation>291</PrevStation>
-    <NextStation>443</NextStation>
-    <IsActive>True</IsActive>
-    <Name>פנים מאירות</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>443</StationNumber>
-    <Address>רחוב:טריק אל מדארס  עיר: ירושלים</Address>
-    <LineStationIndex>5</LineStationIndex>
-    <PrevStation>352</PrevStation>
-    <NextStation>515</NextStation>
-    <IsActive>True</IsActive>
-    <Name>חטיבת ביניים/טריק אלמדארס</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>515</StationNumber>
-    <Address>רחוב:  עיר: ירושלים</Address>
-    <LineStationIndex>6</LineStationIndex>
-    <PrevStation>443</PrevStation>
-    <NextStation>681</NextStation>
-    <IsActive>True</IsActive>
-    <Name>דרך חברון/דניאל ינובסקי</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>681</StationNumber>
-    <Address>רחוב:דרך חברון  עיר: ירושלים</Address>
-    <LineStationIndex>7</LineStationIndex>
-    <PrevStation>515</PrevStation>
-    <NextStation>752</NextStation>
-    <IsActive>True</IsActive>
-    <Name>דרך חברון/הרוזמרין</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>752</StationNumber>
-    <Address>רחוב:דרך יריחו  עיר: ירושלים</Address>
-    <LineStationIndex>8</LineStationIndex>
-    <PrevStation>681</PrevStation>
-    <NextStation>833</NextStation>
-    <IsActive>True</IsActive>
-    <Name>מכללת ולקאן/דרך יריחו</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>833</StationNumber>
-    <Address>רחוב:רבעה אל עדוויה  עיר: ירושלים</Address>
-    <LineStationIndex>9</LineStationIndex>
-    <PrevStation>752</PrevStation>
-    <NextStation>891</NextStation>
-    <IsActive>True</IsActive>
-    <Name>בית חולים מקאסד כניסה ראשית/ראבעה אל עדוויה</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>891</StationNumber>
-    <Address>רחוב:אל צלעה  עיר: ירושלים</Address>
-    <LineStationIndex>10</LineStationIndex>
-    <PrevStation>833</PrevStation>
-    <NextStation>948</NextStation>
-    <IsActive>True</IsActive>
-    <Name>מרכז רפואי אלבראא/אל צלעה</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>948</StationNumber>
-    <Address>רחוב:שח''ל 24 עיר: ירושלים</Address>
-    <LineStationIndex>11</LineStationIndex>
-    <PrevStation>891</PrevStation>
-    <NextStation>951</NextStation>
-    <IsActive>True</IsActive>
-    <Name>'שח''ל ב</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>951</StationNumber>
-    <Address>רחוב:שח''ל 1 עיר: ירושלים</Address>
-    <LineStationIndex>12</LineStationIndex>
-    <PrevStation>948</PrevStation>
-    <NextStation>996</NextStation>
-    <IsActive>True</IsActive>
-    <Name>שח''ל/הרצוג</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>996</StationNumber>
-    <Address>רחוב:ימין אבות 14 עיר: ירושלים</Address>
-    <LineStationIndex>13</LineStationIndex>
-    <PrevStation>951</PrevStation>
-    <NextStation>1041</NextStation>
-    <IsActive>True</IsActive>
-    <Name>ימין אבות</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>64</LineId>
-    <StationNumber>1041</StationNumber>
-    <Address>רחוב:רחל אמנו 11 עיר: ירושלים</Address>
-    <LineStationIndex>14</LineStationIndex>
-    <PrevStation>996</PrevStation>
-    <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
-    <Name>רחל אימנו/רות</Name>
-  </LineStation>
-  <LineStation>
-    <LineId>0</LineId>
-    <StationNumber>61158</StationNumber>
-    <Address>רחוב:מעגלות הרב פרדס  עיר: ירושלים</Address>
-    <Name>הרב פרדס/מאיר בלבן</Name>
-    <LineStationIndex>0</LineStationIndex>
-    <PrevStation>NaN</PrevStation>
-    <NextStation>35</NextStation>
-    <IsActive>True</IsActive>
-  </LineStation>
-  <LineStation>
-    <LineId>0</LineId>
+    <LineId>4</LineId>
     <StationNumber>35</StationNumber>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
     <Name>אלמדינה אלמנורה/מסעב בן עמיר</Name>
-    <LineStationIndex>1</LineStationIndex>
-    <PrevStation>61158</PrevStation>
-    <NextStation>60414</NextStation>
-    <IsActive>True</IsActive>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
   </LineStation>
   <LineStation>
-    <LineId>0</LineId>
-    <StationNumber>60414</StationNumber>
-    <Address>רחוב:דרך חברון  עיר: ירושלים</Address>
-    <Name>קבר רחל</Name>
-    <LineStationIndex>2</LineStationIndex>
-    <PrevStation>35</PrevStation>
+    <LineId>4</LineId>
+    <StationNumber>36</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <Name>קופת חולים/אלמדינה אלמנוורה</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
     <NextStation>NaN</NextStation>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>4</LineId>
+    <StationNumber>37</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <Name>קופת חולים/אלמדינה אלמנוורה</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>5</LineId>
+    <StationNumber>30</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <Name>אלמדינה אלמנורה/ביר אלזחלוק</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>40</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>5</LineId>
+    <StationNumber>37</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <Name>קופת חולים/אלמדינה אלמנוורה</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>30</PrevStation>
+    <NextStation>40</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>5</LineId>
+    <StationNumber>40</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד ד</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>30</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>5</LineId>
+    <StationNumber>41</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד ד</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>40</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>6</LineId>
+    <StationNumber>30</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <Name>אלמדינה אלמנורה/ביר אלזחלוק</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>40</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>6</LineId>
+    <StationNumber>40</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד ד</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>7</LineId>
+    <StationNumber>46</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד א</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>51</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>7</LineId>
+    <StationNumber>48</StationNumber>
+    <Address>רחוב:אלתון  עיר: ירושלים</Address>
+    <Name>אום טובא 3</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>46</PrevStation>
+    <NextStation>51</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>7</LineId>
+    <StationNumber>49</StationNumber>
+    <Address>רחוב:אלתון  עיר: ירושלים</Address>
+    <Name>אום טובא 4</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>48</PrevStation>
+    <NextStation>51</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>7</LineId>
+    <StationNumber>50</StationNumber>
+    <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
+    <Name>אום טובא 6</Name>
+    <LineStationIndex>2</LineStationIndex>
+    <PrevStation>49</PrevStation>
+    <NextStation>51</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>7</LineId>
+    <StationNumber>51</StationNumber>
+    <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
+    <Name>אום טובא 7</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>8</LineId>
+    <StationNumber>40</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד ד</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>8</LineId>
+    <StationNumber>42</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד ג</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>40</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
   </LineStation>
 </LineStations>

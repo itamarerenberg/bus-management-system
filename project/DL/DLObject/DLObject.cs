@@ -597,11 +597,10 @@ namespace DL
             oldLineTrip = newLineTrip.Clone();//override the old line trip with the new one
         }
 
-        public void DeleteLineTrip(LineTrip lineTrip)
+        public void DeleteLineTrip(int id)
         {
             LineTrip lineT = (from l in DataSource.LineTrips
-                         where l.ID == lineTrip.ID
-                               && l.LineId == lineTrip.LineId
+                         where l.ID == id
                                && l.IsActive
                          select l).FirstOrDefault();
             if (lineT != null)

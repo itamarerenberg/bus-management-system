@@ -188,7 +188,7 @@ namespace DLApi
         /// </summary>
         /// <param name="newLineTrip"></param>
         void UpdateLineTrip(LineTrip lineTrip);
-        void DeleteLineTrip(LineTrip lineTrip);
+        void DeleteLineTrip(int lineTrip);
         /// <summary>
         /// returns a clones of all the active line trips in the data source
         /// </summary>

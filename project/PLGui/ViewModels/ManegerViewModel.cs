@@ -482,11 +482,8 @@ namespace PLGui.utilities
         {
             if (station.LinesNums.Count > 0)
             {
-                if (GetLineOfStationWorker == null)
-                {
-                    GetLineOfStationWorker = new BackgroundWorker();
-                    GetLineOfStationWorker.WorkerSupportsCancellation = true;
-                }
+                GetLineOfStationWorker = new BackgroundWorker();
+                GetLineOfStationWorker.WorkerSupportsCancellation = true;
 
                 GetLineOfStationWorker.RunWorkerCompleted +=
                     (object sender, RunWorkerCompletedEventArgs args) =>
@@ -761,7 +758,7 @@ namespace PLGui.utilities
                 {
                     MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} was deleted successfully!");
                     OnPropertyChanged(nameof(MyMessageQueue));
-                    loadStations();
+                    loadData();
                 }
             }
             else                                                //Cancelled!!

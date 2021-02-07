@@ -21,7 +21,7 @@ namespace DL
             return copyToObject;
         }
 
-        internal static void xelement_to_object<T>(XElement from, out T to) where T : new()
+        internal static void Xelement_to_object<T>(XElement from, out T to) where T : new()
         {
             to = new T();
             foreach (var prop in to.GetType().GetProperties())
@@ -77,7 +77,7 @@ namespace DL
 
         internal static T xelement_to_new_object<T>(XElement from) where T : new()
         {
-            xelement_to_object(from, out T newObj);
+            Xelement_to_object(from, out T newObj);
             return newObj;
         }
 

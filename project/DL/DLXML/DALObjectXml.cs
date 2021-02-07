@@ -51,7 +51,7 @@ namespace DL
                 throw new NotExistExeption("bus with this License's num not exist");
             }
 
-            Cloning.xelement_to_object(bus, out Bus ret);//create a new bus's instence with the content of bus
+            Cloning.Xelement_to_object(bus, out Bus ret);//create a new bus's instence with the content of bus
             return ret;//                       ^^^^^^^
         }
 
@@ -448,8 +448,8 @@ namespace DL
         public IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> predicate)
         {
             var ret = from ls in DataSourceXML.LineStations.Elements()
-                   let temp = Cloning.xelement_to_new_object<LineStation>(ls)//create a new instence of LineStation from 'ls' so it can send to peredicate
-                   where predicate(temp)
+                   let temp = XMLTools.xelement_to_new_object<LineStation>(ls)//create a new instence of LineStation from 'ls' so it can send to peredicate
+                   where predicate(temp) && temp.IsActive
                    select temp;
             DataSourceXML.Save("LineStations");
             return ret;
@@ -582,11 +582,10 @@ namespace DL
             XMLTools.object_to_xelement(newLineTrip, oldLineTrip);//override the old lineTrip with the new one in the data source 
             DataSourceXML.Save("LineTrips");//save the changes
         }
-        public void DeleteLineTrip(LineTrip lineTrip)
+        public void DeleteLineTrip(int id)
         {
             XElement lineT = (from lt in DataSourceXML.LineTrips.Elements()//get the line trip from the data source
-                              where lt.Element("ID").Value == lineTrip.ID.ToString()
-                                    && lt.Element("LineId").Value == lineTrip.LineId.ToString()
+                              where int.Parse(lt.Element("ID").Value) == id
                                     && lt.Element("IsActive").Value == true.ToString()
                               select lt).FirstOrDefault();
             if (lineT != null)
