@@ -10,10 +10,11 @@ using System.Windows.Data;
 
 namespace PLGui.utilities
 {
-    class Bool_converter_to_visibility : IValueConverter
+    class BoolOrNull_converter_to_visibility : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            
             if (value is bool flag)
             {
                 if (targetType.Name == "Double")//if the target type is property "width"
@@ -27,8 +28,14 @@ namespace PLGui.utilities
                     return Visibility.Visible;
                 return Visibility.Collapsed;
             }
-            
-            return null;
+            if (value is null)
+            {
+                return Visibility.Collapsed;
+            }
+            else
+            {
+                return Visibility.Visible;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

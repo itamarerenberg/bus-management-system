@@ -24,7 +24,7 @@
                 <x:Type TypeName="local:AreasEnum"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        <viewmodels:Bool_converter_to_visibility x:Key="Bool_converter_to_visibility" />
+        <viewmodels:BoolOrNull_converter_to_visibility x:Key="Bool_converter_to_visibility" />
 
         <Style TargetType="TextBox">
             <Style.Triggers>
