@@ -146,7 +146,7 @@
       <DependentUpon>PasswordBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="utilities\CopyHelper.cs" />
-    <Compile Include="utilities\Bool_converter_to_visibility.cs" />
+    <Compile Include="utilities\BoolOrNull_converter_to_visibility.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManegerViewModel.cs" />
     <Compile Include="ViewModels\NewStationViewModel.cs" />

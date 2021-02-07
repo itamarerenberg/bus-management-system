@@ -32,13 +32,15 @@ namespace PLGui.utilities
         ManegerModel manegerModel = new ManegerModel();
         IBL source;
         TabItem selectedTabItem;
-        public int rate;
 
         private Station stationDisplay;
         private Line lineDisplay;
         private LineTrip lineTripDisplay;
         private Bus busDisplay;
         private DateTime time;
+        private bool isSimulatorOff = true;
+        public int rate;
+
 
         private ObservableCollection<BO.LineStation> lineStation;
         private ObservableCollection<LineTrip> lineTripsOfLine;
@@ -87,7 +89,6 @@ namespace PLGui.utilities
             get => rate > 0 ? rate : 1;
             set => SetProperty(ref rate, value);
         }
-        private bool isSimulatorOff;
         public bool IsSimulatorOff
         {
             get => isSimulatorOff;
@@ -138,14 +139,14 @@ namespace PLGui.utilities
         {
             get { return CollectionViewSource.GetDefaultView(lines); }
         }
-        private ObservableCollection<Station> stations
+        public ObservableCollection<Station> Stations
         {
             get => manegerModel.Stations;
             set => SetProperty(ref manegerModel.Stations, value);
         }
-        public ICollectionView Stations
+        public ICollectionView StationsTest
         {
-            get { return CollectionViewSource.GetDefaultView(stations); }
+            get { return CollectionViewSource.GetDefaultView(Stations); }
         }
         private ObservableCollection<LineTrip> lineTrips
         {
@@ -204,8 +205,10 @@ namespace PLGui.utilities
             RequestLineMessege();
             RequestLineTripMessege();
 
-            IsSimulatorOff = true;
+            InitBackgroundWorkers();
         }
+
+        
 
         #endregion
 
@@ -261,7 +264,7 @@ namespace PLGui.utilities
                     if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated befor he done execute DoWork
                         manegerModel.Stations = (ObservableCollection<Station>)args.Result;
-                        OnPropertyChanged("Stations");
+                        OnPropertyChanged(nameof(Stations));
                     }
                 };//this function will execute in the main thred
 
@@ -384,8 +387,8 @@ namespace PLGui.utilities
                     case "Stations":
                         if (Stations != null)
                         {
-                            Stations.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
-                            Stations.Refresh();
+                            //Stations.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
+                            //Stations.Refresh();
                         }
                         break;
                     case "LineTrips":
@@ -439,8 +442,7 @@ namespace PLGui.utilities
             List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns
                                       .Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
             Mview.ComboBoxSearch.ItemsSource = comboList;
-            Mview.ComboBoxSearch.SelectedIndex = 0;//display the first item in the combo box
-            Mview.SearchBox.Text = "";//clear the search box !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //Mview.ComboBoxSearch.SelectedIndex = 0;//display the first item in the combo box
             SearchBox_TextChanged(Mview);
 
             OnPropertyChanged(nameof(SelectedTabItem));
@@ -582,50 +584,6 @@ namespace PLGui.utilities
             }
             List_SelectionChanged(Mview);//refrash the view
         }     
-        /// <summary>
-        /// generic delete command
-        /// </summary>
-        /// <param name="window"></param>
-        private void Delete()
-        {
-            if (Mview.Stations_view.IsSelected)//station
-            {
-                Station station = Mview.StationList.SelectedItem as Station;
-                if (DeleteStation(station))
-                {
-                    MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} was deleted successfully!");
-                    OnPropertyChanged(nameof(MyMessageQueue));
-                }
-            }
-            else if (Mview.Lines_view.IsSelected)//Line
-            {
-                Line line = Mview.LinesList.SelectedItem as Line;
-                if (DeleteLine(line))
-                {
-                    MyMessageQueue.Enqueue($"line number: {line.LineNumber} was deleted successfully!");
-                    OnPropertyChanged(nameof(MyMessageQueue));
-                }
-            }
-            else if (Mview.LineTrip_view.IsSelected)//LineTrip
-            {
-                LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
-                if (DeleteLineTrip(lineTrip))
-                {
-                    OnPropertyChanged(nameof(MyMessageQueue));
-                }
-            }
-            else if (Mview.Bus_view.IsSelected)//bus
-            {
-                Bus bus = Mview.BusesList.SelectedItem as Bus;
-                if (bus != null)
-                {
-                    MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} will be deleted!","UNDO", new Action(DeleteBusWorker.CancelAsync));
-                    OnPropertyChanged(nameof(MyMessageQueue));
-                    DeleteBus(bus);
-                }
-            }
-
-        }
         private void enter_asAnotherUser(Window window)
         {
             new MainWindow().Show();
@@ -704,8 +662,248 @@ namespace PLGui.utilities
             OnPropertyChanged(nameof(StackIsNotEmpty));
 
         }
-        BackgroundWorker GetRandomBusWorker;
 
+        #region delete
+
+        /// <summary>
+        /// generic delete command
+        /// </summary>
+        /// <param name="window"></param>
+        private void Delete()
+        {
+            if (Mview.Stations_view.IsSelected)//station
+            {
+                if (Mview.StationList.SelectedItem is Station station)
+                {
+                    StationsForDeletion.Enqueue(station);//insert the bus to the queue of "stations for deletion"
+                    if (!DeleteStationWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
+                    {
+                        DeleteStationWorker.RunWorkerAsync();
+                    }
+                }
+            }
+            else if (Mview.Lines_view.IsSelected)//Line
+            {
+                if (Mview.LinesList.SelectedItem is Line line)
+                {
+                    LinesForDeletion.Enqueue(line);//insert the bus to the queue of "lines for deletion"
+                    if (!DeleteLineWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
+                    {
+                        DeleteLineWorker.RunWorkerAsync();
+                    }
+                }
+            }
+            else if (Mview.LineTrip_view.IsSelected)//LineTrip
+            {
+                if (Mview.LinesTripList.SelectedItem is LineTrip lineTrip)
+                {
+                    LineTripsForDeletion.Enqueue(lineTrip);//insert the bus to the queue of "line Trips for deletion"
+                    if (!DeleteLineTripWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
+                    {
+                        DeleteLineTripWorker.RunWorkerAsync();
+                    }
+                }
+            }
+            else if (Mview.Bus_view.IsSelected)//bus
+            {
+                if (Mview.BusesList.SelectedItem is Bus bus)
+                {
+                    busesForDeletion.Enqueue(bus);//insert the bus to the queue of "buses for deletion"
+                    if (!DeleteBusWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
+                    {
+                        DeleteBusWorker.RunWorkerAsync();
+                    }
+                }
+            }
+        }
+
+        BackgroundWorker DeleteStationWorker;
+        BackgroundWorker DeleteLineWorker;
+        BackgroundWorker DeleteLineTripWorker;
+        BackgroundWorker DeleteBusWorker;
+
+        private Queue<Station> StationsForDeletion = new Queue<Station>();
+        private Queue<Line> LinesForDeletion = new Queue<Line>();
+        private Queue<LineTrip> LineTripsForDeletion = new Queue<LineTrip>();
+        private Queue<Bus> busesForDeletion = new Queue<Bus>();
+
+        #region station
+        private void DeleteStationWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Station station = StationsForDeletion.Dequeue();// get the station to delete
+
+            //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
+            MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} will be deleted!", "UNDO", new Action(DeleteStationWorker.CancelAsync));
+            OnPropertyChanged(nameof(MyMessageQueue));
+
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            Thread.Sleep(3000);// let time for cancelation
+            if (worker.CancellationPending) { e.Cancel = true; }
+            else
+            {
+                try
+                {
+                    source.DeleteStation(station.Code);
+                    e.Result = station;
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }
+            }
+        }
+
+        private void DeleteStationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)//if the BackgroundWorker didn't Cancel
+            {
+                if (e.Result is Station station)
+                {
+                    MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} was deleted successfully!");
+                    OnPropertyChanged(nameof(MyMessageQueue));
+                    loadStations();
+                }
+            }
+            else                                                //Cancelled!!
+            {
+                MyMessageQueue.Enqueue("Cancelled!");
+                OnPropertyChanged(nameof(MyMessageQueue));
+            }
+            if (StationsForDeletion.Count > 0)//if there are buses on the line run again
+            {
+                DeleteStationWorker.RunWorkerAsync();
+            }
+        }
+        #endregion
+
+        #region line
+        private void DeleteLineWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Line line = LinesForDeletion.Dequeue();// get the line to delete
+
+            //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
+            MyMessageQueue.Enqueue($"line number: {line.LineNumber} will be deleted!", "UNDO", new Action(DeleteLineWorker.CancelAsync));
+            OnPropertyChanged(nameof(MyMessageQueue));
+
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            Thread.Sleep(3000);// let time for cancelation
+            if (worker.CancellationPending) { e.Cancel = true; }
+            else
+            {
+                try
+                {
+                    source.DeleteLine(line.ID);
+                    e.Result = line;
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }
+            }
+        }
+        private void DeleteLineWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)//if the BackgroundWorker didn't Cancel
+            {
+                if (e.Result is Line line)
+                {
+                    MyMessageQueue.Enqueue($"line number: {line.LineNumber} was deleted successfully!");
+                    OnPropertyChanged(nameof(MyMessageQueue));
+                    loadLines();
+                }
+            }
+            else                                                //Cancelled!!
+            {
+                MyMessageQueue.Enqueue("Cancelled!");
+                OnPropertyChanged(nameof(MyMessageQueue));
+            }
+            if (LinesForDeletion.Count > 0)//if there are buses on the line run again
+            {
+                DeleteLineWorker.RunWorkerAsync();
+            }
+        }
+        #endregion
+
+        #region line trip
+        private void DeleteLineTripWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            LineTrip lineTrip = LineTripsForDeletion.Dequeue();// get the linetrip to delete
+            Line line = lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault();//get the line number
+
+            //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
+            MyMessageQueue.Enqueue($"Line trip of line number: {line.LineNumber}(ID = {lineTrip.LineId}) will be deleted!", "UNDO", new Action(DeleteLineTripWorker.CancelAsync));
+            OnPropertyChanged(nameof(MyMessageQueue));
+
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            Thread.Sleep(3000);// let time for cancelation
+            if (worker.CancellationPending) { e.Cancel = true; }
+            else
+            {
+                try
+                {
+                    source.DeleteLineTrip(lineTrip.BOlineTrip);
+                    e.Result = line;
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }
+            }
+        }
+        private void DeleteLineTripWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)//if the BackgroundWorker didn't Cancel
+            {
+                if (e.Result is Line line)
+                {
+                    MyMessageQueue.Enqueue($"Line trip of line number: {line.LineNumber}(ID = {line.ID}) was deleted successfully!");
+                    OnPropertyChanged(nameof(MyMessageQueue));
+                    loadLineTrips();
+                    loadLines();
+                }
+            }
+            else                                                //Cancelled!!
+            {
+                MyMessageQueue.Enqueue("Cancelled!");
+                OnPropertyChanged(nameof(MyMessageQueue));
+            }
+            if (LineTripsForDeletion.Count > 0)//if there are lineTrips on the line run again
+            {
+                DeleteLineTripWorker.RunWorkerAsync();
+            }
+        }
+        #endregion
+
+        #region bus
+        private void DeleteBusWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Bus bus = busesForDeletion.Dequeue();// get the bus to delete
+
+            //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
+            MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} will be deleted!", "UNDO", new Action(DeleteBusWorker.CancelAsync));
+            OnPropertyChanged(nameof(MyMessageQueue));
+
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            Thread.Sleep(3000);// let time for cancelation
+            if (worker.CancellationPending) { e.Cancel = true; }
+            else
+            {
+                try
+                {
+                    source.DeleteBus(bus.LicenseNumber);
+                    e.Result = bus;
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }
+            }
+        }
+        #endregion
+
+        #endregion
+
+        BackgroundWorker GetRandomBusWorker;
         private void RandomBus()
         {
             if (GetRandomBusWorker == null)
@@ -779,7 +977,7 @@ namespace PLGui.utilities
                         if (listV.SelectedItem is BO.LineStation SelectedLineStation)
                         {
                             MemoryStack.Push(Mview.LinesList.SelectedItem);// push the line into the stack
-                            Station SelectedStation = stations.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
+                            Station SelectedStation = Stations.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
                             if (SelectedStation != null)
                             {
                                 Mview.mainTab.SelectedIndex = 0;
@@ -839,114 +1037,52 @@ namespace PLGui.utilities
 
         #region help methods
         //------------------------------------------------------------------------------------------------
-        BackgroundWorker DeleteStationWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
-        BackgroundWorker DeleteLineWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
-        BackgroundWorker DeleteLineTripWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
-        BackgroundWorker DeleteBusWorker = new BackgroundWorker() {WorkerSupportsCancellation = true };
-        private bool DeleteStation(Station station)
-        {
-            if (station != null)
-            {
-                MessageBoxResult result = MessageBox.Show($"station: {station.Name} code: {station.Code} will be deleted! do you want to continue?", "Attention", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.OK)
-                {
-                    try
-                    {
-                        source.DeleteStation(station.Code);
-                        return true;
-                    }
-                    catch (Exception msg)
-                    {
-                        MessageBox.Show(msg.Message, "ERROR");
-                    }
-                    loadStations();
-                }
-            }
-            return false;
-        }
-        private bool DeleteLine(Line line)
-        {
-            if (line != null)
-            {
-                MessageBoxResult result = MessageBox.Show($"line number: {line.LineNumber} will be deleted! do you want to continue?", "Attention", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.OK)
-                {
-                    try
-                    {
-                        source.DeleteLine(line.ID);
-                        return true;
-                    }
-                    catch (Exception msg)
-                    {
-                        MessageBox.Show(msg.Message, "ERROR");
-                    }
-                    loadLines();
-                }
-            }
-            return false;
-        }
-        private bool DeleteLineTrip(LineTrip lineTrip)
-        {
-            if (lineTrip != null)
-            {
-                int? lineNum = lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault().LineNumber;
+        
 
-                MessageBoxResult result = MessageBox.Show($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) will be deleted! do you want to continue?", "Attention", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.OK)
+        /// <summary>
+        /// initialize the BackgroundWorkers that works on deletion, and creates event handelers for them
+        /// </summary>
+        private void InitBackgroundWorkers()
+        {
+            DeleteBusWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
+            DeleteBusWorker.DoWork += DeleteBusWorker_DoWork;
+            DeleteBusWorker.RunWorkerCompleted += DeleteBusWorker_RunWorkerCompleted;
+
+            DeleteStationWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
+            DeleteStationWorker.DoWork += DeleteStationWorker_DoWork;
+            DeleteStationWorker.RunWorkerCompleted += DeleteStationWorker_RunWorkerCompleted;
+
+            DeleteLineWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
+            DeleteLineWorker.DoWork += DeleteLineWorker_DoWork;
+            DeleteLineWorker.RunWorkerCompleted += DeleteLineWorker_RunWorkerCompleted;
+
+            DeleteLineTripWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
+            DeleteLineTripWorker.DoWork += DeleteLineTripWorker_DoWork;
+            DeleteLineTripWorker.RunWorkerCompleted += DeleteLineTripWorker_RunWorkerCompleted;
+        }
+
+        private void DeleteBusWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)//if the BackgroundWorker didn't Cancel
+            {
+                if (e.Result is Bus bus)
                 {
-                    try
-                    {
-                        source.DeleteLineTrip(lineTrip.BOlineTrip);
-                        MyMessageQueue.Enqueue($"Line trip of line number: {lineNum}(ID = {lineTrip.LineId}) was deleted successfully!");
-                        return true;
-                    }
-                    catch (Exception msg)
-                    {
-                        MessageBox.Show(msg.Message, "ERROR");
-                    }
-                    loadLineTrips();
-                    loadLines();
+                    MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} was deleted successfully!");
+                    OnPropertyChanged(nameof(MyMessageQueue));
+                    loadBuses(); 
                 }
             }
-            return false;
+            else                                                //Cancelled!!
+            {
+                MyMessageQueue.Enqueue("Cancelled!");
+                OnPropertyChanged(nameof(MyMessageQueue));
+            }
+            if (busesForDeletion.Count > 0)//if there are buses on the line run again
+            {
+                DeleteBusWorker.RunWorkerAsync();
+            }
         }
-        private void DeleteBus(Bus bus)
-        {
-            DeleteBusWorker.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!args.Cancelled)//if the BackgroundWorker didn't 
-                    {                                                   //terminated befor he done execute DoWork
-                        loadBuses();
-                        MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} was deleted successfully!");
-                        OnPropertyChanged(nameof(MyMessageQueue));
-                    }
-                    else                                                //Cancelled!!
-                    {
-                        MyMessageQueue.Enqueue("Cancelled!");
-                        OnPropertyChanged(nameof(MyMessageQueue));
-                    }
-                };//this function will execute in the main thread
-            DeleteBusWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    Thread.Sleep(3000);// let time for cancelation
-                    if (worker.CancellationPending) { args.Cancel = true;}
-                    else
-                    {
-                        try
-                        {
-                            source.DeleteBus(bus.LicenseNumber);
-                        }
-                        catch (Exception msg)
-                        {
-                            MessageBox.Show(msg.Message, "ERROR");
-                        } 
-                    }
-                };//this function will execute in the BackgroundWorker thread
-            DeleteBusWorker.RunWorkerAsync();
-        }
+
 
         private void Update_Line(Line line)
         {

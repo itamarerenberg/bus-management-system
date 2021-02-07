@@ -25,7 +25,7 @@
         <viewmodels:ManegerViewModel x:Name="vModel"/>
     </Window.DataContext>
     <Window.Resources>
-        <utilities:Bool_converter_to_visibility x:Key="Bool_converter_to_visibility" />
+        <utilities:BoolOrNull_converter_to_visibility x:Key="Bool_converter_to_visibility" />
         <utilities:Type_converter_to_visibility x:Key="Type_converter_to_visibility" />
         <ContextMenu x:Key="RightClickMenuStrip" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
             <MenuItem Header="Update" Icon="{materialDesign:PackIcon Kind=Update}" Command="{Binding UpdateCommand, diag:PresentationTraceSources.TraceLevel=High}" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
@@ -48,7 +48,7 @@
         </Grid.RowDefinitions>
 
         <!--#region Menu -->
-        <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="0" Margin="20,0,0,0">
+        <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="0" Margin="20,0,0,0" >
             <MenuItem Header="New" Height="25">
                 <MenuItem Header="new line" Command="{Binding NewLine}" Icon="{materialDesign:PackIcon Kind=Plus}"/>
                 <MenuItem Header="new bus" Icon="{materialDesign:PackIcon Kind=Plus}"/>
@@ -71,6 +71,7 @@
             <materialDesign:Card UniformCornerRadius="6" Background="#FFB3EF7C">
                 <Border BorderThickness="3" Background="White" BorderBrush="#FFB3EF7C" CornerRadius="6">
                     <StackPanel Orientation="Horizontal" Margin="5">
+                        <Slider Minimum="1" Maximum="999" Value="{Binding Rate}" IsSelectionRangeEnabled="True" IsEnabled="{Binding IsSimulatorOff}" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}"/>
                         <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}" MaxLength="4"/>
                         <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
                         <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
@@ -102,7 +103,7 @@
 
         <!--#region search area -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="0,0,25,0">
-            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by"/>
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by" />
             <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <TextBox x:Name="SearchBox" MinWidth="100" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
             materialDesign:TextFieldAssist.DecorationVisibility="Hidden" MaxLength="25">
@@ -269,6 +270,7 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+                
             </TabItem>
             <!--#endregion-->
 
@@ -319,7 +321,7 @@
             <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add new line trip" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
         </Grid>-->
 
-        <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="5" UniformCornerRadius="6"
+        <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="50,0,80,0" UniformCornerRadius="6"
                     Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
                     ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
             <Grid>
@@ -358,8 +360,8 @@
                             Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
                 </StackPanel>
-                
-                <materialDesign:Card  Grid.Row="1" Margin="5" 
+
+                <materialDesign:Card Background="#FFB3EF7C" Grid.Row="1" Margin="5" 
                                      Padding="8" UniformCornerRadius="6">
                     <TextBlock Text="Station:" FontSize="20" FontWeight="Bold"/>
                 </materialDesign:Card>
@@ -377,7 +379,7 @@
 
                 <materialDesign:Card Background="#FFB3EF7C" Grid.Row="3" Margin="5"
                                      Padding="8" UniformCornerRadius="6">
-                    <TextBlock Text="Station:" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Line trips:" FontSize="20" FontWeight="Bold"/>
                 </materialDesign:Card>
                 
                 <ListView x:Name="LineTrip_Details" HorizontalAlignment="Left" Margin="10" Grid.Row="4"
@@ -398,7 +400,7 @@
 
         <!--#region Station Details -->
         
-        <materialDesign:Card  x:Name="StationDetails" Margin="5" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6"
+        <materialDesign:Card  x:Name="StationDetails" Margin="50,0,80,0" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6"
                 Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
                 ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
             <Grid>
@@ -415,7 +417,7 @@
                             <TextBlock Text="{Binding StationDisplay.Name}" FontSize="20" FontWeight="ExtraBold" TextWrapping="Wrap" FlowDirection="RightToLeft"/>
                             <TextBlock Text="{Binding StationDisplay.Address}" TextWrapping="Wrap" MaxWidth="200" FlowDirection="RightToLeft"/>
                         </StackPanel>
-                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
                         <Run Text="Code: "/>
                         <Run Text="{Binding StationDisplay.Code}"/>
                         </TextBlock>
@@ -426,7 +428,7 @@
                     </Grid>
                 </Border>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="200,0,0,-10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="200,0,0,-10">
                     <Button Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="0,0,15,0"
                             Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
                             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
@@ -523,7 +525,19 @@
                     </StackPanel>
                 </WrapPanel>
             </Expander>
-            <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a random bus" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Command="{Binding RandomBus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+            <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a random bus" Grid.Row="2"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" 
+                    Command="{Binding RandomBus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}" 
+                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="200,0,0,-10" Grid.Row="3">
+                <Button Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="0,0,15,0"
+                            Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                <Button Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" 
+                            Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+            </StackPanel>
         </Grid>
         <!--#endregion-->
 
