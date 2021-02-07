@@ -16,12 +16,13 @@ namespace PLGui.Models.PO
             get => boBus;
             set
             {
-                boBus = value;
+                SetProperty(ref boBus, value);
                 OnPropertyChanged(nameof(LicenseNumber));
                 OnPropertyChanged(nameof(LicenesDate));
                 OnPropertyChanged(nameof(Kilometraz));
-                OnPropertyChanged(nameof(Fule));
+                OnPropertyChanged(nameof(Fuel));
                 OnPropertyChanged(nameof(Stat));
+                OnPropertyChanged(nameof(TimeUntilReady));
             }
         }
 
@@ -55,14 +56,14 @@ namespace PLGui.Models.PO
                 boBus.Kilometraz = kilometraz;
             }
         }
-        private float fule;
-        public float Fule 
+        private float fuel;
+        public float Fuel 
         {
-            get => boBus.Fule;
+            get => boBus.Fuel;
             set
             {
-                SetProperty(ref fule, value);
-                boBus.Fule = fule;
+                SetProperty(ref fuel, value);
+                boBus.Fuel = fuel;
             }
         }
         private BO.BusStatus stat;
@@ -77,7 +78,7 @@ namespace PLGui.Models.PO
         }
         private TimeSpan timeUntilReady;
 
-        public TimeSpan MyProperty
+        public TimeSpan TimeUntilReady
         {
             get => boBus.TimeUntilReady;
             set

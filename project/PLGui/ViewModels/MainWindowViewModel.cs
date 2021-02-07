@@ -67,7 +67,8 @@ namespace PLGui.utilities
             SignInCommand = new RelayCommand<Window>(SignIn);
             SignUnCommand = new RelayCommand<Window>(SignUn);
             DebugButtonCommand = new RelayCommand(debugButton);
-            CloseCommand = new RelayCommand(MainWindow_Closing);
+            CloseCommand = new RelayCommand<MainWindow>(MainWindow_Closing);
+            RegisterCommand = new RelayCommand<MainWindow>(Register);
         }
         #endregion
 
@@ -77,6 +78,7 @@ namespace PLGui.utilities
         public ICommand SignUnCommand { get; }
         public ICommand DebugButtonCommand { get; }//temporery
         public ICommand CloseCommand { get; }
+        public ICommand RegisterCommand { get; }
 
         /// <summary>
         /// 
@@ -129,9 +131,14 @@ namespace PLGui.utilities
             new ManegerView().ShowDialog();
         }
 
-        private void MainWindow_Closing()
+        private void MainWindow_Closing(MainWindow window)
         {
-            Environment.Exit(Environment.ExitCode);
+            window.Close();
+        }
+
+        private void Register(MainWindow window, bool reverse = false)
+        {
+            
         }
         #endregion
     }

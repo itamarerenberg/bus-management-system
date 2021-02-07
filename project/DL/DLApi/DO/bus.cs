@@ -14,7 +14,7 @@ namespace DO
         public string LicenseNumber { get; set; }
         public DateTime LicenesDate { get; set; }
         public double Kilometraz { get; set; }
-        public float Fule { get; set; }
+        public float Fuel { get; set; }
         public BusStatus Stat { get; set; }
         public double KmAfterTreat { get; set; }
         public DateTime LastTreatDate { get; set; }

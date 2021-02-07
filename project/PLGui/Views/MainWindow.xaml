@@ -8,7 +8,7 @@
         xmlns:p="clr-namespace:PLGui.utilities"
         xmlns:viewmodels="clr-namespace:PLGui.utilities"
         mc:Ignorable="d"
-        Title="statrt" x:Name="ThisWindow" Height="200" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
+        Title="statrt" x:Name="ThisWindow" Height="450" Width="300" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
@@ -22,14 +22,55 @@
     <Window.DataContext>
         <viewmodels:MainWindowViewModel/>
     </Window.DataContext>
-    <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Height" Value="25"/>
-        </Style>
-    </Window.Resources>
-    <Grid Margin="0,0,-6.667,-0.333">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE4FAD0"/>
+                    <GradientStop Color="#FF97F045" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Button Content="Close" VerticalAlignment="Top" HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Black"/>
+        <materialDesign:Card x:Name="SignInCard" Grid.RowSpan="2" Margin="50,100,50,90" UniformCornerRadius="9">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Name" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" MaxLength="30"/>
+                <p:PasswordBox Password="{Binding Password}" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Center" VerticalAlignment="top" Width="120" Grid.Row="1"/>
+                <CheckBox Content="Enter as maneger" IsChecked="{Binding ManegerCheckBox}" Grid.Row="1" VerticalAlignment="Bottom" Margin="35"/>
+            </Grid>
+        </materialDesign:Card>
+        <materialDesign:Card x:Name="SignUpCard" Grid.RowSpan="2" Margin="50,100,50,90" UniformCornerRadius="9" Visibility="Collapsed">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Name" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" MaxLength="30"/>
+                <p:PasswordBox Password="{Binding Password}" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Grid.RowSpan="2"/>
+                <p:PasswordBox Password="{Binding NewPassword}" materialDesign:HintAssist.Hint="Confirm Password" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Grid.Row="1"/>
+
+            </Grid>
+        </materialDesign:Card>
+        <Button x:Name="SignInButton" Content="Sign in" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                Style="{StaticResource MaterialDesignFlatMidBgButton}" Background="#FF97F045" Foreground="White"
+                    materialDesign:ButtonAssist.CornerRadius="15"/>
+        <Button x:Name="SignUpButton" Content="Sign Up" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                Style="{StaticResource MaterialDesignFlatButton}" Background="#FF97F045" Foreground="#FFFDFDFD"
+                    materialDesign:ButtonAssist.CornerRadius="15" Visibility="Collapsed"/>
+        <Button x:Name="Register" Content="Register" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+               Style="{StaticResource MaterialDesignFlatButton}"/>
+    </Grid>
+    <!--<Grid Margin="0,0,-6.667,-0.333">
         <TabControl x:Name="Tab_Control" Margin="0,0,10,0">
-            <!--sign in tab-->
+            --><!--sign in tab--><!--
             <TabItem Header="sign in">
                  <Grid>
                     <Grid.ColumnDefinitions>
@@ -48,17 +89,18 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
-                    <!--row 1-->
+                    --><!--row 1--><!--
                     <Label Grid.Row="1" Grid.Column="1" Content="enter name" Height="31" Width="93"/>
-                    <TextBox x:Name="userName" Grid.Row="1" Grid.Column="2" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.HelperText="Helper text longer than error"/>
+                    <TextBox x:Name="userName" Grid.Row="1" Grid.Column="2" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" materialDesign:HintAssist.Hint="Name" />
 
-                    <!--row 2-->
+                    --><!--row 2--><!--
                     <Label Content="enter password" Grid.Column="1" Grid.Row="2" Height="35" Width="93"/>
                     <p:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="2" Height="25" MinWidth="100" Width="auto"/>
-                    <!--row 4-->
+                    --><!--row 4--><!--
                     <Button x:Name="SignInButton" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=ThisWindow}" Grid.Column="4" Grid.Row="4" Content="sign in" Width="90" Height="27" />
                     <CheckBox x:Name="IsAdmin" Content="enter as admin" IsChecked="{Binding ManegerCheckBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" />
                     <Button Content="debug" Grid.Column="4" Grid.Row="2" Command="{Binding DebugButtonCommand}"/>
+                     
                 </Grid>
             </TabItem>
             <TabItem Header="sign up">
@@ -78,20 +120,20 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
-                    <!--row 1-->
+                    --><!--row 1--><!--
                     <Label Grid.Row="1" Grid.Column="1" Content="enter name" Height="31" Width="93"/>
                     <TextBox x:Name="newUserName" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" Width="auto"/>
 
-                    <!--row 2-->
+                    --><!--row 2--><!--
                     <Label Content="enter password" Grid.Column="1" Grid.Row="2" Height="35" Width="93"/>
                     <p:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="2" Height="25" MinWidth="100" Width="auto"/>
-                    <!--row 3-->
+                    --><!--row 3--><!--
                     <Label Content="confirm password" Grid.Column="1" Grid.Row="3" Height="35" Width="93"/>
                     <p:PasswordBox Password="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="3" Height="25" MinWidth="100" Width="auto"/>
-                    <!--row 4-->
+                    --><!--row 4--><!--
                     <Button x:Name="SignUpButton" Command="{Binding SignUnCommand}" CommandParameter="{Binding ElementName=ThisWindow}" Grid.Column="4" Grid.Row="3" Content="sign in" Width="90" Height="27" />
                 </Grid>
             </TabItem>
         </TabControl>
-    </Grid>
+    </Grid>-->
 </Window>

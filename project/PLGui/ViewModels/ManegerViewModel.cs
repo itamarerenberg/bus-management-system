@@ -79,7 +79,7 @@ namespace PLGui.utilities
         }
         public Stack<object> MemoryStack { get; set; } = new Stack<object>();
         public bool StackIsNotEmpty{ get => MemoryStack.Count > 0; }
-        public SnackbarMessageQueue MyMessageQueue { get; set; } = new SnackbarMessageQueue();
+        public SnackbarMessageQueue MyMessageQueue { get; set; } = new SnackbarMessageQueue( new TimeSpan(0,0,3));
         public DateTime Time{
             get => time;
             set => SetProperty(ref time, value); 
@@ -199,6 +199,8 @@ namespace PLGui.utilities
             BackCommand = new RelayCommand<ManegerView>(Back);
             Play_Command = new RelayCommand(Play);
             RandomBus_Command = new RelayCommand(RandomBus);
+            RefuleBus_Command = new RelayCommand(RefuleBus);
+            TreatmentBus_Command = new RelayCommand(TreatmentBus);
 
             //messengers initalize
             RequestStationMessege();
@@ -208,11 +210,23 @@ namespace PLGui.utilities
             InitBackgroundWorkers();
         }
 
-        
+  
 
         #endregion
 
         #region load data
+
+        BackgroundWorker loadLinesWorker;
+        BackgroundWorker loadStationWorker;
+        BackgroundWorker loadBusesWorker;
+        BackgroundWorker loadLineTripesWorker;
+
+        #region flags
+        private bool runLoadLinesAgain = false;
+        private bool runLoadStationsAgain = false;
+        private bool runLoadLineTripsAgain = false;
+        private bool runLoadBusesAgain = false;
+        #endregion
         private void loadData()
         {
             loadLines();
@@ -221,64 +235,83 @@ namespace PLGui.utilities
             loadLineTrips();
         }
 
-        BackgroundWorker loadLinesWorker;
         private void loadLines()
         {
             if (loadLinesWorker == null)
             {
                 loadLinesWorker = new BackgroundWorker();
-            }
+                loadLinesWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                        {                                                   //terminated befor he done execute DoWork
+                            manegerModel.Lines = (ObservableCollection<Line>)args.Result;
+                            OnPropertyChanged(nameof(Lines));
+                        }
+                        if (runLoadLinesAgain)
+                        {
+                            runLoadLinesAgain = false;
+                            loadLinesWorker.RunWorkerAsync();
+                        }
+                    };//this function will execute in the main thred
 
-            loadLinesWorker.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated befor he done execute DoWork
-                        manegerModel.Lines = (ObservableCollection<Line>)args.Result;
-                        OnPropertyChanged(nameof(Lines));
-                    }
-                };//this function will execute in the main thred
-
-            loadLinesWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    ObservableCollection<Line> result = new ObservableCollection<Line>();
-                    result = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));//get all lines from source
+                loadLinesWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        ObservableCollection<Line> result = new ObservableCollection<Line>();
+                        result = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));//get all lines from source
                     args.Result = worker.CancellationPending ? null : result;
-                };//this function will execute in the BackgroundWorker thread
-            loadLinesWorker.RunWorkerAsync();
+                    };//this function will execute in the BackgroundWorker thread
+            }
+            if (!loadLinesWorker.IsBusy)//if the worker is not busy run immediately
+            {
+                loadLinesWorker.RunWorkerAsync();
+            }
+            else                        //turn the flag on
+            {
+                runLoadLinesAgain = true;
+            }
         }
 
-        BackgroundWorker loadStationWorker;
         private void loadStations()
         {
             if (loadStationWorker == null)
             {
                 loadStationWorker = new BackgroundWorker();
-            }
+                loadStationWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                        {                                                   //terminated befor he done execute DoWork
+                            manegerModel.Stations = (ObservableCollection<Station>)args.Result;
+                            OnPropertyChanged(nameof(Stations));
+                        }
+                        if (runLoadStationsAgain)
+                        {
+                            runLoadStationsAgain = false;
+                            loadStationWorker.RunWorkerAsync();
+                        }
+                    };//this function will execute in the main thred
 
-            loadStationWorker.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated befor he done execute DoWork
-                        manegerModel.Stations = (ObservableCollection<Station>)args.Result;
-                        OnPropertyChanged(nameof(Stations));
-                    }
-                };//this function will execute in the main thred
-
-            loadStationWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    ObservableCollection<Station> result = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));//get all Stations from source
+                loadStationWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        ObservableCollection<Station> result = new ObservableCollection<Station>(source.GetAllStations().Select(st => new Station() { BOstation = st }));//get all Stations from source
                     args.Result = worker.CancellationPending ? null : result;
-                };//this function will execute in the BackgroundWorker thread
-            loadStationWorker.RunWorkerAsync();
+                    };//this function will execute in the BackgroundWorker thread
+            }
+            if (!loadStationWorker.IsBusy)//if the worker is not busy run immediately
+            {
+                loadStationWorker.RunWorkerAsync();
+            }
+            else                        //turn the flag on
+            {
+                runLoadStationsAgain = true;
+            }
         }
 
-        BackgroundWorker loadBusesWorker;
         private void loadBuses()
         {
             if (loadBusesWorker == null)
@@ -294,6 +327,11 @@ namespace PLGui.utilities
                             manegerModel.Buses = (ObservableCollection<Bus>)args.Result;
                             OnPropertyChanged(nameof(Buses));
                         }
+                        if (runLoadBusesAgain)
+                        {
+                            runLoadBusesAgain = false;
+                            loadBusesWorker.RunWorkerAsync();
+                        }
                     };//this function will execute in the main thred
 
                 loadBusesWorker.DoWork +=
@@ -304,36 +342,54 @@ namespace PLGui.utilities
                     args.Result = worker.CancellationPending ? null : result;
                     };//this function will execute in the BackgroundWorker thread
             }
-            loadBusesWorker.RunWorkerAsync();
+            if (!loadBusesWorker.IsBusy)//if the worker is not busy run immediately
+            {
+                loadBusesWorker.RunWorkerAsync();
+            }
+            else                        //turn the flag on
+            {
+                runLoadBusesAgain = true;
+            }
 
         }
 
-        BackgroundWorker loadLineTripesWorker;
         private void loadLineTrips()
         {
             if (loadLineTripesWorker == null)
             {
                 loadLineTripesWorker = new BackgroundWorker();
-            }
 
-            loadLineTripesWorker.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated befor he done execute DoWork
-                        manegerModel.LineTrips = (ObservableCollection<LineTrip>)args.Result;
-                        OnPropertyChanged(nameof(LineTrips));
-                    }
-                };//this function will execute in the main thred
+                loadLineTripesWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                        {                                                   //terminated befor he done execute DoWork
+                            manegerModel.LineTrips = (ObservableCollection<LineTrip>)args.Result;
+                            OnPropertyChanged(nameof(LineTrips));
+                        }
+                        if (runLoadLineTripsAgain)
+                        {
+                            runLoadLineTripsAgain = false;
+                            loadLineTripesWorker.RunWorkerAsync();
+                        }
+                    };//this function will execute in the main thred
 
-            loadLineTripesWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    ObservableCollection<LineTrip> result = new ObservableCollection<LineTrip>(source.GetAllLineTrips().Select(lineTrip => new LineTrip() { BOlineTrip = lineTrip }));//get all line trips from source
+                loadLineTripesWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        ObservableCollection<LineTrip> result = new ObservableCollection<LineTrip>(source.GetAllLineTrips().Select(lineTrip => new LineTrip() { BOlineTrip = lineTrip }));//get all line trips from source
                     args.Result = worker.CancellationPending ? null : result;
-                };//this function will execute in the BackgroundWorker thread
-            loadLineTripesWorker.RunWorkerAsync();
+                    };//this function will execute in the BackgroundWorker thread
+            }
+            if (!loadLineTripesWorker.IsBusy)//if the worker is not busy run immediately
+            {
+                loadLineTripesWorker.RunWorkerAsync();
+            }
+            else                        //turn the flag on
+            {
+                runLoadLineTripsAgain = true;
+            }
         }
 
         #endregion
@@ -356,8 +412,8 @@ namespace PLGui.utilities
         public ICommand BackCommand { get; }
         public ICommand Play_Command { get; }
         public ICommand RandomBus_Command { get; }
-
-
+        public ICommand RefuleBus_Command { get; }
+        public ICommand TreatmentBus_Command { get; }
 
 
         #endregion
@@ -440,7 +496,7 @@ namespace PLGui.utilities
             ListView currentListView = (Mview.mainTab.SelectedItem as TabItem).Content as ListView;
 
             List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns
-                                      .Where(g => g.DisplayMemberBinding != null).Select(C => C.Header.ToString()).ToList();
+                                      .Where(g => g.DisplayMemberBinding != null && g.Header != null).Select(C => C.Header.ToString()).ToList();
             Mview.ComboBoxSearch.ItemsSource = comboList;
             //Mview.ComboBoxSearch.SelectedIndex = 0;//display the first item in the combo box
             SearchBox_TextChanged(Mview);
@@ -458,7 +514,7 @@ namespace PLGui.utilities
             {
                 if (StationDisplay != null)
                     Stop_truck_station_panel(stationDisplay.Code);//stop truking the privius selected station's panel
-                GetLineOfStation(SelectedStation);
+                GetLinesOfStation(SelectedStation);
                 StationDisplay = SelectedStation;
                 LineTimingsList = SelectedStation.LineTimings;
                 Truck_station_panel(StationDisplay);//start truking the selected station's panel
@@ -478,7 +534,7 @@ namespace PLGui.utilities
             }
         }
         BackgroundWorker GetLineOfStationWorker;
-        private void GetLineOfStation(Station station)
+        private void GetLinesOfStation(Station station)
         {
             if (station.LinesNums.Count > 0)
             {
@@ -486,34 +542,33 @@ namespace PLGui.utilities
                 {
                     GetLineOfStationWorker = new BackgroundWorker();
                     GetLineOfStationWorker.WorkerSupportsCancellation = true;
+                    GetLineOfStationWorker.RunWorkerCompleted +=
+                        (object sender, RunWorkerCompletedEventArgs args) =>
+                        {
+                            if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                            {                                                   //terminated befor he done execute DoWork
+                                LinesOfStation = (ObservableCollection<Line>)args.Result;
+                                OnPropertyChanged(nameof(LinesOfStation));
+                            }
+                        };//this function will execute in the main thred
+
+                    GetLineOfStationWorker.DoWork +=
+                        (object sender, DoWorkEventArgs args) =>
+                        {
+                            BackgroundWorker worker = (BackgroundWorker)sender;
+                            ObservableCollection<Line> result = new ObservableCollection<Line>();
+                            try
+                            {
+                                result = new ObservableCollection<Line>(source.GetAllLinesBy(l => l.Stations.Exists(s => s.StationNumber == station.Code)).Select(l => l.Line_BO_PO()));//get the lines from source
+                            }
+                            catch (Exception msg)
+                            {
+                                MessageBox.Show(msg.Message, "ERROR");
+                                GetLineOfStationWorker.CancelAsync();
+                            }
+                            args.Result = worker.CancellationPending ? null : result;
+                        };//this function will execute in the BackgroundWorker thread
                 }
-
-                GetLineOfStationWorker.RunWorkerCompleted +=
-                    (object sender, RunWorkerCompletedEventArgs args) =>
-                    {
-                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated befor he done execute DoWork
-                        LinesOfStation = (ObservableCollection<Line>)args.Result;
-                            OnPropertyChanged(nameof(LinesOfStation));
-                        }
-                    };//this function will execute in the main thred
-
-                GetLineOfStationWorker.DoWork +=
-                    (object sender, DoWorkEventArgs args) =>
-                    {
-                        BackgroundWorker worker = (BackgroundWorker)sender;
-                        ObservableCollection<Line> result = new ObservableCollection<Line>();
-                        try
-                        {
-                            result = new ObservableCollection<Line>(source.GetAllLinesBy(l => l.Stations.Exists(s => s.StationNumber == station.Code)).Select(l => l.Line_BO_PO()));//get the lines from source
-                    }
-                        catch (Exception msg)
-                        {
-                            MessageBox.Show(msg.Message, "ERROR");
-                            GetLineOfStationWorker.CancelAsync();
-                        }
-                        args.Result = worker.CancellationPending ? null : result;
-                    };//this function will execute in the BackgroundWorker thread
                 GetLineOfStationWorker.RunWorkerAsync(); 
             }
         }
@@ -662,6 +717,34 @@ namespace PLGui.utilities
             OnPropertyChanged(nameof(StackIsNotEmpty));
 
         }
+        BackgroundWorker tempWorker;
+        private void TreatmentBus()
+        {
+            if (Mview.Bus_view.IsSelected)//bus
+            {
+                if (Mview.BusesList.SelectedItem is Bus bus)
+                {
+                    tempWorker = new BackgroundWorker();
+                    tempWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+                    {
+                        try
+                        {
+                            source.Treatment(bus.BObus);
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
+                        }
+                    };
+                    tempWorker.RunWorkerAsync();
+                }
+            }
+        }
+
+        private void RefuleBus()
+        {
+            throw new NotImplementedException();
+        }
 
         #region delete
 
@@ -737,19 +820,19 @@ namespace PLGui.utilities
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
-            Thread.Sleep(3000);// let time for cancelation
-            if (worker.CancellationPending) { e.Cancel = true; }
-            else
+            for (int i = 0; i < 30; i++)// let time for cancelation: 3 sec
             {
-                try
-                {
-                    source.DeleteStation(station.Code);
-                    e.Result = station;
-                }
-                catch (Exception msg)
-                {
-                    MessageBox.Show(msg.Message, "ERROR");
-                }
+                Thread.Sleep(100);
+                if (worker.CancellationPending) { e.Cancel = true; return; }//if canceled stop the work
+            }
+            try
+            {
+                source.DeleteStation(station.Code);
+                e.Result = station;
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.Message, "ERROR");
             }
         }
 
@@ -786,19 +869,19 @@ namespace PLGui.utilities
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
-            Thread.Sleep(3000);// let time for cancelation
-            if (worker.CancellationPending) { e.Cancel = true; }
-            else
+            for (int i = 0; i < 30; i++)// let time for cancelation: 3 sec
             {
-                try
-                {
-                    source.DeleteLine(line.ID);
-                    e.Result = line;
-                }
-                catch (Exception msg)
-                {
-                    MessageBox.Show(msg.Message, "ERROR");
-                }
+                Thread.Sleep(100);
+                if (worker.CancellationPending) { e.Cancel = true; return; }//if canceled stop the work
+            }
+            try
+            {
+                source.DeleteLine(line.ID);
+                e.Result = line;
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.Message, "ERROR");
             }
         }
         private void DeleteLineWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -835,19 +918,19 @@ namespace PLGui.utilities
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
-            Thread.Sleep(3000);// let time for cancelation
-            if (worker.CancellationPending) { e.Cancel = true; }
-            else
+            for (int i = 0; i < 30; i++)// let time for cancelation: 3 sec
             {
-                try
-                {
-                    source.DeleteLineTrip(lineTrip.BOlineTrip);
-                    e.Result = line;
-                }
-                catch (Exception msg)
-                {
-                    MessageBox.Show(msg.Message, "ERROR");
-                }
+                Thread.Sleep(100);
+                if (worker.CancellationPending) { e.Cancel = true; return; }//if canceled stop the work
+            }
+            try
+            {
+                source.DeleteLineTrip(lineTrip.BOlineTrip);
+                e.Result = line;
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.Message, "ERROR");
             }
         }
         private void DeleteLineTripWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -884,19 +967,40 @@ namespace PLGui.utilities
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
-            Thread.Sleep(3000);// let time for cancelation
-            if (worker.CancellationPending) { e.Cancel = true; }
-            else
+            for (int i = 0; i < 30; i++)// let time for cancelation: 3 sec
             {
-                try
+                Thread.Sleep(100);
+                if (worker.CancellationPending) { e.Cancel = true; return; }//if canceled stop the work
+            }
+            try
+            {
+                source.DeleteBus(bus.LicenseNumber);
+                e.Result = bus;
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.Message, "ERROR");
+            }
+        }
+        private void DeleteBusWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)//if the BackgroundWorker didn't Cancel
+            {
+                if (e.Result is Bus bus)
                 {
-                    source.DeleteBus(bus.LicenseNumber);
-                    e.Result = bus;
+                    MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} was deleted successfully!");
+                    OnPropertyChanged(nameof(MyMessageQueue));
+                    loadBuses();
                 }
-                catch (Exception msg)
-                {
-                    MessageBox.Show(msg.Message, "ERROR");
-                }
+            }
+            else                                                //Cancelled!!
+            {
+                MyMessageQueue.Enqueue("Cancelled!");
+                OnPropertyChanged(nameof(MyMessageQueue));
+            }
+            if (busesForDeletion.Count > 0)//if there are buses on the line run again
+            {
+                DeleteBusWorker.RunWorkerAsync();
             }
         }
         #endregion
@@ -904,6 +1008,7 @@ namespace PLGui.utilities
         #endregion
 
         BackgroundWorker GetRandomBusWorker;
+        private int counter = 0;
         private void RandomBus()
         {
             if (GetRandomBusWorker == null)
@@ -917,6 +1022,11 @@ namespace PLGui.utilities
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             loadBuses();
+                        }
+                        if (counter > 0)
+                        {
+                            counter--;
+                            GetRandomBusWorker.RunWorkerAsync();
                         }
                     };//this function will execute in the main thred
 
@@ -933,9 +1043,16 @@ namespace PLGui.utilities
                         }
                     };//this function will execute in the BackgroundWorker thread
             }
-            GetRandomBusWorker.RunWorkerAsync();
-            
+            if (!GetRandomBusWorker.IsBusy)
+            {
+                GetRandomBusWorker.RunWorkerAsync();
+            }
+            else
+            {
+                counter++;
+            }
         }
+
         #endregion
 
         #region events
@@ -969,7 +1086,6 @@ namespace PLGui.utilities
         {
             if (sender is Control control)
             {
-                ManegerView Mview = control.FindWindowOfType<ManegerView>();// try to get the source window
                 if (sender is ListView listV)
                 {
                     if (listV == Mview.LineStations_view)
@@ -1061,27 +1177,7 @@ namespace PLGui.utilities
             DeleteLineTripWorker.RunWorkerCompleted += DeleteLineTripWorker_RunWorkerCompleted;
         }
 
-        private void DeleteBusWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (!e.Cancelled)//if the BackgroundWorker didn't Cancel
-            {
-                if (e.Result is Bus bus)
-                {
-                    MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} was deleted successfully!");
-                    OnPropertyChanged(nameof(MyMessageQueue));
-                    loadBuses(); 
-                }
-            }
-            else                                                //Cancelled!!
-            {
-                MyMessageQueue.Enqueue("Cancelled!");
-                OnPropertyChanged(nameof(MyMessageQueue));
-            }
-            if (busesForDeletion.Count > 0)//if there are buses on the line run again
-            {
-                DeleteBusWorker.RunWorkerAsync();
-            }
-        }
+       
 
 
         private void Update_Line(Line line)

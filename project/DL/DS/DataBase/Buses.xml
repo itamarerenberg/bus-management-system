@@ -1,253 +1,183 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Buses>
   <Bus>
-    <LicenseNumber>87229595</LicenseNumber>
-    <LicenesDate>14/07/2019 00:00:00</LicenesDate>
-    <Kilometraz>92233</Kilometraz>
-    <Fule>669</Fule>
+    <LicenseNumber>24069111</LicenseNumber>
+    <LicenesDate>06/08/2018 00:00:00</LicenesDate>
+    <Kilometraz>81924</Kilometraz>
+    <Fuel>943</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>1318</KmAfterTreat>
-    <LastTreatDate>06/09/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>287</KmAfterTreat>
+    <LastTreatDate>16/07/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
-    <LicenseNumber>92818130</LicenseNumber>
-    <LicenesDate>14/02/2018 00:00:00</LicenesDate>
-    <Kilometraz>91796</Kilometraz>
-    <Fule>1102</Fule>
-    <Stat>Need_treatment</Stat>
-    <KmAfterTreat>1549</KmAfterTreat>
-    <LastTreatDate>14/01/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>13311964</LicenseNumber>
-    <LicenesDate>16/07/2019 00:00:00</LicenesDate>
-    <Kilometraz>85732</Kilometraz>
-    <Fule>134</Fule>
+    <LicenseNumber>53637067</LicenseNumber>
+    <LicenesDate>08/10/2019 00:00:00</LicenesDate>
+    <Kilometraz>55833</Kilometraz>
+    <Fuel>390</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>19766</KmAfterTreat>
-    <LastTreatDate>27/08/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>8796</KmAfterTreat>
+    <LastTreatDate>11/07/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
-    <LicenseNumber>97912515</LicenseNumber>
-    <LicenesDate>08/04/2018 00:00:00</LicenesDate>
-    <Kilometraz>81360</Kilometraz>
-    <Fule>963</Fule>
+    <LicenseNumber>70909983</LicenseNumber>
+    <LicenesDate>01/08/2019 00:00:00</LicenesDate>
+    <Kilometraz>58831</Kilometraz>
+    <Fuel>700</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>4967</KmAfterTreat>
-    <LastTreatDate>07/05/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>18716</KmAfterTreat>
+    <LastTreatDate>04/12/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
-    <LicenseNumber>19256872</LicenseNumber>
-    <LicenesDate>23/09/2019 00:00:00</LicenesDate>
-    <Kilometraz>64500</Kilometraz>
-    <Fule>1060</Fule>
+    <LicenseNumber>34467323</LicenseNumber>
+    <LicenesDate>23/05/2018 00:00:00</LicenesDate>
+    <Kilometraz>85461</Kilometraz>
+    <Fuel>324</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>1246</KmAfterTreat>
-    <LastTreatDate>03/07/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>3903</KmAfterTreat>
+    <LastTreatDate>12/10/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
-    <LicenseNumber>31505362</LicenseNumber>
-    <LicenesDate>19/01/2019 00:00:00</LicenesDate>
-    <Kilometraz>73823</Kilometraz>
-    <Fule>382</Fule>
-    <Stat>Need_treatment</Stat>
-    <KmAfterTreat>16085</KmAfterTreat>
-    <LastTreatDate>11/01/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>72093779</LicenseNumber>
-    <LicenesDate>27/02/2019 00:00:00</LicenesDate>
-    <Kilometraz>46179</Kilometraz>
-    <Fule>15</Fule>
+    <LicenseNumber>73006589</LicenseNumber>
+    <LicenesDate>05/05/2018 00:00:00</LicenesDate>
+    <Kilometraz>85841</Kilometraz>
+    <Fuel>39</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>7419</KmAfterTreat>
-    <LastTreatDate>29/03/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>6069</KmAfterTreat>
+    <LastTreatDate>30/12/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
-    <LicenseNumber>23896976</LicenseNumber>
-    <LicenesDate>20/10/2019 00:00:00</LicenesDate>
-    <Kilometraz>88478</Kilometraz>
-    <Fule>302</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>9188</KmAfterTreat>
-    <LastTreatDate>25/06/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>66775814</LicenseNumber>
-    <LicenesDate>10/04/2018 00:00:00</LicenesDate>
-    <Kilometraz>69259</Kilometraz>
-    <Fule>118</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>16545</KmAfterTreat>
-    <LastTreatDate>27/10/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>23805797</LicenseNumber>
-    <LicenesDate>18/11/2019 00:00:00</LicenesDate>
-    <Kilometraz>79669</Kilometraz>
-    <Fule>366</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>17983</KmAfterTreat>
-    <LastTreatDate>07/03/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>98064440</LicenseNumber>
-    <LicenesDate>02/03/2018 00:00:00</LicenesDate>
-    <Kilometraz>53085</Kilometraz>
-    <Fule>1152</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>25</KmAfterTreat>
-    <LastTreatDate>11/02/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>96629815</LicenseNumber>
-    <LicenesDate>06/07/2019 00:00:00</LicenesDate>
-    <Kilometraz>66855</Kilometraz>
-    <Fule>781</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>1801</KmAfterTreat>
-    <LastTreatDate>23/10/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>81620621</LicenseNumber>
-    <LicenesDate>12/11/2019 00:00:00</LicenesDate>
-    <Kilometraz>99663</Kilometraz>
-    <Fule>209</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>4041</KmAfterTreat>
-    <LastTreatDate>16/09/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>71315117</LicenseNumber>
-    <LicenesDate>04/08/2019 00:00:00</LicenesDate>
-    <Kilometraz>63430</Kilometraz>
-    <Fule>803</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>18872</KmAfterTreat>
-    <LastTreatDate>26/08/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>30795174</LicenseNumber>
-    <LicenesDate>14/03/2019 00:00:00</LicenesDate>
-    <Kilometraz>91740</Kilometraz>
-    <Fule>381</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>18717</KmAfterTreat>
-    <LastTreatDate>30/06/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>72842846</LicenseNumber>
-    <LicenesDate>16/11/2019 00:00:00</LicenesDate>
-    <Kilometraz>66934</Kilometraz>
-    <Fule>494</Fule>
-    <Stat>Need_treatment</Stat>
-    <KmAfterTreat>239</KmAfterTreat>
-    <LastTreatDate>22/01/2020 00:00:00</LastTreatDate>
-    <IsActive>False</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>80383483</LicenseNumber>
-    <LicenesDate>07/09/2018 00:00:00</LicenesDate>
-    <Kilometraz>71707</Kilometraz>
-    <Fule>708</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>7649</KmAfterTreat>
-    <LastTreatDate>08/08/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>70112998</LicenseNumber>
-    <LicenesDate>22/06/2019 00:00:00</LicenesDate>
-    <Kilometraz>65800</Kilometraz>
-    <Fule>1036</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>6967</KmAfterTreat>
-    <LastTreatDate>27/11/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>36410659</LicenseNumber>
-    <LicenesDate>21/11/2019 00:00:00</LicenesDate>
-    <Kilometraz>68195</Kilometraz>
-    <Fule>181</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>14071</KmAfterTreat>
-    <LastTreatDate>14/03/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>87097010</LicenseNumber>
-    <LicenesDate>14/09/2018 00:00:00</LicenesDate>
-    <Kilometraz>68249</Kilometraz>
-    <Fule>690</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>3015</KmAfterTreat>
-    <LastTreatDate>16/05/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>35150190</LicenseNumber>
-    <LicenesDate>07/04/2018 00:00:00</LicenesDate>
-    <Kilometraz>93360</Kilometraz>
-    <Fule>611</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>6609</KmAfterTreat>
-    <LastTreatDate>27/05/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>12820261</LicenseNumber>
-    <LicenesDate>21/10/2019 00:00:00</LicenesDate>
-    <Kilometraz>61798</Kilometraz>
-    <Fule>806</Fule>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>1440</KmAfterTreat>
-    <LastTreatDate>04/08/2020 00:00:00</LastTreatDate>
-    <IsActive>True</IsActive>
-  </Bus>
-  <Bus>
-    <LicenseNumber>70176093</LicenseNumber>
+    <LicenseNumber>14703080</LicenseNumber>
     <LicenesDate>10/09/2018 00:00:00</LicenesDate>
-    <Kilometraz>97290</Kilometraz>
-    <Fule>84</Fule>
+    <Kilometraz>64470</Kilometraz>
+    <Fuel>48</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>6864</KmAfterTreat>
-    <LastTreatDate>19/07/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>4902</KmAfterTreat>
+    <LastTreatDate>09/08/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
-    <LicenseNumber>92611957</LicenseNumber>
-    <LicenesDate>02/08/2019 00:00:00</LicenesDate>
-    <Kilometraz>79970</Kilometraz>
-    <Fule>1095</Fule>
+    <LicenseNumber>38749168</LicenseNumber>
+    <LicenesDate>11/09/2018 00:00:00</LicenesDate>
+    <Kilometraz>66963</Kilometraz>
+    <Fuel>1065</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>2202</KmAfterTreat>
-    <LastTreatDate>02/08/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>12183</KmAfterTreat>
+    <LastTreatDate>05/02/2021 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
-    <LicenseNumber>82289601</LicenseNumber>
-    <LicenesDate>22/02/2019 00:00:00</LicenesDate>
-    <Kilometraz>51854</Kilometraz>
-    <Fule>604</Fule>
+    <LicenseNumber>49490116</LicenseNumber>
+    <LicenesDate>17/06/2019 00:00:00</LicenesDate>
+    <Kilometraz>88127</Kilometraz>
+    <Fuel>963</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>15778</KmAfterTreat>
-    <LastTreatDate>17/04/2020 00:00:00</LastTreatDate>
+    <KmAfterTreat>8610</KmAfterTreat>
+    <LastTreatDate>11/06/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>96436101</LicenseNumber>
+    <LicenesDate>25/06/2019 00:00:00</LicenesDate>
+    <Kilometraz>82158</Kilometraz>
+    <Fuel>78</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>6484</KmAfterTreat>
+    <LastTreatDate>02/07/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>16187176</LicenseNumber>
+    <LicenesDate>13/03/2018 00:00:00</LicenesDate>
+    <Kilometraz>76220</Kilometraz>
+    <Fuel>190</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>10049</KmAfterTreat>
+    <LastTreatDate>14/09/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>23366662</LicenseNumber>
+    <LicenesDate>04/05/2018 00:00:00</LicenesDate>
+    <Kilometraz>65322</Kilometraz>
+    <Fuel>497</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>6167</KmAfterTreat>
+    <LastTreatDate>05/06/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>40016076</LicenseNumber>
+    <LicenesDate>07/08/2018 00:00:00</LicenesDate>
+    <Kilometraz>82182</Kilometraz>
+    <Fuel>1005</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>6089</KmAfterTreat>
+    <LastTreatDate>28/12/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>17524364</LicenseNumber>
+    <LicenesDate>13/06/2018 00:00:00</LicenesDate>
+    <Kilometraz>80976</Kilometraz>
+    <Fuel>873</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>12811</KmAfterTreat>
+    <LastTreatDate>01/02/2021 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>95224686</LicenseNumber>
+    <LicenesDate>24/08/2019 00:00:00</LicenesDate>
+    <Kilometraz>50204</Kilometraz>
+    <Fuel>438</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>10321</KmAfterTreat>
+    <LastTreatDate>08/03/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>54436007</LicenseNumber>
+    <LicenesDate>12/11/2018 00:00:00</LicenesDate>
+    <Kilometraz>52260</Kilometraz>
+    <Fuel>1188</Fuel>
+    <Stat>Need_treatment</Stat>
+    <KmAfterTreat>5282</KmAfterTreat>
+    <LastTreatDate>13/01/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>45836945</LicenseNumber>
+    <LicenesDate>01/06/2018 00:00:00</LicenesDate>
+    <Kilometraz>46451</Kilometraz>
+    <Fuel>749</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>4513</KmAfterTreat>
+    <LastTreatDate>22/02/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>96681047</LicenseNumber>
+    <LicenesDate>23/09/2019 00:00:00</LicenesDate>
+    <Kilometraz>62576</Kilometraz>
+    <Fuel>1162</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>3683</KmAfterTreat>
+    <LastTreatDate>19/05/2020 00:00:00</LastTreatDate>
+    <IsActive>True</IsActive>
+  </Bus>
+  <Bus>
+    <LicenseNumber>91537361</LicenseNumber>
+    <LicenesDate>17/05/2018 00:00:00</LicenesDate>
+    <Kilometraz>93648</Kilometraz>
+    <Fuel>734</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>10027</KmAfterTreat>
+    <LastTreatDate>12/11/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
 </Buses>

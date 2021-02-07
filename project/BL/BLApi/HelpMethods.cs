@@ -166,13 +166,13 @@ namespace BL.BLApi
             }
 
             //check if there is enough fule for the ride
-            if (bus.Fule < km)
+            if (bus.Fuel < km)
             {
                 throw new NotEnoughFule("there is not enough fuel for this ride");
             }
 
             //update the km end the fule
-            bus.Fule -= km;
+            bus.Fuel -= km;
             bus.KmAfterTreat += km;
             bus.Kilometraz += km;
             bus.Stat = BusStatus.Traveling;
@@ -190,7 +190,7 @@ namespace BL.BLApi
 
             bus.Stat = BusStatus.In_refueling;//set the stat to refueling
             bus.TimeUntilReady = time_refuling;//set Time_until_ready to 'time_refuling' secondes
-            bus.Fule = 1200;//set the Fule to 1200
+            bus.Fuel = 1200;//set the Fule to 1200
         }
 
         public static void Treatment(this Bus bus)
@@ -244,7 +244,7 @@ namespace BL.BLApi
                 LicenesDate = LDate,
                 Kilometraz = r.Next(40000, 100000),
                 LastTreatDate = Time,
-                Fule = RFuel,
+                Fuel = RFuel,
                 KmAfterTreat = Km,
                 Stat = DateTime.Today - Time < new TimeSpan(365, 0, 0, 0) ? BusStatus.Ready : BusStatus.Need_treatment
             };
