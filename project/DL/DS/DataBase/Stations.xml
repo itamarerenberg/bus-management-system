@@ -1054,7 +1054,7 @@
     <Longitude>35.22416</Longitude>
     <Latitude>31.791394</Latitude>
     <Address>רחוב:שמואל הנביא 47 עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>213</Code>

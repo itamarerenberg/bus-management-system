@@ -5,7 +5,7 @@
     <StationCode2>277</StationCode2>
     <Distance>3.43109495535494</Distance>
     <Time>00:05:05.6470000</Time>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </AdjacentStations>
   <AdjacentStations>
     <StationCode1>277</StationCode1>
@@ -173,6 +173,20 @@
     <StationCode2>1041</StationCode2>
     <Distance>3.42978874330585</Distance>
     <Time>00:07:30.7080000</Time>
+    <IsActive>True</IsActive>
+  </AdjacentStations>
+  <AdjacentStations>
+    <StationCode1>61158</StationCode1>
+    <StationCode2>35</StationCode2>
+    <Distance>12.0164539698558</Distance>
+    <Time>00:32:10.5770000</Time>
+    <IsActive>True</IsActive>
+  </AdjacentStations>
+  <AdjacentStations>
+    <StationCode1>35</StationCode1>
+    <StationCode2>60414</StationCode2>
+    <Distance>3.6206715459868</Distance>
+    <Time>00:06:21.5540000</Time>
     <IsActive>True</IsActive>
   </AdjacentStations>
 </AdjacentStations>

@@ -4,7 +4,7 @@
     <ID>63</ID>
     <LineNumber>254</LineNumber>
     <Area>Jerusalem</Area>
-    <FirstStation_Id>211</FirstStation_Id>
+    <FirstStation_Id>277</FirstStation_Id>
     <LastStation_Id>982</LastStation_Id>
     <IsActive>True</IsActive>
   </Line>
@@ -14,6 +14,14 @@
     <Area>Jerusalem</Area>
     <FirstStation_Id>148</FirstStation_Id>
     <LastStation_Id>1041</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>0</ID>
+    <LineNumber>33</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>61158</FirstStation_Id>
+    <LastStation_Id>60414</LastStation_Id>
     <IsActive>True</IsActive>
   </Line>
 </Lines>
