@@ -617,8 +617,8 @@ namespace DL
         #region User
         public void AddUser(User user)
         {
-            XElement tempUser = (from u in DataSourceXML.Users.Elements()//serch for this user in the data source
-                             where bool.Parse(u.Element("IsActive").Value)
+            XElement tempUser = (from u in DataSourceXML.Users.Elements()//search for this user in the data source
+                             where u.Element("Name").Value == user.Name
                              select u).FirstOrDefault();
             if (tempUser == null)//if ther is no such user allready in the data source
             {

@@ -6,4 +6,22 @@
     <Admin>True</Admin>
     <IsActive>True</IsActive>
   </User>
+  <User>
+    <Name>passanger</Name>
+    <Password>1234</Password>
+    <Admin>False</Admin>
+    <IsActive>True</IsActive>
+  </User>
+  <User>
+    <Name>passanger2</Name>
+    <Password>1234</Password>
+    <Admin>False</Admin>
+    <IsActive>True</IsActive>
+  </User>
+  <User>
+    <Name>passenger3</Name>
+    <Password>1234</Password>
+    <Admin>False</Admin>
+    <IsActive>True</IsActive>
+  </User>
 </Users>

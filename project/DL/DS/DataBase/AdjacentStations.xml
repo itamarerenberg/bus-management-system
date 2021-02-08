@@ -341,6 +341,6 @@
     <StationCode2>42</StationCode2>
     <Distance>0.144753526277796</Distance>
     <Time>00:00:20.6080000</Time>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </AdjacentStations>
 </AdjacentStations>

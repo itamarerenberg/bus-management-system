@@ -142,7 +142,7 @@
     <Longitude>35.22574</Longitude>
     <Latitude>31.732673</Latitude>
     <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>45</Code>

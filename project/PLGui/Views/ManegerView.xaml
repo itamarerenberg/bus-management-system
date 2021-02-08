@@ -15,10 +15,13 @@
         Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True" WindowState="Maximized">
+        FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True" WindowState="Maximized" >
     <y:Interaction.Triggers>
         <y:EventTrigger EventName="Loaded">
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+        </y:EventTrigger>
+        <y:EventTrigger EventName="Closed">
+            <y:InvokeCommandAction Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
         </y:EventTrigger>
     </y:Interaction.Triggers>
     <Window.DataContext>
@@ -61,7 +64,7 @@
             </MenuItem>
             <MenuItem Header="Exit" Height="25">
                 <MenuItem Header="Log out" Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
-                <MenuItem Header="Exit" Command="{Binding manegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
+                <MenuItem Header="Exit" Command="{Binding ManegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
             </MenuItem>
         </Menu>
         <!--#endregion-->

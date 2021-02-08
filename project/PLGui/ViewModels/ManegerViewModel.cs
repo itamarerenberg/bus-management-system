@@ -139,14 +139,14 @@ namespace PLGui.utilities
         {
             get { return CollectionViewSource.GetDefaultView(lines); }
         }
-        public ObservableCollection<Station> Stations
+        private ObservableCollection<Station> stations
         {
             get => manegerModel.Stations;
             set => SetProperty(ref manegerModel.Stations, value);
         }
-        public ICollectionView StationsTest
+        public ICollectionView Stations
         {
-            get { return CollectionViewSource.GetDefaultView(Stations); }
+            get { return CollectionViewSource.GetDefaultView(stations); }
         }
         private ObservableCollection<LineTrip> lineTrips
         {
@@ -192,7 +192,7 @@ namespace PLGui.utilities
             NewLineTrip = new RelayCommand<ManegerView>(Add_newLineTrip);
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
-            Enter_asAnotherUserCommand = new RelayCommand<Window>(enter_asAnotherUser);
+            Enter_asAnotherUserCommand = new RelayCommand<ManegerView>(enter_asAnotherUser);
             ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
             WindowLoaded_Command = new RelayCommand<ManegerView>(Window_Loaded);
             LostFocus_Command = new RelayCommand<ManegerView>(LostFocus);
@@ -285,7 +285,7 @@ namespace PLGui.utilities
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             manegerModel.Stations = (ObservableCollection<Station>)args.Result;
-                            OnPropertyChanged(nameof(Stations));
+                            OnPropertyChanged(nameof(stations));
                         }
                         if (runLoadStationsAgain)
                         {
@@ -429,7 +429,7 @@ namespace PLGui.utilities
             if (Mview.ComboBoxSearch.SelectedItem != null)
             {
                 string propertyName = string.Concat(Mview.ComboBoxSearch.Text.Where(s => !char.IsWhiteSpace(s)));//gets the property name
-                string listName = ((Mview.mainTab.SelectedItem as TabItem).Tag.ToString());                      //gets the list name
+                string listName = ((Mview.mainTab.SelectedItem as TabItem).Tag.ToString());                  //gets the list name
 
                 switch (listName)
                 {
@@ -441,10 +441,10 @@ namespace PLGui.utilities
                         }
                         break;
                     case "Stations":
-                        if (Stations != null)
+                        if (stations != null)
                         {
-                            //Stations.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
-                            //Stations.Refresh();
+                            Stations.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
+                            Stations.Refresh();
                         }
                         break;
                     case "LineTrips":
@@ -498,7 +498,7 @@ namespace PLGui.utilities
             List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns
                                       .Where(g => g.DisplayMemberBinding != null && g.Header != null).Select(C => C.Header.ToString()).ToList();
             Mview.ComboBoxSearch.ItemsSource = comboList;
-            //Mview.ComboBoxSearch.SelectedIndex = 0;//display the first item in the combo box
+            Mview.ComboBoxSearch.SelectedIndex = 0;//display the first item in the combo box
             SearchBox_TextChanged(Mview);
 
             OnPropertyChanged(nameof(SelectedTabItem));
@@ -639,17 +639,15 @@ namespace PLGui.utilities
             }
             List_SelectionChanged(Mview);//refrash the view
         }     
-        private void enter_asAnotherUser(Window window)
+        private void enter_asAnotherUser(ManegerView window)
         {
             new MainWindow().Show();
-
-            ManegerView Mview = window as ManegerView;
-            Mview.Close();
+            window.Close(); 
         }
         private void manegerView_Closing(Window window)
         {
-            new MainWindow().Show();
             window.Close();
+            Environment.Exit(Environment.ExitCode);
         }
         private void Window_Loaded(ManegerView manegerView)
         {
@@ -1093,7 +1091,7 @@ namespace PLGui.utilities
                         if (listV.SelectedItem is BO.LineStation SelectedLineStation)
                         {
                             MemoryStack.Push(Mview.LinesList.SelectedItem);// push the line into the stack
-                            Station SelectedStation = Stations.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
+                            Station SelectedStation = stations.Where(s => s.Code == SelectedLineStation.StationNumber).FirstOrDefault();
                             if (SelectedStation != null)
                             {
                                 Mview.mainTab.SelectedIndex = 0;
