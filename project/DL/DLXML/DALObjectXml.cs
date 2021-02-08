@@ -51,7 +51,7 @@ namespace DL
                 throw new NotExistExeption("bus with this License's num not exist");
             }
 
-            Cloning.xelement_to_object(bus, out Bus ret);//create a new bus's instence with the content of bus
+            Cloning.Xelement_to_object(bus, out Bus ret);//create a new bus's instence with the content of bus
             return ret;//                       ^^^^^^^
         }
 
@@ -400,6 +400,24 @@ namespace DL
             DataSourceXML.Save("LineStations");//save changes
         }
 
+        public void UpdateLineStation(Action<LineStation> action, int lineId, int stationNumber)
+        {
+            XElement oldLineStation = (from ls in DataSourceXML.LineStations.Elements()//search for the line station in the data source
+                                       where int.Parse(ls.Element("LineId").Value) == lineId
+                                             && int.Parse(ls.Element("StationNumber").Value) == stationNumber
+                                       select ls).FirstOrDefault();
+            if (oldLineStation == null)//if ther is no such station in th data source
+            {
+                throw new NotExistExeption("the line station doesn't exist");
+            }
+
+            LineStation newLineStation = XMLTools.xelement_to_new_object<LineStation>(oldLineStation);//insert the ditils of the old lineStation to a new LineStation object
+            action(newLineStation);//do 'action' on the new LineStation object
+
+            XMLTools.object_to_xelement(newLineStation, oldLineStation);//insert the new line station insted of the old one
+            DataSourceXML.Save("LineStations");//save the changes
+        }
+
         public void DeleteLineStation(int lineId, int stationNum)
         {
             XElement lineS = (from ls in DataSourceXML.LineStations.Elements()//serch for the line station in the data source
@@ -430,8 +448,8 @@ namespace DL
         public IEnumerable<LineStation> GetAllLineStationsBy(Predicate<LineStation> predicate)
         {
             var ret = from ls in DataSourceXML.LineStations.Elements()
-                   let temp = Cloning.xelement_to_new_object<LineStation>(ls)//create a new instence of LineStation from 'ls' so it can send to peredicate
-                   where predicate(temp)
+                   let temp = XMLTools.xelement_to_new_object<LineStation>(ls)//create a new instence of LineStation from 'ls' so it can send to peredicate
+                   where predicate(temp) && temp.IsActive
                    select temp;
             DataSourceXML.Save("LineStations");
             return ret;
@@ -564,11 +582,10 @@ namespace DL
             XMLTools.object_to_xelement(newLineTrip, oldLineTrip);//override the old lineTrip with the new one in the data source 
             DataSourceXML.Save("LineTrips");//save the changes
         }
-        public void DeleteLineTrip(LineTrip lineTrip)
+        public void DeleteLineTrip(int id)
         {
             XElement lineT = (from lt in DataSourceXML.LineTrips.Elements()//get the line trip from the data source
-                              where lt.Element("ID").Value == lineTrip.ID.ToString()
-                                    && lt.Element("LineId").Value == lineTrip.LineId.ToString()
+                              where int.Parse(lt.Element("ID").Value) == id
                                     && lt.Element("IsActive").Value == true.ToString()
                               select lt).FirstOrDefault();
             if (lineT != null)

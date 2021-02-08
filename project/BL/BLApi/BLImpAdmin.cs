@@ -17,10 +17,12 @@ namespace BL
     {
 
         #region singelton
+
         static readonly BLImpAdmin instance = new BLImpAdmin();
         static BLImpAdmin() { }
         BLImpAdmin() { }
         public static BLImpAdmin Instance { get => instance; }
+
         #endregion
 
         IDL dl = DLFactory.GetDL();
@@ -300,7 +302,7 @@ namespace BL
                 Line line = (Line)dl.GetLine(id).CopyPropertiesToNew(typeof(Line));
 
                 //set the line stations
-                List<DO.LineStation> releventLineStations = dl.GetAllLineStationsBy(ls => ls.LineId == id).ToList();//set 'releventLineStations' to contin all the line stations of the line
+                List<DO.LineStation> releventLineStations = dl.GetAllLineStationsBy(ls => ls.LineId == id && ls.IsActive).ToList();//set 'releventLineStations' to contin all the line stations of the line
                 List <DO.AdjacentStations> releventAdjacentStations =
                     //get all the adjscent stations that required to build this line
                     dl.GetAllAdjacentStationsBy(adjs => releventLineStations.Exists(ls => ls.StationNumber == adjs.StationCode1 && ls.NextStation != null && ls.NextStation == adjs.StationCode2)).ToList();
@@ -387,10 +389,8 @@ namespace BL
             Line line = GetLine(id);
             try
             {
-                foreach (LineStation lStation in line.Stations)
-                {
-                    DeleteLineStation(id, lStation.StationNumber);
-                }
+                delete_lineStations(id, line.Stations.Select(ls => ls.StationNumber).ToList());//delete all the lineStations of the line
+                delete_lineTrips(line.LineTrips.Select(lt => lt.ID).ToList());//delete all the lineTrips of the line
                 dl.DeleteLine(id);
             }
             catch (Exception msg)
@@ -506,31 +506,97 @@ namespace BL
         public void DeleteLineStation(int lineNumber, int StationNumber)
         {
             Line line = GetLine(lineNumber);
-            LineStation lineStation = HelpMethods.GetLineStation(lineNumber, StationNumber);
 
-            if (lineStation.PrevToCurrent != null)//the deleted station is not in the first location
+            line.Stations.OrderBy(ls => ls.LineStationIndex);//Make sure the line stations in 'line' are ordered by the fild 'LineStationIndex'
+
+            LineStation lineStation = line.Stations.FirstOrDefault(ls => ls.StationNumber == StationNumber);
+
+            int indexInLine = lineStation.LineStationIndex;
+
+            //the deleted station is the first stop of the line
+            if (indexInLine == 0)
             {
-                HelpMethods.DeleteAdjacentStations(line.Stations[lineStation.LineStationIndex - 1].CurrentToNext);
+                //update the second line station of the line (now is the first line station)
+                LineStation temp = line.Stations[1];//for convenience save a reference to the second line station in the line(now the first line station)
+                dl.UpdateLineStation(ls => ls.PrevStation = null, line.ID, temp.StationNumber);//set the fild 'PrevStation' of the second line station in line to be null because now its the first line station in line
+
+                //update the line (the FirstStation_Id fild)
+                dl.UpdateLine(new DO.Line()
+                {
+                    ID = line.ID,
+                    LineNumber = line.LineNumber,
+                    Area = (DO.AreasEnum)Enum.Parse(typeof(DO.AreasEnum), line.Area.ToString()),//Area = line.Area
+                    LastStation_Id = line.LastStation.StationNumber,
+                    FirstStation_Id = line.Stations[1].StationNumber,//the second station in the line now is the first station
+                    IsActive = true
+                });
+
             }
-            if (lineStation.CurrentToNext != null)//the deleted station is not in the last location
+            //if the station is the last stop of the line
+            else if (indexInLine == line.Stations.Count() - 1)
             {
-                HelpMethods.DeleteAdjacentStations(line.Stations[lineStation.LineStationIndex + 1].PrevToCurrent);
+                LineStation temp = line.Stations[indexInLine - 1];//for convenience save a reference to second from last line station in the line(now the last line station)
+                dl.UpdateLineStation(ls => ls.NextStation = null, line.ID, temp.StationNumber);//set the fild 'NextStation' of the second from end line station to be null because now its the last line station in line
+
+                //update the line (the LastStation_Id fild)
+                dl.UpdateLine(new DO.Line()
+                {
+                    ID = line.ID,
+                    LineNumber = line.LineNumber,
+                    Area = (DO.AreasEnum)Enum.Parse(typeof(DO.AreasEnum), line.Area.ToString()),//Area = line.Area
+                    LastStation_Id = line.Stations[lineStation.LineStationIndex - 1].StationNumber,//now the last station is the station before the delets line station
+                    FirstStation_Id = line.FirstStation.StationNumber,
+                    IsActive = true
+                });
             }
-            if (lineStation.PrevToCurrent != null && lineStation.CurrentToNext != null)//the deleted station is niether in the first and last
+            //if the line station to delete is not the first and not the last in the line
+            else
             {
-                HelpMethods.AddAdjacentStations(lineStation.PrevToCurrent.StationCode1, lineStation.CurrentToNext.StationCode2);
-                AdjacentStations newAdjacentStations = HelpMethods.GetAdjacentStations(lineStation.PrevToCurrent.StationCode1, lineStation.CurrentToNext.StationCode2);
-                line.Stations[lineStation.LineStationIndex - 1].CurrentToNext = newAdjacentStations;
-                line.Stations[lineStation.LineStationIndex + 1].PrevToCurrent = newAdjacentStations;
+                //save arefernce to the preius station and to the next for convenience
+                LineStation prevInLine = line.Stations[indexInLine - 1];
+                LineStation nextInLine = line.Stations[indexInLine + 1];
+
+                //update the privius and next stations of the line:
+                //privius station:
+                dl.UpdateLineStation(ls => ls.NextStation = nextInLine.StationNumber, line.ID, prevInLine.StationNumber);
+                //next station:
+                dl.UpdateLineStation(ls => ls.PrevStation = prevInLine.StationNumber, line.ID, nextInLine.StationNumber);
+
+
+                //add new adjecent station for (prevInLine, nextInLine)
+                dl.AddAdjacentStations(new DO.AdjacentStations()
+                {
+                    StationCode1 = prevInLine.StationNumber,
+                    StationCode2 = nextInLine.StationNumber,
+                    Distance = lineStation.PrevToCurrent.Distance + lineStation.CurrentToNext.Distance,//rughly assuming that the distance between the 'prevInLine' and the 'nextInLine' is the sum of the distances from them to the deletes line station
+                    Time = lineStation.PrevToCurrent.Time + lineStation.CurrentToNext.Time,//same as above^^^^
+                    IsActive = true
+                });
             }
-            for (int i = line.Stations.Count - 1; i > lineStation.LineStationIndex; i--)
+
+            //update the index of all the line stations after the deletes line station to be less in 1(LineStationIndex--)
+            for (int i = indexInLine; i < line.Stations.Count(); i++)
             {
-                line.Stations[i].LineStationIndex--;
+                dl.UpdateLineStation(ls => ls.LineStationIndex--, line.ID, line.Stations[i].StationNumber);
             }
-            line.Stations.RemoveAt(lineStation.LineStationIndex);
-            dl.DeleteLineStation(lineNumber, StationNumber);
+
+            dl.DeleteLineStation(line.ID, lineStation.StationNumber);//Finally delete the line station 
         }
-
+        void delete_lineStations(int lineId, List<int> lineStationsNumbers)
+        {
+            foreach (var lsNumber in lineStationsNumbers)
+            {
+                try
+                {
+                    dl.DeleteLineStation(lineId, lsNumber);
+                }
+                catch (DO.NotExistExeption)
+                {
+                    continue;
+                    throw;
+                }
+            }
+        }
         #endregion
 
         #region Line trip
@@ -571,11 +637,18 @@ namespace BL
         {
             try
             {
-                dl.DeleteLineTrip((DO.LineTrip)lineTrip.CopyPropertiesToNew(typeof(DO.LineTrip)));
+                dl.DeleteLineTrip(lineTrip.ID);
             }
             catch (Exception msg)
             {
                 throw msg;
+            }
+        }
+        void delete_lineTrips(List<int> lineTripsIds)
+        {
+            foreach (var ltId in lineTripsIds)
+            {
+                dl.DeleteLineTrip(ltId);
             }
         }
         public IEnumerable<LineTrip> GetAllLineTrips()
@@ -676,15 +749,15 @@ namespace BL
         {
             try
             {
-                dl.DeleteStation(code);
-                foreach (DO.LineStation lineS in dl.GetAllLineStationsBy(s => s.StationNumber == code))
+                foreach (DO.LineStation lineS in dl.GetAllLineStationsBy(s => s.StationNumber == code))//delete all the line stations of the deleted station from all the lines
                 {
                     DeleteLineStation(lineS.LineId, lineS.StationNumber);
                 }
-                foreach (DO.AdjacentStations AjaS in dl.GetAllAdjacentStationsBy(a => a.StationCode1 == code || a.StationCode2 == code))
+                foreach (DO.AdjacentStations AjaS in dl.GetAllAdjacentStationsBy(a => a.StationCode1 == code || a.StationCode2 == code))//delete all the adjecentStations that involve the deleted station
                 {
                     dl.DeleteAdjacentStations(AjaS);
                 }
+                dl.DeleteStation(code);//delete the station
             }
             catch (Exception msg)
             {
@@ -786,7 +859,6 @@ namespace BL
         }
 
         #endregion
-
 
         #region private methods
 

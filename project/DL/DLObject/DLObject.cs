@@ -417,6 +417,19 @@ namespace DL
             oldLineStation = newLineStation.Clone();//override the old lineStation
         }
 
+        public void UpdateLineStation(Action<LineStation> action, int lineId, int stationNumber)
+        {
+            LineStation oldLineStation = (from ls in DataSource.LineStations
+                                          where ls.LineId == lineId
+                                                && ls.StationNumber == stationNumber
+                                          select ls).FirstOrDefault();
+            if (oldLineStation == null)//if the old Line Station dont exist in the data source
+            {
+                throw new NotExistExeption("the line station doesn't exist");
+            }
+            action(oldLineStation);//do 'action' on the old line station
+        }
+
         /// <summary>
         /// <br>delete the line station with LineId = 'lineId' and StationNumber = 'stationNum'</br>
         /// </summary>
@@ -584,11 +597,10 @@ namespace DL
             oldLineTrip = newLineTrip.Clone();//override the old line trip with the new one
         }
 
-        public void DeleteLineTrip(LineTrip lineTrip)
+        public void DeleteLineTrip(int id)
         {
             LineTrip lineT = (from l in DataSource.LineTrips
-                         where l.ID == lineTrip.ID
-                               && l.LineId == lineTrip.LineId
+                         where l.ID == id
                                && l.IsActive
                          select l).FirstOrDefault();
             if (lineT != null)

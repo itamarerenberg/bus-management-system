@@ -70,7 +70,7 @@
     <Longitude>35.237224</Longitude>
     <Latitude>31.73837</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>32</Code>
@@ -102,7 +102,7 @@
     <Longitude>35.235105</Longitude>
     <Latitude>31.736976</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>36</Code>
@@ -110,7 +110,7 @@
     <Longitude>35.23286</Longitude>
     <Latitude>31.736484</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>37</Code>
@@ -118,7 +118,7 @@
     <Longitude>35.23226</Longitude>
     <Latitude>31.736302</Latitude>
     <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>40</Code>
@@ -134,7 +134,7 @@
     <Longitude>35.224724</Longitude>
     <Latitude>31.731849</Latitude>
     <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>42</Code>
@@ -166,7 +166,7 @@
     <Longitude>35.233766</Longitude>
     <Latitude>31.728309</Latitude>
     <Address>רחוב:אלתון  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>49</Code>
@@ -174,7 +174,7 @@
     <Longitude>35.23344</Longitude>
     <Latitude>31.729868</Latitude>
     <Address>רחוב:אלתון  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>50</Code>
@@ -182,7 +182,7 @@
     <Longitude>35.231458</Longitude>
     <Latitude>31.732664</Latitude>
     <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>51</Code>
@@ -1054,7 +1054,7 @@
     <Longitude>35.22416</Longitude>
     <Latitude>31.791394</Latitude>
     <Address>רחוב:שמואל הנביא 47 עיר: ירושלים</Address>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Station>
   <Station>
     <Code>213</Code>

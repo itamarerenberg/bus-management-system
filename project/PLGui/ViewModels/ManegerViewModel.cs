@@ -844,7 +844,7 @@ namespace PLGui.utilities
                 {
                     MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} was deleted successfully!");
                     OnPropertyChanged(nameof(MyMessageQueue));
-                    loadStations();
+                    loadData();
                 }
             }
             else                                                //Cancelled!!

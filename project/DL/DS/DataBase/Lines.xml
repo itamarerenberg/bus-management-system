@@ -1,19 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Lines>
   <Line>
-    <ID>63</ID>
-    <LineNumber>254</LineNumber>
+    <ID>4</ID>
+    <LineNumber>11</LineNumber>
     <Area>Jerusalem</Area>
-    <FirstStation_Id>211</FirstStation_Id>
-    <LastStation_Id>982</LastStation_Id>
-    <IsActive>True</IsActive>
+    <FirstStation_Id>30</FirstStation_Id>
+    <LastStation_Id>37</LastStation_Id>
+    <IsActive>False</IsActive>
   </Line>
   <Line>
-    <ID>64</ID>
-    <LineNumber>875</LineNumber>
+    <ID>5</ID>
+    <LineNumber>12</LineNumber>
     <Area>Jerusalem</Area>
-    <FirstStation_Id>148</FirstStation_Id>
-    <LastStation_Id>1041</LastStation_Id>
-    <IsActive>True</IsActive>
+    <FirstStation_Id>30</FirstStation_Id>
+    <LastStation_Id>40</LastStation_Id>
+    <IsActive>False</IsActive>
+  </Line>
+  <Line>
+    <ID>6</ID>
+    <LineNumber>14</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>30</FirstStation_Id>
+    <LastStation_Id>40</LastStation_Id>
+    <IsActive>False</IsActive>
+  </Line>
+  <Line>
+    <ID>7</ID>
+    <LineNumber>145</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>46</FirstStation_Id>
+    <LastStation_Id>51</LastStation_Id>
+    <IsActive>False</IsActive>
+  </Line>
+  <Line>
+    <ID>8</ID>
+    <LineNumber>22</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>40</FirstStation_Id>
+    <LastStation_Id>42</LastStation_Id>
+    <IsActive>False</IsActive>
   </Line>
 </Lines>
