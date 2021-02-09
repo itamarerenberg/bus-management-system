@@ -170,4 +170,104 @@
     <NextStation>NaN</NextStation>
     <IsActive>False</IsActive>
   </LineStation>
+  <LineStation>
+    <LineId>9</LineId>
+    <StationNumber>45</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד א</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>51</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>9</LineId>
+    <StationNumber>51</StationNumber>
+    <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
+    <Name>אום טובא 7</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>45</PrevStation>
+    <NextStation>46</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>9</LineId>
+    <StationNumber>46</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד א</Name>
+    <LineStationIndex>2</LineStationIndex>
+    <PrevStation>51</PrevStation>
+    <NextStation>52</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>9</LineId>
+    <StationNumber>52</StationNumber>
+    <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
+    <Name>אום טובא 9</Name>
+    <LineStationIndex>3</LineStationIndex>
+    <PrevStation>46</PrevStation>
+    <NextStation>53</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>9</LineId>
+    <StationNumber>53</StationNumber>
+    <Address>רחוב:אל מדינה אל מונאוורה  עיר: ירושלים</Address>
+    <Name>סור באהר 1</Name>
+    <LineStationIndex>4</LineStationIndex>
+    <PrevStation>52</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>10</LineId>
+    <StationNumber>61158</StationNumber>
+    <Address>רחוב:מעגלות הרב פרדס  עיר: ירושלים</Address>
+    <Name>הרב פרדס/מאיר בלבן</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>46</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>10</LineId>
+    <StationNumber>46</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד א</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>61158</PrevStation>
+    <NextStation>40</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>10</LineId>
+    <StationNumber>40</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד ד</Name>
+    <LineStationIndex>2</LineStationIndex>
+    <PrevStation>46</PrevStation>
+    <NextStation>45</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>10</LineId>
+    <StationNumber>45</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד א</Name>
+    <LineStationIndex>3</LineStationIndex>
+    <PrevStation>40</PrevStation>
+    <NextStation>51</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>10</LineId>
+    <StationNumber>51</StationNumber>
+    <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
+    <Name>אום טובא 7</Name>
+    <LineStationIndex>4</LineStationIndex>
+    <PrevStation>45</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>False</IsActive>
+  </LineStation>
 </LineStations>

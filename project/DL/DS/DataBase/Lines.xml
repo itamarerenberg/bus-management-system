@@ -40,4 +40,20 @@
     <LastStation_Id>42</LastStation_Id>
     <IsActive>False</IsActive>
   </Line>
+  <Line>
+    <ID>9</ID>
+    <LineNumber>1</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>45</FirstStation_Id>
+    <LastStation_Id>53</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>10</ID>
+    <LineNumber>2</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>61158</FirstStation_Id>
+    <LastStation_Id>51</LastStation_Id>
+    <IsActive>False</IsActive>
+  </Line>
 </Lines>

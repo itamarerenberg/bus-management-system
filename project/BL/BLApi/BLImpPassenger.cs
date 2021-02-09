@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BL.BLApi;
 using BL.BO;
+using BL.simulator;
 using BLApi;
 using BO;
 using DLApi;
@@ -381,29 +382,53 @@ namespace BL
             throw new NotImplementedException();
         }
 
+
+        #endregion
+
         #region simulator
-        public void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime)
+        SimulationClock clock = SimulationClock.Instance;
+        TravelsExecuter travelsExecuter = TravelsExecuter.Instance;
+        /// <summary>
+        /// start the simulatorClock and the travel executer
+        /// </summary>
+        /// <param name="startTime">the time wich the simolator clock will start from</param>
+        /// <param name="Rate">the rate of the simulator clock relative to real time</param>
+        /// <param name="updateTime">will executet when the simulator time changes</param>
+        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime)
         {
-            throw new NotImplementedException();
+            clock.StartClock(startTime, rate, updateTime);
+            travelsExecuter.StartExecute();
         }
 
+        /// <summary>
+        /// stops the simulator clock and the travels executer and all the travels that in progres
+        /// </summary>
         public void StopSimulator()
         {
-            throw new NotImplementedException();
+            clock.StopClock();//this stops the travels executer too
         }
 
+        /// <summary>
+        /// adds the station to the list of the stations that under truck
+        /// </summary>
         public void Add_stationPanel(int stationCode, Action<LineTiming> updateBus)
         {
-            throw new NotImplementedException();
+            travelsExecuter.Add_station_to_truck(stationCode);
         }
 
+        /// <summary>
+        /// removes the station from the list of the stations that under truck
+        /// </summary>
         public void Remove_stationPanel(int stationCode)
         {
-            throw new NotImplementedException();
-        } 
-        #endregion
-        #endregion
+            travelsExecuter.Add_station_to_truck(stationCode);
+        }
 
+        public void Change_SimulatorRate(int change)
+        {
+            clock.Change_Rate(change);
+        }
 
+        #endregion
     }
 }
