@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using BLApi;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -11,39 +14,45 @@ using Microsoft.Toolkit.Mvvm.Input;
 
 namespace PLGui.utilities
 {
-    public class MainWindowViewModel : ObservableRecipient
+    public class MainWindowViewModel : ObservableValidator
     {
 
         #region properties and fields
         IBL mangerBl;
-        IBL passangerBl;
+        IBL passengerBl;
         private string name;
         private string password;
         private string newPasswod;
         private bool manegerCheckBox;
 
+        [Required(ErrorMessage = "Name cannot be empty", AllowEmptyStrings =false)]
         public string Name
         {
             get => name;
             set
             {
-                SetProperty(ref name, value);
+                value = value ?? "";
+                SetProperty(ref name, value, true);
             }
-        }
 
+        }
+        [Required(ErrorMessage = "Password cannot be empty")]
         public string Password
         {
             get => password;
             set
             {
-                SetProperty(ref password, value);
+                value = value ?? "";
+                SetProperty(ref password, value, true);
             }
         }
-
         public string NewPassword
         {
-            get { return newPasswod; }
-            set { newPasswod = value; }
+            get => newPasswod;
+            set
+            {
+                SetProperty(ref newPasswod, value, true);
+            }
         }
 
         public bool ManegerCheckBox
@@ -60,11 +69,11 @@ namespace PLGui.utilities
         #region constructor
         public MainWindowViewModel()
         {
-            passangerBl = BL.BLApi.BLFactory.GetBL("passenger");
+            passengerBl = BL.BLApi.BLFactory.GetBL("passenger");
             mangerBl = BL.BLApi.BLFactory.GetBL("admin");
 
-            SignInCommand = new RelayCommand<Window>(SignIn);
-            SignUpCommand = new RelayCommand<Window>(SignUp);
+            SignInCommand = new RelayCommand<MainWindow>(SignIn);
+            SignUpCommand = new RelayCommand<MainWindow>(SignUp);
             DebugButtonCommand = new RelayCommand<Window>(debugButton);
             CloseCommand = new RelayCommand<MainWindow>(MainWindow_Closing);
             RegisterCommand = new RelayCommand<MainWindow>(Register);
@@ -85,43 +94,54 @@ namespace PLGui.utilities
         /// 
         /// </summary>
         /// <param name="window"></param>
-        private void SignIn(Window window)
+        private void SignIn(MainWindow window)
         {
-            if (ManegerCheckBox == true)
+            //invoke the binding for validation
+            window.NameIn.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            window.PasswordIn.GetBindingExpression(PasswordBox.PasswordProperty).UpdateSource();
+            if (!this.HasErrors)
             {
-                try
+                if (ManegerCheckBox == true)
                 {
-                    if (mangerBl.GetManagar(Name, Password))
+                    try
                     {
-                        new ManegerView().Show();
-                        window.Close();
+                        if (mangerBl.GetManagar(Name, Password))
+                        {
+                            new ManegerView().Show();
+                            window.Close();
+                        }
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "the access is denied");
                     }
                 }
-                catch (Exception msg)
+                else
                 {
-                    MessageBox.Show(msg.Message, "the access is denied");
-                }
-            }
-            else 
-            {
-                try
-                {
-                    BO.Passenger passenger = passangerBl.GetPassenger(Name, Password);
-                    MessageBox.Show("צריך לעשות חלון של נוסע");
-                }
-                catch (Exception msg)
-                {
-                    MessageBox.Show(msg.Message, "the access is denied");
+                    try
+                    {
+                        BO.Passenger passenger = passengerBl.GetPassenger(Name, Password);
+                        MessageBox.Show("צריך לעשות חלון של נוסע");
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "the access is denied");
+                    }
                 }
             }
         }
-        private void SignUp(Window window)
+            
+        private void SignUp(MainWindow window)
         {
+            //invoke the binding for validation
+            window.NameUp.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            window.PasswordUp.GetBindingExpression(PasswordBox.PasswordProperty).UpdateSource();
+
             if (Password == newPasswod)
             {
                 try
                 {
-                    passangerBl.AddPassenger(Name, Password);
+                    passengerBl.AddPassenger(Name, Password);
                     MessageBox.Show("the user was added successfully!\nPlease sign in");
                     SwitchView(window as MainWindow, true);//return the view into sign in mode
                 }

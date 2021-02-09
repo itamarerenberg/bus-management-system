@@ -130,8 +130,6 @@ namespace PLGui.utilities
                 to.Add(line);
             }
         }
-
-
         public static T FindParentOfType<T>(this Control aParent) where T : Control
         {
             if (aParent is T)

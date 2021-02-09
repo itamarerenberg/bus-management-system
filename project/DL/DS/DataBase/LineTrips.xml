@@ -1,2 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LineTrips></LineTrips>
+<LineTrips>
+  <LineTrip>
+    <ID>15</ID>
+    <LineId>70</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>15:00:00</Frequency>
+    <FinishAt>00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>16</ID>
+    <LineId>71</LineId>
+    <StartTime>08:00:00</StartTime>
+    <Frequency>00:30:00</Frequency>
+    <FinishAt>23:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>17</ID>
+    <LineId>72</LineId>
+    <StartTime>06:00:00</StartTime>
+    <Frequency>00:25:00</Frequency>
+    <FinishAt>00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>18</ID>
+    <LineId>69</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>00:40:00</Frequency>
+    <FinishAt>00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>19</ID>
+    <LineId>68</LineId>
+    <StartTime>09:00:00</StartTime>
+    <Frequency>00:10:00</Frequency>
+    <FinishAt>23:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>20</ID>
+    <LineId>69</LineId>
+    <StartTime>12:00:00</StartTime>
+    <Frequency>00:10:00</Frequency>
+    <FinishAt>18:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+</LineTrips>

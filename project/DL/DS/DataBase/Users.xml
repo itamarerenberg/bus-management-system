@@ -24,4 +24,10 @@
     <Admin>False</Admin>
     <IsActive>True</IsActive>
   </User>
+  <User>
+    <Name></Name>
+    <Password></Password>
+    <Admin>False</Admin>
+    <IsActive>True</IsActive>
+  </User>
 </Users>

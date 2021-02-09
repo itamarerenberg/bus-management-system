@@ -39,6 +39,7 @@ namespace PLGui.utilities
         private Bus busDisplay;
         private DateTime time;
         private bool isSimulatorOff = true;
+        private bool filterStations;
         public int rate;
 
 
@@ -57,6 +58,8 @@ namespace PLGui.utilities
             {
                 SetProperty(ref selectedTabItem, value);
                 OnPropertyChanged(nameof(IsSelcetdItemList));
+                if(Mview != null)
+                    tab_selactionChange(Mview);
             }
         }
         public ManegerView Mview { get; set; }
@@ -94,6 +97,25 @@ namespace PLGui.utilities
             get => isSimulatorOff;
             set => SetProperty(ref isSimulatorOff, value);
         }
+
+        public bool FilterStations
+        {
+            get => filterStations;
+            set
+            {
+                SetProperty(ref filterStations, value);
+                if (filterStations)
+                {
+                    Stations.Filter = s => ((Station)s).LinesNums.Count() > 0;
+                }
+                else
+                {
+                    Stations.Filter = s => true;
+                }
+                Stations.Refresh();
+            }
+        }
+
 
         public Station StationDisplay
         {
@@ -246,6 +268,10 @@ namespace PLGui.utilities
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             manegerModel.Lines = (ObservableCollection<Line>)args.Result;
+                            if (LineDisplay != null)
+                            {
+                                LineDisplay = manegerModel.Lines.Where(l => l.ID == LineDisplay.ID).FirstOrDefault();
+                            } 
                             OnPropertyChanged(nameof(Lines));
                         }
                         if (runLoadLinesAgain)
@@ -420,37 +446,36 @@ namespace PLGui.utilities
 
         /// <summary>
         /// accured when search box is changing. replace the list in the window into list that contains the search box text.
-        /// the search is according to the conbo box picking
+        /// the search is according to the combo box picking
         /// </summary>
         private void SearchBox_TextChanged(Window window)
         {
-            //get the ManegerView instance
-            ManegerView Mview = window as ManegerView;
             if (Mview.ComboBoxSearch.SelectedItem != null)
             {
                 string propertyName = string.Concat(Mview.ComboBoxSearch.Text.Where(s => !char.IsWhiteSpace(s)));//gets the property name
-                string listName = ((Mview.mainTab.SelectedItem as TabItem).Tag.ToString());                  //gets the list name
+                string listName = (SelectedTabItem.Tag.ToString());                  //gets the list name
 
+                //filtering the selceted list by collectionView according to the search box content and combo box picking
                 switch (listName)
                 {
                     case "Buses":
                         if (buses != null)
                         {
-                            Buses.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
+                            Buses.Filter = b => b.GetType().GetProperty(propertyName).GetValue(b).ToString().Contains(Mview.SearchBox.Text);
                             Buses.Refresh(); 
                         }
                         break;
                     case "Stations":
-                        if (stations != null)
+                        if (stations != null && FilterStations == false)
                         {
-                            Stations.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
+                            Stations.Filter = s => s.GetType().GetProperty(propertyName).GetValue(s).ToString().Contains(Mview.SearchBox.Text);
                             Stations.Refresh();
                         }
                         break;
                     case "LineTrips":
                         if (LineTrips != null)
                         {
-                            LineTrips.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
+                            LineTrips.Filter = lt => lt.GetType().GetProperty(propertyName).GetValue(lt).ToString().Contains(Mview.SearchBox.Text);
                             LineTrips.Refresh();
                         }
                         break;
@@ -493,16 +518,12 @@ namespace PLGui.utilities
         /// <param name="window"></param>
         private void tab_selactionChange(ManegerView Mview)
         {
-            ListView currentListView = (Mview.mainTab.SelectedItem as TabItem).Content as ListView;
-
-            List<string> comboList = (((Mview.mainTab.SelectedItem as TabItem).Content as ListView).View as GridView).Columns
+            List<string> comboList = ((SelectedTabItem.Content as ListView).View as GridView).Columns
                                       .Where(g => g.DisplayMemberBinding != null && g.Header != null).Select(C => C.Header.ToString()).ToList();
             Mview.ComboBoxSearch.ItemsSource = comboList;
             Mview.ComboBoxSearch.SelectedIndex = 0;//display the first item in the combo box
+            Mview.SearchBox.Text = "";
             SearchBox_TextChanged(Mview);
-
-            OnPropertyChanged(nameof(SelectedTabItem));
-            OnPropertyChanged(nameof(IsSelcetdItemList));
         }
         /// <summary>
         /// when a row in the list has selected. show in the window his properties deatails, etc.
@@ -534,14 +555,17 @@ namespace PLGui.utilities
             }
         }
         BackgroundWorker GetLineOfStationWorker;
+        /// <summary>
+        /// set the collection "LinesOfStation"(this collection is bind to the view) with the lines of the given station
+        /// </summary>
         private void GetLinesOfStation(Station station)
         {
+            LinesOfStation = null;
             if (station.LinesNums.Count > 0)
             {
                 if (GetLineOfStationWorker == null)
                 {
-                    GetLineOfStationWorker = new BackgroundWorker();
-                    GetLineOfStationWorker.WorkerSupportsCancellation = true;
+                    GetLineOfStationWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
                     GetLineOfStationWorker.RunWorkerCompleted +=
                         (object sender, RunWorkerCompletedEventArgs args) =>
                         {
@@ -556,20 +580,22 @@ namespace PLGui.utilities
                         (object sender, DoWorkEventArgs args) =>
                         {
                             BackgroundWorker worker = (BackgroundWorker)sender;
+                            Station newStation = args.Argument as Station;
                             ObservableCollection<Line> result = new ObservableCollection<Line>();
                             try
                             {
-                                result = new ObservableCollection<Line>(source.GetAllLinesBy(l => l.Stations.Exists(s => s.StationNumber == station.Code)).Select(l => l.Line_BO_PO()));//get the lines from source
+                                //result = new ObservableCollection<Line>(source.GetAllLinesBy(l => l.Stations.Exists(s => s.StationNumber == newStation.Code)).Select(l => l.Line_BO_PO()));//get the lines from source
+                                //result = new ObservableCollection<Line>(lines.Where(l => l.Stations.Where(s => s.StationNumber == station.Code).FirstOrDefault() != null));
+                                result = new ObservableCollection<Line>(lines.Where(l => newStation.LinesNums.Any(n => n == l.ID)));
                             }
                             catch (Exception msg)
                             {
                                 MessageBox.Show(msg.Message, "ERROR");
-                                GetLineOfStationWorker.CancelAsync();
                             }
                             args.Result = worker.CancellationPending ? null : result;
                         };//this function will execute in the BackgroundWorker thread
                 }
-                GetLineOfStationWorker.RunWorkerAsync(); 
+                GetLineOfStationWorker.RunWorkerAsync(station);
             }
         }
         private void LostFocus( ManegerView MView)
@@ -606,7 +632,6 @@ namespace PLGui.utilities
 
                 loadLineTrips();
                 loadLines();
-                List_SelectionChanged(Mview);//refrash the view
             }
             else
             {
@@ -638,11 +663,14 @@ namespace PLGui.utilities
                 } 
             }
             List_SelectionChanged(Mview);//refrash the view
-        }     
+        }
         private void enter_asAnotherUser(ManegerView window)
         {
             new MainWindow().Show();
-            window.Close(); 
+            if (window.IsActive)
+            {
+                window.Close();
+            }
         }
         private void manegerView_Closing(Window window)
         {
@@ -658,6 +686,7 @@ namespace PLGui.utilities
             manegerView.LinesList.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LineTrip_Details.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LineStations_view.MouseDoubleClick += List_MouseDoubleClick;
+            manegerView.LinePasses_view.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LinesTripList.MouseDoubleClick += List_MouseDoubleClick;
 
             manegerView.StationList.MouseRightButtonUp += List_MouseRightButtonUp;
@@ -738,7 +767,6 @@ namespace PLGui.utilities
                 }
             }
         }
-
         private void RefuleBus()
         {
             throw new NotImplementedException();

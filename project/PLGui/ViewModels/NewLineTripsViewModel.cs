@@ -89,11 +89,16 @@ namespace PLGui.utilities
             }
 
             ButtonCommand = new RelayCommand<Window>(Set_Update_Button);
-        } 
+            CloseCommand = new RelayCommand<Window>(Close);
+        }
+
+        
         #endregion
 
         #region commands
         public ICommand ButtonCommand { get; }
+        public ICommand CloseCommand { get; }
+
 
         private void Set_Update_Button(Window window)
         {
@@ -130,7 +135,10 @@ namespace PLGui.utilities
             }
             window.Close();
         }
-
+        private void Close(Window window)
+        {
+            window.Close();
+        }
         #endregion
 
         #region help methods

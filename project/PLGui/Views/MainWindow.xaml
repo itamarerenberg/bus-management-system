@@ -18,7 +18,7 @@
         <viewmodels:MainWindowViewModel/>
     </Window.DataContext>
 
-    <Border CornerRadius="15" Background="White" >
+    <Border CornerRadius="15" Background="#FFF2FCED" >
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*"/>
@@ -36,22 +36,24 @@
             <Button Content="Close" VerticalAlignment="Top" HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Black"
                 Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ThisWindow}" FontWeight="Bold" FontFamily="Arial Narrow"/>
 
-            <materialDesign:Card x:Name="SignInCard" Grid.RowSpan="2" Margin="50,100,50,90" UniformCornerRadius="9">
+            <materialDesign:PackIcon Kind="Bus" Width="60" Height="60" Foreground="#FFF2FCED" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            
+            <materialDesign:Card x:Name="SignInCard" Grid.RowSpan="2" Margin="50,100,50,90" UniformCornerRadius="9" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Name" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" MaxLength="30"/>
-                    <p:PasswordBox Password="{Binding Password}" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Center" VerticalAlignment="top" Width="120" Grid.Row="1"/>
+                    <TextBox x:Name="NameIn" Text="{Binding Name, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" materialDesign:HintAssist.Hint="Name" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" MaxLength="30" />
+                    <p:PasswordBox x:Name="PasswordIn" Password="{Binding Password, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus,Mode=TwoWay}" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Center" VerticalAlignment="top" Width="120" Grid.Row="1"/>
                     <CheckBox Content="Enter as maneger" IsChecked="{Binding ManegerCheckBox}" Grid.Row="1" VerticalAlignment="Bottom" Margin="35" Foreground="Gray"/>
 
-                    <Button Command="{Binding DebugButtonCommand}" CommandParameter="{Binding ElementName=ThisWindow}" Content="Debug" HorizontalAlignment="Left" Height="35" Margin="81,13,0,0" VerticalAlignment="Top" Width="84" Background="#FFDA2517"/>
+                    <Button Command="{Binding DebugButtonCommand}" CommandParameter="{Binding ElementName=ThisWindow}" Content="Debug" HorizontalAlignment="Left" Height="35" Margin="81,13,0,0" VerticalAlignment="Top" Width="84" Background="#FFDA2517" BorderBrush="{x:Null}"/>
 
                 </Grid>
             </materialDesign:Card>
             <Button x:Name="SignInButton" Content="Sign in" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                Style="{StaticResource MaterialDesignFlatMidBgButton}" Background="#FF97F045" Foreground="White"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}" Background="#FF97F045" Foreground="#FFF2FCED"
                 Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=ThisWindow}" materialDesign:ButtonAssist.CornerRadius="15"/>
 
             <materialDesign:Card x:Name="SignUpCard" Grid.RowSpan="2" Margin="50,100,50,90" UniformCornerRadius="9" Visibility="Collapsed">
@@ -60,9 +62,9 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Name" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" MaxLength="30"/>
-                    <p:PasswordBox Password="{Binding Password}" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Grid.RowSpan="2"/>
-                    <p:PasswordBox Password="{Binding NewPassword}" materialDesign:HintAssist.Hint="Confirm Password" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Grid.Row="1"/>
+                    <TextBox x:Name="NameUp" Text="{Binding Name, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus}" materialDesign:HintAssist.Hint="Name" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" MaxLength="30"/>
+                    <p:PasswordBox x:Name="PasswordUp" Password="{Binding Password, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus}" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Grid.RowSpan="2"/>
+                    <p:PasswordBox x:Name="NewPasswordUp" Password="{Binding NewPassword, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus}" materialDesign:HintAssist.Hint="Confirm Password" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Grid.Row="1"/>
 
                 </Grid>
             </materialDesign:Card>

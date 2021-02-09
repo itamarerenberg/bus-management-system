@@ -47,7 +47,7 @@
 
         <Label Content="add/remove a station to/from the new line by double click on the station" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom"/>
 
-        <StackPanel Grid.Column="0" Grid.Row="1" Margin="10">
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="10" CanVerticallyScroll="True">
             <StackPanel Orientation="Horizontal">
                 <StackPanel>
                     <TextBlock Text="line number" HorizontalAlignment="Left"/>
