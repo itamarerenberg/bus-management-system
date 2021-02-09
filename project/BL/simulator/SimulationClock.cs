@@ -58,6 +58,12 @@ namespace BL.simulator
 
             Cancel = false;
             Observer = _observer;
+
+            if(rate < 1)
+            {
+                throw new IligalRateExeption("rate can not be less then 1");
+            }
+
             Rate = rate;
 
             Stopwatch tempStopWach = new Stopwatch();
@@ -72,9 +78,9 @@ namespace BL.simulator
                 stopwatch.Restart();
                 while(!Cancel)
                 {
-                    clock = new Clock(startTime + new TimeSpan(stopwatch.ElapsedTicks * rate));
+                    clock = new Clock(startTime + new TimeSpan(Stime_to_Rtime(stopwatch.ElapsedTicks)));
                     observer(new TimeSpan(clock.Hours, clock.Minutes, clock.Seconds));
-                    Thread.Sleep(1000 / rate);
+                    Thread.Sleep((int)Rtime_to_Stime(1000));
                 }
                 stopwatch.Stop();
             };//this function will execute in the BackgroundWorker thread
@@ -88,6 +94,39 @@ namespace BL.simulator
         public void StopClock()
         {
             Cancel = true;
+        }
+
+        /// <summary>
+        /// <br>changes the rate of the simulation</br>
+        /// <br>for speed up insert positive number for 'change'</br>
+        /// <br>for slow down insert negative number for 'change'</br>
+        /// </summary>
+        /// <param name="change">adds to current Rate</param>
+        public void Change_Rate(int change)
+        {
+            if(Rate + change < 1)
+            {
+                throw new IligalRateExeption("rate cant be less then 1");
+            }
+            Rate += change;
+        }
+
+        /// <summary>
+        /// convert from real time to simulator time
+        /// </summary>
+        public long Rtime_to_Stime(long time)
+        {
+            return time / Rate;
+        }
+
+        /// <summary>
+        /// convert from simulator time to real time
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public long Stime_to_Rtime(long time)
+        {
+            return time * Rate;
         }
     }
 }

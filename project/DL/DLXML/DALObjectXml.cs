@@ -426,7 +426,7 @@ namespace DL
                               select ls).FirstOrDefault();
             if (lineS != null)//if found
             {
-                lineS.Element("IsActive").Value = false.ToString();//set the line station to be unactive
+                lineS.Remove();
             }
             else
             {

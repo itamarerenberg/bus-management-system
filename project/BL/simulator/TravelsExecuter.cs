@@ -74,7 +74,7 @@ namespace BL.simulator
                 for (int i = 0; !clock.Cancel; i = (i + 1) % lineTrips.Count())//run while !clock.cancel in cycels(0, 1, 2,..., n, 0, 1, 2,...)
                 {
                     int timeToNextTravel = (int)((lineTrips[i].StartTime - clock.Time).TotalMilliseconds);
-                    Thread.Sleep(timeToNextTravel / clock.Rate);
+                    Thread.Sleep((int)clock.Rtime_to_Stime(timeToNextTravel));
                     
                     executeTravel(lineTrips[i]);//execute the travel
                 }
@@ -119,8 +119,8 @@ namespace BL.simulator
                     }
 
                     //calculate the sleep time (the time until the next station)
-                    double sleepTime = stations[current].CurrentToNext.Time.TotalMilliseconds / clock.Rate;
-                    sleepTime *= (new Random()).Next(10, 200) / 100d;//real time is between 10% and 200% of the avrege time(the time that save in the LineStation)
+                    long sleepTime = clock.Rtime_to_Stime((long)stations[current].CurrentToNext.Time.TotalMilliseconds);
+                    sleepTime *= (new Random()).Next(10, 200) / 100;//real time is between 10% and 200% of the avrege time(the time that save in the LineStation)
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
 
@@ -137,7 +137,7 @@ namespace BL.simulator
 
                         foreach (var timing in underTruck)//update the observer for all the stations that under truck
                         {
-                            timing.Value.ArrivalTime -= new TimeSpan(0, 0, 0, (int)sleep * clock.Rate);//substract the time passed during the sleep from the arival time
+                            timing.Value.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
                             observer(timing.Value);//update the observer 
                         }
                     }

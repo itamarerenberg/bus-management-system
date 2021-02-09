@@ -858,6 +858,11 @@ namespace BL
             travelsExecuter.Add_station_to_truck(stationCode);
         }
 
+        public void Change_SimulatorRate(int change)
+        {
+            clock.Change_Rate(change);
+        }
+
         #endregion
 
         #region private methods

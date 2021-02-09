@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BL.BO;
+using BL.simulator;
 using BO;
 
 namespace BLApi
@@ -146,6 +147,7 @@ namespace BLApi
         /// <param name="startTime">the time wich the simolator clock will start from</param>
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
+        /// /// <exception cref="IligalRateExeption">if rate is less then 1</exception>
         void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime);
 
         /// <summary>
@@ -162,6 +164,15 @@ namespace BLApi
         /// removes the station from the list of the stations that under truck
         /// </summary>
         void Remove_stationPanel(int stationCode);
+
+        /// <summary>
+        /// <br>changes the rate of the simulator's clock</br>
+        /// <br>for speed up insert positive number for 'change'</br>
+        /// <br>for slow down insert negative number for 'change'</br>
+        /// </summary>
+        /// <param name="change">adds to the current rate of the simulator's clock</param>
+        /// <exception cref="IligalRateExeption">if the change will make rate to be less the 1</exception>
+        void Change_SimulatorRate(int change);
 
         #endregion
 

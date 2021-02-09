@@ -478,7 +478,7 @@ namespace DL
             if (tempStations == null)//if ther is no such AdjacentStations
             {
                 DataSource.AdjacentStations.Add(tempStations.Clone());
-            }            
+            }
             //else do nothing (it's not an exeption) 
         }
 
