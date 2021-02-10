@@ -76,9 +76,9 @@
             <materialDesign:Card UniformCornerRadius="6" Background="#FFB3EF7C">
                 <Border BorderThickness="1" Background="White" BorderBrush="#FFB3EF7C" CornerRadius="6">
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <Slider Minimum="1" Maximum="999" Value="{Binding Rate}" IsSelectionRangeEnabled="True" IsEnabled="{Binding IsSimulatorOff}" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}"/>
+                        <Slider Minimum="1" Maximum="999" Value="{Binding Rate}" IsSelectionRangeEnabled="True" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}"/>
                         <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-                                 ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}" MaxLength="4" CaretBrush="#FF7CC33B" BorderBrush="#FF96EE46"/>
+                                 ToolTip="set the rate of the simulator" MaxLength="4" CaretBrush="#FF7CC33B" BorderBrush="#FF96EE46"/>
                         <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
                         <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
                         Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom" IsEnabled="{Binding IsSimulatorOff}">

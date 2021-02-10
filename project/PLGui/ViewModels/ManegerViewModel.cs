@@ -90,7 +90,14 @@ namespace PLGui
         public int Rate
         {
             get => rate > 0 ? rate : 1;
-            set => SetProperty(ref rate, value);
+            set
+            {
+                int temp = rate;//save the old value
+                if (SetProperty(ref rate, value) && !IsSimulatorOff)
+                {
+                    source.Change_SimulatorRate(value - temp);
+                }
+            }
         }
         public bool IsSimulatorOff
         {
