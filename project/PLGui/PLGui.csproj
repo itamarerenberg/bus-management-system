@@ -153,6 +153,7 @@
     <Compile Include="Models\PO\LineStation.cs" />
     <Compile Include="Models\PO\LineTrip.cs" />
     <Compile Include="Models\PO\Station.cs" />
+    <Compile Include="Models\PO\TimeTrip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserTrip.cs" />
     <Compile Include="utilities\TimeSpanPicker.xaml.cs">
@@ -160,7 +161,7 @@
     </Compile>
     <Compile Include="utilities\Type_converter_to_visibility.cs" />
     <Compile Include="ViewModels\NewLineTripsViewModel.cs" />
-    <Compile Include="Views\PassengerViewModel.cs" />
+    <Compile Include="ViewModels\PassengerViewModel.cs" />
     <Compile Include="utilities\MessengerCenter.cs" />
     <Compile Include="utilities\PasswordBox.xaml.cs">
       <DependentUpon>PasswordBox.xaml</DependentUpon>

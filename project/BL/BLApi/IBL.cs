@@ -99,6 +99,8 @@ namespace BLApi
         void AddLineStation(int id, int StationNumber, int index);
         void UpdateLineStation(int lineNumber, int StationNumber);
         void DeleteLineStation(int lineNumber, int StationNumber);
+        IEnumerable<LineStation> GetAllLineStations();
+
         #endregion
 
         #region Station

@@ -23,14 +23,14 @@ using PLGui.Models;
 using PLGui.Models.PO;
 using PLGui.utilities;
 
-namespace PLGui.utilities
+namespace PLGui
 {
     public class ManegerViewModel : ObservableRecipient  
     {
         #region fileds
 
         ManegerModel manegerModel = new ManegerModel();
-        IBL source;
+        readonly IBL source;
         TabItem selectedTabItem;
 
         private Station stationDisplay;

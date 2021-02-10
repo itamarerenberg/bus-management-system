@@ -5,7 +5,7 @@
     <LineId>70</LineId>
     <StartTime>00:00:00</StartTime>
     <Frequency>15:00:00</Frequency>
-    <FinishAt>00:00:00</FinishAt>
+    <FinishAt>1.00:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
   <LineTrip>
@@ -21,7 +21,7 @@
     <LineId>72</LineId>
     <StartTime>06:00:00</StartTime>
     <Frequency>00:25:00</Frequency>
-    <FinishAt>00:00:00</FinishAt>
+    <FinishAt>1.00:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
   <LineTrip>
@@ -29,7 +29,7 @@
     <LineId>69</LineId>
     <StartTime>00:00:00</StartTime>
     <Frequency>00:40:00</Frequency>
-    <FinishAt>00:00:00</FinishAt>
+    <FinishAt>1.00:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
   <LineTrip>
@@ -46,6 +46,14 @@
     <StartTime>12:00:00</StartTime>
     <Frequency>00:10:00</Frequency>
     <FinishAt>18:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>21</ID>
+    <LineId>71</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>15:00:00</Frequency>
+    <FinishAt>1.00:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
 </LineTrips>

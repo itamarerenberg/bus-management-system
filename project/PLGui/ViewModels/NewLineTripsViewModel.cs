@@ -102,13 +102,18 @@ namespace PLGui.utilities
 
         private void Set_Update_Button(Window window)
         {
-            if (Frequency == new DateTime())//Frequency is empty
+            if (Finish != new DateTime() && Frequency == new DateTime())//finish is set while Frequency is empty
             {
                 MessageBox.Show("Frequency cannot be empty", "ERROR");
                 return;
             }
+            if (Frequency != new DateTime() && Finish < Start)//Frequency is set while start is bigger then finish
+            {
+                MessageBox.Show("finish cannot be before the start", "ERROR");
+                return;
+            }
             LTrip.StartTime = Start.TimeOfDay;
-            LTrip.Finish = Finish.TimeOfDay;
+            LTrip.Finish = Finish.TimeOfDay == TimeSpan.Zero? new TimeSpan(1,0,0,0): Finish.TimeOfDay;//if finish is 00:00 => finish = 1 day
             LTrip.Frequency = Frequency.TimeOfDay;
 
             if (NewLineTripMode == false)//if the view model on "updating mode"

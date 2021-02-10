@@ -18,5 +18,9 @@ namespace BO
         public double Distance_from_start { get; set; }
         public TimeSpan Time_from_start { get; set; }
 
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

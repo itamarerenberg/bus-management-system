@@ -157,7 +157,7 @@ namespace PLGui.utilities
         }
         private void debugButton(Window window)
         {
-            new ManegerView().Show();
+            new PassengerView().Show();
             window.Close();
         }
 

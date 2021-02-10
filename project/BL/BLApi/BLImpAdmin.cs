@@ -964,7 +964,12 @@ namespace BL
             result.Add(prev_lineStation);
             return result;
         }
-        #endregion 
+
+        public IEnumerable<LineStation> GetAllLineStations()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
         #endregion
     }
