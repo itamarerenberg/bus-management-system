@@ -17,4 +17,7 @@ namespace PLGui.utilities
     public class RequestLineTrip : RequestMessage<LineTrip>
     {
     }
+    public class RequestPassenger : RequestMessage<BO.Passenger>
+    {
+    }
 }

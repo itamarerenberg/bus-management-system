@@ -102,39 +102,75 @@ namespace PLGui.utilities
 
         private void Set_Update_Button(Window window)
         {
-            if (Frequency == new DateTime())//Frequency is empty
+            
+            if (IsValid())
+            {
+                LTrip.StartTime = Start.TimeOfDay;
+                if (Frequency.TimeOfDay != TimeSpan.Zero)//if Frequency is set
+                {
+                    LTrip.Finish = Finish.TimeOfDay == TimeSpan.Zero ? new TimeSpan(1, 0, 0, 0) : Finish.TimeOfDay;//if finish is 00:00 => finish = 1 day
+                }
+                else
+                {
+                    LTrip.Finish = TimeSpan.Zero;
+                }
+                LTrip.Frequency = Frequency.TimeOfDay;
+
+                if (NewLineTripMode == false)//if the view model on "updating mode"
+                {
+                    try
+                    {
+                        UpdateLineTrip();
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "ERROR");
+                    }
+                }
+                else                        //New LineTrip Mode
+                {
+                    try
+                    {
+                        AddLineTrip();
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "ERROR");
+                    }
+                }
+                window.Close(); 
+            }
+        }
+        /// <summary>
+        /// validation
+        /// </summary>
+        /// <returns></returns>
+        private bool IsValid()
+        {
+            if (Finish != new DateTime() && Frequency == new DateTime())//finish is set while Frequency is empty
             {
                 MessageBox.Show("Frequency cannot be empty", "ERROR");
-                return;
+                return false;
             }
-            LTrip.StartTime = Start.TimeOfDay;
-            LTrip.Finish = Finish.TimeOfDay;
-            LTrip.Frequency = Frequency.TimeOfDay;
-
-            if (NewLineTripMode == false)//if the view model on "updating mode"
+            if (Frequency != new DateTime())
             {
-                try
+                Finish = Finish.TimeOfDay == TimeSpan.Zero ? Finish.AddDays(1) : Finish;//if finish is 00:00 => finish = 1 day
+                if (Finish < Start)     //Frequency is set while start is bigger then finish
                 {
-                    UpdateLineTrip();
+                    MessageBox.Show("finish cannot be before the start", "ERROR");
+                    Finish = Finish.TimeOfDay == TimeSpan.Zero ? Finish.AddDays(-1) : Finish;//set the previous value
+                    return false;
                 }
-                catch (Exception msg)
+                if (Frequency.TimeOfDay >= Finish - Start)
                 {
-                    MessageBox.Show(msg.Message, "ERROR");
-                }            
-            }
-            else                        //New LineTrip Mode
-            {
-                try
-                {
-                    AddLineTrip();
-                }
-                catch (Exception msg)
-                {
-                    MessageBox.Show(msg.Message, "ERROR");
+                    MessageBox.Show("Frequency cannot be less the difernet between start and finish", "ERROR");
+                    Finish = Finish.TimeOfDay == TimeSpan.Zero ? Finish.AddDays(-1) : Finish;//set the previous value
+                    return false;
                 }
             }
-            window.Close();
+            return true;
         }
+
         private void Close(Window window)
         {
             window.Close();
