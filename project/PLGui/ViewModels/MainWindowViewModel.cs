@@ -11,6 +11,7 @@ using System.Windows.Input;
 using BLApi;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
 
 namespace PLGui.utilities
 {
@@ -24,6 +25,8 @@ namespace PLGui.utilities
         private string password;
         private string newPasswod;
         private bool manegerCheckBox;
+
+        private BO.Passenger passenger;
 
         [Required(ErrorMessage = "Name cannot be empty", AllowEmptyStrings =false)]
         public string Name
@@ -120,8 +123,9 @@ namespace PLGui.utilities
                 {
                     try
                     {
-                        BO.Passenger passenger = passengerBl.GetPassenger(Name, Password);
-                        MessageBox.Show("צריך לעשות חלון של נוסע");
+                        passenger = passengerBl.GetPassenger(Name, Password);
+                        new PassengerView().Show();
+                        window.Close();
                     }
                     catch (Exception msg)
                     {
@@ -207,6 +211,15 @@ namespace PLGui.utilities
                 window.SignInButton.Visibility = Visibility.Collapsed;
                 window.RegisterButton.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void RequestLineTripMessege()
+        {
+            //reply to the RequestPassenger messege by sending the Passenger
+            WeakReferenceMessenger.Default.Register<MainWindowViewModel, RequestPassenger>(this, (r, m) =>
+            {
+                m.Reply(r.passenger);
+            });
         }
         #endregion
     }

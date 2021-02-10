@@ -5,11 +5,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using BL.BLApi;
 using BLApi;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using PLGui.Models.PO;
+using PLGui.utilities;
 
 namespace PLGui
 {
@@ -20,23 +26,14 @@ namespace PLGui
 
         private BO.LineStation fromStation;
         private BO.LineStation toStation;
+        private string fromText;
+        private string toText;
+        private TimeTrip timeOfTrip;
+        private PassengerView passengerView;
+        private BO.Passenger passenger;
 
-        #region constructor
-        public PassengerViewModel()
-        {
-            source = BLFactory.GetBL("passenger");
-            loadStations();
-            loadLineTrips();
+        #region properties
 
-            //commands initialize
-            //SearchCommand = new RelayCommand<Window>(SearchBox_TextChanged);
-
-        }
-        #endregion
-
-        #region collections and properties
-
-        private List<BO.LineTrip> LineTrips { get; set; }
         public BO.LineStation FromStation
         {
             get => fromStation;
@@ -50,7 +47,6 @@ namespace PLGui
                 }
             }
         }
-
         public BO.LineStation ToStation
         {
             get => toStation;
@@ -65,10 +61,6 @@ namespace PLGui
                 }
             }
         }
- 
-
-        private string fromText;
-
         public string FromText
         {
             get => fromText;
@@ -76,14 +68,12 @@ namespace PLGui
             {
                 if (SetProperty(ref fromText, value))//if the text has changed
                 {
+                    value = value ?? "";        //preventing from value to be null
                     FromStations.Filter = s => ((BO.LineStation)s).Name.Contains(value);
                     FromStations.Refresh();
                 }
             }
         }
-
-        private string toText;
-
         public string ToText
         {
             get => toText;
@@ -91,13 +81,12 @@ namespace PLGui
             {
                 if (SetProperty(ref toText, value))//if the text has changed
                 {
+                    value = value ?? "";        //preventing from value to be null
                     ToStations.Filter = s => ((BO.LineStation)s).Name.Contains(value);
                     ToStations.Refresh();
                 }
             }
         }
-        private TimeTrip timeOfTrip;
-
         public TimeTrip TimeOfTrip
         {
             get => timeOfTrip;
@@ -113,7 +102,12 @@ namespace PLGui
                 }
             }
         }
+        
 
+        #endregion
+
+        #region collections
+        private List<BO.LineTrip> LineTrips { get; set; }
 
         private List<TimeTrip> departureTimes;
 
@@ -130,7 +124,7 @@ namespace PLGui
             get => _stations;
             set => SetProperty(ref _stations, value);
         }
-        
+
         private ObservableCollection<BO.LineStation> _fromStations;
 
         private ObservableCollection<BO.LineStation> fromStations
@@ -154,7 +148,7 @@ namespace PLGui
         public ICollectionView ToStations
         {
             get { return CollectionViewSource.GetDefaultView(toStations); }
-        }
+        } 
         #endregion
 
         #region load data
@@ -218,8 +212,67 @@ namespace PLGui
             {
                 loadLineTripesWorker.RunWorkerAsync();
             }
-            #endregion
         }
+        #endregion
+
+        #region constructor
+        public PassengerViewModel()
+        {
+            source = BLFactory.GetBL("passenger");
+            loadStations();
+            loadLineTrips();
+
+            //commands initialize
+            WindowLoaded_Command = new RelayCommand<PassengerView>(Window_Loaded);
+
+        }
+        #endregion
+
+        #region commands and events
+        public ICommand WindowLoaded_Command { get; }
+
+        private void Window_Loaded(PassengerView window)
+        {
+
+            try
+            {
+                passenger = WeakReferenceMessenger.Default.Send<RequestPassenger>();//requests the passenger
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("your details and trips history is unavailable! \nplease login again with your correct name and password" +
+                    "\n  ובתרגום לעיברית: אם נכנסת דרך כפתור הדיבאג, לא תופיע היסטוריית הנסיעות, כי הוא לא קיבל passenger ", "ERROR");
+            }
+
+            passengerView = window;
+
+            passengerView.FromComboBox.DropDownOpened += ComboBox_DropDownOpened;
+            passengerView.FromComboBox.TextInput += ComboBox_TextInput;
+            passengerView.ToComboBox.DropDownOpened += ComboBox_DropDownOpened;
+            passengerView.ToComboBox.TextInput += ComboBox_TextInput;
+        }
+        /// <summary>
+        /// open the combo box whill typing
+        /// </summary>
+        private void ComboBox_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            (sender as ComboBox).IsDropDownOpen = true;
+        }
+        /// <summary>
+        /// clear the text when combo box get open(for reset the collectionView filter)
+        /// </summary>
+        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            if ((sender as ComboBox).SelectedIndex != -1)
+            {
+                (sender as ComboBox).Text = null; 
+            }
+        }
+
+        
+        #endregion
+
+        #region private nethods
         /// <summary>
         /// Calculates the Times of Departure Lines from the selected station
         /// </summary>
@@ -250,6 +303,7 @@ namespace PLGui
                 }
             }
             return tempTimeTrips;
-        }
+        } 
+        #endregion
     }
 }

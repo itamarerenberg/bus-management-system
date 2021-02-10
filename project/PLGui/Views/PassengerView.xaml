@@ -16,10 +16,10 @@
         FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True" WindowState="Maximized" >
     <y:Interaction.Triggers>
         <y:EventTrigger EventName="Loaded">
-            <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+            <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
         </y:EventTrigger>
         <y:EventTrigger EventName="Closing">
-            <y:InvokeCommandAction Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+            <y:InvokeCommandAction Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
         </y:EventTrigger>
     </y:Interaction.Triggers>
     <Window.DataContext>
@@ -104,25 +104,35 @@
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
 
-                <ComboBox Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.Column="1" 
+                <ComboBox x:Name="ToComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.Column="1" 
                           Text="{Binding ToText}" SelectedItem="{Binding ToStation}"
-                          IsEnabled="{Binding Path=IsChecked, ElementName=OutlinedComboBoxEnabledCheckBox}" IsEditable="True" 
+                           IsEditable="True" 
                           materialDesign:HintAssist.Hint="To" ItemsSource="{Binding ToStations}" Width="256" />
-
-                <ComboBox Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.Row="1" SelectedItem="{Binding TimeOfTrip}"
-                          IsEnabled="{Binding Path=SelectedItem, ElementName=FromComboBox}"
-                          materialDesign:HintAssist.Hint="Departure time" ItemsSource="{Binding DepartureTimes}" Width="256" />
-                
-                
-                <ComboBox x:Name="FromComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-                          Text="{Binding FromText}" SelectedItem="{Binding FromStation}" IsTextSearchEnabled="True"
-                          IsEnabled="{Binding Path=IsChecked, ElementName=OutlinedComboBoxEnabledCheckBox}" IsEditable="True" 
-                          materialDesign:HintAssist.Hint="From" ItemsSource="{Binding FromStations}" Width="256" />
+                <!--<Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedIndex, ElementName=FromComboBox}" Value="-1">
+                                <Setter Property="Visibility" Value=""
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>-->
 
                 <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                     <Run Text="Estimate arrival time: "/>
                     <Run Text="{Binding TimeOfTrip.FinishTime, StringFormat={}{0:hh':'mm':'ss}}"/>
                 </TextBlock>
+
+                <StackPanel Grid.RowSpan="2" Margin="0,0,30,0">
+                    <ComboBox x:Name="FromComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}" StaysOpenOnEdit="True" 
+                          Text="{Binding FromText}" SelectedItem="{Binding FromStation}" IsTextSearchEnabled="False"
+                          IsEditable="True" 
+                          materialDesign:HintAssist.Hint="From" ItemsSource="{Binding FromStations}" Width="256" >
+                        
+                    </ComboBox>
+                    <ComboBox Style="{StaticResource MaterialDesignOutlinedComboBox}" SelectedItem="{Binding TimeOfTrip}"
+                          IsEnabled="{Binding Path=SelectedItem, ElementName=FromComboBox}"
+                          materialDesign:HintAssist.Hint="Departure time" ItemsSource="{Binding DepartureTimes}" Width="256" />
+                </StackPanel>
+               
             </Grid>
             
         </materialDesign:Card>
