@@ -48,4 +48,12 @@
     <FinishAt>18:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
+  <LineTrip>
+    <ID>11</ID>
+    <LineId>67</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>01:00:00</Frequency>
+    <FinishAt>13:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
 </LineTrips>

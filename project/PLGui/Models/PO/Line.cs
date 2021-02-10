@@ -46,7 +46,11 @@ namespace PLGui.Models.PO
         [MinLength(2, ErrorMessage = "the line has to contains at least 2 stations")]
         public ObservableCollection<BO.LineStation> Stations
         {
-            get => stations;
+            get
+            {
+                stations.OrderBy(st=>st.LineStationIndex);
+                return stations;
+            }
             set
             {
                 stations = value;
