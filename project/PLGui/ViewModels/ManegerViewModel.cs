@@ -209,6 +209,7 @@ namespace PLGui
         #region constractor
         public ManegerViewModel()
         {
+            
             source = BLFactory.GetBL("admin");
             loadData();
 
@@ -221,7 +222,7 @@ namespace PLGui
             NewLineTrip = new RelayCommand<ManegerView>(Add_newLineTrip);
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
-            Enter_asAnotherUserCommand = new RelayCommand<ManegerView>(enter_asAnotherUser);
+            LogOut_Command = new RelayCommand<ManegerView>(LogOut);
             ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
             WindowLoaded_Command = new RelayCommand<ManegerView>(Window_Loaded);
             LostFocus_Command = new RelayCommand<ManegerView>(LostFocus);
@@ -438,7 +439,7 @@ namespace PLGui
         public ICommand NewLineTrip { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ICommand Enter_asAnotherUserCommand { get; }
+        public ICommand LogOut_Command { get; }
         public ICommand ManegerView_ClosingCommand { get; }
         public ICommand WindowLoaded_Command { get; }
         public ICommand LostFocus_Command { get; }
@@ -671,7 +672,7 @@ namespace PLGui
             }
             List_SelectionChanged(Mview);//refrash the view
         }
-        private void enter_asAnotherUser(ManegerView window)
+        private void LogOut(ManegerView window)
         {
             new MainWindow().Show();
             if (window.IsActive)

@@ -222,24 +222,24 @@ namespace PLGui.utilities
             if (updateLine == null)
             {
                 updateLine = new BackgroundWorker();
-            }
-            updateLine.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                updateLine.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                     {                                                   //terminated before he done execute DoWork
 
                     }
-                };//this function will execute in the main thread
+                    };//this function will execute in the main thread
 
-            updateLine.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    List<int?> distances = Stations.Select(lst => lst.Distance).ToList();
-                    List<int?> times = Stations.Select(lst => lst.Time).ToList();
-                    source.UpdateLine((int)TempLine.ID, Stations.Select(st => st.Station.BOstation), distances, times);
-                };//this function will execute in the BackgroundWorker thread
+                updateLine.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        List<int?> distances = Stations.Select(lst => lst.Distance).ToList();
+                        List<int?> times = Stations.Select(lst => lst.Time).ToList();
+                        source.UpdateLine((int)TempLine.ID, Stations.Select(st => st.Station.BOstation), distances, times);
+                    };//this function will execute in the BackgroundWorker thread
+            }
             updateLine.RunWorkerAsync();
 
         }

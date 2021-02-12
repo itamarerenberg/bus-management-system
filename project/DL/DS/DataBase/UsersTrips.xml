@@ -1,2 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<UsersTrips />
+<UsersTrips>
+  <LineTrip>
+    <TripId>2</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>67</LineId>
+    <LineNum>3</LineNum>
+    <InStation>227</InStation>
+    <InStationName>אנג'ל/כנפי נשרים</InStationName>
+    <InTime>12/02/2021 13:00:16</InTime>
+    <OutStation>527</OutStation>
+    <OutStationName>צומת הבנקים/דרך חברון</OutStationName>
+    <OutTime>12/02/2021 13:39:49</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <TripId>3</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>68</LineId>
+    <LineNum>78</LineNum>
+    <InStation>147</InStation>
+    <InStationName>מינץ/שיף מזרח</InStationName>
+    <InTime>12/02/2021 23:07:26</InTime>
+    <OutStation>331</OutStation>
+    <OutStationName>שיבת ציון/לואי ליפסקי</OutStationName>
+    <OutTime>12/02/2021 23:56:07</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
+</UsersTrips>

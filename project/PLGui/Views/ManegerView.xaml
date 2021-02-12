@@ -23,7 +23,7 @@
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
         </y:EventTrigger>
         <y:EventTrigger EventName="Closing">
-            <y:InvokeCommandAction Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+            <y:InvokeCommandAction Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
         </y:EventTrigger>
     </y:Interaction.Triggers>
     <Window.DataContext>
@@ -65,7 +65,7 @@
                 <MenuItem Header="update station" />
             </MenuItem>
             <MenuItem Header="Exit" Height="25">
-                <MenuItem Header="Log out" Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
+                <MenuItem Header="Log out" Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
                 <MenuItem Header="Exit" Command="{Binding ManegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
             </MenuItem>
         </Menu>

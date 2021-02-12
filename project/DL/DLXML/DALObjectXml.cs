@@ -687,14 +687,14 @@ namespace DL
         public int AddUserTrip(UserTrip userTrip)
         {
             userTrip.TripId = SerialNumbers.GetUserTripId;//get a serial number from SerialNumbers for the id
-            DataSourceXML.UsersTrips.Add(userTrip.to_new_xelement("LineTrip"));//add the userTrip to the data source
+            DataSourceXML.UserTrips.Add(userTrip.to_new_xelement("LineTrip"));//add the userTrip to the data source
             DataSourceXML.Save("UserTrips");//save the changes
             return userTrip.TripId;
         }
 
         public UserTrip GetUserTrip(int id)
         {
-            XElement tempUserTrip = (from ut in DataSourceXML.UsersTrips.Elements()
+            XElement tempUserTrip = (from ut in DataSourceXML.UserTrips.Elements()
                                      where int.Parse(ut.Element("TripId").Value) == id
                                      select ut).FirstOrDefault();//.FirstOrDefault(u => u.TripId == id && u.IsActive == true);
             if (tempUserTrip == null)//if thr is no such user trip in the data source
@@ -707,7 +707,7 @@ namespace DL
 
         public void UpdateUserTrip(UserTrip newUserTrip)
         {
-            XElement oldUserTrip = (from ut in DataSourceXML.UsersTrips.Elements()//serch for the old user trip in the data source 
+            XElement oldUserTrip = (from ut in DataSourceXML.UserTrips.Elements()//serch for the old user trip in the data source 
                                     where int.Parse(ut.Element("TripId").Value) == newUserTrip.LineId
                                           && bool.Parse(ut.Element("IsActive").Value)
                                     select ut).FirstOrDefault();
@@ -717,19 +717,19 @@ namespace DL
             }
             //else
             XMLTools.object_to_xelement(newUserTrip, oldUserTrip);//override the old UserTrip with the new UserTrip
-            DataSourceXML.Save("UsersTrips");//save changes
+            DataSourceXML.Save("UserTrips");//save changes
         }
 
         public IEnumerable<UserTrip> GetAllUserTrips()
         {
-            return from ut in DataSourceXML.UsersTrips.Elements()//return all the active user trips
+            return from ut in DataSourceXML.UserTrips.Elements()//return all the active user trips
                    where bool.Parse(ut.Element("IsActive").Value)
                    select XMLTools.xelement_to_new_object<UserTrip>(ut);
         }
 
         public IEnumerable<UserTrip> GetAllUserTripsBy(Predicate<UserTrip> predicate)
         {
-            return from xeut in DataSourceXML.UsersTrips.Elements()
+            return from xeut in DataSourceXML.UserTrips.Elements()
                    let ut = XMLTools.xelement_to_new_object<UserTrip>(xeut)//create an instance of UserTrip from 'xeut' so it can send to predicate
                    where predicate(ut)
                    select ut;
