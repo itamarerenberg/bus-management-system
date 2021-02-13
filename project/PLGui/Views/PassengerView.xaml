@@ -7,23 +7,23 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PLGui"
         mc:Ignorable="d"
-        Title="Passenger View" Height="450" Width="800"
+        Height="450" Width="800"
         x:Name="PassengerWindow" MinHeight="700" MinWidth="1000"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
-        TextElement.FontWeight="Medium"
-        TextElement.FontSize="14" 
+        TextElement.FontWeight="Medium" 
+        TextElement.FontSize="14" Title="{Binding passenger.Name}"
         FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True" WindowState="Maximized" >
     <y:Interaction.Triggers>
         <y:EventTrigger EventName="Loaded">
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
         </y:EventTrigger>
         <y:EventTrigger EventName="Closing">
-            <y:InvokeCommandAction Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
+            <y:InvokeCommandAction Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
         </y:EventTrigger>
     </y:Interaction.Triggers>
     <Window.DataContext>
-        <local:PassengerViewModel />
+        <local:PassengerViewModel x:Name="VModel" />
     </Window.DataContext>
     <Grid Background="#FFF0FFE9">
         <Grid.ColumnDefinitions>
@@ -49,14 +49,14 @@
                 <MenuItem Header="update station" />
             </MenuItem>
             <MenuItem Header="Exit" Height="25">
-                <MenuItem Header="Log out" Command="{Binding Enter_asAnotherUserCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
-                <MenuItem Header="Exit" Command="{Binding ManegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
+                <MenuItem Header="Log out" Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=PassengerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
+                <MenuItem Header="Exit" Command="{Binding ClosingCommand}" CommandParameter="{Binding ElementName=PassengerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
             </MenuItem>
         </Menu>
         <!--#endregion-->
 
         <!--#region Clock Dialog -->
-        <materialDesign:DialogHost x:Name="ClockDialog" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="15">
+        <materialDesign:DialogHost x:Name="ClockDialog" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15">
             <materialDesign:Card UniformCornerRadius="6" Background="#FFB3EF7C">
                 <Border BorderThickness="1" Background="White" BorderBrush="#FFB3EF7C" CornerRadius="6">
                     <StackPanel Orientation="Horizontal" Margin="5">
@@ -92,7 +92,7 @@
         <!--#endregion-->
 
         <!--#region search area -->
-        <materialDesign:Card Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="15" UniformCornerRadius="15">
+        <materialDesign:Card Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="30" Padding="15" UniformCornerRadius="15">
             <Grid Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -132,89 +132,56 @@
                           IsEnabled="{Binding Path=SelectedItem, ElementName=FromComboBox}"
                           materialDesign:HintAssist.Hint="Departure time" ItemsSource="{Binding DepartureTimes}" Width="256" />
                 </StackPanel>
-               
+                <Button x:Name="SignInButton" Content="Go" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" 
+                Style="{StaticResource MaterialDesignFlatMidBgButton}" Background="#FF97F045" Foreground="#FFF2FCED"
+                Command="{Binding TripCommand}"  materialDesign:ButtonAssist.CornerRadius="15"/>
             </Grid>
             
         </materialDesign:Card>
         <!--#endregion-->
 
-        <!--#region Line Details -->
 
-        <!--<materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="50,0,80,30" UniformCornerRadius="6">
+        <materialDesign:Card  Grid.Row="2" Grid.ColumnSpan="2" UniformCornerRadius="6" HorizontalAlignment="Right" Margin="0,0,30,30">
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <Border Background="#FFB3EF7C">
-                    <Grid>
-                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="{Binding LineDisplay.LineNumber}" FontSize="20" FontWeight="ExtraBold"/>
-                            <TextBlock Text="{Binding LineDisplay.Area}"/>
-                        </StackPanel>
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">
-                            <TextBlock>
-                        <Run Text="First station: "/>
-                        <Run Text="{Binding LineDisplay.FirstStation.Name}"/>
-                            </TextBlock>
-                            <TextBlock>
-                        <Run Text="Last station: "/>
-                        <Run Text="{Binding LineDisplay.LastStation.Name}"/>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
+                <Border Background="#FFB3EF7C" Padding="10">
+                        <TextBlock Text="My trips history:" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
                 </Border>
 
-                
-
-                <materialDesign:Card Background="#FFB3EF7C" Grid.Row="1" Margin="5" 
-                                     Padding="8" UniformCornerRadius="6">
-                    <TextBlock Text="Station:" FontSize="20" FontWeight="Bold"/>
-                </materialDesign:Card>
-
-                <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding LineDisplay.Stations}" 
-                          ToolTip="press twice and see the station details" Grid.Row="2">
+                <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding passenger.UserTrips}" Grid.Row="1">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn x:Name="SNumber"  Header="Station Number" Width="auto" DisplayMemberBinding="{Binding StationNumber}" />
-                            <GridViewColumn x:Name="Distance"  Header="Distance from start" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Distance, StringFormat={}{0:F2}km}" />
-                            <GridViewColumn x:Name="Time"  Header="Estimate time" Width="auto" DisplayMemberBinding="{Binding PrevToCurrent.Time, StringFormat={}{0:hh':'mm':'ss}}" />
+                            <GridViewColumn  Header="Date" Width="auto" DisplayMemberBinding="{Binding InTime ,StringFormat=d}" />
+                            <GridViewColumn  Header="Line number" Width="auto" DisplayMemberBinding="{Binding LineNum}" />
+                            <GridViewColumn  Header="Boarding Station" Width="auto" >
+                                <GridViewColumn.DisplayMemberBinding>
+                                    <MultiBinding StringFormat="{}{0}, code:{1}">
+                                        <Binding Path="InStationName"/>
+                                        <Binding Path="InStation"/>
+                                    </MultiBinding>
+                                </GridViewColumn.DisplayMemberBinding>
+                            </GridViewColumn>
+                            <GridViewColumn  Header="Departure time" Width="auto" DisplayMemberBinding="{Binding InTime, StringFormat={}{0:hh':'mm':'ss}}" />
+                            <GridViewColumn  Header="Drop Station" Width="auto">
+                                <GridViewColumn.DisplayMemberBinding>
+                                    <MultiBinding StringFormat="{}{0}, code:{1}">
+                                        <Binding Path="OutStationName"/>
+                                        <Binding Path="OutStation"/>
+                                    </MultiBinding>
+                                </GridViewColumn.DisplayMemberBinding>
+                            </GridViewColumn>
+                            <GridViewColumn  Header="Arrival time" Width="auto" DisplayMemberBinding="{Binding OutTime, StringFormat={}{0:hh':'mm':'ss}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
-
-                <materialDesign:Card Background="#FFB3EF7C" Grid.Row="3" Margin="5"
-                                     UniformCornerRadius="6">
-                    <Grid>
-                        <TextBlock Text="Line trips:" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
-
-                        <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a line trip" Grid.Row="2"
-                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                    Command="{Binding NewLineTrip}" CommandParameter="{Binding ElementName=ManegerWindow}" 
-                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
-                    </Grid>
-                </materialDesign:Card>
-
-                <ListView x:Name="LineTrip_Details" HorizontalAlignment="Stretch" Margin="10" Grid.Row="4"
-                          VerticalAlignment="Top" ItemsSource="{Binding LineDisplay.LineTrips}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Start Time" Width="auto" DisplayMemberBinding="{Binding StartTime}" />
-                            <GridViewColumn Header="Finish" Width="auto" DisplayMemberBinding="{Binding Finish}"/>
-                            <GridViewColumn Header="Frequency" Width="auto" DisplayMemberBinding="{Binding Frequency}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-
 
             </Grid>
-        </materialDesign:Card>-->
-        <!--#endregion-->
+        </materialDesign:Card>
 
         
         <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Background="#FF016306" />

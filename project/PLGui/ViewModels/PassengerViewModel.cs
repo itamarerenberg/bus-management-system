@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using BL.BLApi;
 using BLApi;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.Messaging;
@@ -21,7 +22,6 @@ namespace PLGui
 {
     public class PassengerViewModel : ObservableRecipient
     {
-
         readonly IBL source;
 
         private BO.LineStation fromStation;
@@ -30,9 +30,10 @@ namespace PLGui
         private string toText;
         private TimeTrip timeOfTrip;
         private PassengerView passengerView;
-        private BO.Passenger passenger;
 
         #region properties
+
+        public BO.Passenger passenger { get; set; }
 
         public BO.LineStation FromStation
         {
@@ -42,7 +43,7 @@ namespace PLGui
                 if (SetProperty(ref fromStation, value) && value != null)//if the another station has selected in the combo box
                 {
                     //show all the available stations that are next in the lines that passed in selected station("FromStation")
-                    toStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.LineId == value.LineId && s.Time_from_start < value.Time_from_start));
+                    toStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.LineId == value.LineId && s.LineStationIndex > value.LineStationIndex));
                     DepartureTimes = CalculatesTime(value);
                 }
             }
@@ -82,8 +83,11 @@ namespace PLGui
                 if (SetProperty(ref toText, value))//if the text has changed
                 {
                     value = value ?? "";        //preventing from value to be null
-                    ToStations.Filter = s => ((BO.LineStation)s).Name.Contains(value);
-                    ToStations.Refresh();
+                    if (ToStations != null)
+                    {
+                        ToStations.Filter = s => ((BO.LineStation)s).Name.Contains(value);
+                        ToStations.Refresh(); 
+                    }
                 }
             }
         }
@@ -102,11 +106,12 @@ namespace PLGui
                 }
             }
         }
-        
+
 
         #endregion
 
         #region collections
+        public ObservableCollection<Line> Lines { get; set; }
         private List<BO.LineTrip> LineTrips { get; set; }
 
         private List<TimeTrip> departureTimes;
@@ -165,7 +170,7 @@ namespace PLGui
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             stations = (ObservableCollection<BO.LineStation>)args.Result;
-                            fromStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.CurrentToNext != null));//take all the stations that aren't last in the line
+                            fromStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.LineStationIndex > 0));//take all the stations that aren't last in the line
                         }
                     };//this function will execute in the main thred
 
@@ -213,6 +218,36 @@ namespace PLGui
                 loadLineTripesWorker.RunWorkerAsync();
             }
         }
+        BackgroundWorker loadLinesWorker;
+        private void loadLines()
+        {
+            if (loadLinesWorker == null)
+            {
+                loadLinesWorker = new BackgroundWorker();
+                loadLinesWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                        {                                                   //terminated befor he done execute DoWork
+                            Lines = (ObservableCollection<Line>)args.Result;
+                        }
+                    };//this function will execute in the main thred
+
+                loadLinesWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        ObservableCollection<Line> result = new ObservableCollection<Line>();
+                        result = new ObservableCollection<Line>(source.GetAllLines().Select(l => l.Line_BO_PO()));//get all lines from source
+                        args.Result = worker.CancellationPending ? null : result;
+                    };//this function will execute in the BackgroundWorker thread
+            }
+            if (!loadLinesWorker.IsBusy)//if the worker is not busy run immediately
+            {
+                loadLinesWorker.RunWorkerAsync();
+            }
+
+        }
         #endregion
 
         #region constructor
@@ -221,52 +256,87 @@ namespace PLGui
             source = BLFactory.GetBL("passenger");
             loadStations();
             loadLineTrips();
+            loadLines();
 
             //commands initialize
             WindowLoaded_Command = new RelayCommand<PassengerView>(Window_Loaded);
-
+            LogOut_Command = new RelayCommand<PassengerView>(LogOut);
+            ClosingCommand = new RelayCommand<Window>(Close);
+            TripCommand = new RelayCommand(GoTrip);
         }
+
         #endregion
 
         #region commands and events
         public ICommand WindowLoaded_Command { get; }
+        public ICommand LogOut_Command { get; }
+        public ICommand ClosingCommand { get; }
+        public ICommand TripCommand { get; }
+
+        BackgroundWorker AddUserTripWorker;
+
+        private void GoTrip()
+        {
+            Line line = Lines.Where(l => l.ID == FromStation.LineId).FirstOrDefault();
+            BO.UserTrip newUserTrip = new BO.UserTrip()
+            {
+                UserName = passenger.Name,
+                LineId = line.ID,
+                LineNum = (int)line.LineNumber,
+                InStation = FromStation.StationNumber,
+                InStationName = FromStation.Name,
+                InTime = DateTime.Today + TimeOfTrip.StartTime,
+                OutStation = ToStation.StationNumber,
+                OutStationName = ToStation.Name,
+                OutTime = DateTime.Today + TimeOfTrip.FinishTime
+            };
+
+            AddUserTrip(newUserTrip);
+            //clea the fileds
+            FromText = "";
+            ToText = "";
+        }
+
+        private void LogOut(PassengerView window)
+        {
+            new MainWindow().Show();
+            if (window.IsActive)
+            {
+                window.Close();
+            }
+        }
+        private void Close(Window window)
+        {
+            window.Close();
+            Environment.Exit(Environment.ExitCode);
+        }
 
         private void Window_Loaded(PassengerView window)
         {
-
-            try
-            {
-                passenger = WeakReferenceMessenger.Default.Send<RequestPassenger>();//requests the passenger
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("your details and trips history is unavailable! \nplease login again with your correct name and password" +
-                    "\n  ובתרגום לעיברית: אם נכנסת דרך כפתור הדיבאג, לא תופיע היסטוריית הנסיעות, כי הוא לא קיבל passenger ", "ERROR");
-            }
+            GetPassengerDetails();
 
             passengerView = window;
 
             passengerView.FromComboBox.DropDownOpened += ComboBox_DropDownOpened;
-            passengerView.FromComboBox.TextInput += ComboBox_TextInput;
+            passengerView.FromComboBox.PreviewTextInput += ComboBox_TextInput;
             passengerView.ToComboBox.DropDownOpened += ComboBox_DropDownOpened;
-            passengerView.ToComboBox.TextInput += ComboBox_TextInput;
+            passengerView.ToComboBox.PreviewTextInput += ComboBox_TextInput;
         }
+
         /// <summary>
-        /// open the combo box whill typing
+        /// open the combo box while start typing
         /// </summary>
         private void ComboBox_TextInput(object sender, TextCompositionEventArgs e)
         {
             (sender as ComboBox).IsDropDownOpen = true;
         }
         /// <summary>
-        /// clear the text when combo box get open(for reset the collectionView filter)
+        /// reset the collectionView filter when the combo box gets open
         /// </summary>
         private void ComboBox_DropDownOpened(object sender, EventArgs e)
         {
-            if ((sender as ComboBox).SelectedIndex != -1)
-            {
-                (sender as ComboBox).Text = null; 
-            }
+            FromStations.Filter = s => true;
+            FromStations.Refresh();
         }
 
         
@@ -287,23 +357,65 @@ namespace PLGui
             {
                 if (LT.LineId == station.LineId)
                 {
+                    int lineNum = (int)Lines.Where(l => l.ID == station.LineId).FirstOrDefault().LineNumber;
                     if (LT.Frequency == TimeSpan.Zero)//if the line trips is only once a day
                     {
-                        tempTimeTrips.Add(new TimeTrip() { LineId = LT.LineId, StartTime = LT.StartTime + station.Time_from_start });
+                        tempTimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = LT.StartTime + station.Time_from_start });
                     }
                     else                               //the line trips is more then once a day
                     {
                         TimeSpan tempStart = LT.StartTime;
                         while (LT.FinishAt >= tempStart)
                         {
-                            tempTimeTrips.Add(new TimeTrip() { LineId = LT.LineId, StartTime = tempStart + station.Time_from_start });
+                            tempTimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = tempStart + station.Time_from_start });
                             tempStart += LT.Frequency;
                         }
                     }
                 }
             }
             return tempTimeTrips;
-        } 
+        }
+        /// <summary>
+        /// send a requests massege to get the passenger details
+        /// </summary>
+        private void GetPassengerDetails()
+        {
+            try
+            {
+                passenger = WeakReferenceMessenger.Default.Send<RequestPassenger>();//requests the passenger
+                OnPropertyChanged(nameof(passenger));
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("your details and trips history is unavailable! \nyou probably enter by maneger account, please switch to passenger account"
+                   , "ERROR", new MessageBoxButton());
+            }
+        }
+
+        private void AddUserTrip(BO.UserTrip userTrip)
+        {
+            if (AddUserTripWorker == null)
+            {
+                AddUserTripWorker = new BackgroundWorker();
+                AddUserTripWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        passenger = (BO.Passenger)args.Result;
+                        OnPropertyChanged(nameof(passenger));
+                    };//this function will execute in the main thred
+
+                AddUserTripWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        source.AddUserTrip((BO.UserTrip)args.Argument);     //add the user trip
+                        args.Result = source.GetPassenger(passenger.Name, passenger.Password);//get the updated passenger
+                    };//this function will execute in the BackgroundWorker thread
+            }
+            if (!AddUserTripWorker.IsBusy)//if the worker is not busy run immediately
+            {
+                AddUserTripWorker.RunWorkerAsync(userTrip);
+            }
+        }
         #endregion
     }
 }

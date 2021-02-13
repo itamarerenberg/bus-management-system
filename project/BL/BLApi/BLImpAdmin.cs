@@ -14,7 +14,6 @@ namespace BL
 {
     public class BLImpAdmin : IBL
     {
-
         #region singelton
 
         static readonly BLImpAdmin instance = new BLImpAdmin();

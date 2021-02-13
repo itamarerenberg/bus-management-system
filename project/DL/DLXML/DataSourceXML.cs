@@ -56,7 +56,7 @@ namespace DLXML
             ["LineStations"] = new FileDetails { Path = LineStationsFilePath },
             ["LineTrips"] = new FileDetails { Path = LineTripsFilePath },
             ["Users"] = new FileDetails { Path = UsersFilePath },
-            ["UsersTrips"] = new FileDetails { Path = UsersTripsFilePath }
+            ["UserTrips"] = new FileDetails { Path = UsersTripsFilePath }
         };
 
         #region data Access
@@ -284,11 +284,11 @@ namespace DLXML
                 return files[index].Root;
             }
         }
-        public static XElement UsersTrips
+        public static XElement UserTrips
         {
             get
             {
-                string index = "UsersTrips";
+                string index = "UserTrips";
                 try
                 {
                     for (int i = 0; i < tryNtimes; i++)

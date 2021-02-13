@@ -93,7 +93,7 @@
     <Content Include="DataBase\LineTrips.xml" />
     <Content Include="DataBase\Stations.xml" />
     <Content Include="DataBase\Users.xml" />
-    <Content Include="DataBase\UsersTrips.xml" />
+    <Content Include="DataBase\UserTrips.xml" />
     <Content Include="DataSource.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

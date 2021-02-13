@@ -21,10 +21,10 @@ namespace PLGui.utilities
         #region properties and fields
         IBL mangerBl;
         IBL passengerBl;
-        private string name;
-        private string password;
+        private string name = "Admin";
+        private string password ="1234";
         private string newPasswod;
-        private bool manegerCheckBox;
+        private bool manegerCheckBox = true;
 
         private BO.Passenger passenger;
 
@@ -75,12 +75,16 @@ namespace PLGui.utilities
             passengerBl = BL.BLApi.BLFactory.GetBL("passenger");
             mangerBl = BL.BLApi.BLFactory.GetBL("admin");
 
+            //commands initalize
             SignInCommand = new RelayCommand<MainWindow>(SignIn);
             SignUpCommand = new RelayCommand<MainWindow>(SignUp);
             DebugButtonCommand = new RelayCommand<Window>(debugButton);
             CloseCommand = new RelayCommand<MainWindow>(MainWindow_Closing);
             RegisterCommand = new RelayCommand<MainWindow>(Register);
             BackToSignInCommand = new RelayCommand<MainWindow>(BackToSignIn);
+
+            //messengers initalize
+            RequestPassengerMessege();
         }
         #endregion
 
@@ -161,8 +165,16 @@ namespace PLGui.utilities
         }
         private void debugButton(Window window)
         {
-            new PassengerView().Show();
-            window.Close();
+            try
+            {
+                passenger = passengerBl.GetPassenger("Passenger","1234" );
+                new PassengerView().Show();
+                window.Close();
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.Message, "the access is denied");
+            }
         }
 
         private void MainWindow_Closing(MainWindow window)
@@ -183,7 +195,7 @@ namespace PLGui.utilities
         /// Switch the View between the sign in/sign up modes
         /// </summary>
         /// <param name="window"></param>
-        /// <param name="reverse">true: back to sign in mode.  false: replace to sign up mode</param>
+        /// <param name="reverse">true: back to sign in mode. false: replace to sign up mode</param>
         private void SwitchView(MainWindow window, bool reverse = false)
         {
             if (reverse)
@@ -213,7 +225,7 @@ namespace PLGui.utilities
             }
         }
 
-        private void RequestLineTripMessege()
+        private void RequestPassengerMessege()
         {
             //reply to the RequestPassenger messege by sending the Passenger
             WeakReferenceMessenger.Default.Register<MainWindowViewModel, RequestPassenger>(this, (r, m) =>
