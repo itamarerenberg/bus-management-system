@@ -292,7 +292,7 @@ namespace PLGui
             };
 
             AddUserTrip(newUserTrip);
-            //clea the fileds
+            //clear the fileds
             FromText = "";
             ToText = "";
         }

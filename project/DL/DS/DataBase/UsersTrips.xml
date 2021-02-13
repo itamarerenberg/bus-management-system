@@ -26,4 +26,30 @@
     <OutTime>12/02/2021 23:56:07</OutTime>
     <IsActive>True</IsActive>
   </LineTrip>
+  <LineTrip>
+    <TripId>4</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <InStation>112</InStation>
+    <InStationName>יעקובזון/עזרת תורה</InStationName>
+    <InTime>13/02/2021 15:05:36</InTime>
+    <OutStation>371</OutStation>
+    <OutStationName>מעגלי הרי''ם לוין/האדמור מצאנז</OutStationName>
+    <OutTime>13/02/2021 16:09:44</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <TripId>5</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>68</LineId>
+    <LineNum>78</LineNum>
+    <InStation>544</InStation>
+    <InStationName>זילברג/קדיש לוז</InStationName>
+    <InTime>13/02/2021 15:31:50</InTime>
+    <OutStation>731</OutStation>
+    <OutStationName>צומת הזיתים</OutStationName>
+    <OutTime>13/02/2021 15:45:44</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
 </UsersTrips>

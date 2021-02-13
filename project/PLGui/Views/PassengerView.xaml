@@ -156,9 +156,9 @@
                 <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding passenger.UserTrips}" Grid.Row="1">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn  Header="Date" Width="auto" DisplayMemberBinding="{Binding InTime ,StringFormat=d}" />
-                            <GridViewColumn  Header="Line number" Width="auto" DisplayMemberBinding="{Binding LineNum}" />
-                            <GridViewColumn  Header="Boarding Station" Width="auto" >
+                            <GridViewColumn Header="Date" Width="auto" DisplayMemberBinding="{Binding InTime ,StringFormat=d}" />
+                            <GridViewColumn Header="Line number" Width="auto" DisplayMemberBinding="{Binding LineNum}" />
+                            <GridViewColumn Header="Boarding Station" Width="auto" >
                                 <GridViewColumn.DisplayMemberBinding>
                                     <MultiBinding StringFormat="{}{0}, code:{1}">
                                         <Binding Path="InStationName"/>
@@ -166,7 +166,7 @@
                                     </MultiBinding>
                                 </GridViewColumn.DisplayMemberBinding>
                             </GridViewColumn>
-                            <GridViewColumn  Header="Departure time" Width="auto" DisplayMemberBinding="{Binding InTime, StringFormat={}{0:hh':'mm':'ss}}" />
+                            <GridViewColumn  Header="Departure time" Width="auto" DisplayMemberBinding="{Binding InTime.TimeOfDay, StringFormat={}{0:hh':'mm':'ss}}" />
                             <GridViewColumn  Header="Drop Station" Width="auto">
                                 <GridViewColumn.DisplayMemberBinding>
                                     <MultiBinding StringFormat="{}{0}, code:{1}">
@@ -175,7 +175,7 @@
                                     </MultiBinding>
                                 </GridViewColumn.DisplayMemberBinding>
                             </GridViewColumn>
-                            <GridViewColumn  Header="Arrival time" Width="auto" DisplayMemberBinding="{Binding OutTime, StringFormat={}{0:hh':'mm':'ss}}" />
+                            <GridViewColumn  Header="Arrival time" Width="auto" DisplayMemberBinding="{Binding OutTime.TimeOfDay, StringFormat={}{0:hh':'mm':'ss}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>

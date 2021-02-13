@@ -1234,7 +1234,8 @@ namespace PLGui
                             args.Result = worker.CancellationPending ? null : result;
                         };//this function will execute in the BackgroundWorker thread
                 }
-                GetLineOfStationWorker.RunWorkerAsync(station);
+                if(!GetLineOfStationWorker.IsBusy)
+                    GetLineOfStationWorker.RunWorkerAsync(station);
             }
         }
 
