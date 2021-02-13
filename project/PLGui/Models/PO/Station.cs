@@ -133,5 +133,9 @@ namespace PLGui.Models.PO
         {
             throw new NotImplementedException();
         }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

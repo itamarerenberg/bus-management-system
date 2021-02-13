@@ -568,50 +568,7 @@ namespace PLGui
                 BusDisplay = selectedbus;
             }
         }
-        BackgroundWorker GetLineOfStationWorker;
-        /// <summary>
-        /// set the collection "LinesOfStation"(this collection is bind to the view) with the lines of the given station
-        /// </summary>
-        private void GetLinesOfStation(Station station)
-        {
-            LinesOfStation = null;
-            if (station.LinesNums.Count > 0)
-            {
-                if (GetLineOfStationWorker == null)
-                {
-                    GetLineOfStationWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
-                    GetLineOfStationWorker.RunWorkerCompleted +=
-                        (object sender, RunWorkerCompletedEventArgs args) =>
-                        {
-                            if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                            {                                                   //terminated befor he done execute DoWork
-                                LinesOfStation = (ObservableCollection<Line>)args.Result;
-                                OnPropertyChanged(nameof(LinesOfStation));
-                            }
-                        };//this function will execute in the main thred
-
-                    GetLineOfStationWorker.DoWork +=
-                        (object sender, DoWorkEventArgs args) =>
-                        {
-                            BackgroundWorker worker = (BackgroundWorker)sender;
-                            Station newStation = args.Argument as Station;
-                            ObservableCollection<Line> result = new ObservableCollection<Line>();
-                            try
-                            {
-                                //result = new ObservableCollection<Line>(source.GetAllLinesBy(l => l.Stations.Exists(s => s.StationNumber == newStation.Code)).Select(l => l.Line_BO_PO()));//get the lines from source
-                                //result = new ObservableCollection<Line>(lines.Where(l => l.Stations.Where(s => s.StationNumber == station.Code).FirstOrDefault() != null));
-                                result = new ObservableCollection<Line>(lines.Where(l => newStation.LinesNums.Any(n => n == l.ID)));
-                            }
-                            catch (Exception msg)
-                            {
-                                MessageBox.Show(msg.Message, "ERROR");
-                            }
-                            args.Result = worker.CancellationPending ? null : result;
-                        };//this function will execute in the BackgroundWorker thread
-                }
-                GetLineOfStationWorker.RunWorkerAsync(station);
-            }
-        }
+       
         private void LostFocus( ManegerView MView)
         {
             if (SelectedTabItem != null)
@@ -1162,7 +1119,7 @@ namespace PLGui
                             }
                         }
                     }
-                    if (listV == Mview.LinePasses_view)
+                    else if (listV == Mview.LinePasses_view)
                     {
                         if (listV.SelectedItem is Line SelectedLine)
                         {
@@ -1176,7 +1133,7 @@ namespace PLGui
                             }
                         }
                     }
-                    if (listV == Mview.LinesTripList)
+                    else if (listV == Mview.LinesTripList)
                     {
                         if (listV.SelectedItem is LineTrip SelectedLineTrip)
                         {
@@ -1191,7 +1148,7 @@ namespace PLGui
                             }
                         }
                     }
-                    if (listV == Mview.LineTrip_Details)
+                    else if (listV == Mview.LineTrip_Details)
                     {
                         if (listV.SelectedItem is LineTrip SelectedLineTrip)
                         {
@@ -1210,7 +1167,7 @@ namespace PLGui
         }
         #endregion
 
-        #region help methods
+        #region private methods
         //------------------------------------------------------------------------------------------------
         
 
@@ -1236,7 +1193,50 @@ namespace PLGui
             DeleteLineTripWorker.RunWorkerCompleted += DeleteLineTripWorker_RunWorkerCompleted;
         }
 
-       
+        BackgroundWorker GetLineOfStationWorker;
+        /// <summary>
+        /// set the collection "LinesOfStation"(this collection is bind to the view) with the lines of the given station
+        /// </summary>
+        private void GetLinesOfStation(Station station)
+        {
+            LinesOfStation = null;
+            if (station.LinesNums.Count > 0)
+            {
+                if (GetLineOfStationWorker == null)
+                {
+                    GetLineOfStationWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
+                    GetLineOfStationWorker.RunWorkerCompleted +=
+                        (object sender, RunWorkerCompletedEventArgs args) =>
+                        {
+                            if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                            {                                                   //terminated befor he done execute DoWork
+                                LinesOfStation = (ObservableCollection<Line>)args.Result;
+                                OnPropertyChanged(nameof(LinesOfStation));
+                            }
+                        };//this function will execute in the main thred
+
+                    GetLineOfStationWorker.DoWork +=
+                        (object sender, DoWorkEventArgs args) =>
+                        {
+                            BackgroundWorker worker = (BackgroundWorker)sender;
+                            Station newStation = args.Argument as Station;
+                            ObservableCollection<Line> result = new ObservableCollection<Line>();
+                            try
+                            {
+                                //result = new ObservableCollection<Line>(source.GetAllLinesBy(l => l.Stations.Exists(s => s.StationNumber == newStation.Code)).Select(l => l.Line_BO_PO()));//get the lines from source
+                                //result = new ObservableCollection<Line>(lines.Where(l => l.Stations.Where(s => s.StationNumber == station.Code).FirstOrDefault() != null));
+                                result = new ObservableCollection<Line>(lines.Where(l => newStation.LinesNums.Any(n => n == l.ID)));
+                            }
+                            catch (Exception msg)
+                            {
+                                MessageBox.Show(msg.Message, "ERROR");
+                            }
+                            args.Result = worker.CancellationPending ? null : result;
+                        };//this function will execute in the BackgroundWorker thread
+                }
+                GetLineOfStationWorker.RunWorkerAsync(station);
+            }
+        }
 
 
         private void Update_Line(Line line)
@@ -1305,7 +1305,7 @@ namespace PLGui
             {
                 simulatorWorker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true };
             }
-            else
+            else    //????????????????
             {
                 if (simulatorWorker.IsBusy) 
                     return null;
