@@ -173,7 +173,7 @@
         <!--#endregion-->
 
         <!--#region Tab control -->
-        <materialDesign:Card Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="25,0,25,25">
+        <materialDesign:Card Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25">
             <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" 
                     SelectedIndex="0" Width="auto" 
                     Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="PrimaryMid" TabStripPlacement="Left" 
@@ -192,7 +192,7 @@
                             <Label Content="{materialDesign:PackIcon Kind=BusStopCovered, Size=24}"/>
                         </Grid>
                     </TabItem.Header>
-                    <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" FontSize="12" Height="386" VerticalAlignment="Top">
+                    <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" FontSize="12"  VerticalAlignment="Top">
                         <y:Interaction.Triggers>
                             <y:EventTrigger EventName="SelectionChanged">
                                 <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
