@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.BLApi;
-using BL.BO;
 using BL.simulator;
 using BLApi;
 using BO;
@@ -487,10 +486,10 @@ namespace BL
         /// <param name="startTime">the time wich the simolator clock will start from</param>
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
-        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime)
+        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus)
         {
             clock.StartClock(startTime, rate, updateTime);
-            travelsExecuter.StartExecute();
+            travelsExecuter.StartExecute(updateBus);
         }
 
         /// <summary>
@@ -504,7 +503,7 @@ namespace BL
         /// <summary>
         /// adds the station to the list of the stations that under truck
         /// </summary>
-        public void Add_stationPanel(int stationCode, Action<LineTiming> updateBus)
+        public void Add_stationPanel(int stationCode)
         {
             travelsExecuter.Add_station_to_truck(stationCode);
         }

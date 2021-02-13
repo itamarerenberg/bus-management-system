@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PriorityQueue;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,30 +12,13 @@ namespace correctDataset
     {
         static void Main(string[] args)
         {
-            string lineStationsFilePath = @"C:\Users\erenb\Source\Repos\dotNet5781_1038_06852\project\DL\DS\DataBase\LineStations.xml";
-            string stationFilePath = @"C:\Users\erenb\Source\Repos\dotNet5781_1038_06852\project\DL\DS\DataBase\Stations.xml";
-            XElement lineStations;
-            XElement stations;
-            try
+            List<int> l= new List<int>() { 1, 6, 4, 6, 2, 7, 3 };
+            PriorityQueue<int> queue = new PriorityQueue<int>((a, b) => { return a > b; }, l);
+            while(queue.Count != 0)
             {
-                lineStations = XElement.Load(lineStationsFilePath);
-                stations = XElement.Load(stationFilePath);
+                Console.WriteLine(queue.Dequeue() + ", ");
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            foreach (var lineStation in lineStations.Elements())
-            {
-                if(lineStation.Element("Name") == null)
-                {
-                    string lsName = (from st in stations.Elements()
-                                     where st.Element("Code").Value == lineStation.Element("StationNumber").Value
-                                     select st.Element("Name").Value).FirstOrDefault();
-                    lineStation.Add(new XElement("Name", lsName));
-                }
-            }
-            lineStations.Save(lineStationsFilePath);
+            Console.ReadKey();
         }
     }
 }

@@ -75,8 +75,8 @@
             <materialDesign:Card UniformCornerRadius="6" Background="#FFB3EF7C">
                 <Border BorderThickness="1" Background="White" BorderBrush="#FFB3EF7C" CornerRadius="6">
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <Slider Minimum="1" Maximum="999" Value="{Binding Rate}" IsSelectionRangeEnabled="True" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}"/>
-                        <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                        <Slider Minimum="1" Maximum="999" Value="{Binding Rate}" IsSelectionRangeEnabled="True" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}" IsEnabled ="{Binding IsSimulatorOff}"/>
+                        <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" IsEnabled ="{Binding IsSimulatorOff}" 
                                  ToolTip="set the rate of the simulator" MaxLength="4" CaretBrush="#FF7CC33B" BorderBrush="#FF96EE46"/>
                         <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
                         <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
@@ -156,7 +156,7 @@
                             <ListView  HorizontalAlignment="Left" ItemsSource="{Binding LineTimingsList}" SelectionMode="Single" FontSize="12">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Line number" Width="auto" DisplayMemberBinding="{Binding lineNum}" />
+                                        <GridViewColumn Header="Line number" Width="auto" DisplayMemberBinding="{Binding LineNum}" />
                                         <GridViewColumn Header="Last station" Width="auto" DisplayMemberBinding="{Binding LastStation}" />
                                         <GridViewColumn Header="Address" Width="auto" DisplayMemberBinding="{Binding ArrivalTime, StringFormat={}{0:hh':'mm':'ss}}" />
                                     </GridView>

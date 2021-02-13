@@ -154,6 +154,7 @@
     <Compile Include="Models\PO\Exeptions.cs" />
     <Compile Include="Models\PO\Line.cs" />
     <Compile Include="Models\PO\LineStation.cs" />
+    <Compile Include="Models\PO\LineTiming.cs" />
     <Compile Include="Models\PO\LineTrip.cs" />
     <Compile Include="Models\PO\Station.cs" />
     <Compile Include="Models\PO\TimeTrip.cs" />

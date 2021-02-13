@@ -44,7 +44,12 @@ namespace BL.simulator
             private set => clock = new Clock(value);
         }
 
-        public int Rate { get; set; }
+        volatile int rate;
+        public int Rate 
+        { 
+            get => rate;
+            set => rate = value;
+        }
 
         internal volatile bool Cancel;
 
@@ -119,6 +124,11 @@ namespace BL.simulator
             return time / Rate;
         }
 
+        public TimeSpan Rtime_to_Stime(TimeSpan time)
+        {
+            return new TimeSpan(0, 0, 0, 0, milliseconds: (int)(time.TotalMilliseconds / Rate));
+        }
+
         /// <summary>
         /// convert from simulator time to real time
         /// </summary>
@@ -127,6 +137,11 @@ namespace BL.simulator
         public long Stime_to_Rtime(long time)
         {
             return time * Rate;
+        }
+
+        public TimeSpan Stime_to_Rtime(TimeSpan time)
+        {
+            return new TimeSpan(0, 0, 0, 0, milliseconds: (int)(time.TotalMilliseconds * Rate));
         }
     }
 }

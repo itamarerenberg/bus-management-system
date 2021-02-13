@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BL.BO;
 using BL.simulator;
 using BO;
 
@@ -150,7 +149,7 @@ namespace BLApi
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
         /// /// <exception cref="IligalRateExeption">if rate is less then 1</exception>
-        void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime);
+        void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus);
 
         /// <summary>
         /// stops the simulator clock and the travels executer and all the travels that in progres
@@ -160,7 +159,7 @@ namespace BLApi
         /// <summary>
         /// adds the station to the list of the stations that under truck
         /// </summary>
-        void Add_stationPanel(int stationCode, Action<LineTiming> updateBus);
+        void Add_stationPanel(int stationCode);
 
         /// <summary>
         /// removes the station from the list of the stations that under truck
