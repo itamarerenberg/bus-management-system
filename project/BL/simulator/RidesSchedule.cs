@@ -82,7 +82,7 @@ namespace BL.simulator
         public Ride GetNextRide()
         {
             //if the next ride's start time was in more then 'scheduleTimeOut' then reorder the rides in the queue to be up to date with the current time
-            if (Rides.Top().StartTime < time_back(clock.Time, scheduleTimeOut))
+            if (Rides.Top().StartTime < clock.Time - scheduleTimeOut)
             {
                 reorder_rides();
             }
@@ -108,38 +108,11 @@ namespace BL.simulator
             }
         }
 
-        /// <summary>
-        /// return the time in the day that 'duretionBack' before 'pivotTime'
-        /// </summary>
-        private TimeSpan time_back(TimeSpan pivotTime, TimeSpan duretionBack)
-        {
-            TimeSpan result = pivotTime - duretionBack;
-            while (result < TimeSpan.Zero)
-            {
-                result += new TimeSpan(1, 0, 0, 0);
-            }
-            return result;
-        }
-
         public TimeSpan time_until_next_ride()
         {
             Ride next_ride = Rides.Top();
             TimeSpan result = clock.Time - next_ride.StartTime - timeToExecute;//the time until the start time of the next ride minus 'timeToExecute'
             return result > TimeSpan.Zero ? result : TimeSpan.Zero;//if the ride is late by a short time then still execut the ride now
         }
-
-        ///// <summary>
-        ///// returns the duration from 'pivotTime' to 'dstTime' as times in the day
-        ///// </summary>
-        //private TimeSpan timeUntil(TimeSpan pivotTime, TimeSpan dstTime)
-        //{
-        //    TimeSpan result = dstTime - pivotTime;
-        //    while (result < TimeSpan.Zero)
-        //    {
-        //        result += new TimeSpan(1, 0, 0);
-        //    }
-        //    return result;
-        //}
-
     }
 }

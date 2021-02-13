@@ -51,9 +51,6 @@ namespace BL.simulator
 
         IBL source;
 
-        private PriorityQueue<LineTrip> lineTrips;
-        private List<Line> lines;
-
         RidesSchedule schedule = RidesSchedule.Instance;
 
         SimulationClock clock;
@@ -70,7 +67,6 @@ namespace BL.simulator
             observer = _observer != null ? _observer : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
 
             //load the lineTrips and lines
-            lines = source.GetAllLines().ToList();
             schedule.Set_lineTrips(source.GetAllLineTrips());
            
             if(travelsExecuterWorker == null)
@@ -95,9 +91,11 @@ namespace BL.simulator
             newTravel.DoWork += (object sender, DoWorkEventArgs args) =>
             {
                 //get the line of this line trip
-                Line line = lines.FirstOrDefault(l => l.ID == ride.LineId);
+                Line line = source.GetLine(ride.LineId);
+
                 string lastStationName = source.GetStation(line.LastStation.StationNumber).Name;//get the name of the last station in this line
                 int lineNumber = line.LineNumber;
+
                 LineStation[] stations = line.Stations.ToArray();
                 Dictionary<int, LineTiming> underTruck = new Dictionary<int, LineTiming>();//save the code of all the stations in this line that under truck together with the apropiate lineTiming  
 
@@ -145,10 +143,15 @@ namespace BL.simulator
                             break;
                         }
 
-                        foreach (var timing in underTruck)//update the observer for all the stations that under truck
+                        foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
                         {
-                            timing.Value.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
-                            observer(timing.Value);//update the observer 
+                            if(!underTruck.ContainsKey(station))
+                            {
+                                continue;
+                            }
+                            LineTiming timing = underTruck[station];
+                            timing.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
+                            observer(timing);//update the observer 
                         }
                     }
                     stopwatch.Stop();
