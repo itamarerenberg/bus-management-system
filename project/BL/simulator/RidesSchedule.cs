@@ -110,8 +110,12 @@ namespace BL.simulator
 
         public TimeSpan time_until_next_ride()
         {
+            if (Rides.Top().StartTime < clock.Time - scheduleTimeOut)
+            {
+                reorder_rides();
+            }
             Ride next_ride = Rides.Top();
-            TimeSpan result = clock.Time - next_ride.StartTime - timeToExecute;//the time until the start time of the next ride minus 'timeToExecute'
+            TimeSpan result = next_ride.StartTime - clock.Time - timeToExecute;//the time until the start time of the next ride minus 'timeToExecute'
             return result > TimeSpan.Zero ? result : TimeSpan.Zero;//if the ride is late by a short time then still execut the ride now
         }
     }

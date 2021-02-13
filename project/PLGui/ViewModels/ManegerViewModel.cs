@@ -1306,7 +1306,7 @@ namespace PLGui
             {
                 simulatorWorker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true };
             }
-            else    //????????????????
+            else
             {
                 if (simulatorWorker.IsBusy) 
                     return null;
