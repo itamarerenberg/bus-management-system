@@ -1,8 +1,8 @@
 ﻿using BL.BLApi;
-using BL.BO;
 using BLApi;
 using BO;
 using DLApi;
+using PriorityQueue;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,13 +38,23 @@ namespace BL.simulator
 
         #endregion
 
+        /// <summary>
+        /// <br>this fild is save how much time before the start</br>
+        /// <br>time of the travel the travel executer will lunch the</br>
+        /// <br>backgrownd worker of this travel</br>
+        /// <br>(in simulator time)</br>
+        /// </summary>
+        TimeSpan timeToExcuteTravel = new TimeSpan(0, 20, 0);
+
         Action<LineTiming> observer;
         List<int> stationsInTrack = new List<int>();//list of all the station that in tracking
 
         IBL source;
 
-        private List<LineTrip> lineTrips;
+        private PriorityQueue<LineTrip> lineTrips;
         private List<Line> lines;
+
+        RidesSchedule schedule = RidesSchedule.Instance;
 
         SimulationClock clock;
 
@@ -60,10 +70,9 @@ namespace BL.simulator
             observer = _observer != null ? _observer : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
 
             //load the lineTrips and lines
-            lineTrips = source.GetAllLineTrips().ToList();
             lines = source.GetAllLines().ToList();
-
-            lineTrips.OrderBy(lt => lt.StartTime - clock.Time);//order the travels by the most neer to present
+            schedule.Set_lineTrips(source.GetAllLineTrips());
+           
             if(travelsExecuterWorker == null)
             {
                 travelsExecuterWorker = new BackgroundWorker();
@@ -71,45 +80,45 @@ namespace BL.simulator
 
             travelsExecuterWorker.DoWork += (object sender, DoWorkEventArgs args) =>
             {
-                for (int i = 0; !clock.Cancel; i = (i + 1) % lineTrips.Count())//run while !clock.cancel in cycels(0, 1, 2,..., n, 0, 1, 2,...)
+                while (!clock.Cancel)
                 {
-                    int timeToNextTravel = (int)((lineTrips[i].StartTime - clock.Time).TotalMilliseconds);
-                    Thread.Sleep((int)clock.Rtime_to_Stime(timeToNextTravel));
-                    
-                    executeTravel(lineTrips[i]);//execute the travel
+                    Thread.Sleep(clock.Rtime_to_Stime(schedule.time_until_next_ride()));
+                    executeTravel(schedule.GetNextRide());//execute the travel
                 }
             };
+            travelsExecuterWorker.RunWorkerAsync();
         }
 
-        private void executeTravel(LineTrip lineTrip)
+        private void executeTravel(Ride ride)
         {
             BackgroundWorker newTravel = new BackgroundWorker();
             newTravel.DoWork += (object sender, DoWorkEventArgs args) =>
             {
                 //get the line of this line trip
-                Line line = lines.FirstOrDefault(l => l.ID == lineTrip.LineId);
+                Line line = lines.FirstOrDefault(l => l.ID == ride.LineId);
                 string lastStationName = source.GetStation(line.LastStation.StationNumber).Name;//get the name of the last station in this line
+                int lineNumber = line.LineNumber;
                 LineStation[] stations = line.Stations.ToArray();
                 Dictionary<int, LineTiming> underTruck = new Dictionary<int, LineTiming>();//save the code of all the stations in this line that under truck together with the apropiate lineTiming  
 
                 for (int current = 0; current < stations.Length && !clock.Cancel; current++)
                 {
                     //calculate the arival time according to the position of the bus now
-                    TimeSpan calcTime = TimeSpan.Zero;
+                    TimeSpan calcTime = ride.StartTime - clock.Time;//the travel executs 'timeToExcuteTravel' time before the actual start time of the trip
                     for (int i = current; i < stations.Length; i++)
                     {
-                        calcTime += stations[i].PrevToCurrent.Time;
+                        calcTime += stations[i].PrevToCurrent != null? stations[i].PrevToCurrent.Time :TimeSpan.Zero;
                         if (stationsInTrack.Contains(stations[i].StationNumber))//if this station under truck then update the arival time to this station
                         {
-                            if (underTruck[stations[i].StationNumber] == null)//if this station new in stationsInTrack(added after the trip started)
+                            if (!underTruck.ContainsKey(stations[i].StationNumber))//if this station new in stationsInTrack(added after the trip started)
                             {
                                 underTruck[stations[i].StationNumber] =//add to the under truck dictionery
                                 new LineTiming()
                                 {
-                                    lineNum = line.LineNumber,
+                                    LineNum = line.LineNumber,
                                     LineId = line.ID,
                                     LastStation = lastStationName,
-                                    StatrtTime = lineTrip.StartTime,
+                                    StartTime = ride.StartTime,
                                     StationCode = stations[i].StationNumber
                                 };
                             }
@@ -119,7 +128,8 @@ namespace BL.simulator
                     }
 
                     //calculate the sleep time (the time until the next station)
-                    long sleepTime = clock.Rtime_to_Stime((long)stations[current].CurrentToNext.Time.TotalMilliseconds);
+                    long currentToNext_time = (stations[current].CurrentToNext != null ? (long)stations[current].CurrentToNext.Time.TotalMilliseconds : 0L);//if its the last station in the line then the 'CurrentToNext' fild will be null
+                    long sleepTime = clock.Rtime_to_Stime(currentToNext_time);
                     sleepTime *= (new Random()).Next(10, 200) / 100;//real time is between 10% and 200% of the avrege time(the time that save in the LineStation)
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
@@ -161,6 +171,32 @@ namespace BL.simulator
         public void Stop_truck_station(int stationCode)
         {
             stationsInTrack.Remove(stationCode);
+        }
+
+        /// <summary>
+        /// return the time in the day that 'duretionBack' before 'pivotTime'
+        /// </summary>
+        private TimeSpan time_back(TimeSpan pivotTime, TimeSpan duretionBack)
+        {
+            TimeSpan result = pivotTime - duretionBack;
+            while(result < TimeSpan.Zero)
+            {
+                result += new TimeSpan(1, 0, 0, 0);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// returns the duration from 'pivotTime' to 'dstTime' as times in the day
+        /// </summary>
+        private TimeSpan timeUntil(TimeSpan pivotTime, TimeSpan dstTime)
+        {
+            TimeSpan result = dstTime - pivotTime;
+            while (result < TimeSpan.Zero)
+            {
+                result += new TimeSpan(1, 0, 0);
+            }
+            return result;
         }
     }
 }

@@ -12,7 +12,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using BL.BLApi;
-using BL.BO;
 using BLApi;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -203,7 +202,15 @@ namespace PLGui
             set => SetProperty(ref linesOfStation, value);
         }
 
-        public ObservableCollection<LineTiming> LineTimingsList { get; set; }
+        ObservableCollection<LineTiming> lineTimingsList = new ObservableCollection<LineTiming>();
+        public ObservableCollection<LineTiming> LineTimingsList 
+        {
+            get => lineTimingsList;
+            set
+            {
+                SetProperty(ref lineTimingsList, value);
+            }
+        }
         #endregion
 
         #region constractor
@@ -544,7 +551,6 @@ namespace PLGui
                     Stop_truck_station_panel(stationDisplay.Code);//stop truking the privius selected station's panel
                 GetLinesOfStation(SelectedStation);
                 StationDisplay = SelectedStation;
-                LineTimingsList = SelectedStation.LineTimings;
                 Truck_station_panel(StationDisplay);//start truking the selected station's panel
 
             }
@@ -715,7 +721,26 @@ namespace PLGui
                 var worker = Start_simulator(Time.TimeOfDay, Rate);
                 worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
                 {
-                    Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
+                    //(selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation
+                    if (e.UserState is TimeSpan updateTime)
+                    {
+                        Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
+                    }
+                    else if(e.UserState is BO.LineTiming updateLineTiming)
+                    {
+                        LineTiming temp = LineTimingsList.FirstOrDefault(lt =>
+                                            lt.LineId == updateLineTiming.LineId
+                                            && lt.StationCode == updateLineTiming.StationCode
+                                            && lt.StartTime == updateLineTiming.StartTime);
+                        if(temp == null)
+                        {
+                            LineTimingsList.Add(new LineTiming() { BoLineTiming = updateLineTiming });
+                        }
+                        else
+                        {
+                            temp.BoLineTiming = updateLineTiming; 
+                        }
+                    }
                 };
             }
             else
@@ -1281,7 +1306,8 @@ namespace PLGui
             }
             else
             {
-                while (simulatorWorker.IsBusy) ;//wait for the simulator worker to finish the last task
+                if (simulatorWorker.IsBusy) 
+                    return null;
                 simulatorWorker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true};
             }
 
@@ -1292,6 +1318,10 @@ namespace PLGui
                                      (upToDateTime) => 
                                      { 
                                          worker.ReportProgress(0, upToDateTime); 
+                                     },
+                                     (lineTiming) =>
+                                     {
+                                         worker.ReportProgress(0, lineTiming);
                                      });
                 while(!worker.CancellationPending)
                 {
@@ -1310,13 +1340,7 @@ namespace PLGui
 
         private void Truck_station_panel(Station st)
         {
-            source.Add_stationPanel(st.Code, (lineTiming) => 
-            {
-                //insted of implementing class LineTiming for the pl that is an oservable  
-                //object I remove the line timing and add it back evry time there is an update
-                st.LineTimings.Remove(st.LineTimings.FirstOrDefault(lt0 => lt0.LineId == lineTiming.LineId));
-                st.LineTimings.Add(lineTiming);
-            });
+            source.Add_stationPanel(st.Code);
         }
 
         private void Stop_truck_station_panel(int stationCode)
