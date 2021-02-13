@@ -48,7 +48,6 @@
             <RowDefinition Height="25"/>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -154,12 +153,12 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ListView x:Name="LineTimingList" HorizontalAlignment="Left" ItemsSource="{Binding LineTimingsList}" SelectionMode="Single" FontSize="12">
+                            <ListView  HorizontalAlignment="Left" ItemsSource="{Binding LineTimingsList}" SelectionMode="Single" FontSize="12">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Line number" Width="auto" DisplayMemberBinding="{Binding lineNum}" />
                                         <GridViewColumn Header="Last station" Width="auto" DisplayMemberBinding="{Binding LastStation}" />
-                                        <GridViewColumn Header="Address" Width="auto" DisplayMemberBinding="{Binding ArrivalTime}" />
+                                        <GridViewColumn Header="Address" Width="auto" DisplayMemberBinding="{Binding ArrivalTime, StringFormat={}{0:hh':'mm':'ss}}" />
                                     </GridView>
                                 </ListView.View>
                             </ListView>
@@ -173,8 +172,8 @@
         
         <!--#endregion-->
 
+        <!--#region Tab control -->
         <materialDesign:Card Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="25,0,25,25">
-            <!--#region Tab control -->
             <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" 
                     SelectedIndex="0" Width="auto" 
                     Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="PrimaryMid" TabStripPlacement="Left" 
@@ -193,7 +192,7 @@
                             <Label Content="{materialDesign:PackIcon Kind=BusStopCovered, Size=24}"/>
                         </Grid>
                     </TabItem.Header>
-                    <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" FontSize="12">
+                    <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" FontSize="12" Height="386" VerticalAlignment="Top">
                         <y:Interaction.Triggers>
                             <y:EventTrigger EventName="SelectionChanged">
                                 <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -225,7 +224,7 @@
                             <Label Content="{materialDesign:PackIcon Kind=TransitConnection, Size=24}"/>
                         </Grid>
                     </TabItem.Header>
-                    <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Lines}">
+                    <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Lines}" SelectedIndex="0">
                         <y:Interaction.Triggers>
                             <y:EventTrigger EventName="SelectionChanged">
                                 <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -298,12 +297,13 @@
                 <!--#endregion-->
 
             </TabControl>
-            <!--#endregion-->
-
         </materialDesign:Card>
+
+        <!--#endregion-->
+
         <!--#region Line Details -->
         
-        <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="50,0,80,30" UniformCornerRadius="6"
+        <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Margin="50,0,80,30" UniformCornerRadius="6"
                     Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
                     ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
             <Grid>
@@ -408,10 +408,10 @@
                         <Run Text="Code: "/>
                         <Run Text="{Binding StationDisplay.Code}"/>
                         </TextBlock>
-                        <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="Location" Margin="10,0,0,0"/>
                             <TextBlock Text="{Binding StationDisplay.Location}"/>
-                        </StackPanel>-->
+                        </StackPanel>
                         
                     </Grid>
                 </Border>
@@ -443,15 +443,15 @@
                             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
                 </StackPanel>
 
-                <ListView x:Name="LinePasses_view" ItemsSource="{Binding LinesOfStation}" Grid.IsSharedSizeScope="True" Grid.Row="2" Height="auto" HorizontalAlignment="Stretch">
+                <ListView x:Name="LinePasses_view" ItemsSource="{Binding LinesOfStation}" Grid.IsSharedSizeScope="True" Grid.Row="1" Height="auto" HorizontalAlignment="Stretch" SelectionMode="Single" >
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         </Style>
                     </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource MaterialDesignDivider}" HorizontalAlignment="Stretch">
+                    <ListView.ItemTemplate >
+                        <DataTemplate >
+                            <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource MaterialDesignDivider}" HorizontalAlignment="Stretch" >
                                 <Grid HorizontalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="80"/>
@@ -471,7 +471,7 @@
                                 </Grid>
                             </Border>
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <DataTrigger Binding="{Binding ElementName=Border, Path=IsFocused}" Value="True">
                                     <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
@@ -483,6 +483,55 @@
         </materialDesign:Card>
        
         <!--#endregion-->
+
+
+        <!--#region Live Station panel -->
+
+        <materialDesign:Card  x:Name="LiveStationPanel" Margin="50,20,80,25" Grid.Row="3" Grid.Column="1" UniformCornerRadius="6"
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
+                ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                
+                <ListView x:Name="LineTimingList" ItemsSource="{Binding LineTimingsList}" Grid.IsSharedSizeScope="True" Grid.Row="1" Height="auto" HorizontalAlignment="Stretch" SelectionMode="Single" >
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate >
+                        <DataTemplate >
+                            <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource MaterialDesignDivider}" HorizontalAlignment="Stretch" >
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Margin="8 0 0 0" HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding lineNum}" FontWeight="Bold" FontSize="20"/>
+                                        <TextBlock Text="{Binding LastStation}" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding ArrivalTime, StringFormat={}{0:hh':'mm':'ss} }" Margin="8 0 0 0" HorizontalAlignment="Right" Grid.Column="1" FlowDirection="RightToLeft" TextWrapping="Wrap"/>
+                                </Grid>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=Border, Path=IsFocused}" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
+        </materialDesign:Card>
+
+        <!--#endregion-->
+
 
         <!--#region Line trip Details -->
         <Grid x:Name="LineTripDetails" Grid.Row="2" Grid.Column="1" Margin="5"

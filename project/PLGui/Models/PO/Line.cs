@@ -84,5 +84,9 @@ namespace PLGui.Models.PO
         {
             //OnPropertyChanged(nameof(Errors));
         }
+        public override string ToString()
+        {
+            return LineNumber.ToString();
+        }
     }
 }
