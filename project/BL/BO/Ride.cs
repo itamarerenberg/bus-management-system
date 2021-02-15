@@ -9,10 +9,16 @@ namespace BO
     /// <summary>
     /// represents one ride
     /// </summary>
-    class Ride
+    public class Ride
     {
         public int LineId { get; set; }
         public int LineTripId { get; set; }
         public TimeSpan StartTime { get; set; }
+
+        public override string ToString()
+        {
+            return $" Line ID:{LineId} start time: {StartTime}";
+        }
     }
+     
 }

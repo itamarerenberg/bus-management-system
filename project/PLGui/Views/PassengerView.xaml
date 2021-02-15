@@ -133,8 +133,9 @@
                           materialDesign:HintAssist.Hint="Departure time" ItemsSource="{Binding DepartureTimes}" Width="256" />
                 </StackPanel>
                 <Button x:Name="SignInButton" Content="Go" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" 
-                Style="{StaticResource MaterialDesignFlatMidBgButton}" Background="#FF97F045" Foreground="#FFF2FCED"
+                Background="#FF97F045" Foreground="#FFF2FCED" IsEnabled="{Binding ReadyToGo}"
                 Command="{Binding TripCommand}"  materialDesign:ButtonAssist.CornerRadius="15"/>
+
             </Grid>
             
         </materialDesign:Card>

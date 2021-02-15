@@ -37,6 +37,12 @@
             <MenuItem Header="Delete" Icon="{materialDesign:PackIcon Kind=Delete}"  />
         </ContextMenu>
 
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
     </Window.Resources>
 
     <Grid Background="#FFF0FFE9">
@@ -122,9 +128,9 @@
                     </Grid>
                 </CheckBox.ToolTip>
             </CheckBox>
-            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by" Background="White" BorderBrush="#FF96EE46" />
-            <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <TextBox x:Name="SearchBox" MinWidth="100" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            <ComboBox x:Name="ComboBoxSearch" MinWidth="155" Margin="10,0,0,0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by" Background="White" BorderBrush="#FF96EE46" />
+            <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center" Width="20" Height="20"/>
+            <TextBox x:Name="SearchBox" MinWidth="155" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
             materialDesign:TextFieldAssist.DecorationVisibility="Hidden" MaxLength="25" Background="White" CaretBrush="#FF7CC33B" BorderBrush="#FF96EE46">
                 <y:Interaction.Triggers>
                     <y:EventTrigger EventName="TextChanged">
@@ -173,7 +179,7 @@
         <!--#endregion-->
 
         <!--#region Tab control -->
-        <materialDesign:Card Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25">
+        <materialDesign:Card Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" 
                     SelectedIndex="0" Width="auto" 
                     Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="PrimaryMid" TabStripPlacement="Left" 
@@ -192,7 +198,8 @@
                             <Label Content="{materialDesign:PackIcon Kind=BusStopCovered, Size=24}"/>
                         </Grid>
                     </TabItem.Header>
-                    <ListView x:Name="StationList" HorizontalAlignment="Left" ItemsSource="{Binding Stations}" SelectionMode="Single" FontSize="12"  VerticalAlignment="Top">
+                    <ListView x:Name="StationList" FontSize="12"  VerticalAlignment="Top"  HorizontalAlignment="Left"
+                              ItemsSource="{Binding Stations}" SelectionMode="Single" SelectedItem="{Binding StationDisplay, Mode=TwoWay}">
                         <y:Interaction.Triggers>
                             <y:EventTrigger EventName="SelectionChanged">
                                 <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -224,7 +231,8 @@
                             <Label Content="{materialDesign:PackIcon Kind=TransitConnection, Size=24}"/>
                         </Grid>
                     </TabItem.Header>
-                    <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Lines}" SelectedIndex="0">
+                    <ListView x:Name="LinesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top"
+                              ItemsSource="{Binding Lines}" SelectedIndex="0" SelectedItem="{Binding LineDisplay, Mode=TwoWay}">
                         <y:Interaction.Triggers>
                             <y:EventTrigger EventName="SelectionChanged">
                                 <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -250,7 +258,8 @@
                             <Label Content="{materialDesign:PackIcon Kind=BusClock, Size=24}" />
                         </Grid>
                     </TabItem.Header>
-                    <ListView x:Name="LinesTripList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding LineTrips}">
+                    <ListView x:Name="LinesTripList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top"
+                              ItemsSource="{Binding LineTrips}" SelectionMode="Single" SelectedItem="{Binding LineTripDisplay, Mode=TwoWay}">
                         <y:Interaction.Triggers>
                             <y:EventTrigger EventName="SelectionChanged">
                                 <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -276,7 +285,8 @@
                             <Label Content="{materialDesign:PackIcon Kind=BusMultiple, Size=24}" />
                         </Grid>
                     </TabItem.Header>
-                    <ListView x:Name="BusesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Buses, UpdateSourceTrigger=PropertyChanged}">
+                    <ListView x:Name="BusesList" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top"
+                              ItemsSource="{Binding Buses, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding BusDisplay, Mode=TwoWay}">
                         <y:Interaction.Triggers>
                             <y:EventTrigger EventName="SelectionChanged">
                                 <y:InvokeCommandAction Command="{Binding ListChangedCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
@@ -284,7 +294,7 @@
                         </y:Interaction.Triggers>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn x:Name="LicensNumber" Header="License Number" Width="auto" DisplayMemberBinding="{Binding LicenseNumber, StringFormat={}000-00-000}"/>
+                                <GridViewColumn x:Name="LicensNumber" Header="License Number" Width="auto" DisplayMemberBinding="{Binding LicenseNumber, FallbackValue=000-00-000}"/>
                                 <GridViewColumn x:Name="Stat" Header="Status" Width="auto" DisplayMemberBinding="{Binding Stat}"/>
                                 <GridViewColumn x:Name="Fuel" Header="Fuel" Width="auto" DisplayMemberBinding="{Binding Fuel}"/>
                                 <GridViewColumn x:Name="Kilometraz" Header="Kilometraz" Width="auto" DisplayMemberBinding="{Binding Kilometraz}"/>
@@ -305,7 +315,8 @@
         
         <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Margin="50,0,80,30" UniformCornerRadius="6"
                     Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
-                    ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+                    ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
@@ -317,8 +328,8 @@
 
                 <Border Background="#FFB3EF7C">
                     <Grid>
-                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="{Binding LineDisplay.LineNumber}" FontSize="20" FontWeight="ExtraBold"/>
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" >
+                            <TextBlock Text="{Binding LineDisplay.LineNumber}" FontSize="20" FontWeight="ExtraBold" />
                             <TextBlock Text="{Binding LineDisplay.Area}"/>
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">
@@ -345,7 +356,7 @@
 
                 <materialDesign:Card Background="#FFB3EF7C" Grid.Row="1" Margin="5" 
                                      Padding="8" UniformCornerRadius="6">
-                    <TextBlock Text="Station:" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Stations:" FontSize="20" FontWeight="Bold"/>
                 </materialDesign:Card>
                 
                 <ListView x:Name="LineStations_view" VerticalAlignment="Top" ItemsSource="{Binding LineDisplay.Stations}" 
@@ -391,11 +402,12 @@
         
         <materialDesign:Card  x:Name="StationDetails" Margin="50,0,80,0" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6"
                 Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
-                ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+                ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                              materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Border Background="#FFB3EF7C">
@@ -404,13 +416,12 @@
                             <TextBlock Text="{Binding StationDisplay.Name}" FontSize="20" FontWeight="ExtraBold" TextWrapping="Wrap" FlowDirection="RightToLeft"/>
                             <TextBlock Text="{Binding StationDisplay.Address}" TextWrapping="Wrap" MaxWidth="200" FlowDirection="RightToLeft"/>
                         </StackPanel>
-                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
-                        <Run Text="Code: "/>
-                        <Run Text="{Binding StationDisplay.Code}"/>
-                        </TextBlock>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="Location" Margin="10,0,0,0"/>
-                            <TextBlock Text="{Binding StationDisplay.Location}"/>
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding StationDisplay.Code, StringFormat={}Code: {0}}"
+                                   Visibility="{Binding StationDisplay, Converter={StaticResource NullableToVisibilityConverter}}"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                    Visibility="{Binding StationDisplay, Converter={StaticResource NullableToVisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Location" Margin="10,0,0,0"/>
+                                    <TextBlock Text="{Binding StationDisplay.Location}"/>
                         </StackPanel>
                         
                     </Grid>
@@ -434,12 +445,13 @@
                     </Button>
                 </materialDesign:DialogHost>-->
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="200,0,0,-10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="200,0,0,-10"
+                            Visibility="{Binding StationDisplay, Converter={StaticResource NullableToVisibilityConverter}}">
                     <Button Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="0,0,15,0"
-                            Command="{Binding DeleteCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
+                            Command="{Binding DeleteCommand}" 
                             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
                     <Button Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" 
-                            Command="{Binding UpdateCommand}"  Visibility="{Binding Path=IsSelcetdItemList, Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                            Command="{Binding UpdateCommand}" 
                             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
                 </StackPanel>
 
@@ -489,11 +501,12 @@
 
         <materialDesign:Card  x:Name="LiveStationPanel" Margin="50,20,80,25" Grid.Row="3" Grid.Column="1" UniformCornerRadius="6"
                 Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
-                ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+                ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 
@@ -515,8 +528,9 @@
                                         <TextBlock Text="{Binding LineNum}" FontWeight="Bold" FontSize="20"/>
                                         <TextBlock Text="{Binding LastStation}" TextWrapping="Wrap"/>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding ArrivalTime, StringFormat={}{0:hh':'mm':'ss} }" Margin="8 0 0 0"
-                                               HorizontalAlignment="Right" Grid.Column="1" FlowDirection="RightToLeft" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding ArrivalTime, StringFormat={}{0:hh':'mm':'ss} }" Margin="0 0 0 8" Style="{StaticResource BlinkedText}" 
+                                               Foreground="Green" FontWeight="Bold" FontSize="15"
+                                               HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" FlowDirection="RightToLeft" TextWrapping="Wrap"/>
                                 </Grid>
                             </Border>
                             <DataTemplate.Triggers>
@@ -535,30 +549,77 @@
 
 
         <!--#region Line trip Details -->
-        <Grid x:Name="LineTripDetails" Grid.Row="2" Grid.Column="1" Margin="5"
-                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, ConverterParameter={x:Reference LineTrip_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Expander Header="Line trip details" Grid.Row="0" Margin="5" Background="#FFB3EF7C">
-                <WrapPanel Background="White" DataContext="{Binding LineTripDisplay}" >
-                    <StackPanel>
-                        <TextBlock Text="Start:"/>
-                        <Label Content="{Binding StartTime}" BorderThickness="2" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                    <StackPanel Margin="10,0,0,0">
-                        <TextBlock Text="Finish:"/>
-                        <Label Content="{Binding Finish}" BorderThickness="2" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                    <StackPanel Margin="10,0,0,0" >
-                        <TextBlock Text="Frequency:" />
-                        <Label Content="{Binding Frequency}" BorderThickness="2" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </WrapPanel>
-            </Expander>
-        </Grid>
+
+        <materialDesign:Card x:Name="LineTripDetails" Margin="50,0,80,0" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6"
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
+                ConverterParameter={x:Reference LineTrip_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Background="#FFB3EF7C" Padding="15">
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding LineTripDisplay, Converter={StaticResource NullableToVisibilityConverter}}">
+                            <TextBlock Text="{Binding LineDisplay.LineNumber, StringFormat={}Line: {0}}" FontSize="20" FontWeight="ExtraBold" />
+                            <TextBlock Margin="8 0 0 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" FlowDirection="RightToLeft" TextWrapping="Wrap">
+                                        <Run Text="{Binding LineDisplay.FirstStation.Name, StringFormat={}{0} -> }"/>
+                                        <Run Text="{Binding LineDisplay.LastStation.Name}"/>
+                            </TextBlock>
+                        </StackPanel>
+                        <TextBlock Text="{Binding LineTripDisplay.ID, StringFormat={}ID: {0}}" FontSize="20" FontWeight="ExtraBold"
+                                   HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"/>
+                        <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,100,0"
+                                    Visibility="{Binding LineTripDisplay, Converter={StaticResource NullableToVisibilityConverter}}">
+                            <TextBlock Margin="0,0,10,0">
+                                <Run Text="Start at"/>
+                                <Run Text="{Binding LineTripDisplay.StartTime ,StringFormat={}{0:hh':'mm':'ss}}" FontWeight="ExtraBold"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,0,10,0">
+                                <Run Text="Finish at"/>
+                                <Run Text="{Binding LineTripDisplay.Finish ,StringFormat={}{0:hh':'mm':'ss} }" FontWeight="ExtraBold"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,0,10,0" >
+                                <Run Text="Frequency every"/>
+                                <Run Text="{Binding LineTripDisplay.Frequency.TotalMinutes, Mode=OneWay}" FontWeight="ExtraBold"/>
+                                <Run Text=" min"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,0,10,0">
+                                <Run Text="{Binding RidesList.Count, Mode=OneWay}" FontWeight="ExtraBold"/>
+                                <Run Text="Times"/>
+                            </TextBlock>
+                        </DockPanel>
+                    </Grid>
+                </Border>
+                    
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,15,-10">
+                    <Button Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="0,0,15,0"
+                            Command="{Binding DeleteCommand}" Visibility="{Binding LineTripDisplay, Converter={StaticResource NullableToVisibilityConverter}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                    <Button Content="{materialDesign:PackIcon Kind=Update, Size=25}" ToolTip="Update" 
+                            Command="{Binding UpdateCommand}" Visibility="{Binding LineTripDisplay, Converter={StaticResource NullableToVisibilityConverter}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                </StackPanel>
+
+                <ListView ItemsSource="{Binding RidesList}" Grid.IsSharedSizeScope="True" Grid.Row="1" Height="auto" HorizontalAlignment="Stretch" SelectionMode="Single" >
+                    <ListView.ItemTemplate >
+                        <DataTemplate >
+                            <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource MaterialDesignDivider}" HorizontalAlignment="Stretch" >
+                                <Grid>
+                                     <TextBlock Margin="8 0 0 0" Text="{Binding StartTime, StringFormat={}{0:hh':'mm':'ss}}"/>
+                                </Grid>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=Border, Path=IsFocused}" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </materialDesign:Card>
         <!--#endregion-->
 
         <!--#region Bus Details -->
@@ -609,7 +670,8 @@
         </Grid>
         <!--#endregion-->
 
-        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Background="#FF016306" />
+        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Foreground="Black" Background="#FFB3EF7C" ActionButtonStyle="{StaticResource SnackbarThemeChangedStyle}"/>
+
 
     </Grid>
 

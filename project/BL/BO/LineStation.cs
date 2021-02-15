@@ -20,7 +20,7 @@ namespace BO
 
         public override string ToString()
         {
-            return Name;
+            return StationNumber.ToString();
         }
     }
 }

@@ -4,7 +4,7 @@
     <ID>15</ID>
     <LineId>70</LineId>
     <StartTime>00:00:00</StartTime>
-    <Frequency>15:00:00</Frequency>
+    <Frequency>00:15:00</Frequency>
     <FinishAt>1.00:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
@@ -52,7 +52,7 @@
     <ID>21</ID>
     <LineId>71</LineId>
     <StartTime>00:00:00</StartTime>
-    <Frequency>15:00:00</Frequency>
+    <Frequency>00:20:00</Frequency>
     <FinishAt>1.00:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
@@ -62,6 +62,62 @@
     <StartTime>07:00:00</StartTime>
     <Frequency>00:45:00</Frequency>
     <FinishAt>22:00:00</FinishAt>
+    <IsActive>False</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>26</ID>
+    <LineId>85</LineId>
+    <StartTime>00:00:00</StartTime>
+    <Frequency>01:00:00</Frequency>
+    <FinishAt>1.00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>27</ID>
+    <LineId>85</LineId>
+    <StartTime>07:00:00</StartTime>
+    <Frequency>00:15:00</Frequency>
+    <FinishAt>11:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>28</ID>
+    <LineId>86</LineId>
+    <StartTime>06:00:00</StartTime>
+    <Frequency>00:46:00</Frequency>
+    <FinishAt>23:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>29</ID>
+    <LineId>86</LineId>
+    <StartTime>10:00:00</StartTime>
+    <Frequency>00:15:00</Frequency>
+    <FinishAt>14:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>30</ID>
+    <LineId>70</LineId>
+    <StartTime>09:00:00</StartTime>
+    <Frequency>00:10:00</Frequency>
+    <FinishAt>17:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>31</ID>
+    <LineId>87</LineId>
+    <StartTime>04:00:00</StartTime>
+    <Frequency>00:20:00</Frequency>
+    <FinishAt>1.00:00:00</FinishAt>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <ID>32</ID>
+    <LineId>88</LineId>
+    <StartTime>05:00:00</StartTime>
+    <Frequency>00:30:00</Frequency>
+    <FinishAt>23:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
 </LineTrips>

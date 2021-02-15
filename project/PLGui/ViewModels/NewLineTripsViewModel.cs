@@ -118,27 +118,12 @@ namespace PLGui.utilities
 
                 if (NewLineTripMode == false)//if the view model on "updating mode"
                 {
-                    try
-                    {
-                        UpdateLineTrip();
-                    }
-                    catch (Exception msg)
-                    {
-                        MessageBox.Show(msg.Message, "ERROR");
-                    }
+                    UpdateLineTrip(window);
                 }
                 else                        //New LineTrip Mode
                 {
-                    try
-                    {
-                        AddLineTrip();
-                    }
-                    catch (Exception msg)
-                    {
-                        MessageBox.Show(msg.Message, "ERROR");
-                    }
+                    AddLineTrip(window);
                 }
-                window.Close(); 
             }
         }
         /// <summary>
@@ -180,34 +165,60 @@ namespace PLGui.utilities
         #region help methods
 
         BackgroundWorker addLineTripWorker;
-        private void AddLineTrip()
+        private void AddLineTrip(Window window)
         {
             if (addLineTripWorker == null)
             {
                 addLineTripWorker = new BackgroundWorker();
+                addLineTripWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs e) =>
+                    {
+                        (e.Result as Window).Close();
+                    };
+                addLineTripWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        try
+                        {
+                            source.AddLineTrip(LTrip.BOlineTrip);
+                            args.Result = args.Argument;
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
+                        }
+                    };//this function will execute in the BackgroundWorker thread
             }
-            addLineTripWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    source.AddLineTrip(LTrip.BOlineTrip);
-                };//this function will execute in the BackgroundWorker thread
-            addLineTripWorker.RunWorkerAsync();
+            addLineTripWorker.RunWorkerAsync(window);
         }
+
+
         BackgroundWorker updateLineTripWorker;
-        private void UpdateLineTrip()
+        private void UpdateLineTrip(Window window)
         {
             if (updateLineTripWorker == null)
             {
                 updateLineTripWorker = new BackgroundWorker();
-            }
-            updateLineTripWorker.DoWork +=
+                updateLineTripWorker.RunWorkerCompleted +=
+                        (object sender, RunWorkerCompletedEventArgs e) =>
+                        {
+                            (e.Result as Window).Close();
+                        };
+                updateLineTripWorker.DoWork +=
                 (object sender, DoWorkEventArgs args) =>
                 {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    source.UpdateLineTrip(LTrip.BOlineTrip);
+                    try
+                    {
+                        source.UpdateLineTrip(LTrip.BOlineTrip);
+                        args.Result = args.Argument;
+                    }
+                    catch (Exception msg)
+                    {
+                        MessageBox.Show(msg.Message, "ERROR");
+                    }
                 };//this function will execute in the BackgroundWorker thread
-            updateLineTripWorker.RunWorkerAsync();
+            }
+            updateLineTripWorker.RunWorkerAsync(window);
         }
 
         #endregion

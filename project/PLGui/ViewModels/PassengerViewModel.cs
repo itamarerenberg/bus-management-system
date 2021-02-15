@@ -28,7 +28,7 @@ namespace PLGui
         private BO.LineStation toStation;
         private string fromText;
         private string toText;
-        private TimeTrip timeOfTrip;
+        private BO.TimeTrip timeOfTrip;
         private PassengerView passengerView;
 
         #region properties
@@ -44,7 +44,8 @@ namespace PLGui
                 {
                     //show all the available stations that are next in the lines that passed in selected station("FromStation")
                     toStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.LineId == value.LineId && s.LineStationIndex > value.LineStationIndex));
-                    DepartureTimes = CalculatesTime(value);
+                    CalculatesTime(value);
+                    OnPropertyChanged(nameof(ReadyToGo));
                 }
             }
         }
@@ -58,7 +59,8 @@ namespace PLGui
                     if (TimeOfTrip != null && value != null)
                     {
                         TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (value.Time_from_start - FromStation.Time_from_start);//FinishTime = start time + the diferent between the stations
-                    }                
+                    }
+                    OnPropertyChanged(nameof(ReadyToGo));
                 }
             }
         }
@@ -91,7 +93,7 @@ namespace PLGui
                 }
             }
         }
-        public TimeTrip TimeOfTrip
+        public BO.TimeTrip TimeOfTrip
         {
             get => timeOfTrip;
             set
@@ -103,20 +105,21 @@ namespace PLGui
                         TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (ToStation.Time_from_start - FromStation.Time_from_start);//FinishTime = start time + the diferent between the stations
                         OnPropertyChanged(nameof(TimeOfTrip));
                     }
+                    OnPropertyChanged(nameof(ReadyToGo));
                 }
             }
         }
-
-
+        public bool ReadyToGo { get => FromStation != null && ToStation != null && TimeOfTrip != null; }
+  
         #endregion
 
         #region collections
         public ObservableCollection<Line> Lines { get; set; }
         private List<BO.LineTrip> LineTrips { get; set; }
 
-        private List<TimeTrip> departureTimes;
+        private List<BO.TimeTrip> departureTimes;
 
-        public List<TimeTrip> DepartureTimes
+        public List<BO.TimeTrip> DepartureTimes
         {
             get => departureTimes;
             set => SetProperty(ref departureTimes, value);
@@ -170,7 +173,7 @@ namespace PLGui
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             stations = (ObservableCollection<BO.LineStation>)args.Result;
-                            fromStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.LineStationIndex > 0));//take all the stations that aren't last in the line
+                            fromStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.CurrentToNext != null));//take all the stations that aren't last in the line
                         }
                     };//this function will execute in the main thred
 
@@ -277,7 +280,7 @@ namespace PLGui
 
         private void GoTrip()
         {
-            Line line = Lines.Where(l => l.ID == FromStation.LineId).FirstOrDefault();
+            Line line = Lines.FirstOrDefault(l => l.ID == FromStation.LineId);
             BO.UserTrip newUserTrip = new BO.UserTrip()
             {
                 UserName = passenger.Name,
@@ -335,46 +338,52 @@ namespace PLGui
         /// </summary>
         private void ComboBox_DropDownOpened(object sender, EventArgs e)
         {
-            FromStations.Filter = s => true;
-            FromStations.Refresh();
+            if ((sender as ComboBox).Name == "FromComboBox")
+            {
+                FromStations.Filter = s => true;
+                FromStations.Refresh();
+            }
+            else if((sender as ComboBox).Name == "ToComboBox")
+            {
+                ToStations.Filter = s => true;
+                ToStations.Refresh();
+            }
         }
 
-        
+
         #endregion
 
         #region private nethods
+        BackgroundWorker CalculatesTimeWorker;
         /// <summary>
-        /// Calculates the Times of Departure Lines from the selected station
+        /// Calculates the Times of Departure Lines from the selected station in the BL Layer
+        /// and set the departureTimes list to the result of "source.CalculateTimeTrip"
         /// </summary>
-        /// <param name="station"></param>
-        /// <returns>
-        /// List of TimeTrips that contains "StartTime" and "LineId"
-        /// </returns>
-        private List<TimeTrip> CalculatesTime(BO.LineStation station)
+        private void CalculatesTime(BO.LineStation station)
         {
-            List<TimeTrip> tempTimeTrips = new List<TimeTrip>();
-            foreach (BO.LineTrip LT in LineTrips)
+            if (CalculatesTimeWorker == null)
             {
-                if (LT.LineId == station.LineId)
-                {
-                    int lineNum = (int)Lines.Where(l => l.ID == station.LineId).FirstOrDefault().LineNumber;
-                    if (LT.Frequency == TimeSpan.Zero)//if the line trips is only once a day
+                CalculatesTimeWorker = new BackgroundWorker();
+                CalculatesTimeWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
                     {
-                        tempTimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = LT.StartTime + station.Time_from_start });
-                    }
-                    else                               //the line trips is more then once a day
+                        DepartureTimes = (List<BO.TimeTrip>)args.Result;
+                    };//this function will execute in the main thred
+
+                CalculatesTimeWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
                     {
-                        TimeSpan tempStart = LT.StartTime;
-                        while (LT.FinishAt >= tempStart)
-                        {
-                            tempTimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = tempStart + station.Time_from_start });
-                            tempStart += LT.Frequency;
-                        }
-                    }
-                }
+                        BO.LineStation lineStation = args.Argument as BO.LineStation;
+                        int lineNum = (int)Lines.FirstOrDefault(l => l.ID == lineStation.LineId).LineNumber;
+                        args.Result = source.CalculateTimeTrip(lineStation, lineNum, LineTrips);
+                    };
             }
-            return tempTimeTrips;
+            if (!CalculatesTimeWorker.IsBusy)//if the worker is not busy run immediately
+            {
+                CalculatesTimeWorker.RunWorkerAsync(station);
+            }
         }
+
         /// <summary>
         /// send a requests massege to get the passenger details
         /// </summary>

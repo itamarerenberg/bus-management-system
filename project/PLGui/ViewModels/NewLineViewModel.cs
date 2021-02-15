@@ -23,7 +23,7 @@ namespace PLGui.utilities
         #region fields
         IBL source;
         BackgroundWorker loadDataWorker;
-        BackgroundWorker creatNewLine;
+        BackgroundWorker NewLineWorker;
 
         Line tempLine = new Line();
         private bool addManually;
@@ -51,9 +51,10 @@ namespace PLGui.utilities
         public string buttonCaption { get; set; }
         public bool NewLineMode{ get; set; }
         public bool IsMinStation { get => Stations.Count >= 2; }
+        public bool Processing { get; set; } = true;
 
         public ObservableCollection<Station> DBStations { get; set; }//data base stations
-        public ObservableCollection<LineStation> Stations { get; set; } = new ObservableCollection<LineStation>();//new updated line stations
+        public ObservableCollection<LineStation> Stations { get; set; } = new ObservableCollection<LineStation>();//new/updated line stations
         public List<string> ComboList { get; set; } = new List<string>() { "Name", "Code", "Address" };
 
 
@@ -91,7 +92,9 @@ namespace PLGui.utilities
             DeleteStationCommand = new RelayCommand<object>(DeleteStation);
             SearchCommand = new RelayCommand<object>(SearchBox_TextChanged);
             LoadedCommand = new RelayCommand<NewLineView>(Loaded);
+            CloseCommand = new RelayCommand<Window>(Close);
         }
+
 
         #endregion
 
@@ -136,7 +139,7 @@ namespace PLGui.utilities
         public ICommand AddLineButton { get; }
         public ICommand SearchCommand { get; }
         public ICommand LoadedCommand { get; }
-
+        public ICommand CloseCommand { get; }
 
         /// <summary>
         /// double click on data base station, the station will be added to the new/updated line stations
@@ -151,7 +154,7 @@ namespace PLGui.utilities
                 DBStations.Remove(selectedStation);
                 OnPropertyChanged(nameof(IsMinStation));
 
-                NewLineView Lview = ((sender as ListView).Parent as Grid).Parent as NewLineView;
+                NewLineView Lview = (sender as Control).FindWindowOfType<NewLineView>();
                 SearchBox_TextChanged(Lview);
             }
         }
@@ -170,7 +173,7 @@ namespace PLGui.utilities
                     Stations.Last().NotLast = false;//set the new last station to not NotLast
                 OnPropertyChanged(nameof(IsMinStation));
 
-                NewLineView Lview = (((sender as ListView).Parent as StackPanel).Parent as Grid).Parent as NewLineView;
+                NewLineView Lview = (sender as Control).FindWindowOfType<NewLineView>();
                 SearchBox_TextChanged(Lview);
             }
         }
@@ -179,69 +182,95 @@ namespace PLGui.utilities
         /// </summary>
         private void Add_Update_LineButton(Window window)
         {
-            if (NewLineMode == false)//if the view model on "updating mode"
+            //open the dialog and disabled the elements in the window
+            (window as NewLineView).DialogProcess.IsOpen = true;
+            Processing = false;
+            OnPropertyChanged(nameof(Processing));
+
+            if (NewLineMode)
             {
-                UpdateLine();
-                window.Close();
-                return;
+                NewLine(window);
             }
-            if (creatNewLine == null)
+            else//if the view model on "updating mode"
             {
-                creatNewLine = new BackgroundWorker();
+                UpdateLine(window);
             }
-            creatNewLine.RunWorkerCompleted +=
-                (object sender, RunWorkerCompletedEventArgs args) =>
-                {
-                    if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated before he done execute DoWork
-                        window.Close();
-                    }
-                };//this function will execute in the main thread
-
-            creatNewLine.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
-                {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-
-                    BO.Line BOline = new BO.Line()//creating new BO line
-                    {
-                        LineNumber = (int)TempLine.LineNumber,
-                        Area = (BO.AreasEnum)TempLine.Area
-                    };
-                    List<int?> distances = Stations.Select(lst => lst.Distance).ToList();
-                    List<int?> times = Stations.Select(lst => lst.Time).ToList();
-                    source.AddLine(BOline, Stations.Select(st => st.Station.BOstation), distances, times);
-                };//this function will execute in the BackgroundWorker thread
-            creatNewLine.RunWorkerAsync();
-
         }
 
-        BackgroundWorker updateLine;
-        private void UpdateLine()
+        private void NewLine(Window window)
         {
-            if (updateLine == null)
+            if (NewLineWorker == null)
             {
-                updateLine = new BackgroundWorker();
-                updateLine.RunWorkerCompleted +=
-                    (object sender, RunWorkerCompletedEventArgs args) =>
+                NewLineWorker = new BackgroundWorker();
+                NewLineWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs e) =>
                     {
-                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
-                    {                                                   //terminated before he done execute DoWork
+                        (e.Result as Window).Close();
+                    };
+                NewLineWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BO.Line BOline = new BO.Line()//creating new BO line
+                        {
+                            LineNumber = (int)TempLine.LineNumber,
+                            Area = (BO.AreasEnum)TempLine.Area
+                        };
+                        List<int?> distances = Stations.Select(lst => lst.Distance).ToList();
+                        List<int?> times = Stations.Select(lst => lst.Time).ToList();
+                        try
+                        {
+                            source.AddLine(BOline, Stations.Select(st => st.Station.BOstation), distances, times);
+                            args.Result = args.Argument;
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
 
-                    }
-                    };//this function will execute in the main thread
+                            //return the window to the normal mode
+                            (args.Argument as NewLineView).DialogProcess.IsOpen = false;
+                            Processing = true;
+                            OnPropertyChanged(nameof(Processing));
+                        }  
+                    };//this function will execute in the BackgroundWorker thread
+            }
+            NewLineWorker.RunWorkerAsync(window);
+        }
 
-                updateLine.DoWork +=
+
+        BackgroundWorker updateLineWorker;
+        private void UpdateLine(Window window)
+        {
+            if (updateLineWorker == null)
+            {
+                updateLineWorker = new BackgroundWorker();
+                updateLineWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs e) =>
+                    {
+                        (e.Result as Window).Close();
+                    };
+                updateLineWorker.DoWork +=
                     (object sender, DoWorkEventArgs args) =>
                     {
                         BackgroundWorker worker = (BackgroundWorker)sender;
                         List<int?> distances = Stations.Select(lst => lst.Distance).ToList();
                         List<int?> times = Stations.Select(lst => lst.Time).ToList();
-                        source.UpdateLine((int)TempLine.ID, Stations.Select(st => st.Station.BOstation), distances, times);
+                        try
+                        {
+                            source.UpdateLine((int)TempLine.ID, Stations.Select(st => st.Station.BOstation), distances, times);
+                            args.Result = args.Argument;
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
+
+                            //return the window to the normal mode
+                            (args.Argument as NewLineView).DialogProcess.IsOpen = false;
+                            Processing = true;
+                            OnPropertyChanged(nameof(Processing));
+                        }
                     };//this function will execute in the BackgroundWorker thread
             }
-            updateLine.RunWorkerAsync();
-
+            updateLineWorker.RunWorkerAsync(window);
         }
 
         /// <summary>
@@ -276,6 +305,10 @@ namespace PLGui.utilities
         {
             Lview.LNum.Focus();
             Lview.LNum.SelectAll();
+        }
+        private void Close(Window window)
+        {
+            window.Close();
         }
         #endregion
 

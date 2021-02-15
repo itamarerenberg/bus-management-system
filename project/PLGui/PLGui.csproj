@@ -157,7 +157,6 @@
     <Compile Include="Models\PO\LineTiming.cs" />
     <Compile Include="Models\PO\LineTrip.cs" />
     <Compile Include="Models\PO\Station.cs" />
-    <Compile Include="Models\PO\TimeTrip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserTrip.cs" />
     <Compile Include="utilities\TimeSpanPicker.xaml.cs">

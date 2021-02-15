@@ -77,6 +77,10 @@ namespace BL.simulator
             clockWorker = new BackgroundWorker();
             clockWorker.DoWork += (object sender, DoWorkEventArgs args) =>
             {
+                if (Thread.CurrentThread.Name == null)
+                {
+                    Thread.CurrentThread.Name = "clock";
+                }
                 BackgroundWorker worker = (BackgroundWorker)sender;
                 TimeSpan start = startTime;
                 Stopwatch stopwatch = new Stopwatch();

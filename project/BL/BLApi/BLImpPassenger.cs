@@ -93,6 +93,33 @@ namespace BL
             throw new NotImplementedException();
         }
 
+        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum, List<LineTrip> lineTrips)
+        {
+            List<TimeTrip> TimeTrips = new List<TimeTrip>();
+            foreach (BO.LineTrip LT in lineTrips)
+            {
+                if (LT.LineId == lineStation.LineId)
+                {
+                    if (LT.Frequency == TimeSpan.Zero)//if the line trips is only once a day
+                    {
+                        TimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = LT.StartTime + lineStation.Time_from_start });
+                    }
+                    else                               //the line trips is more then once a day
+                    {
+                        for (TimeSpan rideTime = LT.StartTime; rideTime <= LT.FinishAt; rideTime += LT.Frequency)//all the rides of this line trip in one day
+                        {
+                            TimeTrips.Add(new TimeTrip()
+                            {
+                                LineNum = lineNum,
+                                StartTime = rideTime + lineStation.Time_from_start
+                            });
+                        }
+                    }
+                }
+            }
+            return TimeTrips;
+        }
+
         #endregion
 
         #region User Trip
@@ -519,6 +546,11 @@ namespace BL
         public void Change_SimulatorRate(int change)
         {
             clock.Change_Rate(change);
+        }
+
+        public List<Ride> GetRides(LineTrip lineTrip)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
