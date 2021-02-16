@@ -103,7 +103,6 @@ namespace PLGui
             get => isSimulatorOff;
             set => SetProperty(ref isSimulatorOff, value);
         }
-
         public bool FilterStations
         {
             get => filterStations;
@@ -122,11 +121,23 @@ namespace PLGui
             }
         }
 
-
+        private Station previousStation;
         public Station StationDisplay
         {
             get => stationDisplay;
-            set => SetProperty(ref stationDisplay, value);
+            set
+            {
+                previousStation = stationDisplay;
+                if (SetProperty(ref stationDisplay, value) && value != null)
+                {
+                    if (previousStation != null)
+                    {
+                        Stop_truck_station_panel(stationDisplay.Code);//stop truking the privius selected station's panel
+                    }
+                    GetLinesOfStation(value);
+                    Truck_station_panel(value);//start truking the selected station's panel
+                }
+            }
         }
         public Line LineDisplay
         {
@@ -136,15 +147,20 @@ namespace PLGui
         public LineTrip LineTripDisplay
         {
             get => lineTripDisplay;
-            set => SetProperty(ref lineTripDisplay, value);
+            set 
+            {
+                if (SetProperty(ref lineTripDisplay, value) && value != null)//if the line trip in the view has changed
+                {
+                    GetRides(value);
+                    LineDisplay = lines.FirstOrDefault(l => l.ID == value.LineId);
+                }
+            } 
         }
         public Bus BusDisplay
         {
             get => busDisplay;
             set => SetProperty(ref busDisplay, value);
         }
-
-
         #endregion
 
         #region collections
@@ -211,6 +227,13 @@ namespace PLGui
                 SetProperty(ref lineTimingsList, value);
             }
         }
+        private List<BO.Ride> ridesList;
+        public List<BO.Ride> RidesList
+        {
+            get => ridesList;
+            set => SetProperty(ref ridesList, value);
+        }
+
         #endregion
 
         #region constractor
@@ -495,7 +518,7 @@ namespace PLGui
                         }
                         break;
                     case "Lines":
-                        if (buses != null)
+                        if (Lines != null)
                         {
                             Lines.Filter = l => l.GetType().GetProperty(propertyName).GetValue(l).ToString().Contains(Mview.SearchBox.Text);
                             Lines.Refresh();
@@ -533,6 +556,9 @@ namespace PLGui
         /// <param name="window"></param>
         private void tab_selactionChange(ManegerView Mview)
         {
+            //LineDisplay = null;
+            //LineTripDisplay = null;
+            //RidesList = null;
             List<string> comboList = ((SelectedTabItem.Content as ListView).View as GridView).Columns
                                       .Where(g => g.DisplayMemberBinding != null && g.Header != null).Select(C => C.Header.ToString()).ToList();
             Mview.ComboBoxSearch.ItemsSource = comboList;
@@ -546,29 +572,31 @@ namespace PLGui
         /// <param name="sender"></param>
         private void List_SelectionChanged(ManegerView Mview)
         {
-            if ((selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation)
-            {
-                if (StationDisplay != null)
-                    Stop_truck_station_panel(stationDisplay.Code);//stop truking the privius selected station's panel
-                GetLinesOfStation(SelectedStation);
-                StationDisplay = SelectedStation;
-                Truck_station_panel(StationDisplay);//start truking the selected station's panel
+            //if ((selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation)
+            //{
+            //    if (StationDisplay != null)
+            //        Stop_truck_station_panel(stationDisplay.Code);//stop truking the privius selected station's panel
+            //    GetLinesOfStation(SelectedStation);
+            //    StationDisplay = SelectedStation;
+            //    Truck_station_panel(StationDisplay);//start truking the selected station's panel
 
-            }
-            else if ((selectedTabItem.Content as ListView).SelectedItem is Line selectedLine)
-            {
-                LineDisplay = selectedLine;
-            }
-            else if ((selectedTabItem.Content as ListView).SelectedItem is LineTrip selectedLineTrip)
-            {
-                LineTripDisplay = selectedLineTrip;
-            }
-            else if ((selectedTabItem.Content as ListView).SelectedItem is Bus selectedbus)
-            {
-                BusDisplay = selectedbus;
-            }
+            //}
+            //else if ((selectedTabItem.Content as ListView).SelectedItem is Line selectedLine)
+            //{
+            //    //LineDisplay = selectedLine;
+            //}
+            //else if ((selectedTabItem.Content as ListView).SelectedItem is LineTrip selectedLineTrip)
+            //{
+            //    //LineTripDisplay = selectedLineTrip;
+                
+            //}
+            //else if ((selectedTabItem.Content as ListView).SelectedItem is Bus selectedbus)
+            //{
+            //    //BusDisplay = selectedbus;
+            //}
         }
-       
+        
+
         private void LostFocus( ManegerView MView)
         {
             if (SelectedTabItem != null)
@@ -750,7 +778,6 @@ namespace PLGui
                         }
                         catch (Exception msg)
                         {
-                            MessageBox.Show(msg.Message, "ERROR");
                         }
                     };
                     tempWorker.RunWorkerAsync();
@@ -832,7 +859,7 @@ namespace PLGui
             Station station = StationsForDeletion.Dequeue();// get the station to delete
 
             //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
-            MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} will be deleted!", "UNDO", new Action(DeleteStationWorker.CancelAsync));
+            MyMessageQueue.Enqueue($"station: {station.Name} code: {station.Code} will be deleted!  ", "UNDO", new Action(DeleteStationWorker.CancelAsync));
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
@@ -851,7 +878,6 @@ namespace PLGui
                 MessageBox.Show(msg.Message, "ERROR");
             }
         }
-
         private void DeleteStationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (!e.Cancelled)//if the BackgroundWorker didn't Cancel
@@ -881,7 +907,7 @@ namespace PLGui
             Line line = LinesForDeletion.Dequeue();// get the line to delete
 
             //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
-            MyMessageQueue.Enqueue($"line number: {line.LineNumber} will be deleted!", "UNDO", new Action(DeleteLineWorker.CancelAsync));
+            MyMessageQueue.Enqueue($"line number: {line.LineNumber} will be deleted!    ", "UNDO", new Action(DeleteLineWorker.CancelAsync));
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
@@ -930,7 +956,7 @@ namespace PLGui
             Line line = lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault();//get the line number
 
             //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
-            MyMessageQueue.Enqueue($"Line trip of line number: {line.LineNumber}(ID = {lineTrip.LineId}) will be deleted!", "UNDO", new Action(DeleteLineTripWorker.CancelAsync));
+            MyMessageQueue.Enqueue($"Line trip of line number: {line.LineNumber}(ID = {lineTrip.LineId}) will be deleted!   ", "UNDO", new Action(DeleteLineTripWorker.CancelAsync));
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
@@ -979,7 +1005,7 @@ namespace PLGui
             Bus bus = busesForDeletion.Dequeue();// get the bus to delete
 
             //show a messege of deletion, and if "UNDO" was pressed the worker will be cancled
-            MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} will be deleted!", "UNDO", new Action(DeleteBusWorker.CancelAsync));
+            MyMessageQueue.Enqueue($"bus license number: {bus.LicenseNumber} will be deleted!   ", "UNDO", new Action(DeleteBusWorker.CancelAsync));
             OnPropertyChanged(nameof(MyMessageQueue));
 
             BackgroundWorker worker = (BackgroundWorker)sender;
@@ -1155,9 +1181,10 @@ namespace PLGui
                             MemoryStack.Push(Mview.LinesList.SelectedItem);// push the station into the stack
                             if (SelectedLineTrip != null)
                             {
+                                LineTrip lineTrip = lineTrips.FirstOrDefault(lt => lt.ID == SelectedLineTrip.ID);//LineTrip inside a Line and LineTrip of the list are the same but with diferent referance
                                 Mview.mainTab.SelectedIndex = 2;
-                                Mview.LinesTripList.SelectedIndex = Mview.LinesTripList.Items.IndexOf(SelectedLineTrip);//-------------------------------------------------------------------------
-                                Mview.LinesTripList.ScrollIntoView(SelectedLineTrip);
+                                Mview.LinesTripList.SelectedIndex = Mview.LinesTripList.Items.IndexOf(lineTrip);
+                                Mview.LinesTripList.ScrollIntoView(lineTrip);
                                 OnPropertyChanged(nameof(StackIsNotEmpty));
                             }
                         }
@@ -1238,7 +1265,47 @@ namespace PLGui
                     GetLineOfStationWorker.RunWorkerAsync(station);
             }
         }
+        BackgroundWorker GetRidesWorker;
+        /// <summary>
+        /// gets the line trip's rides of all day from the BL
+        /// </summary>
+        private void GetRides(LineTrip lineTrip)
+        {
+            if (GetRidesWorker == null)
+            {
+                GetRidesWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
+                GetRidesWorker.RunWorkerCompleted +=
+                    (object sender, RunWorkerCompletedEventArgs args) =>
+                    {
+                        if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
+                        {                                                   //terminated befor he done execute DoWork
+                            if (args.Result != null)
+                            {
+                                RidesList = (List<BO.Ride>)args.Result;
+                            } 
+                        }
+                    };//this function will execute in the main thred
 
+                GetRidesWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        LineTrip LT = args.Argument as LineTrip;
+                        List<BO.Ride> tempList = new List<BO.Ride>();
+                        try
+                        {
+                            tempList = source.GetRides(LT.BOlineTrip);
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
+                        }
+                        args.Result = worker.CancellationPending ? null : tempList;
+                    };//this function will execute in the BackgroundWorker thread
+            }
+            if (!GetRidesWorker.IsBusy)
+                GetRidesWorker.RunWorkerAsync(lineTrip);
+        }
 
         private void Update_Line(Line line)
         {
@@ -1300,6 +1367,7 @@ namespace PLGui
         #region simulator
 
         BackgroundWorker simulatorWorker;
+        Thread simulatorThread;
         private BackgroundWorker Start_simulator(TimeSpan startTime, int rate)
         {
             if(simulatorWorker == null)
@@ -1308,13 +1376,21 @@ namespace PLGui
             }
             else
             {
-                if (simulatorWorker.IsBusy) 
-                    return null;
+                if (simulatorWorker.IsBusy)
+                {
+                    simulatorThread.Interrupt();
+                    Thread.Sleep(50);
+                }
                 simulatorWorker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true};
             }
 
             simulatorWorker.DoWork += (object sender, DoWorkEventArgs args) =>
             {
+                simulatorThread = Thread.CurrentThread;
+                if (simulatorThread.Name == null)
+                {
+                    simulatorThread.Name = "Simulator";
+                }
                 BackgroundWorker worker = (BackgroundWorker)sender;
                 source.StartSimulator(startTime, rate,
                                      (upToDateTime) =>//updateTime
@@ -1327,7 +1403,14 @@ namespace PLGui
                                      });
                 while(!worker.CancellationPending)
                 {
-                    Thread.Sleep(1000);
+                    try
+                    {
+                        Thread.Sleep(1000);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }                
                 }
                 source.StopSimulator();
             };

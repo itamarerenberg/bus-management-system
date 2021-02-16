@@ -22,7 +22,8 @@ namespace PLGui.Models.PO
         }
 
         private BO.Station station;
-        public BO.Station BOstation {
+        public BO.Station BOstation 
+        {
             get 
             {
                 station.LinesNums = linesNums.ToList();
@@ -39,7 +40,6 @@ namespace PLGui.Models.PO
                 OnPropertyChanged("Location");
                 linesNums = new ObservableCollection<int>(station.LinesNums);//bcause that lineNums need to be an ObservableCollection it a spetial case
                 OnPropertyChanged("LinesNums");
-            
             }
         }
 
@@ -120,7 +120,6 @@ namespace PLGui.Models.PO
         }
 
         public ObservableCollection<LineTiming> LineTimings { get; set; }
-
         private void Station_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(HasErrors))
@@ -133,6 +132,7 @@ namespace PLGui.Models.PO
         {
             throw new NotImplementedException();
         }
+
         public override string ToString()
         {
             return Name;

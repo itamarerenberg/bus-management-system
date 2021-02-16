@@ -9,15 +9,22 @@
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PLGui.Models.PO"
         mc:Ignorable="d"
-        Title="NewLineView" x:Name="NewLineWindow" Height="600" Width="900" >
+        Title="NewLineView" x:Name="NewLineWindow" Height="600" Width="900"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}">
+    
     <y:Interaction.Triggers>
         <y:EventTrigger EventName="Loaded">
             <y:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=NewLineWindow}"/>
         </y:EventTrigger>
     </y:Interaction.Triggers>
+    
     <Window.DataContext>
         <viewmodels:NewLineViewModel x:Name="vModel"/>
     </Window.DataContext>
+    
     <Window.Resources>
         <ObjectDataProvider x:Key="EnumBinding" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -33,124 +40,167 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <SolidColorBrush x:Key="LightBackground" Color="#FFF2FCED"/>
+        <SolidColorBrush x:Key="MidBackground" Color="#FFB3EF7C"/>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="5*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="55"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
-        </Grid.RowDefinitions>
+    
+    
+    <Border CornerRadius="15" Background="{StaticResource LightBackground}"  BorderThickness="2" BorderBrush="{StaticResource MidBackground}">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            <Button Content="Close" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Black"
+                Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=NewLineWindow}" FontWeight="Bold" FontFamily="Arial Narrow"/>
 
-        <Label Content="add/remove a station to/from the new line by double click on the station" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom"/>
+            <Label Content="add/remove a station to/from the new line by double click on the station" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom"/>
+            
+            <materialDesign:DialogHost x:Name="DialogProcess" Grid.ColumnSpan="2" Grid.RowSpan="3">
+                <materialDesign:DialogHost.DialogContent>
+                    <Border Padding="20" BorderBrush="{StaticResource MidBackground}" CornerRadius="8">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Processing... please wait"/>
+                            <ProgressBar Style="{DynamicResource MaterialDesignCircularProgressBar}"
+                                     HorizontalAlignment="Center" Margin="16" IsIndeterminate="True" Value="0" />
+                        </StackPanel>
+                    </Border>
+                </materialDesign:DialogHost.DialogContent>
+                
+            </materialDesign:DialogHost>
 
-        <StackPanel Grid.Column="0" Grid.Row="1" Margin="10" CanVerticallyScroll="True">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel>
-                    <TextBlock Text="line number" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="LNum" Text="{Binding TempLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Left" MinWidth="80" Height="22" IsEnabled="{Binding NewLineMode, Mode=OneTime}" />
-                </StackPanel>
-                <StackPanel Margin="15,0,0,0">
-                    <TextBlock Text="Area" HorizontalAlignment="Left"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=TempLine.Area}" HorizontalAlignment="Left" MinWidth="80" IsEnabled="{Binding NewLineMode, Mode=OneTime}"/>
-                </StackPanel>
-                <CheckBox Content="add dis/time manually" IsChecked="{Binding AddManually}" VerticalAlignment="Bottom" Margin="15,0,0,0"/>
-            </StackPanel>
-
-            <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" Width="auto">
-                <y:Interaction.Triggers>
-                    <y:EventTrigger EventName="MouseDoubleClick">
-                        <y:InvokeCommandAction Command="{Binding DeleteStationCommand}" CommandParameter="{Binding RelativeSource=
+            <materialDesign:Card Grid.Column="0" Grid.Row="1" Margin="10" UniformCornerRadius="15" IsEnabled="{Binding Processing}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid Background="{StaticResource MidBackground}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,5,0,0">
+                            <TextBox x:Name="LNum" Text="{Binding TempLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                     HorizontalAlignment="Left" IsEnabled="{Binding NewLineMode, Mode=OneTime}" Background="{StaticResource LightBackground}"
+                                     materialDesign:HintAssist.Hint="Line number" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource EnumBinding}}" SelectedItem="{Binding Path=TempLine.Area}" Margin="15,0,0,0"
+                                      HorizontalAlignment="Left" MinWidth="80" IsEnabled="{Binding NewLineMode, Mode=OneTime}" Background="{StaticResource LightBackground}"
+                                      materialDesign:HintAssist.Hint="Area" Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+                        </StackPanel>
+                        <CheckBox Content="add dis/time manually" IsChecked="{Binding AddManually}" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                    </Grid>
+                 
+                    <ListView x:Name="StationList" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding Stations}" Width="auto" Grid.Row="1"
+                              ToolTip="Click twice to remove a station from the line">
+                        <y:Interaction.Triggers>
+                            <y:EventTrigger EventName="MouseDoubleClick">
+                                <y:InvokeCommandAction Command="{Binding DeleteStationCommand}" CommandParameter="{Binding RelativeSource=
                                          { RelativeSource FindAncestor, 
                                            AncestorType={x:Type ListView},
                                            AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
-                    </y:EventTrigger>
-                </y:Interaction.Triggers>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn x:Name="Name" Header="Name" Width="auto" DisplayMemberBinding="{Binding Station.Name}" />
-                        <GridViewColumn x:Name="Code" Header="Code" Width="auto" DisplayMemberBinding="{Binding Station.Code}" />
-                        <GridViewColumn x:Name="dist_to_next" Header="distance to next" Width="{Binding AddManually, Converter={StaticResource Bool_converter_to_visibility}}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                        <TextBox x:Name="meters" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Distance, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn x:Name="time_to_next" Header="time to next" Width="{Binding AddManually, Converter={StaticResource Bool_converter_to_visibility}}" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                        <TextBox x:Name="minuts" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Time, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
-       
+                            </y:EventTrigger>
+                        </y:Interaction.Triggers>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn x:Name="Name" Header="Name" Width="auto" DisplayMemberBinding="{Binding Station.Name}" />
+                                <GridViewColumn x:Name="Code" Header="Code" Width="auto" DisplayMemberBinding="{Binding Station.Code}" />
+                                <GridViewColumn x:Name="dist_to_next" Header="distance to next" Width="{Binding AddManually, Converter={StaticResource Bool_converter_to_visibility}}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="meters" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Distance, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="time_to_next" Header="time to next" Width="{Binding AddManually, Converter={StaticResource Bool_converter_to_visibility}}" >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="minuts" MinWidth="30" IsEnabled="{Binding NotLast}" Text="{Binding Time, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+                
+            </materialDesign:Card>
 
 
-        <ListView x:Name="DBStationList" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Top" ItemsSource="{Binding DBStations}"  >
-            <y:Interaction.Triggers>
-                <y:EventTrigger EventName="MouseDoubleClick">
-                    <y:InvokeCommandAction Command="{Binding SelectDBStationCommand}" CommandParameter="{Binding RelativeSource=
-                                         { RelativeSource FindAncestor, 
-                                           AncestorType={x:Type ListView},
-                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
-                </y:EventTrigger>
-            </y:Interaction.Triggers>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn x:Name="DBName"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn x:Name="DBCode"  Header="Code" Width="auto" DisplayMemberBinding="{Binding Code}" />
-                    <GridViewColumn x:Name="DBAddress"  Header="Address" Width="auto" DisplayMemberBinding="{Binding Address}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,25,0">
-            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" ItemsSource="{Binding ComboList}"
+            <materialDesign:Card Grid.Row="1" Grid.Column="1" Margin="10"  UniformCornerRadius="15" IsEnabled="{Binding Processing}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Background="{StaticResource MidBackground}" >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0">
+                            <ComboBox x:Name="ComboBoxSearch" MinWidth="70" Margin="10,0,0,0" ItemsSource="{Binding ComboList}" Background="{StaticResource LightBackground}"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="sort by"/>
-            <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <TextBox x:Name="SearchBox" MinWidth="100" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-            materialDesign:TextFieldAssist.DecorationVisibility="Hidden">
-                <y:Interaction.Triggers>
-                    <y:EventTrigger EventName="TextChanged">
-                        <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding RelativeSource=
+                            <materialDesign:PackIcon Kind="Magnify" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="SearchBox" MinWidth="100" Margin="0,0,0,0" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        materialDesign:TextFieldAssist.DecorationVisibility="Hidden" Background="{StaticResource LightBackground}">
+                                <y:Interaction.Triggers>
+                                    <y:EventTrigger EventName="TextChanged">
+                                        <y:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding RelativeSource=
                                          { RelativeSource FindAncestor, 
                                            AncestorType={x:Type TextBox},
                                            AncestorLevel=1}}" PassEventArgsToCommand="True"/>
-                    </y:EventTrigger>
-                </y:Interaction.Triggers>
-            </TextBox>
-        </StackPanel>
+                                    </y:EventTrigger>
+                                </y:Interaction.Triggers>
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
 
-        <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" Command="{Binding AddLineButton}" CommandParameter="{Binding ElementName=NewLineWindow}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" HorizontalAlignment="Right">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="IsEnabled" Value="false" />
-                    <Style.Triggers>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding ElementName=LNum, Path=(Validation.HasError)}" Value="false" />
-                                <Condition Binding="{Binding IsMinStation}" Value="true" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="IsEnabled" Value="true" />
-                            <Setter Property="FocusManager.IsFocusScope" Value="True"/>
-                        </MultiDataTrigger>
-                        <DataTrigger Binding="{Binding TempLine.LineNumber}" Value="">
-                            <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding TempLine.LineNumber}" Value="{x:Null}">
-                            <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-    </Grid>
+                    <ListView x:Name="DBStationList" ItemsSource="{Binding DBStations}" Grid.Row="1" ToolTip="Click twice to add a station to the line">
+                        <y:Interaction.Triggers>
+                            <y:EventTrigger EventName="MouseDoubleClick">
+                                <y:InvokeCommandAction Command="{Binding SelectDBStationCommand}" CommandParameter="{Binding RelativeSource=
+                                         { RelativeSource FindAncestor, 
+                                           AncestorType={x:Type ListView},
+                                           AncestorLevel=1}}"  PassEventArgsToCommand="True"/>
+                            </y:EventTrigger>
+                        </y:Interaction.Triggers>
+                        <ListView.View >
+                            <GridView>
+                                <GridViewColumn x:Name="DBName"  Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn x:Name="DBCode"  Header="Code" Width="auto" DisplayMemberBinding="{Binding Code}" />
+                                <GridViewColumn x:Name="DBAddress"  Header="Address" Width="auto" DisplayMemberBinding="{Binding Address}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </materialDesign:Card>
+
+
+            <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" IsEnabled="{Binding Processing}"
+                    Command="{Binding AddLineButton}" CommandParameter="{Binding ElementName=NewLineWindow}"
+                    Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" 
+                    materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Right">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="IsEnabled" Value="false" />
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ElementName=LNum, Path=(Validation.HasError)}" Value="false" />
+                                    <Condition Binding="{Binding IsMinStation}" Value="true" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsEnabled" Value="true" />
+                                <Setter Property="FocusManager.IsFocusScope" Value="True"/>
+                            </MultiDataTrigger>
+                            <DataTrigger Binding="{Binding TempLine.LineNumber}" Value="">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding TempLine.LineNumber}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Border>
 </Window>

@@ -46,7 +46,7 @@
     <Area>Jerusalem</Area>
     <FirstStation_Id>179</FirstStation_Id>
     <LastStation_Id>952</LastStation_Id>
-    <IsActive>True</IsActive>
+    <IsActive>False</IsActive>
   </Line>
   <Line>
     <ID>68</ID>
@@ -86,6 +86,46 @@
     <Area>Jerusalem</Area>
     <FirstStation_Id>88</FirstStation_Id>
     <LastStation_Id>453</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>85</ID>
+    <LineNumber>300</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>95</FirstStation_Id>
+    <LastStation_Id>557</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>86</ID>
+    <LineNumber>33</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>93</FirstStation_Id>
+    <LastStation_Id>833</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>87</ID>
+    <LineNumber>92</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>95</FirstStation_Id>
+    <LastStation_Id>523</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>88</ID>
+    <LineNumber>56</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>60414</FirstStation_Id>
+    <LastStation_Id>751</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>89</ID>
+    <LineNumber>14</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>105</FirstStation_Id>
+    <LastStation_Id>491</LastStation_Id>
     <IsActive>True</IsActive>
   </Line>
 </Lines>

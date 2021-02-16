@@ -52,4 +52,30 @@
     <OutTime>13/02/2021 15:45:44</OutTime>
     <IsActive>True</IsActive>
   </LineTrip>
+  <LineTrip>
+    <TripId>6</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <InStation>230</InStation>
+    <InStationName>רוזנטל/כנפי נשרים</InStationName>
+    <InTime>14/02/2021 15:51:46</InTime>
+    <OutStation>737</OutStation>
+    <OutStationName>בית ספר יסודי א טור/שיח' ענבר</OutStationName>
+    <OutTime>14/02/2021 17:08:42</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <TripId>7</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <InStation>188</InStation>
+    <InStationName>שאולזון/מעלות בוסטון</InStationName>
+    <InTime>14/02/2021 09:12:49</InTime>
+    <OutStation>750</OutStation>
+    <OutStationName>קופת חולים/ג'בל מוכבר</OutStationName>
+    <OutTime>14/02/2021 11:00:09</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
 </UsersTrips>

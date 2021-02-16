@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,6 +57,7 @@ namespace BL.simulator
         SimulationClock clock;
 
         BackgroundWorker travelsExecuterWorker;
+        Thread travelsExecuterThread;
         public void StartExecute(Action<LineTiming> _observer = null)
         {
             if(source == null)
@@ -68,20 +70,36 @@ namespace BL.simulator
 
             //load the lineTrips and lines
             schedule.Set_lineTrips(source.GetAllLineTrips());
-           
-            if(travelsExecuterWorker == null)
+
+            if (travelsExecuterWorker == null)
             {
                 travelsExecuterWorker = new BackgroundWorker();
-            }
-
-            travelsExecuterWorker.DoWork += (object sender, DoWorkEventArgs args) =>
-            {
-                while (!clock.Cancel)
+                travelsExecuterWorker.DoWork += (object sender, DoWorkEventArgs args) =>
                 {
-                    Thread.Sleep(clock.Rtime_to_Stime(schedule.time_until_next_ride()));
-                    executeTravel(schedule.GetNextRide());//execute the travel
-                }
-            };
+                    travelsExecuterThread = Thread.CurrentThread;
+                    if (travelsExecuterThread.Name == null)
+                    {
+                        travelsExecuterThread.Name = "travelsExecuter";
+                    }
+                    while (!clock.Cancel)
+                    {
+                        try
+                        {
+                            Thread.Sleep(clock.Rtime_to_Stime(schedule.time_until_next_ride()));
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        } 
+                        executeTravel(schedule.GetNextRide());//execute the travel
+                    }
+                };
+            }
+            if (travelsExecuterWorker.IsBusy)
+            {
+                travelsExecuterThread.Interrupt();
+                Thread.Sleep(50);
+            }
             travelsExecuterWorker.RunWorkerAsync();
         }
 
@@ -90,6 +108,11 @@ namespace BL.simulator
             BackgroundWorker newTravel = new BackgroundWorker();
             newTravel.DoWork += (object sender, DoWorkEventArgs args) =>
             {
+                if (Thread.CurrentThread.Name == null)
+                {
+                    Thread.CurrentThread.Name = "newTravel";
+                }
+
                 //get the line of this line trip
                 Line line = source.GetLine(ride.LineId);
 
@@ -170,7 +193,7 @@ namespace BL.simulator
                         double sleep = Math.Min(sleepTime - stopwatch.ElapsedMilliseconds, 1000);
                         Thread.Sleep((int)sleep);
 
-                        if(clock.Cancel)//this part can take a lot of time so chak any second the cancel state
+                        if(clock.Cancel)//this part can take a lot of time so check any second the cancel state
                         {
                             break;
                         }

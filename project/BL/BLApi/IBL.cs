@@ -59,6 +59,13 @@ namespace BLApi
         /// Delete a user with Passenger permission
         /// </summary>
         void DeletePassenger(string name, string password);
+        /// <summary>
+        /// Calculates the Times of Departure Lines from the selected station
+        /// </summary>
+        /// <returns>
+        /// List of TimeTrips that contains "StartTime" and "Line number"
+        /// </returns>
+        List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum, List<LineTrip> lineTrips);
 
         #endregion
 
@@ -138,7 +145,7 @@ namespace BLApi
         void DeleteLineTrip(LineTrip lineTrip);
         IEnumerable<LineTrip> GetAllLineTrips();
         IEnumerable<LineTrip> GetAllLineTripBy(Predicate<LineTrip> predicate);
-
+        List<Ride> GetRides(LineTrip lineTrip);
         #endregion
 
         #region simulator

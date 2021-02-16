@@ -61,6 +61,7 @@
     <Compile Include="BO\Passenger.cs" />
     <Compile Include="BO\Ride.cs" />
     <Compile Include="BO\Station.cs" />
+    <Compile Include="BO\TimeTrip.cs" />
     <Compile Include="BO\UserTrip.cs" />
     <Compile Include="BLApi\IBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

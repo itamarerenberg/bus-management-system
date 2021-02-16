@@ -63,7 +63,7 @@ namespace BL.simulator
             //for each lineTrip: calulate all the rides of the line trip in 24 hours cycle and enque the ride to the Rides priority_Queue
             foreach(var lt in lineTrips)
             {
-                if(lt.FinishAt <= lt.StartTime)
+                if(lt.FinishAt <= lt.StartTime && lt.Frequency != TimeSpan.Zero)
                 {
                     lt.FinishAt += new TimeSpan(days: 1, 0, 0, 0);//if lt.FinishAt < lt.StartTime then apparently the finish time is in the day after the startTime
                 }

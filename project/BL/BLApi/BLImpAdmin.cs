@@ -267,7 +267,7 @@ namespace BL
                 DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
                 stations = stations.Skip(1);//remove the first station from stations (its allready take ceared)
                 int index = 1;//this will be use to define the fild LineStationIndex in the loop
-                foreach (Station st in stations)//! I think we shuld add in dl function that add a range of LineStation
+                foreach (Station st in stations)//! I think we shuld add in dl function that add a range of LineStation //I don't think so
                 {
                     prev_station.NextStation = st.Code;
                     dl.AddLineStation(prev_station);
@@ -661,6 +661,20 @@ namespace BL
                    where predicate(LTripBO)
                    select LTripBO;
         }
+        public List<Ride> GetRides(LineTrip lineTrip)
+        {
+            List<Ride> rides = new List<Ride>();
+            for (TimeSpan rideTime = lineTrip.StartTime; rideTime <= lineTrip.FinishAt; rideTime += lineTrip.Frequency)//this is all the rides of this line trip in one day
+            {
+               rides.Add(new Ride()
+                {
+                    LineId = lineTrip.LineId,
+                    LineTripId = lineTrip.ID,
+                    StartTime = rideTime,
+                });
+            }
+            return rides;
+        }
 
         #endregion
 
@@ -964,6 +978,11 @@ namespace BL
         }
 
         public IEnumerable<LineStation> GetAllLineStations()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum, List<LineTrip> lineTrips)
         {
             throw new NotImplementedException();
         }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using BL.BLApi;
 using BLApi;
@@ -54,12 +55,14 @@ namespace PLGui.utilities
             source = BLFactory.GetBL("admin");
 
             ButtonCommand = new RelayCommand(Add_Update_Button);
+            CloseCommand = new RelayCommand<Window>(Close);
         }
 
         #endregion
 
         #region commands
         public ICommand ButtonCommand { get; }
+        public ICommand CloseCommand { get; }
 
         private void Add_Update_Button()
         {
@@ -104,6 +107,10 @@ namespace PLGui.utilities
                     source.UpdateStation(station.BOstation);
                 };//this function will execute in the BackgroundWorker thread
             updateStationWorker.RunWorkerAsync();
+        }
+        private void Close(Window window)
+        {
+            window.Close();
         }
         #endregion
     }
