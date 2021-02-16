@@ -45,7 +45,8 @@ namespace BL.simulator
         SimulationClock clock = SimulationClock.Instance;
 
         /// <summary>
-        /// gets a colection of line trips and generets rides according to the lineTrips and insert them in the schedule
+        /// <br>gets a colection of line trips and generets rides according to the lineTrips and insert them in the schedule</br>
+        /// <br>if ther is allready rides in the schedual then all the rides will be deleted</br>
         /// </summary>
         public void Set_lineTrips(IEnumerable<LineTrip> lineTrips)
         {
@@ -108,6 +109,10 @@ namespace BL.simulator
             }
         }
 
+        /// <summary>
+        /// returns the time until the next ride (in simulator time)
+        /// </summary>
+        /// <returns></returns>
         public TimeSpan time_until_next_ride()
         {
             if (Rides.Top().StartTime < clock.Time - scheduleTimeOut)

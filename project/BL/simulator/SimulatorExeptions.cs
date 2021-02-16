@@ -11,4 +11,9 @@ namespace BL.simulator
     {
         public IligalRateExeption(string msg) : base(msg){}
     }
+
+    class IligalArgsPassedToFunction:Exception
+    {
+        public IligalArgsPassedToFunction(string msg) : base(msg){}
+    }
 }

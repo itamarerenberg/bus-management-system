@@ -1409,7 +1409,7 @@ namespace PLGui
                     }
                     catch (Exception)
                     {
-                        return;
+                        break;
                     }                
                 }
                 source.StopSimulator();

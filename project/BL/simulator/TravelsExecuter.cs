@@ -56,7 +56,6 @@ namespace BL.simulator
 
         SimulationClock clock;
 
-        BackgroundWorker travelsExecuterWorker;
         Thread travelsExecuterThread;
         public void StartExecute(Action<LineTiming> _observer = null)
         {
@@ -69,38 +68,17 @@ namespace BL.simulator
             observer = _observer != null ? _observer : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
 
             //load the lineTrips and lines
-            schedule.Set_lineTrips(source.GetAllLineTrips());
+            var lineTrips = source.GetAllLineTrips();
 
-            if (travelsExecuterWorker == null)
-            {
-                travelsExecuterWorker = new BackgroundWorker();
-                travelsExecuterWorker.DoWork += (object sender, DoWorkEventArgs args) =>
-                {
-                    travelsExecuterThread = Thread.CurrentThread;
-                    if (travelsExecuterThread.Name == null)
-                    {
-                        travelsExecuterThread.Name = "travelsExecuter";
-                    }
-                    while (!clock.Cancel)
-                    {
-                        try
-                        {
-                            Thread.Sleep(clock.Rtime_to_Stime(schedule.time_until_next_ride()));
-                        }
-                        catch (Exception)
-                        {
-                            return;
-                        } 
-                        executeTravel(schedule.GetNextRide());//execute the travel
-                    }
-                };
-            }
-            if (travelsExecuterWorker.IsBusy)
+            //build the schedual
+            schedule.Set_lineTrips(lineTrips);
+            if(travelsExecuterThread != null)
             {
                 travelsExecuterThread.Interrupt();
-                Thread.Sleep(50);
             }
-            travelsExecuterWorker.RunWorkerAsync();
+            travelsExecuterThread = new Thread((object schedual) => execute_rides(schedual, travelsExecuterThread));//preform the func execute_rides with 'schdual' and the travel xecuter thread
+            travelsExecuterThread.Name = "rides executer";//set the name of the thread to be "rides executer" for maintenance
+            travelsExecuterThread.Start(schedule);//start the travelsExecuterThread with argument 'schedule'
         }
 
         private void executeTravel(Ride ride)
@@ -108,12 +86,9 @@ namespace BL.simulator
             BackgroundWorker newTravel = new BackgroundWorker();
             newTravel.DoWork += (object sender, DoWorkEventArgs args) =>
             {
-                if (Thread.CurrentThread.Name == null)
-                {
-                    Thread.CurrentThread.Name = "newTravel";
-                }
-
                 //get the line of this line trip
+                var temp = TimeSpan.Zero;
+                Stopwatch st = new Stopwatch();
                 Line line = source.GetLine(ride.LineId);
 
                 string lastStationName = source.GetStation(line.LastStation.StationNumber).Name;//get the name of the last station in this line
@@ -122,37 +97,30 @@ namespace BL.simulator
                 LineStation[] stations = line.Stations.ToArray();
                 Dictionary<int, LineTiming> underTruck = new Dictionary<int, LineTiming>();//save the code of all the stations in this line that under truck together with the apropiate lineTiming  
 
-                //wate for the start of the travel
-                while(ride.StartTime > clock.Time)
+                TimeSpan timeUntilStart = ride.StartTime - clock.Time;
+                waite_while_doing(timeUntilStart, () =>
                 {
-                    //sleep the minimum between 1 second to the time until the start time
-                    double sleep = Math.Min(clock.Stime_to_Rtime((long)(ride.StartTime - clock.Time).TotalMilliseconds), 1000);
-                    Thread.Sleep((int)sleep);
-
-                    if (clock.Cancel)//this part can take a lot of time so chak any second the cancel state
-                    {
-                        break;
-                    }
-
                     foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
                     {
-                        if (!underTruck.ContainsKey(station))
+                        LineStation tempLS = line.Stations.FirstOrDefault(ls => ls.StationNumber == station);//get the line station of this station in this line
+                        if(tempLS == null)//if tempLS is null then this station not exist in this line
                         {
-                            underTruck[station] =//add to the under truck dictionery
-                                new LineTiming()
-                                {
-                                    LineNum = line.LineNumber,
-                                    LineId = line.ID,
-                                    LastStation = lastStationName,
-                                    StartTime = ride.StartTime,
-                                    StationCode = station
-                                };
+                            continue;
                         }
-                        LineTiming timing = underTruck[station];
-                        timing.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
-                        observer(timing);//update the observer 
+                        TimeSpan arrivalTime = tempLS.Time_from_start + ride.StartTime - clock.Time;//calculate the arrival time for this station
+                        LineTiming timing = new LineTiming()
+                        {
+                            LineNum = line.LineNumber,
+                            LineId = line.ID,
+                            LastStation = lastStationName,
+                            StartTime = ride.StartTime,
+                            StationCode = station,
+                            ArrivalTime = arrivalTime
+                        };
+                        observer(timing);//update the observer
                     }
-                }
+                    return clock.Cancel;
+                });
 
                 for (int current = 0; current < stations.Length && !clock.Cancel; current++)
                 {
@@ -264,5 +232,56 @@ namespace BL.simulator
             }
             return result;
         }
+
+        #region functions for threads
+        /// <summary>
+        /// executs rides according to the rides schedual
+        /// </summary>
+        /// <param name="obj_schedule">the schedual of the rides to execute</param>
+        /// <param name="thisThread">the thrad that this execution of the function is runing on</param>
+        private void execute_rides(object obj_schedule, Thread thisThread)
+        {
+            if (!(obj_schedule is RidesSchedule schedual))
+            {
+                throw new IligalArgsPassedToFunction("execute_rides(): paramete has to be RidesSchedule type");
+            }
+            while (!clock.Cancel)
+            {
+                TimeSpan sleep = schedule.time_until_next_ride();//get the time until the next ride from the schedule(in simulator time)
+                sleep = clock.Stime_to_Rtime(sleep);//convert 'sleep' to real world time to the next ride
+                try
+                {
+                    Thread.Sleep(sleep);//sleep 'sleep' time
+                }
+                catch (ThreadInterruptedException)//if the "travel executer thread" whas interrupted while sleeping
+                {
+                    break;//end the loop
+                }               
+                executeTravel(schedule.GetNextRide());//execute the ride
+            }
+        }
+
+
+        /// <summary>
+        /// do 'action' every 'sleepTime' miliseconds for 'time' time
+        /// </summary>
+        /// <param name="action">if returns true the function will be end imidietly</param>
+        private void waite_while_doing(TimeSpan time, Func<bool> action, int sleepTime = 1000)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            while(stopwatch.Elapsed < time)
+            {
+                bool isInterrupted = action();
+                if(isInterrupted)
+                {
+                    break;
+                }
+                int sleep = (int)Math.Min(sleepTime, time.TotalMilliseconds - stopwatch.ElapsedMilliseconds);
+            }
+            stopwatch.Stop();
+        }
+
+        #endregion
     }
 }
