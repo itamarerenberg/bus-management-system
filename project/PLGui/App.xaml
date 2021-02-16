@@ -14,16 +14,22 @@
             <Style TargetType="materialDesign:Card" x:Key="VisibleAnimation">
                 <Setter Property="Visibility" Value="Collapsed"/>
                 <Setter Property="Opacity" Value="0"/>
-                <!--<Setter Property="Width" Value=""/>-->
+                <Setter Property="RenderTransform" >
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    </Setter.Value>
+                </Setter>
                 <Style.Triggers>
                     <Trigger Property="Visibility" Value="Visible">
                         <Trigger.EnterActions>
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                    From="0.0" To="1.0" Duration="0:0:0.5"/>
-                                    <!--<DoubleAnimation Storyboard.TargetProperty="Width" 
-                                    From="0" Duration="0:0:0.5"/>-->
+                                    From="0.0" To="1.0" Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                                    From="0" Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                                    From="0" Duration="0:0:0.2"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </Trigger.EnterActions>

@@ -38,7 +38,7 @@
         </ContextMenu>
 
         <Style x:Key="ActionButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Red"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -294,7 +294,7 @@
                         </y:Interaction.Triggers>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn x:Name="LicensNumber" Header="License Number" Width="auto" DisplayMemberBinding="{Binding LicenseNumber, FallbackValue=000-00-000}"/>
+                                <GridViewColumn x:Name="LicensNumber" Header="License Number" Width="auto" DisplayMemberBinding="{Binding LicenseNumber, StringFormat={}{0:###\-##\-###}}"/>
                                 <GridViewColumn x:Name="Stat" Header="Status" Width="auto" DisplayMemberBinding="{Binding Stat}"/>
                                 <GridViewColumn x:Name="Fuel" Header="Fuel" Width="auto" DisplayMemberBinding="{Binding Fuel}"/>
                                 <GridViewColumn x:Name="Kilometraz" Header="Kilometraz" Width="auto" DisplayMemberBinding="{Binding Kilometraz}"/>
@@ -316,7 +316,7 @@
         <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Margin="50,0,80,30" UniformCornerRadius="6"
                     Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
                     ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                             Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
@@ -403,7 +403,7 @@
         <materialDesign:Card  x:Name="StationDetails" Margin="50,0,80,0" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6"
                 Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
                 ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-                              materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                             Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
@@ -502,7 +502,7 @@
         <materialDesign:Card  x:Name="LiveStationPanel" Margin="50,20,80,25" Grid.Row="3" Grid.Column="1" UniformCornerRadius="6"
                 Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
                 ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              materialDesign:ShadowAssist.ShadowDepth="Depth3">
+                             Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -550,7 +550,7 @@
 
         <!--#region Line trip Details -->
 
-        <materialDesign:Card x:Name="LineTripDetails" Margin="50,0,80,0" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6"
+        <materialDesign:Card x:Name="LineTripDetails" Margin="50,0,80,0" Grid.Row="2" Grid.Column="1" UniformCornerRadius="6" 
                 Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
                 ConverterParameter={x:Reference LineTrip_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3" >
@@ -670,8 +670,7 @@
         </Grid>
         <!--#endregion-->
 
-        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Foreground="Black" Background="#FFB3EF7C" ActionButtonStyle="{StaticResource SnackbarThemeChangedStyle}"/>
-
+        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Foreground="Black" Background="#FFB3EF7C" ActionButtonStyle="{StaticResource ActionButtonStyle}"/>
 
     </Grid>
 

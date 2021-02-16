@@ -29,7 +29,14 @@ namespace PLGui.Models.PO
         private string licenseNumber;
         public string LicenseNumber 
         {
-            get => boBus.LicenseNumber;
+            get 
+            {
+                if (boBus.LicenseNumber.Count() == 8)
+                {
+                    return int.Parse(boBus.LicenseNumber).ToString("000-00-000");
+                }
+                return int.Parse(boBus.LicenseNumber).ToString("00-000-00");
+            }
             set
             {
                 SetProperty(ref licenseNumber, value);
