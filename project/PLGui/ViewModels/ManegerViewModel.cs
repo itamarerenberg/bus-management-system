@@ -1317,11 +1317,11 @@ namespace PLGui
             {
                 BackgroundWorker worker = (BackgroundWorker)sender;
                 source.StartSimulator(startTime, rate,
-                                     (upToDateTime) => 
+                                     (upToDateTime) =>//updateTime
                                      { 
                                          worker.ReportProgress(0, upToDateTime); 
                                      },
-                                     (lineTiming) =>
+                                     (lineTiming) =>//updateBus
                                      {
                                          worker.ReportProgress(0, lineTiming);
                                      });

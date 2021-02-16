@@ -99,10 +99,42 @@ namespace BL.simulator
                 LineStation[] stations = line.Stations.ToArray();
                 Dictionary<int, LineTiming> underTruck = new Dictionary<int, LineTiming>();//save the code of all the stations in this line that under truck together with the apropiate lineTiming  
 
+                //wate for the start of the travel
+                while(ride.StartTime > clock.Time)
+                {
+                    //sleep the minimum between 1 second to the time until the start time
+                    double sleep = Math.Min(clock.Stime_to_Rtime((long)(ride.StartTime - clock.Time).TotalMilliseconds), 1000);
+                    Thread.Sleep((int)sleep);
+
+                    if (clock.Cancel)//this part can take a lot of time so chak any second the cancel state
+                    {
+                        break;
+                    }
+
+                    foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
+                    {
+                        if (!underTruck.ContainsKey(station))
+                        {
+                            underTruck[station] =//add to the under truck dictionery
+                                new LineTiming()
+                                {
+                                    LineNum = line.LineNumber,
+                                    LineId = line.ID,
+                                    LastStation = lastStationName,
+                                    StartTime = ride.StartTime,
+                                    StationCode = station
+                                };
+                        }
+                        LineTiming timing = underTruck[station];
+                        timing.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
+                        observer(timing);//update the observer 
+                    }
+                }
+
                 for (int current = 0; current < stations.Length && !clock.Cancel; current++)
                 {
                     //calculate the arival time according to the position of the bus now
-                    TimeSpan calcTime = ride.StartTime - clock.Time;//the travel executs 'timeToExcuteTravel' time before the actual start time of the trip
+                    TimeSpan calcTime = TimeSpan.Zero;//ride.StartTime - clock.Time;//the travel executs 'timeToExcuteTravel' time before the actual start time of the trip
                     for (int i = current; i < stations.Length; i++)
                     {
                         calcTime += stations[i].PrevToCurrent != null? stations[i].PrevToCurrent.Time :TimeSpan.Zero;
@@ -147,7 +179,15 @@ namespace BL.simulator
                         {
                             if(!underTruck.ContainsKey(station))
                             {
-                                continue;
+                                underTruck[station] =//add to the under truck dictionery
+                                new LineTiming()
+                                {
+                                    LineNum = line.LineNumber,
+                                    LineId = line.ID,
+                                    LastStation = lastStationName,
+                                    StartTime = ride.StartTime,
+                                    StationCode = station
+                                };
                             }
                             LineTiming timing = underTruck[station];
                             timing.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
