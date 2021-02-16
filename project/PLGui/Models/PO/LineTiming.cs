@@ -16,7 +16,7 @@ namespace PLGui.Models.PO
             set
             {
                 SetProperty(ref boLineTiming, value);
-                OnPropertyChanged();//all the proprties dipens on this property
+                OnPropertyChanged(nameof(ArrivalTime));//all the proprties dipens on this property
             }
         }
 
