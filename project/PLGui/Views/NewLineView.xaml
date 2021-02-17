@@ -175,7 +175,7 @@
             </materialDesign:Card>
 
 
-            <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" IsEnabled="{Binding Processing}"
+            <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" 
                     Command="{Binding AddLineButton}" CommandParameter="{Binding ElementName=NewLineWindow}"
                     Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" 
                     materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Right">
@@ -195,6 +195,9 @@
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding TempLine.LineNumber}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Processing}" Value="False">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
                         </Style.Triggers>

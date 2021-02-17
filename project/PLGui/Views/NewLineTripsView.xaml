@@ -27,7 +27,7 @@
             </Grid.RowDefinitions>
 
             <Button Content="Close" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Black"
-                Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ThisWindow}" FontWeight="Bold" FontFamily="Arial Narrow"/>
+                Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=newLineTripsView}" FontWeight="Bold" FontFamily="Arial Narrow"/>
 
             <TextBlock Text="set line trip" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 

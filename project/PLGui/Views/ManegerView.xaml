@@ -27,13 +27,14 @@
         </y:EventTrigger>
     </y:Interaction.Triggers>
     <Window.DataContext>
-        <local:ManegerViewModel x:Name="vModel"/>
+        <local:ManegerViewModel/>
     </Window.DataContext>
     <Window.Resources>
         <utilities:BoolOrNull_converter_to_visibility x:Key="Bool_converter_to_visibility" />
         <utilities:Type_converter_to_visibility x:Key="Type_converter_to_visibility" />
-        <ContextMenu x:Key="RightClickMenuStrip" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-            <MenuItem Header="Update" Icon="{materialDesign:PackIcon Kind=Update}" Command="{Binding UpdateCommand, diag:PresentationTraceSources.TraceLevel=High}" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+        
+        <ContextMenu x:Key="RightClickMenuStrip">
+            <MenuItem Header="Update" Icon="{materialDesign:PackIcon Kind=Update}" />
             <MenuItem Header="Delete" Icon="{materialDesign:PackIcon Kind=Delete}"  />
         </ContextMenu>
 
@@ -53,8 +54,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="70"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <!--#region Menu -->
@@ -342,6 +343,8 @@
                         <Run Text="{Binding LineDisplay.LastStation.Name}"/>
                             </TextBlock>
                         </StackPanel>
+                        <TextBlock Text="{Binding LineDisplay.Stations.Count, StringFormat={}Stations number:{0}}"
+                                   Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
                     </Grid>
                 </Border>
                 
@@ -505,12 +508,11 @@
                              Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
                 
-                <ListView x:Name="LineTimingList" ItemsSource="{Binding LineTimingsList}" Grid.IsSharedSizeScope="True" Grid.Row="1" Height="auto" HorizontalAlignment="Stretch" SelectionMode="Single" >
+                <ListView x:Name="LineTimingList" ItemsSource="{Binding LineTimingsList}" Grid.IsSharedSizeScope="True" Grid.Row="0" HorizontalAlignment="Stretch" SelectionMode="Single" >
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -528,20 +530,45 @@
                                         <TextBlock Text="{Binding LineNum}" FontWeight="Bold" FontSize="20"/>
                                         <TextBlock Text="{Binding LastStation}" TextWrapping="Wrap"/>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding ArrivalTime, StringFormat={}{0:hh':'mm':'ss} }" Margin="0 0 0 8" Style="{StaticResource BlinkedText}" 
-                                               Foreground="Green" FontWeight="Bold" FontSize="15"
-                                               HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" FlowDirection="RightToLeft" TextWrapping="Wrap"/>
+                                    <TextBlock x:Name="ArrivalTime" Text="{Binding ArrivalTime , StringFormat={}{0:hh\\:mm} }" Margin="0 0 0 8" 
+                                               FontWeight="Bold" FontSize="20"
+                                               HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" FlowDirection="RightToLeft" TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="Green"/>
+                                                <Setter Property="Opacity" Value="0.5"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding ArrivalTime.Hours, Mode=OneWay}" Value="0"/>
+                                                            <Condition Binding="{Binding ArrivalTime.Minutes, Mode=OneWay}" Value="0"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </MultiDataTrigger>
+                                                    <Trigger Property="Visibility" Value="Visible">
+                                                        <Trigger.EnterActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                        From="0.3" To="1.0" Duration="0:0:1.0"  RepeatBehavior="Forever" AutoReverse="True"/>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </Trigger.EnterActions>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Grid>
                             </Border>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=Border, Path=IsFocused}" Value="True">
-                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
+                                    <Setter TargetName="Border" Property="Background"  Value="{DynamicResource MaterialDesignSelection}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-
             </Grid>
         </materialDesign:Card>
 
@@ -646,7 +673,7 @@
                     </StackPanel>
                     <StackPanel Margin="10,0,0,0" >
                         <TextBlock Text="Fuel:" />
-                        <Label Content="{Binding Fule}" BorderThickness="2" HorizontalAlignment="Right"/>
+                        <Label Content="{Binding Fuel}" BorderThickness="2" HorizontalAlignment="Right"/>
                     </StackPanel>
                     <StackPanel Margin="10,0,0,0" >
                         <TextBlock Text="Kilometraz:" />

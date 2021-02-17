@@ -59,16 +59,12 @@ namespace PLGui.Models.PO
             get => boLineTiming.StationCode;
         }
 
-        TimeSpan arrivalTime;
+        /// <summary>
+        /// read only
+        /// </summary>
         public TimeSpan ArrivalTime 
         {
             get => boLineTiming.ArrivalTime;
-            set
-            {
-                arrivalTime = boLineTiming.ArrivalTime;
-                SetProperty(ref arrivalTime, value);
-                boLineTiming.ArrivalTime = arrivalTime;
-            }
         }
     }
 }

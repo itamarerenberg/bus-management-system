@@ -84,7 +84,7 @@
     <ID>28</ID>
     <LineId>86</LineId>
     <StartTime>06:00:00</StartTime>
-    <Frequency>00:46:00</Frequency>
+    <Frequency>00:45:00</Frequency>
     <FinishAt>23:00:00</FinishAt>
     <IsActive>True</IsActive>
   </LineTrip>
