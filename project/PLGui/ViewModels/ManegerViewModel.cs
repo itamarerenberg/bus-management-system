@@ -1117,6 +1117,12 @@ namespace PLGui
                 ManegerView Mview = control.FindWindowOfType<ManegerView>();//find the window instance
 
                 ContextMenu CMenu = Mview.FindResource("RightClickMenuStrip") as ContextMenu;
+                MenuItem updatItem = CMenu.Items[0] as MenuItem;
+                updatItem.Command = UpdateCommand;
+
+                MenuItem deleteItem = CMenu.Items[1] as MenuItem;
+                deleteItem.Command = DeleteCommand;
+
                 if (sender is ListView currentList)
                 {
                     currentList.ContextMenu = CMenu;
