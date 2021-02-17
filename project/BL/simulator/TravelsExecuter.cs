@@ -264,7 +264,7 @@ namespace BL.simulator
             while (!clock.Cancel)
             {
                 TimeSpan sleep = schedule.time_until_next_ride();//get the time until the next ride from the schedule(in simulator time)
-                sleep = clock.Stime_to_Rtime(sleep);//convert 'sleep' to real world time to the next ride
+                sleep = clock.Rtime_to_Stime(sleep);//convert 'sleep' to real world time to the next ride
                 try
                 {
                     Thread.Sleep(sleep);//sleep 'sleep' time
