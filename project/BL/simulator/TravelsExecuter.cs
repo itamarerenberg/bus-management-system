@@ -48,7 +48,7 @@ namespace BL.simulator
         TimeSpan timeToExcuteTravel = new TimeSpan(0, 20, 0);
 
         Action<LineTiming> observer;
-        List<int> stationsInTrack = new List<int>();//list of all the station that in tracking
+        volatile List<int> stationsInTrack = new List<int>();//list of all the station that in tracking
 
         IBL source;
 
@@ -75,6 +75,7 @@ namespace BL.simulator
             if(travelsExecuterThread != null)
             {
                 travelsExecuterThread.Interrupt();
+                travelsExecuterThread.Join();//whit for the travelsExecuterThread to finish his current tasks
             }
             travelsExecuterThread = new Thread((object schedual) => execute_rides(schedual, travelsExecuterThread));//preform the func execute_rides with 'schdual' and the travel xecuter thread
             travelsExecuterThread.Name = "rides executer";//set the name of the thread to be "rides executer" for maintenance
@@ -97,13 +98,14 @@ namespace BL.simulator
                 LineStation[] stations = line.Stations.ToArray();
                 Dictionary<int, LineTiming> underTruck = new Dictionary<int, LineTiming>();//save the code of all the stations in this line that under truck together with the apropiate lineTiming  
 
+                #region wait to start
                 TimeSpan timeUntilStart = ride.StartTime - clock.Time;
                 waite_while_doing(clock.Rtime_to_Stime(timeUntilStart), () =>
                 {
                     foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
                     {
                         LineStation tempLS = line.Stations.FirstOrDefault(ls => ls.StationNumber == station);//get the line station of this station in this line
-                        if(tempLS == null)//if tempLS is null then this station not exist in this line
+                        if (tempLS == null)//if tempLS is null then this station not exist in this line
                         {
                             continue;
                         }
@@ -117,67 +119,27 @@ namespace BL.simulator
                             StationCode = station,
                             ArrivalTime = arrivalTime
                         };
-                        observer(timing);//update the observer
+                        if(!clock.Cancel)
+                            observer(timing);//update the observer
                     }
                     return clock.Cancel;
-                });
-                return;
-                for (int current = 0; current < stations.Length && !clock.Cancel; current++)
+                }); 
+                #endregion
+                for (int current = 0; current < stations.Length - 1 && !clock.Cancel; current++)//the loop to not get to the last station because in the last station it's irelvant
                 {
-                    //calculate the arival time according to the position of the bus now
-                    TimeSpan calcTime = TimeSpan.Zero;//ride.StartTime - clock.Time;//the travel executs 'timeToExcuteTravel' time before the actual start time of the trip
-                    for (int i = current; i < stations.Length; i++)
-                    {
-                        calcTime += stations[i].PrevToCurrent != null? stations[i].PrevToCurrent.Time :TimeSpan.Zero;
-                        if (stationsInTrack.Contains(stations[i].StationNumber))//if this station under truck then update the arival time to this station
-                        {
-
-                            LineTiming timing = new LineTiming()
-                            {
-                                LineNum = line.LineNumber,
-                                LineId = line.ID,
-                                LastStation = lastStationName,
-                                StartTime = ride.StartTime,
-                                StationCode = stations[i].StationNumber,
-                                ArrivalTime = calcTime
-                            };
-                            observer(timing);//update the observer
-                        }
-                    }
-
+                    #region betwen stations 
                     //calculate the sleep time (the time until the next station)
                     long currentToNext_time = (stations[current].CurrentToNext != null ? (long)stations[current].CurrentToNext.Time.TotalMilliseconds : 0L);//if its the last station in the line then the 'CurrentToNext' fild will be null
-                    long sleepTime = clock.Rtime_to_Stime(currentToNext_time);
-                    sleepTime *= (new Random()).Next(10, 200) / 100;//real time is between 10% and 200% of the avrege time(the time that save in the LineStation)
+                    //currentToNext_time *= (new Random()).Next(10, 200) / 100;//real time is between 10% and 200% of the avrege time(the time that save in the LineStation)
+                    long sleepTimeMiliSeconds = currentToNext_time;//in real world time
+                    TimeSpan sleepTime = new TimeSpan(0, 0, 0, 0, (int)sleepTimeMiliSeconds);//in real world time
+                    int updateRate = 1000;//the rate that the observer will be update while waiting to arrive to the next station(in miliseconds)
                     Stopwatch stopwatch = new Stopwatch();
-                    stopwatch.Start();
-
-                    waite_while_doing(new TimeSpan(0, 0, 0, 0, (int)sleepTime), () =>
-                         {
-                             foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
-                             {
-                                 if (!underTruck.ContainsKey(station))
-                                 {
-                                     underTruck[station] =//add to the under truck dictionery
-                                     new LineTiming()
-                                     {
-                                         LineNum = line.LineNumber,
-                                         LineId = line.ID,
-                                         LastStation = lastStationName,
-                                         StartTime = ride.StartTime,
-                                         StationCode = station
-                                     };
-                                 }
-                                 LineTiming timing = underTruck[station];
-                                 timing.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
-                                 observer(timing);//update the observer 
-                             }
-                             return clock.Cancel;
-                         });
+                    stopwatch.Restart();
                     //while the bus is between stations update the observer any 1 second about the arrival time
-                    while(stopwatch.Elapsed.TotalMilliseconds < sleepTime)
+                    while(stopwatch.Elapsed < clock.Rtime_to_Stime(sleepTime))
                     {
-                        double sleep = Math.Min(sleepTime - stopwatch.ElapsedMilliseconds, 1000);
+                        double sleep = Math.Min(sleepTimeMiliSeconds - stopwatch.ElapsedMilliseconds, updateRate);
                         Thread.Sleep((int)sleep);
 
                         if(clock.Cancel)//this part can take a lot of time so check any second the cancel state
@@ -187,27 +149,36 @@ namespace BL.simulator
 
                         foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
                         {
-                            if(!underTruck.ContainsKey(station))
+                            LineStation tempLS = line.Stations.FirstOrDefault(ls => ls.StationNumber == station);
+                            LineStation nearStation = line.Stations[current + 1];
+                            if (tempLS == null || tempLS.LineStationIndex < nearStation.LineStationIndex)//if this station not in this line or the bus allready pass this station
                             {
-                                underTruck[station] =//add to the under truck dictionery
-                                new LineTiming()
-                                {
-                                    LineNum = line.LineNumber,
-                                    LineId = line.ID,
-                                    LastStation = lastStationName,
-                                    StartTime = ride.StartTime,
-                                    StationCode = station
-                                };
+                                continue;
                             }
-                            LineTiming timing = underTruck[station];
-                            timing.ArrivalTime -= new TimeSpan(0, 0, 0, (int)clock.Stime_to_Rtime((long)sleep));//substract the time passed during the sleep from the arival time
-                            observer(timing);//update the observer 
+                            TimeSpan arrivalTime = max(TimeSpan.Zero, tempLS.Time_from_start - nearStation.Time_from_start + sleepTime - clock.Stime_to_Rtime(stopwatch.Elapsed));//if the time appens to be less then 0:0:0 then set arrivalTime to be 0:0:0
+                            LineTiming timing = new LineTiming()
+                            {
+                                LineNum = line.LineNumber,
+                                LineId = line.ID,
+                                LastStation = lastStationName,
+                                StartTime = ride.StartTime,
+                                StationCode = station,
+                                ArrivalTime = arrivalTime
+                            };
+                            if(!clock.Cancel)
+                                observer(timing);//update the observer 
                         }
                     }
                     stopwatch.Stop();
+                    #endregion
                 }
             };
             newTravel.RunWorkerAsync();
+        }
+
+        private int Get_bus_for_ride()
+        {
+            throw new NotImplementedException("Get_bus_for_ride()");
         }
 
         /// <summary>
@@ -250,6 +221,32 @@ namespace BL.simulator
                 result += new TimeSpan(1, 0, 0);
             }
             return result;
+        }
+
+        /// <summary>
+        /// return the bigest value acorrding to ComperTo()
+        /// </summary>
+        private T max<T>(params T[] values) where T : IComparable
+        {
+            T max_val = values[0];
+            foreach(T value in values)
+            {
+                max_val = max_val.CompareTo(value) >= 0 ? max_val : value;
+            }
+            return max_val;
+        }
+
+        /// <summary>
+        /// return the smallest value acorrding to ComperTo()
+        /// </summary>
+        private T min<T>(params T[] values) where T : IComparable
+        {
+            T min_val = values[0];
+            foreach (T value in values)
+            {
+                min_val = min_val.CompareTo(value) <= 0 ? min_val : value;
+            }
+            return min_val;
         }
 
         #region functions for threads
@@ -297,6 +294,10 @@ namespace BL.simulator
                     break;
                 }
                 int sleep = (int)Math.Min(sleepTime, time.TotalMilliseconds - stopwatch.ElapsedMilliseconds);
+                if(sleep < 0)
+                {
+                    break;
+                }
                 Thread.Sleep(sleep);
             }
             stopwatch.Stop();

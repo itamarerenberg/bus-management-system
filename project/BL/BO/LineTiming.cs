@@ -17,5 +17,6 @@ namespace BO
         public string LastStation { get; set; }
         public int StationCode { get; set; }
         public TimeSpan ArrivalTime { get; set; }
+        public int BusLicensNumber { get; set; }
     }
 }

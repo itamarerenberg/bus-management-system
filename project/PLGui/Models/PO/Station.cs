@@ -119,7 +119,7 @@ namespace PLGui.Models.PO
             }
         }
 
-        public ObservableCollection<LineTiming> LineTimings { get; set; }
+        public ObservableCollection<LineTiming> LineTimings { get; set; } = new ObservableCollection<LineTiming>();
         private void Station_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(HasErrors))

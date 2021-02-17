@@ -13,5 +13,9 @@ namespace BO
         public TimeSpan StartTime { get; set; }
         public TimeSpan Frequency { get; set; }
         public TimeSpan FinishAt { get; set; }
+        /// <summary>
+        /// the length of the trip (in km)
+        /// </summary>
+        public double Length { get; set; }
     }
 }

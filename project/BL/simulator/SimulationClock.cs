@@ -53,18 +53,13 @@ namespace BL.simulator
 
         internal volatile bool Cancel;
 
-        BackgroundWorker clockWorker;
+        Thread clockThread;
         public void StartClock(TimeSpan startTime, int rate, Action<TimeSpan> _observer)
         {
-            if(clockWorker == null)
-            {
-                clockWorker = new BackgroundWorker();
-            }
-
             Cancel = false;
             Observer = _observer;
 
-            if(rate < 1)
+            if (rate < 1)
             {
                 throw new IligalRateExeption("rate can not be less then 1");
             }
@@ -73,31 +68,31 @@ namespace BL.simulator
 
             Stopwatch tempStopWach = new Stopwatch();
             tempStopWach.Start();//while waiting to the clockWorker to finish start count the time for for more acurecy
-            while (clockWorker.IsBusy);//waite for the clock worker to finish 
-            clockWorker = new BackgroundWorker();
-            clockWorker.DoWork += (object sender, DoWorkEventArgs args) =>
+            if (clockThread != null)
             {
-                if (Thread.CurrentThread.Name == null)
-                {
-                    Thread.CurrentThread.Name = "clock";
-                }
-                BackgroundWorker worker = (BackgroundWorker)sender;
-                TimeSpan start = startTime;
+                clockThread.Interrupt();
+                clockThread.Join();//wait for clockThread to finish is current task
+            }
+            clockThread = new Thread((initialTimeObject) => 
+            {
+                TimeSpan initialTime = (TimeSpan)initialTimeObject;
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
-                while(!Cancel)
+                while (!Cancel)
                 {
-                    clock = new Clock(startTime + new TimeSpan(Stime_to_Rtime(stopwatch.ElapsedTicks)));
-                    observer(new TimeSpan(clock.Hours, clock.Minutes, clock.Seconds));
-                    Thread.Sleep((int)Rtime_to_Stime(1000));
+                    try
+                    {
+                        clock = new Clock(initialTime + new TimeSpan(Stime_to_Rtime(stopwatch.ElapsedTicks)));
+                        observer(new TimeSpan(clock.Hours, clock.Minutes, clock.Seconds));
+                        Thread.Sleep((int)Rtime_to_Stime(1000));
+                    }
+                    catch (ThreadInterruptedException)//if the clock as been interrupted whill sleeping
+                    {
+                        break;
+                    }
                 }
-                stopwatch.Stop();
-            };//this function will execute in the BackgroundWorker thread
-
-            startTime = startTime + new TimeSpan(tempStopWach.ElapsedTicks);//add to the start time the time pased until the clockWorker fnish is last task
-            tempStopWach.Stop();
-
-            clockWorker.RunWorkerAsync();
+            });
+            clockThread.Start(tempStopWach.Elapsed + startTime);//start the Clock with initialTime = startTime plus the time it took to start the clock since the StartClock() function was called
         }
 
         public void StopClock()

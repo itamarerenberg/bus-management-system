@@ -132,10 +132,12 @@ namespace PLGui
                 {
                     if (previousStation != null)
                     {
-                        Stop_truck_station_panel(stationDisplay.Code);//stop truking the privius selected station's panel
+                        Stop_truck_station_panel(previousStation.Code);//stop truking the privius selected station's panel
+                        previousStation.LineTimings.Clear();//clear all the line timings of the previus diplayed station
                     }
                     GetLinesOfStation(value);
                     Truck_station_panel(value);//start truking the selected station's panel
+                    LineTimingsList = stationDisplay.LineTimings;
                 }
             }
         }
@@ -269,9 +271,6 @@ namespace PLGui
 
             InitBackgroundWorkers();
         }
-
-  
-
         #endregion
 
         #region load data
@@ -637,6 +636,7 @@ namespace PLGui
                 MessageBox.Show("please select a line", "ERROR");
             }
         }
+
         /// <summary>
         /// generic update command
         /// </summary>
@@ -714,13 +714,17 @@ namespace PLGui
                     }
                     else if(e.UserState is BO.LineTiming updateLineTiming)
                     {
-                        LineTiming temp = LineTimingsList.FirstOrDefault(lt =>
+                        Station updateingStation = stations.First(st => st.Code == updateLineTiming.StationCode);
+                        LineTiming temp = updateingStation.LineTimings.FirstOrDefault(lt =>
                                             lt.LineId == updateLineTiming.LineId
-                                            && lt.StationCode == updateLineTiming.StationCode
                                             && lt.StartTime == updateLineTiming.StartTime);
-                        if(temp == null)
+                        if (updateLineTiming.ArrivalTime <= TimeSpan.Zero)
                         {
-                            LineTimingsList.Add(new LineTiming() { BoLineTiming = updateLineTiming });
+                            updateingStation.LineTimings.Remove(temp);
+                        }
+                        else if (temp == null)
+                        {
+                            updateingStation.LineTimings.Add(new LineTiming() { BoLineTiming = updateLineTiming });
                         }
                         else
                         {
@@ -1407,7 +1411,7 @@ namespace PLGui
                     {
                         Thread.Sleep(1000);
                     }
-                    catch (Exception)
+                    catch (ThreadInterruptedException)
                     {
                         break;
                     }                
