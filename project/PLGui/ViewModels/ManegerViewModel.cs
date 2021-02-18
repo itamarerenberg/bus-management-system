@@ -1389,7 +1389,7 @@ namespace PLGui
                 if (simulatorWorker.IsBusy)
                 {
                     simulatorThread.Interrupt();
-                    Thread.Sleep(50);
+                    simulatorThread.Join();
                 }
                 simulatorWorker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true};
             }
@@ -1410,12 +1410,16 @@ namespace PLGui
                                      (lineTiming) =>//updateBus
                                      {
                                          worker.ReportProgress(0, lineTiming);
+                                     },
+                                     (progress) =>//update bus's progress
+                                     {
+                                         worker.ReportProgress(0, progress);
                                      });
                 while(!worker.CancellationPending)
                 {
                     try
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(100);
                     }
                     catch (ThreadInterruptedException)
                     {
@@ -1431,6 +1435,7 @@ namespace PLGui
         private void Stop_simulator()
         {
             simulatorWorker.CancelAsync();
+            stationDisplay.LineTimings.Clear();
         }
 
         private void Truck_station_panel(Station st)

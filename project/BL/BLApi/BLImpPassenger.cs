@@ -418,11 +418,6 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        void IBL.Ride(Bus bus, float km)
-        {
-            throw new NotImplementedException();
-        }
-
         void IBL.Refuel(Bus bus)
         {
             throw new NotImplementedException();
@@ -513,7 +508,7 @@ namespace BL
         /// <param name="startTime">the time wich the simolator clock will start from</param>
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
-        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus)
+        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver = null)
         {
             clock.StartClock(startTime, rate, updateTime);
             travelsExecuter.StartExecute(updateBus);
@@ -547,6 +542,7 @@ namespace BL
         {
             clock.Change_Rate(change);
         }
+
 
         public List<Ride> GetRides(LineTrip lineTrip)
         {

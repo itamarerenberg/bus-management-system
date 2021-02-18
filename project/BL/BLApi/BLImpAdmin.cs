@@ -183,39 +183,6 @@ namespace BL
                    where pred(bus)
                    select bus;
         }
-        public void Ride(Bus bus, float km)
-        {
-            try
-            {
-                bus.Ride(km);
-            }
-            catch(Exception ex)
-            {
-                throw (ex);
-            }
-        }
-        public void Refuel(Bus bus)
-        {
-            try
-            {
-                bus.Refule();
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
-        public void Treatment(Bus bus)
-        {
-            try
-            {
-                bus.Treatment();
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
         public void AddRandomBus()
         {
             AddBus(HelpMethods.RandomBus());
@@ -840,10 +807,11 @@ namespace BL
         /// <param name="startTime">the time wich the simolator clock will start from</param>
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
-        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus)
+        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver)
         {
+            Garage.Instance.Observer = busObserver;
             clock.StartClock(startTime, rate, updateTime);
-            travelsExecuter.StartExecute(updateBus);
+            travelsExecuter.StartExecute(updateBus, busObserver);
         }
 
         /// <summary>
@@ -875,6 +843,30 @@ namespace BL
             clock.Change_Rate(change);
         }
 
+        public void Refuel(Bus bus)
+        {
+            Garage garage = Garage.Instance;
+            try
+            {
+                garage.Refule(bus);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+        public void Treatment(Bus bus)
+        {
+            Garage garage = Garage.Instance;
+            try
+            {
+                garage.Treatnent(bus);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
         #endregion
 
         #region private methods

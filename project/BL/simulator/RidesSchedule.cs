@@ -35,7 +35,7 @@ namespace BL.simulator
         /// <summary>
         /// if the first ride in the queue is more then 'scheduleTimeOut' late from the current Simulator time then reorder the rides
         /// </summary>
-        readonly TimeSpan scheduleTimeOut = new TimeSpan(0, 0, 1);
+        readonly TimeSpan scheduleTimeOut = new TimeSpan(0, 1, 0);
         /// <summary>
         /// how much time before the startTime of the ride to execute the ride
         /// </summary>
@@ -101,7 +101,7 @@ namespace BL.simulator
         {
             //the current time (+ 1 minuts to be save)
             TimeSpan currentTime = clock.Time + new TimeSpan(0, 1, 0);
-            while(Rides.Top().StartTime < clock.Time)
+            while(Rides.Top().StartTime < currentTime)
             {
                 Ride temp = Rides.Dequeue();
                 temp.StartTime += (new TimeSpan(days: 1, 0, 0, 0));

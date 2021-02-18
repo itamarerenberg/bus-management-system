@@ -47,7 +47,8 @@ namespace BL.simulator
         /// </summary>
         TimeSpan timeToExcuteTravel = new TimeSpan(0, 20, 0);
 
-        Action<LineTiming> observer;
+        Action<LineTiming> StationsObserver;
+        Action<BusProgress> BusObserver;
         volatile List<int> stationsInTrack = new List<int>();//list of all the station that in tracking
 
         IBL source;
@@ -57,7 +58,7 @@ namespace BL.simulator
         SimulationClock clock;
 
         Thread travelsExecuterThread;
-        public void StartExecute(Action<LineTiming> _observer = null)
+        public void StartExecute(Action<LineTiming> _stationsObserver = null, Action<BusProgress> _busObserver = null)
         {
             if(source == null)
             {
@@ -65,8 +66,8 @@ namespace BL.simulator
             }
 
             clock = SimulationClock.Instance;
-            observer = _observer != null ? _observer : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
-
+            StationsObserver = _stationsObserver != null ? _stationsObserver : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
+            BusObserver = _busObserver != null ? _busObserver : (BusProgress) => { };
             //load the lineTrips and lines
             var lineTrips = source.GetAllLineTrips();
 
@@ -84,24 +85,37 @@ namespace BL.simulator
 
         private void executeTravel(Ride ride)
         {
-            BackgroundWorker newTravel = new BackgroundWorker();
-            newTravel.DoWork += (object sender, DoWorkEventArgs args) =>
+            Thread newTravel = new Thread(
+            () =>
             {
                 //get the line of this line trip
                 var temp = TimeSpan.Zero;
-                Stopwatch st = new Stopwatch();
                 Line line = source.GetLine(ride.LineId);
 
                 string lastStationName = source.GetStation(line.LastStation.StationNumber).Name;//get the name of the last station in this line
-                int lineNumber = line.LineNumber;
-
                 LineStation[] stations = line.Stations.ToArray();
-                Dictionary<int, LineTiming> underTruck = new Dictionary<int, LineTiming>();//save the code of all the stations in this line that under truck together with the apropiate lineTiming  
+                Bus bus = Get_bus_for_ride(line.Length);
+                //update the data source that the bus is traveling now
+                bus.Stat = BusStatus.Traveling;
+                source.UpdateBus(bus);
 
                 #region wait to start
                 TimeSpan timeUntilStart = ride.StartTime - clock.Time;
                 waite_while_doing(clock.Rtime_to_Stime(timeUntilStart), () =>
                 {
+                    //update the busObserver
+                    if (!clock.Cancel)
+                    {
+                        BusProgress progress = new BusProgress()
+                        {
+                            BusLicensNum = bus.LicenseNumber,
+                            Activity = Activities.Prepering_to_ride,
+                            Progress = (float)(100 * (ride.StartTime - clock.Time).TotalMilliseconds / timeToExcuteTravel.TotalMilliseconds)//the presenteg of the prepering to start the travel pirot
+                        };
+                        BusObserver(progress); 
+                    }
+                    
+                    //update the stationsObserver
                     foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
                     {
                         LineStation tempLS = line.Stations.FirstOrDefault(ls => ls.StationNumber == station);//get the line station of this station in this line
@@ -117,36 +131,74 @@ namespace BL.simulator
                             LastStation = lastStationName,
                             StartTime = ride.StartTime,
                             StationCode = station,
-                            ArrivalTime = arrivalTime
+                            ArrivalTime = arrivalTime,
+                            BusLicensNumber = bus.LicenseNumber,
+                            Status = RideStatus.prepering,
                         };
                         if(!clock.Cancel)
-                            observer(timing);//update the observer
+                            StationsObserver(timing);//update the observer
                     }
                     return clock.Cancel;
-                }); 
+                });
+
                 #endregion
-                for (int current = 0; current < stations.Length - 1 && !clock.Cancel; current++)//the loop to not get to the last station because in the last station it's irelvant
+
+                #region in ride
+                for (int current = 0; current < stations.Length && !clock.Cancel; current++)//the loop to not get to the last station because in the last station it's irelvant
                 {
+
+                    #region arrive to station
+                    //update the current station that the bus in the station
+                    LineStation currentStation = line.Stations[current];
+                    if (stationsInTrack.Exists(code => currentStation.StationNumber == code))
+                    {
+                        LineTiming timing = new LineTiming()
+                        {
+                            LineNum = line.LineNumber,
+                            LineId = line.ID,
+                            LastStation = lastStationName,
+                            StartTime = ride.StartTime,
+                            StationCode = currentStation.StationNumber,
+                            ArrivalTime = TimeSpan.Zero,
+                            BusLicensNumber = bus.LicenseNumber,
+                            Status = RideStatus.in_motion
+                        };
+                        StationsObserver(timing);//update the observer 
+                    } 
+                    #endregion
                     #region betwen stations 
                     //calculate the sleep time (the time until the next station)
                     long currentToNext_time = (stations[current].CurrentToNext != null ? (long)stations[current].CurrentToNext.Time.TotalMilliseconds : 0L);//if its the last station in the line then the 'CurrentToNext' fild will be null
-                    //currentToNext_time *= (new Random()).Next(10, 200) / 100;//real time is between 10% and 200% of the avrege time(the time that save in the LineStation)
+                    currentToNext_time *= (new Random()).Next(50, 200) / 100;//real time is between 10% and 200% of the avrege time(the time that save in the LineStation)
                     long sleepTimeMiliSeconds = currentToNext_time;//in real world time
                     TimeSpan sleepTime = new TimeSpan(0, 0, 0, 0, (int)sleepTimeMiliSeconds);//in real world time
                     int updateRate = 1000;//the rate that the observer will be update while waiting to arrive to the next station(in miliseconds)
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Restart();
                     //while the bus is between stations update the observer any 1 second about the arrival time
-                    while(stopwatch.Elapsed < clock.Rtime_to_Stime(sleepTime))
+                    while (stopwatch.Elapsed < clock.Rtime_to_Stime(sleepTime))
                     {
                         double sleep = Math.Min(sleepTimeMiliSeconds - stopwatch.ElapsedMilliseconds, updateRate);
                         Thread.Sleep((int)sleep);
 
-                        if(clock.Cancel)//this part can take a lot of time so check any second the cancel state
+                        if (clock.Cancel)//this part can take a lot of time so check any second the cancel state
                         {
                             break;
                         }
 
+                        if (!clock.Cancel)
+                        {
+                            //update the busObserver
+                            BusProgress progress = new BusProgress()
+                            {
+                                BusLicensNum = bus.LicenseNumber,
+                                Activity = Activities.Traveling,
+                                Progress = (float)(100 * (clock.Stime_to_Rtime(stopwatch.Elapsed) + currentStation.Time_from_start).TotalMilliseconds / line.Time.TotalMilliseconds)//the presenteg that the bus pass in the ride
+                            };
+                            BusObserver(progress); 
+                        }
+
+                        //update the stationsObserver
                         foreach (int station in stationsInTrack)//update the observer for all the stations that under truck
                         {
                             LineStation tempLS = line.Stations.FirstOrDefault(ls => ls.StationNumber == station);
@@ -163,22 +215,70 @@ namespace BL.simulator
                                 LastStation = lastStationName,
                                 StartTime = ride.StartTime,
                                 StationCode = station,
-                                ArrivalTime = arrivalTime
+                                ArrivalTime = arrivalTime,
+                                BusLicensNumber = bus.LicenseNumber,
+                                Status = RideStatus.in_motion
                             };
-                            if(!clock.Cancel)
-                                observer(timing);//update the observer 
+                            if (!clock.Cancel)
+                                StationsObserver(timing);//update the observer 
                         }
                     }
                     stopwatch.Stop();
+                    //update the buss observer that the ride ended
+                    {
+                        //this is inside a block so 'progress' won't be recegnised outside of this block(just for convenience)
+                        BusProgress progress = new BusProgress()
+                        {
+                            BusLicensNum = bus.LicenseNumber,
+                            Activity = Activities.Traveling,
+                            Progress = 100
+                        };
+                        BusObserver(progress);
+                    }
                     #endregion
                 }
-            };
-            newTravel.RunWorkerAsync();
+                #endregion
+
+                #region finish ride
+                bus.Fuel -= (float)line.Length;
+                bus.KmAfterTreat += (float)line.Length;
+                bus.Kilometraz += (float)line.Length;
+                //set the bus status
+                if (bus.KmAfterTreat >= Bus.max_km_without_tratment)
+                    bus.Stat = BusStatus.Need_treatment;
+
+                else if (bus.Fuel < Bus.min_fule_befor_warning)
+                    bus.Stat = BusStatus.Need_refueling;
+
+                else
+                    bus.Stat = BusStatus.Ready;
+                source.UpdateBus(bus); 
+                #endregion
+            });
+            newTravel.Start();
         }
 
-        private int Get_bus_for_ride()
+        private Bus Get_bus_for_ride(double RideLength)
         {
-            throw new NotImplementedException("Get_bus_for_ride()");
+            List<Bus> avilableBuses = source.GetAllBusesBy(bus => !bus.IsBusy).ToList();
+            //find qualified bus for this ride
+            Bus selectedBus = avilableBuses.FirstOrDefault(bus =>
+            bus.KmAfterTreat + RideLength <= Bus.max_km_without_tratment//check that the ride won't couse to the bus to pass the alowed km without tratment
+            && bus.Fuel >= RideLength//check if the bus have enough fule for this ride
+            );
+
+            if(selectedBus == null)
+            {
+                throw new NoBusForRide("Ride Length: " + RideLength);
+            }
+            //update the selected bus in the data sosurce
+
+            return selectedBus;
+        }
+
+        public void SetBusObserver(Action<BusProgress> _busObserver)
+        {
+            BusObserver = _busObserver;
         }
 
         /// <summary>

@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace BO
 {
+    public enum RideStatus
+    {
+        prepering,
+        in_motion
+    }
     public class LineTiming
     {
         public int LineId { get; set; }
@@ -17,6 +22,10 @@ namespace BO
         public string LastStation { get; set; }
         public int StationCode { get; set; }
         public TimeSpan ArrivalTime { get; set; }
-        public int BusLicensNumber { get; set; }
+        public string BusLicensNumber { get; set; }
+        /// <summary>
+        /// representing the percentage that the bus has been pass in the ride
+        /// </summary>
+        public RideStatus Status { get; set; }
     }
 }

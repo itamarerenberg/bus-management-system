@@ -16,4 +16,9 @@ namespace BL.simulator
     {
         public IligalArgsPassedToFunction(string msg) : base(msg){}
     }
+
+    class NoBusForRide : Exception
+    {
+        public NoBusForRide(string msg) : base(msg){}
+    }
 }

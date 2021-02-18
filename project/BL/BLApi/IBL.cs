@@ -80,7 +80,6 @@ namespace BLApi
         void DeleteBus(string licensNum);
         IEnumerable<Bus> GetAllBuses();
         IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> pred);
-        void Ride(Bus bus, float km);
         void Refuel(Bus bus);
         void Treatment(Bus bus);
         void AddRandomBus();
@@ -156,7 +155,7 @@ namespace BLApi
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
         /// /// <exception cref="IligalRateExeption">if rate is less then 1</exception>
-        void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus);
+        void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver);
 
         /// <summary>
         /// stops the simulator clock and the travels executer and all the travels that in progres
@@ -181,7 +180,6 @@ namespace BLApi
         /// <param name="change">adds to the current rate of the simulator's clock</param>
         /// <exception cref="IligalRateExeption">if the change will make rate to be less the 1</exception>
         void Change_SimulatorRate(int change);
-
         #endregion
 
     }
