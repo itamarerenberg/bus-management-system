@@ -128,4 +128,20 @@
     <LastStation_Id>491</LastStation_Id>
     <IsActive>True</IsActive>
   </Line>
+  <Line>
+    <ID>91</ID>
+    <LineNumber>2</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>61157</FirstStation_Id>
+    <LastStation_Id>284</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
+  <Line>
+    <ID>92</ID>
+    <LineNumber>59</LineNumber>
+    <Area>Jerusalem</Area>
+    <FirstStation_Id>61158</FirstStation_Id>
+    <LastStation_Id>684</LastStation_Id>
+    <IsActive>True</IsActive>
+  </Line>
 </Lines>

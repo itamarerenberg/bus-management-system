@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace PLGui.Models.PO
                 OnPropertyChanged(nameof(Fuel));
                 OnPropertyChanged(nameof(Stat));
                 OnPropertyChanged(nameof(TimeUntilReady));
+                OnPropertyChanged(nameof(BusTrips));
             }
         }
 
@@ -94,6 +96,7 @@ namespace PLGui.Models.PO
                 boBus.TimeUntilReady = timeUntilReady;
             }
         }
+        public List<BO.BusTrip> BusTrips{ get => boBus.BusTrips; }
 
     }
 }

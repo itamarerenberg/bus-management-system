@@ -9,16 +9,16 @@ namespace DO
 /// <summary>
 /// identity property = ID
 /// </summary>
-    public class BusOnTrip
+    public class BusTrip
     {
         public int ID { get; set; }
         public string Bus_Id { get; set; }
-        public int Line_Id { get; set; }
-        public TimeSpan PlannedStartTime{ get; set; }
+        public int LineId { get; set; }
+        public int LineNum { get; set; }
+        public DateTime Date { get; set; }
         public TimeSpan StartTime { get; set; }
-        public int PrevStation { get; set; }
-        public TimeSpan TimePrevStation { get; set; }
-        public TimeSpan TimeFromTheNextStation { get; set; }
+        public TimeSpan FinishTime { get; set; }
+
         public bool IsActive { get; set; }
 
     }

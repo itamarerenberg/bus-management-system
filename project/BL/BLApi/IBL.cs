@@ -65,7 +65,7 @@ namespace BLApi
         /// <returns>
         /// List of TimeTrips that contains "StartTime" and "Line number"
         /// </returns>
-        List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum, List<LineTrip> lineTrips);
+        List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum);
 
         #endregion
 
@@ -83,6 +83,15 @@ namespace BLApi
         void Refuel(Bus bus);
         void Treatment(Bus bus);
         void AddRandomBus();
+
+        #region bus trip
+        void AddBusTrip(BusTrip BusTrip);
+        BusTrip GetBusTrip(int id);
+        void UpdateBusTrip(BusTrip BusTrip);
+        void DeleteBusTrip(int id);
+        IEnumerable<BusTrip> GetAllBusTrips();
+        IEnumerable<BusTrip> GetAllBusTripsBy(Predicate<BusTrip> pred); 
+        #endregion
         #endregion
 
         #region Line

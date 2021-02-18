@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using BL.BLApi;
@@ -103,6 +104,7 @@ namespace PLGui
             get => isSimulatorOff;
             set => SetProperty(ref isSimulatorOff, value);
         }
+
         public bool FilterStations
         {
             get => filterStations;
@@ -263,6 +265,7 @@ namespace PLGui
             RandomBus_Command = new RelayCommand(RandomBus);
             RefuleBus_Command = new RelayCommand(RefuleBus);
             TreatmentBus_Command = new RelayCommand(TreatmentBus);
+            OpenButtonsMenuCommand = new RelayCommand<Popup>(OpenButtonsMenu);
 
             //messengers initalize
             RequestStationMessege();
@@ -271,6 +274,13 @@ namespace PLGui
 
             InitBackgroundWorkers();
         }
+
+        private void OpenButtonsMenu(Popup popup)
+        {
+            popup.IsOpen = true;
+        }
+
+
         #endregion
 
         #region load data
@@ -477,7 +487,8 @@ namespace PLGui
         public ICommand RandomBus_Command { get; }
         public ICommand RefuleBus_Command { get; }
         public ICommand TreatmentBus_Command { get; }
-
+        public ICommand OpenButtonsMenuCommand { get; }
+        
 
         #endregion
 
@@ -595,7 +606,6 @@ namespace PLGui
             //}
         }
         
-
         private void LostFocus( ManegerView MView)
         {
             if (SelectedTabItem != null)
@@ -644,24 +654,27 @@ namespace PLGui
         {
             if (Mview != null)
             {
-                if (Mview.Stations_view.IsSelected)//station
+                if (Mview.Stations_view.IsSelected && Mview.StationList.SelectedItem is Station station)//station
                 {
-                    Station station = Mview.StationList.SelectedItem as Station;
+
                     UpdateStation(station);
                 }
-                else if (Mview.Lines_view.IsSelected)//line
+                else if (Mview.Lines_view.IsSelected && Mview.LinesList.SelectedItem is Line line)//line
                 {
-                    Line line = Mview.LinesList.SelectedItem as Line;
+
                     Update_Line(line);
                 }
-                else if (Mview.LineTrip_view.IsSelected)//lineTrip
+                else if (Mview.LineTrip_view.IsSelected && Mview.LinesTripList.SelectedItem is LineTrip lineTrip)//lineTrip
                 {
-                    LineTrip lineTrip = Mview.LinesTripList.SelectedItem as LineTrip;
-                    Line line = lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault();
-                    UpdateLineTrip(lineTrip, line);
-                } 
+                    UpdateLineTrip(lineTrip, lines.Where(l => l.ID == lineTrip.LineId).FirstOrDefault());
+                }
+                else
+                {
+                    MyMessageQueue.Enqueue("Please select an item to update");
+                    OnPropertyChanged(nameof(MyMessageQueue));
+                }
             }
-            List_SelectionChanged(Mview);//refrash the view
+            
         }
         private void LogOut(ManegerView window)
         {
@@ -687,6 +700,11 @@ namespace PLGui
             manegerView.LineStations_view.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LinePasses_view.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LinesTripList.MouseDoubleClick += List_MouseDoubleClick;
+            manegerView.StationDetails.MouseDoubleClick += List_MouseDoubleClick;
+            manegerView.LineDetails.MouseDoubleClick += List_MouseDoubleClick;
+            manegerView.LineTripDetails.MouseDoubleClick += List_MouseDoubleClick;
+            manegerView.BusDetails.MouseDoubleClick += List_MouseDoubleClick;
+
 
             manegerView.StationList.MouseRightButtonUp += List_MouseRightButtonUp;
             manegerView.LinesList.MouseRightButtonUp += List_MouseRightButtonUp;
@@ -782,12 +800,18 @@ namespace PLGui
                         }
                         catch (Exception msg)
                         {
+                            MessageBox.Show(msg.Message, "ERROR");
                         }
+                    };
+                    tempWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+                    {
+                        loadBuses();
                     };
                     tempWorker.RunWorkerAsync();
                 }
             }
         }
+
         private void RefuleBus()
         {
             throw new NotImplementedException();
@@ -801,49 +825,43 @@ namespace PLGui
         /// <param name="window"></param>
         private void Delete()
         {
-            if (Mview.Stations_view.IsSelected)//station
+            if (Mview.Stations_view.IsSelected && Mview.StationList.SelectedItem is Station station)//station
             {
-                if (Mview.StationList.SelectedItem is Station station)
+                StationsForDeletion.Enqueue(station);//insert the bus to the queue of "stations for deletion"
+                if (!DeleteStationWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
                 {
-                    StationsForDeletion.Enqueue(station);//insert the bus to the queue of "stations for deletion"
-                    if (!DeleteStationWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
-                    {
-                        DeleteStationWorker.RunWorkerAsync();
-                    }
+                    DeleteStationWorker.RunWorkerAsync();
                 }
             }
-            else if (Mview.Lines_view.IsSelected)//Line
+            else if (Mview.Lines_view.IsSelected && Mview.LinesList.SelectedItem is Line line)//Line
             {
-                if (Mview.LinesList.SelectedItem is Line line)
+
+                LinesForDeletion.Enqueue(line);//insert the bus to the queue of "lines for deletion"
+                if (!DeleteLineWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
                 {
-                    LinesForDeletion.Enqueue(line);//insert the bus to the queue of "lines for deletion"
-                    if (!DeleteLineWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
-                    {
-                        DeleteLineWorker.RunWorkerAsync();
-                    }
+                    DeleteLineWorker.RunWorkerAsync();
                 }
             }
-            else if (Mview.LineTrip_view.IsSelected)//LineTrip
+            else if (Mview.LineTrip_view.IsSelected && Mview.LinesTripList.SelectedItem is LineTrip lineTrip)//LineTrip
             {
-                if (Mview.LinesTripList.SelectedItem is LineTrip lineTrip)
+                LineTripsForDeletion.Enqueue(lineTrip);//insert the bus to the queue of "line Trips for deletion"
+                if (!DeleteLineTripWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
                 {
-                    LineTripsForDeletion.Enqueue(lineTrip);//insert the bus to the queue of "line Trips for deletion"
-                    if (!DeleteLineTripWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
-                    {
-                        DeleteLineTripWorker.RunWorkerAsync();
-                    }
+                    DeleteLineTripWorker.RunWorkerAsync();
                 }
             }
-            else if (Mview.Bus_view.IsSelected)//bus
+            else if (Mview.Bus_view.IsSelected && Mview.BusesList.SelectedItem is Bus bus)//bus
             {
-                if (Mview.BusesList.SelectedItem is Bus bus)
+                busesForDeletion.Enqueue(bus);//insert the bus to the queue of "buses for deletion"
+                if (!DeleteBusWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
                 {
-                    busesForDeletion.Enqueue(bus);//insert the bus to the queue of "buses for deletion"
-                    if (!DeleteBusWorker.IsBusy)//if the woerker is not busy then run, otherwise the woerker will run again on the complition
-                    {
-                        DeleteBusWorker.RunWorkerAsync();
-                    }
+                    DeleteBusWorker.RunWorkerAsync();
                 }
+            }
+            else
+            {
+                MyMessageQueue.Enqueue("Please select an item to delete");
+                OnPropertyChanged(nameof(MyMessageQueue));
             }
         }
 

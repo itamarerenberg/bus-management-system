@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DO\AdjacentStations.cs" />
-    <Compile Include="DO\BusOnTrip.cs" />
+    <Compile Include="DO\BusTrip.cs" />
     <Compile Include="DO\DOobjectException.cs" />
     <Compile Include="DO\Enums.cs" />
     <Compile Include="DO\Bus.cs" />

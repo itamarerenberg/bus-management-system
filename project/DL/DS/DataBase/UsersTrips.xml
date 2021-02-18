@@ -78,4 +78,17 @@
     <OutTime>14/02/2021 11:00:09</OutTime>
     <IsActive>True</IsActive>
   </LineTrip>
+  <LineTrip>
+    <TripId>8</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>68</LineId>
+    <LineNum>78</LineNum>
+    <InStation>170</InStation>
+    <InStationName>האדמור מלובאויטש/חזון איש</InStationName>
+    <InTime>17/02/2021 14:53:26</InTime>
+    <OutStation>389</OutStation>
+    <OutStationName>כפר סטודנטים/לוחמי הגטאות</OutStationName>
+    <OutTime>17/02/2021 15:42:40</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
 </UsersTrips>

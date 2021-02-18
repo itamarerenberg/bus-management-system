@@ -178,56 +178,56 @@ namespace DL
 
         #endregion
 
-        #region BusOnTrip
-        public void AddBusOnTrip(BusOnTrip busOnTrip)
+        #region BusTrip
+        public void AddBusTrip(BusTrip busTrip)
         {
-            if (DataSourceXML.BusesOnTrip.Elements().FirstOrDefault(bot => int.Parse(bot.Element("ID").Value) == busOnTrip.ID) != null)
+            if (DataSourceXML.BusTrips.Elements().FirstOrDefault(bot => int.Parse(bot.Element("ID").Value) == busTrip.ID) != null)
             {
                 throw new DuplicateExeption("the bus is allready in driving");
             }
             else
             {
-                DataSourceXML.BusesOnTrip.Add(busOnTrip.to_new_xelement("BusOnTrip"));//add the busBusesOnTrip
-                DataSourceXML.Save("BusesOnTrip");
+                DataSourceXML.BusTrips.Add(busTrip.to_new_xelement("BusTrip"));//add the busBusesOnTrip
+                DataSourceXML.Save("BusTrip");
             }
         }
 
-        public BusOnTrip GetBusOnTrip(int id)
+        public BusTrip GetBusTrip(int id)
         {
-            XElement busOnTrip = (from xebot in DataSourceXML.BusesOnTrip.Elements()
+            XElement busTrip = (from xebot in DataSourceXML.BusTrips.Elements()
                                   where int.Parse(xebot.Element("ID").Value) == id
                                   select xebot).FirstOrDefault();
-            if (busOnTrip == null)//if no such busOnTrip
+            if (busTrip == null)//if no such busTrip
             {
                 throw new NotExistExeption("the bus is not in driving");
             }
-            return XMLTools.xelement_to_new_object<BusOnTrip>(busOnTrip);
+            return XMLTools.xelement_to_new_object<BusTrip>(busTrip);
         }
 
-        public void UpdateBusOnTrip(BusOnTrip newBusOnTrip)
+        public void UpdateBusTrip(BusTrip newBusOnTrip)
         {
-            XElement oldBusOnTrip = (from xebot in DataSourceXML.BusesOnTrip.Elements()
+            XElement oldBusTrip = (from xebot in DataSourceXML.BusTrips.Elements()
                                      where int.Parse(xebot.Element("ID").Value) == newBusOnTrip.ID
                                      select xebot).FirstOrDefault();
-            if (oldBusOnTrip == null)//if ther is no such BusOnTrip
+            if (oldBusTrip == null)//if ther is no such BusOnTrip
             {
                 throw new NotExistExeption("the bus is not in driving");
             }
-            XMLTools.object_to_xelement(newBusOnTrip, oldBusOnTrip);
-            DataSourceXML.Save("BusesOnTrip");
+            XMLTools.object_to_xelement(newBusOnTrip, oldBusTrip);
+            DataSourceXML.Save("BusTrip");
         }
 
-        public void DeleteBusOnTrip(int id)
+        public void DeleteBusTrip(int id)
         {
-            XElement busOnTrip = (from xebot in DataSourceXML.BusesOnTrip.Elements()
+            XElement busTrip = (from xebot in DataSourceXML.BusTrips.Elements()
                                   where int.Parse(xebot.Element("ID").Value) == id
                                   && bool.Parse(xebot.Element("IsActive").Value)
                                   select xebot).FirstOrDefault();
 
-            if (busOnTrip != null)//if the BusOnTrip found
+            if (busTrip != null)//if the BusOnTrip found
             {
-                busOnTrip.Element("IsActive").Value = false.ToString();
-                DataSourceXML.Save("BusOnTrip");
+                busTrip.Element("IsActive").Value = false.ToString();
+                DataSourceXML.Save("BusTrip");
             }
             else
             {
@@ -235,17 +235,17 @@ namespace DL
             }
         }
 
-        public IEnumerable<BusOnTrip> GetAllBusesOnTrip()
+        public IEnumerable<BusTrip> GetAllBusTrips()
         {
-            return from xebot in DataSourceXML.BusesOnTrip.Elements()
+            return from xebot in DataSourceXML.BusTrips.Elements()
                    where bool.Parse(xebot.Element("IsActive").Value)
-                   select XMLTools.xelement_to_new_object<BusOnTrip>(xebot);
+                   select XMLTools.xelement_to_new_object<BusTrip>(xebot);
         }
 
-        public IEnumerable<BusOnTrip> GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
+        public IEnumerable<BusTrip> GetAllBusTripsBy(Predicate<BusTrip> predicate)
         {
-            return from xebot in DataSourceXML.BusesOnTrip.Elements()
-                   let bot = XMLTools.xelement_to_new_object<BusOnTrip>(xebot)
+            return from xebot in DataSourceXML.BusTrips.Elements()
+                   let bot = XMLTools.xelement_to_new_object<BusTrip>(xebot)
                    where predicate(bot)
                    select bot;
         }
