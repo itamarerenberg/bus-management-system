@@ -24,7 +24,7 @@ namespace PLGui
     {
         readonly IBL source;
 
-        private BO.LineStation fromStation;
+        private PassengerStation fromPassengerStation;
         private BO.LineStation toStation;
         private string fromText;
         private string toText;
@@ -35,20 +35,22 @@ namespace PLGui
 
         public BO.Passenger passenger { get; set; }
 
-        public BO.LineStation FromStation
+        public PassengerStation FromPassengerStation
         {
-            get => fromStation;
+            get => fromPassengerStation;
             set
             {
-                if (SetProperty(ref fromStation, value) && value != null)//if the another station has selected in the combo box
+                if (SetProperty(ref fromPassengerStation, value) && value != null)//if the another station has selected in the combo box
                 {
-                    //show all the available stations that are next in the lines that passed in selected station("FromStation")
-                    toStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.LineId == value.LineId && s.LineStationIndex > value.LineStationIndex));
+                    toStations = GetToStations(value.LineStations);
                     CalculatesTime(value);
                     OnPropertyChanged(nameof(ReadyToGo));
                 }
             }
         }
+
+        public BO.LineStation FromStation { get; set; }
+
         public BO.LineStation ToStation
         {
             get => toStation;
@@ -56,11 +58,13 @@ namespace PLGui
             {
                 if (SetProperty(ref toStation, value))//if the another station has selected in the combo box
                 {
+                    FromStation = FromPassengerStation.LineStations.Find(s => s.LineId == value.LineId);//select the fromStation from the list of passengerStation according the line id
                     if (TimeOfTrip != null && value != null)
                     {
                         TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (value.Time_from_start - FromStation.Time_from_start);//FinishTime = start time + the diferent between the stations
                     }
                     OnPropertyChanged(nameof(ReadyToGo));
+                    OnPropertyChanged(nameof(TimeOfTrip));
                 }
             }
         }
@@ -72,7 +76,7 @@ namespace PLGui
                 if (SetProperty(ref fromText, value))//if the text has changed
                 {
                     value = value ?? "";        //preventing from value to be null
-                    FromStations.Filter = s => ((BO.LineStation)s).Name.Contains(value);
+                    FromStations.Filter = s => ((PassengerStation)s).ToString().Contains(value);//filter all the stations that contains letters of "fromText"
                     FromStations.Refresh();
                 }
             }
@@ -102,14 +106,14 @@ namespace PLGui
                 {
                     if (ToStation != null)
                     {
-                        TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (ToStation.Time_from_start - FromStation.Time_from_start);//FinishTime = start time + the diferent between the stations
+                        TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (ToStation.Time_from_start - FromPassengerStation.LineStations.Find(s => s.LineId == ToStation.LineId).Time_from_start);//FinishTime = start time + the diferent between the stations
                         OnPropertyChanged(nameof(TimeOfTrip));
                     }
                     OnPropertyChanged(nameof(ReadyToGo));
                 }
             }
         }
-        public bool ReadyToGo { get => FromStation != null && ToStation != null && TimeOfTrip != null; }
+        public bool ReadyToGo { get => FromPassengerStation != null && ToStation != null && TimeOfTrip != null; }
   
         #endregion
 
@@ -133,9 +137,9 @@ namespace PLGui
             set => SetProperty(ref _stations, value);
         }
 
-        private ObservableCollection<BO.LineStation> _fromStations;
+        private ObservableCollection<PassengerStation> _fromStations;
 
-        private ObservableCollection<BO.LineStation> fromStations
+        private ObservableCollection<PassengerStation> fromStations
         {
             get => _fromStations;
             set => SetProperty(ref _fromStations, value);
@@ -173,7 +177,9 @@ namespace PLGui
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             stations = (ObservableCollection<BO.LineStation>)args.Result;
-                            fromStations = new ObservableCollection<BO.LineStation>(stations.Where(s => s.CurrentToNext != null));//take all the stations that aren't last in the line
+                            fromStations = new ObservableCollection<PassengerStation>(stations.GroupBy(s => s.StationNumber)//group into <station number, list of line stations>
+                                            .Where(p => p.Any(t => t.CurrentToNext != null))// make sure at least 1 line station is not in the end
+                                            .Select(ps => new PassengerStation() { StationNumber = ps.Key, LineStations = ps.ToList() }));//creats passenger station
                         }
                     };//this function will execute in the main thred
 
@@ -181,7 +187,7 @@ namespace PLGui
                     (object sender, DoWorkEventArgs args) =>
                     {
                         BackgroundWorker worker = (BackgroundWorker)sender;
-                        ObservableCollection<BO.LineStation> result = new ObservableCollection<BO.LineStation>(source.GetAllLineStations().OrderBy(s => s.Name));//get all Stations from source
+                        ObservableCollection<BO.LineStation> result = new ObservableCollection<BO.LineStation>(source.GetAllLineStations());//get all Stations from source
                         args.Result = worker.CancellationPending ? null : result;
                     };//this function will execute in the BackgroundWorker thread
             }
@@ -359,7 +365,7 @@ namespace PLGui
         /// Calculates the Times of Departure Lines from the selected station in the BL Layer
         /// and set the departureTimes list to the result of "source.CalculateTimeTrip"
         /// </summary>
-        private void CalculatesTime(BO.LineStation station)
+        private void CalculatesTime(PassengerStation station)
         {
             if (CalculatesTimeWorker == null)
             {
@@ -373,14 +379,14 @@ namespace PLGui
                 CalculatesTimeWorker.DoWork +=
                     (object sender, DoWorkEventArgs args) =>
                     {
-                        BO.LineStation lineStation = args.Argument as BO.LineStation;
-                        int lineNum = (int)Lines.FirstOrDefault(l => l.ID == lineStation.LineId).LineNumber;
-                        args.Result = source.CalculateTimeTrip(lineStation, lineNum, LineTrips);
+                        List<BO.LineStation> lineStation = args.Argument as List<BO.LineStation>;
+                        List<int> lineNum = lineStation.Select(ls => (int)Lines.FirstOrDefault(l => l.ID == ls.LineId).LineNumber).ToList();
+                        args.Result = source.CalculateTimeTrip(lineStation, lineNum);
                     };
             }
             if (!CalculatesTimeWorker.IsBusy)//if the worker is not busy run immediately
             {
-                CalculatesTimeWorker.RunWorkerAsync(station);
+                CalculatesTimeWorker.RunWorkerAsync(station.LineStations);
             }
         }
 
@@ -424,6 +430,18 @@ namespace PLGui
             {
                 AddUserTripWorker.RunWorkerAsync(userTrip);
             }
+        }
+
+        /// <summary>
+        /// show all the available stations that are next in the lines that passed in selected station("FromStation")
+        /// </summary>
+        /// <returns>List of BO.LineStation</returns>
+        private ObservableCollection<BO.LineStation> GetToStations(List<BO.LineStation> lineStations)
+        {
+            return new ObservableCollection<BO.LineStation>(from ls in lineStations
+                                                            from s in stations
+                                                            where s.LineId == ls.LineId && s.LineStationIndex > ls.LineStationIndex
+                                                            select s);
         }
         #endregion
     }

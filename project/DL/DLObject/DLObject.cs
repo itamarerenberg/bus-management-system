@@ -172,21 +172,21 @@ namespace DL
         #endregion
 
         #region BusOnTrip
-        public void AddBusOnTrip(BusOnTrip busOnTrip)
+        public void AddBusTrip(BusTrip busOnTrip)
         {
-            if (DataSource.BusesOnTrip.FirstOrDefault(bot => bot.ID == busOnTrip.ID) != null)//check if this trip exist allready
+            if (DataSource.BuseTrips.FirstOrDefault(bot => bot.ID == busOnTrip.ID) != null)//check if this trip exist allready
             {
                 throw new DuplicateExeption("the bus is allready in driving");
             }
             else
             {
-                DataSource.BusesOnTrip.Add(busOnTrip);//add to the data source
+                DataSource.BuseTrips.Add(busOnTrip);//add to the data source
             }
         }
 
-        public BusOnTrip GetBusOnTrip(int id)
+        public BusTrip GetBusTrip(int id)
         {
-            BusOnTrip busOnTrip = DataSource.BusesOnTrip.Find(bot => bot.ID == id);//serche for the trip in the data source
+            BusTrip busOnTrip = DataSource.BuseTrips.Find(bot => bot.ID == id);//serche for the trip in the data source
             if (busOnTrip == null)//if ther is no such trip in the data source
             {
                 throw new NotExistExeption("the bus is not in driving");
@@ -194,9 +194,9 @@ namespace DL
             return busOnTrip.Clone();
         }
 
-        public void UpdateBusOnTrip(BusOnTrip busOnTrip)
+        public void UpdateBusTrip(BusTrip busOnTrip)
         {
-            BusOnTrip oldBusOnTrip = DataSource.BusesOnTrip.Find(bot => bot.ID == busOnTrip.ID);//serch for the old trip in the data source
+            BusTrip oldBusOnTrip = DataSource.BuseTrips.Find(bot => bot.ID == busOnTrip.ID);//serch for the old trip in the data source
             if (oldBusOnTrip == null)//if not found
             {
                 throw new NotExistExeption("the bus is not in driving");
@@ -204,9 +204,9 @@ namespace DL
             oldBusOnTrip = busOnTrip;//override the old trip with the new one
         }
 
-        public void DeleteBusOnTrip(int id)
+        public void DeleteBusTrip(int id)
         {
-            BusOnTrip busOnTrip = DataSource.BusesOnTrip.Find(l => l.ID == id && l.IsActive == true);//serch for the trip in the data source
+            BusTrip busOnTrip = DataSource.BuseTrips.Find(l => l.ID == id && l.IsActive == true);//serch for the trip in the data source
             if (busOnTrip != null)//if found
             {
                 busOnTrip.IsActive = false;
@@ -217,16 +217,16 @@ namespace DL
             }
         }
 
-        public IEnumerable<BusOnTrip> GetAllBusesOnTrip()
+        public IEnumerable<BusTrip> GetAllBusTrips()
         {
-            return from bot in DataSource.BusesOnTrip//return all the activ trips
+            return from bot in DataSource.BuseTrips//return all the activ trips
                    where bot.IsActive == true
                    select bot.Clone();
         }
 
-        public IEnumerable<BusOnTrip> GetAllBusesOnTripBy(Predicate<BusOnTrip> predicate)
+        public IEnumerable<BusTrip> GetAllBusTripsBy(Predicate<BusTrip> predicate)
         {
-            return from bot in DataSource.BusesOnTrip//return all the trips that predicate return true for them
+            return from bot in DataSource.BuseTrips//return all the trips that predicate return true for them
                    where predicate(bot)
                    select bot.Clone();
         }

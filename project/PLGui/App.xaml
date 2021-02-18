@@ -37,7 +37,7 @@
 
                 </Style.Triggers>
             </Style>
-            
+
             <Style TargetType="TextBlock" x:Key="BlinkedText">
                 <Setter Property="Opacity" Value="0.5"/>
                 <Style.Triggers>

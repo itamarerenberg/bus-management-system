@@ -87,6 +87,7 @@
   <ItemGroup>
     <Content Include="DataBase\AdjacentStations.xml" />
     <Content Include="DataBase\Buses.xml" />
+    <Content Include="DataBase\BusTrips.xml" />
     <Content Include="DataBase\DataSource.xml" />
     <Content Include="DataBase\Lines.xml" />
     <Content Include="DataBase\LineStations.xml" />

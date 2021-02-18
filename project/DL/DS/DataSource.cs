@@ -17,7 +17,7 @@ namespace DS
         public static List<AdjacentStations> AdjacentStations = new List<AdjacentStations>();
         public static List<Bus> Buses = new List<Bus>();
         public static List<Line> Lines = new List<Line>();
-        public static List<BusOnTrip> BusesOnTrip = new List<BusOnTrip>();
+        public static List<BusTrip> BuseTrips = new List<BusTrip>();
         public static List<Station> Stations = new List<Station>();
         public static List<LineStation> LineStations = new List<LineStation>();
         public static List<LineTrip> LineTrips = new List<LineTrip>();

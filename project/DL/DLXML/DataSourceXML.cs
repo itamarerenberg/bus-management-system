@@ -26,7 +26,7 @@ namespace DLXML
         static string LinesFileName = "Lines.xml";
         static string BusesFileName = "Buses.xml";
         static string AdjacentStationsFileName = "AdjacentStations.xml";
-        static string BusesOnTripFileName = "BusesOnTrip.xml";
+        static string BusTripsFileName = "BusTrips.xml";
         static string StationsFileName = "Stations.xml";
         static string LineStationsFileName = "LineStations.xml";
         static string LineTripsFileName = "LineTrips.xml";
@@ -35,15 +35,15 @@ namespace DLXML
         #endregion
 
         #region files paths
-        static string LinesFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", LinesFileName);
-        static string BusesFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", BusesFileName);
-        static string AdjacentStationsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", AdjacentStationsFileName);
-        static string BusesOnTripFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", BusesOnTripFileName);
-        static string StationsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", StationsFileName);
-        static string LineStationsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", LineStationsFileName);
-        static string LineTripsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", LineTripsFileName);
-        static string UsersFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersFileName);
-        static string UsersTripsFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersTripsFileName);
+        static string LinesFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", LinesFileName);
+        static string BusesFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", BusesFileName);
+        static string AdjacentStationsFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", AdjacentStationsFileName);
+        static string BusTripsFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", BusTripsFileName);
+        static string StationsFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", StationsFileName);
+        static string LineStationsFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", LineStationsFileName);
+        static string LineTripsFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", LineTripsFileName);
+        static string UsersFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersFileName);
+        static string UsersTripsFilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", UsersTripsFileName);
         #endregion
 
         static Dictionary<string, FileDetails> files = new Dictionary<string, FileDetails>
@@ -51,7 +51,7 @@ namespace DLXML
             ["Buses"] = new FileDetails { Path = BusesFilePath },
             ["AdjacentStations"] = new FileDetails { Path = AdjacentStationsFilePath },
             ["Lines"] = new FileDetails { Path = LinesFilePath },
-            ["BusesOnTrip"] = new FileDetails { Path = BusesOnTripFilePath },
+            ["BusTrips"] = new FileDetails { Path = BusTripsFilePath },
             ["Stations"] = new FileDetails { Path = StationsFilePath },
             ["LineStations"] = new FileDetails { Path = LineStationsFilePath },
             ["LineTrips"] = new FileDetails { Path = LineTripsFilePath },
@@ -144,11 +144,11 @@ namespace DLXML
                 return files[index].Root;
             }
         }
-        public static XElement BusesOnTrip
+        public static XElement BusTrips
         {
             get
             {
-                string index = "BusesOnTrip";
+                string index = "BusTrips";
                 try
                 {
                     for (int i = 0; i < tryNtimes; i++)
@@ -317,8 +317,8 @@ namespace DLXML
         
 
         public static int serialLineID;
-        static string dataBasePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database");
-        static readonly string FilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()), "DL", "DS", "Database", FileName);
+        static string dataBasePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database");
+        static readonly string FilePath = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "DL", "DS", "Database", FileName);
 
         static DataSourceXML()
         {

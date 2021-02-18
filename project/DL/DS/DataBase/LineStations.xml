@@ -1710,4 +1710,384 @@
     <NextStation>NaN</NextStation>
     <IsActive>True</IsActive>
   </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>61157</StationNumber>
+    <Address>רחוב:מעגלות הרב פרדס  עיר: ירושלים</Address>
+    <Name>הרב פרדס/מאיר בלבן</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>46</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>46</StationNumber>
+    <Address>רחוב:אל משהאד  עיר: ירושלים</Address>
+    <Name>'אלמשאהד א</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>61157</PrevStation>
+    <NextStation>52</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>52</StationNumber>
+    <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
+    <Name>אום טובא 9</Name>
+    <LineStationIndex>2</LineStationIndex>
+    <PrevStation>46</PrevStation>
+    <NextStation>102</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>102</StationNumber>
+    <Address>רחוב:שדרות גולדה מאיר  עיר: ירושלים</Address>
+    <Name>גולדה/שלמה הלוי</Name>
+    <LineStationIndex>3</LineStationIndex>
+    <PrevStation>52</PrevStation>
+    <NextStation>105</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>105</StationNumber>
+    <Address>רחוב:גבעת משה 2 עיר: ירושלים</Address>
+    <Name>גבעת משה</Name>
+    <LineStationIndex>4</LineStationIndex>
+    <PrevStation>102</PrevStation>
+    <NextStation>109</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>109</StationNumber>
+    <Address>רחוב:עזרת תורה 21 עיר: ירושלים</Address>
+    <Name>עזרת תורה/דורש טוב</Name>
+    <LineStationIndex>5</LineStationIndex>
+    <PrevStation>105</PrevStation>
+    <NextStation>124</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>124</StationNumber>
+    <Address>רחוב:הרב סורוצקין 14 עיר: ירושלים</Address>
+    <Name>אוהל דוד/סורוצקין</Name>
+    <LineStationIndex>6</LineStationIndex>
+    <PrevStation>109</PrevStation>
+    <NextStation>142</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>142</StationNumber>
+    <Address>רחוב:הרב ולנשטיין  עיר: ירושלים</Address>
+    <Name>ולנשטיין/הרא''ה</Name>
+    <LineStationIndex>7</LineStationIndex>
+    <PrevStation>124</PrevStation>
+    <NextStation>157</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>157</StationNumber>
+    <Address>רחוב:איגרות משה  עיר: ירושלים</Address>
+    <Name>אגרות משה/קלכהיים</Name>
+    <LineStationIndex>8</LineStationIndex>
+    <PrevStation>142</PrevStation>
+    <NextStation>179</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>179</StationNumber>
+    <Address>רחוב:רבי ישראל נג'ארה 30 עיר: ירושלים</Address>
+    <Name>נג'ארה/בן עוזיאל</Name>
+    <LineStationIndex>9</LineStationIndex>
+    <PrevStation>157</PrevStation>
+    <NextStation>203</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>203</StationNumber>
+    <Address>רחוב:שדרות הנשיא השישי 2 עיר: ירושלים</Address>
+    <Name>חניון הלאום</Name>
+    <LineStationIndex>10</LineStationIndex>
+    <PrevStation>179</PrevStation>
+    <NextStation>210</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>210</StationNumber>
+    <Address>רחוב:שמואל הנביא 71 עיר: ירושלים</Address>
+    <Name>שמואל הנביא/תדהר</Name>
+    <LineStationIndex>11</LineStationIndex>
+    <PrevStation>203</PrevStation>
+    <NextStation>215</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>215</StationNumber>
+    <Address>רחוב:שמואל הנביא 70 עיר: ירושלים</Address>
+    <Name>שמואל הנביא/תדהר</Name>
+    <LineStationIndex>12</LineStationIndex>
+    <PrevStation>210</PrevStation>
+    <NextStation>235</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>235</StationNumber>
+    <Address>רחוב:הרב רפאל קצנלבוגן 74 עיר: ירושלים</Address>
+    <Name>ישיבת ויזניץ/קצנלבוגן</Name>
+    <LineStationIndex>13</LineStationIndex>
+    <PrevStation>215</PrevStation>
+    <NextStation>244</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>244</StationNumber>
+    <Address>רחוב:דרך יריחו  עיר: ירושלים</Address>
+    <Name>דרך יריחו/אל ופא</Name>
+    <LineStationIndex>14</LineStationIndex>
+    <PrevStation>235</PrevStation>
+    <NextStation>279</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>279</StationNumber>
+    <Address>רחוב:יהושוע פרבשטיין 7 עיר: ירושלים</Address>
+    <Name>פרבשטיין/בית הדפוס</Name>
+    <LineStationIndex>15</LineStationIndex>
+    <PrevStation>244</PrevStation>
+    <NextStation>284</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>91</LineId>
+    <StationNumber>284</StationNumber>
+    <Address>רחוב:קהילות יעקב  עיר: ירושלים</Address>
+    <Name>קהילות יעקב</Name>
+    <LineStationIndex>16</LineStationIndex>
+    <PrevStation>279</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>61158</StationNumber>
+    <Address>רחוב:מעגלות הרב פרדס  עיר: ירושלים</Address>
+    <Name>הרב פרדס/מאיר בלבן</Name>
+    <LineStationIndex>0</LineStationIndex>
+    <PrevStation>NaN</PrevStation>
+    <NextStation>51</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>51</StationNumber>
+    <Address>רחוב:אאל אל בית  עיר: ירושלים</Address>
+    <Name>אום טובא 7</Name>
+    <LineStationIndex>1</LineStationIndex>
+    <PrevStation>61158</PrevStation>
+    <NextStation>106</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>106</StationNumber>
+    <Address>רחוב:גבעת משה 3 עיר: ירושלים</Address>
+    <Name>גבעת משה</Name>
+    <LineStationIndex>2</LineStationIndex>
+    <PrevStation>51</PrevStation>
+    <NextStation>127</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>127</StationNumber>
+    <Address>רחוב:פנים מאירות 9 עיר: ירושלים</Address>
+    <Name>פנים מאירות</Name>
+    <LineStationIndex>3</LineStationIndex>
+    <PrevStation>106</PrevStation>
+    <NextStation>159</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>159</StationNumber>
+    <Address>רחוב:הרב מאיר חדש 10 עיר: ירושלים</Address>
+    <Name>מאיר חדש/חזון איש</Name>
+    <LineStationIndex>4</LineStationIndex>
+    <PrevStation>127</PrevStation>
+    <NextStation>164</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>164</StationNumber>
+    <Address>רחוב:רבי שלמה זלמן דרוק 71 עיר: ירושלים</Address>
+    <Name>דרוק/ז'ולטי</Name>
+    <LineStationIndex>5</LineStationIndex>
+    <PrevStation>159</PrevStation>
+    <NextStation>188</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>188</StationNumber>
+    <Address>רחוב:הרב ש. שאולזון 46 עיר: ירושלים</Address>
+    <Name>שאולזון/מעלות בוסטון</Name>
+    <LineStationIndex>6</LineStationIndex>
+    <PrevStation>164</PrevStation>
+    <NextStation>191</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>191</StationNumber>
+    <Address>רחוב:הרב יצחק חי טייב 55 עיר: ירושלים</Address>
+    <Name>חי טייב/שאולזון</Name>
+    <LineStationIndex>7</LineStationIndex>
+    <PrevStation>188</PrevStation>
+    <NextStation>222</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>222</StationNumber>
+    <Address>רחוב:דרך אגודת ספורט בית''ר  עיר: ירושלים</Address>
+    <Name>אצטדיון טדי/א''ס ביתר</Name>
+    <LineStationIndex>8</LineStationIndex>
+    <PrevStation>191</PrevStation>
+    <NextStation>244</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>244</StationNumber>
+    <Address>רחוב:דרך יריחו  עיר: ירושלים</Address>
+    <Name>דרך יריחו/אל ופא</Name>
+    <LineStationIndex>9</LineStationIndex>
+    <PrevStation>222</PrevStation>
+    <NextStation>280</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>280</StationNumber>
+    <Address>רחוב:האדמו''ר מליובאוויטש 8 עיר: ירושלים</Address>
+    <Name>האדמור מלובאויטש/דרוק</Name>
+    <LineStationIndex>10</LineStationIndex>
+    <PrevStation>244</PrevStation>
+    <NextStation>312</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>312</StationNumber>
+    <Address>רחוב:האדמו''ר מליובאוויטש 1 עיר: ירושלים</Address>
+    <Name>האדמור מלובאויטש/דרוק</Name>
+    <LineStationIndex>11</LineStationIndex>
+    <PrevStation>280</PrevStation>
+    <NextStation>314</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>314</StationNumber>
+    <Address>רחוב:דרך שכם  עיר: ירושלים</Address>
+    <Name>בית חולים סן ג'וזף</Name>
+    <LineStationIndex>12</LineStationIndex>
+    <PrevStation>312</PrevStation>
+    <NextStation>345</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>345</StationNumber>
+    <Address>רחוב:הקונגרס הציוני  עיר: ירושלים</Address>
+    <Name>הקונגרס הציוני/גולדה</Name>
+    <LineStationIndex>13</LineStationIndex>
+    <PrevStation>314</PrevStation>
+    <NextStation>389</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>389</StationNumber>
+    <Address>רחוב:לוחמי הגטאות 5 עיר: ירושלים</Address>
+    <Name>כפר סטודנטים/לוחמי הגטאות</Name>
+    <LineStationIndex>14</LineStationIndex>
+    <PrevStation>345</PrevStation>
+    <NextStation>433</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>433</StationNumber>
+    <Address>רחוב:דרך ואדי אל ג'וז 12 עיר: ירושלים</Address>
+    <Name>ואדי אל ג'וז/עתמאן בן עפאן</Name>
+    <LineStationIndex>15</LineStationIndex>
+    <PrevStation>389</PrevStation>
+    <NextStation>448</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>448</StationNumber>
+    <Address>רחוב:קסילה  עיר: ירושלים</Address>
+    <Name>קסילה/אום אלעסאפיר</Name>
+    <LineStationIndex>16</LineStationIndex>
+    <PrevStation>433</PrevStation>
+    <NextStation>503</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>503</StationNumber>
+    <Address>רחוב:א נהדה  עיר: ירושלים</Address>
+    <Name>בית ספר תיכון בית צפאפא/אלנהדה</Name>
+    <LineStationIndex>17</LineStationIndex>
+    <PrevStation>448</PrevStation>
+    <NextStation>510</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>510</StationNumber>
+    <Address>רחוב:הרוזמרין  עיר: ירושלים</Address>
+    <Name>הרוזמרין/כביש המנהרות</Name>
+    <LineStationIndex>18</LineStationIndex>
+    <PrevStation>503</PrevStation>
+    <NextStation>551</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>551</StationNumber>
+    <Address>רחוב:הפסגה 18 עיר: ירושלים</Address>
+    <Name>הפסגה/הרשד''ם</Name>
+    <LineStationIndex>19</LineStationIndex>
+    <PrevStation>510</PrevStation>
+    <NextStation>684</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
+  <LineStation>
+    <LineId>92</LineId>
+    <StationNumber>684</StationNumber>
+    <Address>רחוב:חיי אל מדארס  עיר: ירושלים</Address>
+    <Name>ג'אבל מוקבר 2</Name>
+    <LineStationIndex>20</LineStationIndex>
+    <PrevStation>551</PrevStation>
+    <NextStation>NaN</NextStation>
+    <IsActive>True</IsActive>
+  </LineStation>
 </LineStations>

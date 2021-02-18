@@ -7,6 +7,9 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace PLGui.Models.PO
 {
+    /// <summary>
+    /// station for using only in add/update line operations
+    /// </summary>
     public class LineStation : ObservableObject
     {
         private Station station;

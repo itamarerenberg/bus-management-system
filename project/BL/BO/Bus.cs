@@ -16,6 +16,7 @@ namespace BO
         public  double KmAfterTreat { get; set; }
         public DateTime LastTreatDate { get; set; }
         public TimeSpan TimeUntilReady { get; set; }
+        public List<BusTrip> BusTrips{ get; set; }
         public bool IsBusy
         {
             get

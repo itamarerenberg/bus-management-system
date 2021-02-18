@@ -82,6 +82,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid Background="{StaticResource MidBackground}">
+                        <TextBlock Text="{Binding Stations.Count, StringFormat={} Total stations:{0}}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15" FontSize="17"/>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,5,0,0">
                             <TextBox x:Name="LNum" Text="{Binding TempLine.LineNumber, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                                      HorizontalAlignment="Left" IsEnabled="{Binding NewLineMode, Mode=OneTime}" Background="{StaticResource LightBackground}"

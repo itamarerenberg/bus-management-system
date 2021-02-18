@@ -93,30 +93,30 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum, List<LineTrip> lineTrips)
+        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum)
         {
             List<TimeTrip> TimeTrips = new List<TimeTrip>();
+            List<LineTrip> lineTrips = GetAllLineTripBy(lt => lt.LineId == lineStation.LineId).ToList();//gets the relevant line trips
+            
             foreach (BO.LineTrip LT in lineTrips)
             {
-                if (LT.LineId == lineStation.LineId)
+                if (LT.Frequency == TimeSpan.Zero)//if the line trips is only once a day
                 {
-                    if (LT.Frequency == TimeSpan.Zero)//if the line trips is only once a day
+                    TimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = LT.StartTime + lineStation.Time_from_start });
+                }
+                else                               //the line trips is more then once a day
+                {
+                    for (TimeSpan rideTime = LT.StartTime; rideTime <= LT.FinishAt; rideTime += LT.Frequency)//all the rides of this line trip in one day
                     {
-                        TimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = LT.StartTime + lineStation.Time_from_start });
-                    }
-                    else                               //the line trips is more then once a day
-                    {
-                        for (TimeSpan rideTime = LT.StartTime; rideTime <= LT.FinishAt; rideTime += LT.Frequency)//all the rides of this line trip in one day
+                        TimeTrips.Add(new TimeTrip()
                         {
-                            TimeTrips.Add(new TimeTrip()
-                            {
-                                LineNum = lineNum,
-                                StartTime = rideTime + lineStation.Time_from_start
-                            });
-                        }
+                            LineNum = lineNum,
+                            StartTime = rideTime + lineStation.Time_from_start
+                        });
                     }
                 }
             }
+
             return TimeTrips;
         }
 
@@ -325,6 +325,115 @@ namespace BL
 
         #endregion
 
+        #region private methods
+        /// <summary>
+        /// take a list of DO's LineStation and convert them to BO's LineStation,  
+        /// assuming all the line stations is from the same line!!!
+        /// </summary>
+        List<LineStation> LineStations_Do_Bo(List<DO.LineStation> lineStations, List<DO.AdjacentStations> adjacentStations)//^^^^^^^^^^^^continue from heare^^^^^^^^^^^^
+        {
+            //check that all the stationLines from the same line
+            if (lineStations.Exists(lst => lst.LineId != lineStations[0].LineId))
+            {
+                throw new invalidUseOfFunc("all the LineStations need to be from the same line");
+            }
+
+            List<LineStation> result = new List<LineStation>();
+            lineStations.OrderBy(lst => lst.LineStationIndex);//order by the index of the lineStation in the line
+            double distance_from_start = 0;
+            TimeSpan time_from_start = new TimeSpan(0);
+            LineStation first_station = new LineStation()
+            {
+                LineId = lineStations[0].LineId,
+                StationNumber = lineStations[0].StationNumber,
+                LineStationIndex = lineStations[0].LineStationIndex,
+                PrevToCurrent = null,//ther is no previus station so it's null
+                Address = lineStations[0].Address,
+                Name = lineStations[0].Name,
+                Distance_from_start = distance_from_start,// = 0// because it's the first station
+                Time_from_start = time_from_start// = 0:0:0// because it's the first station
+                //the fild CurrentToNext will be set inside the loop
+            };
+            lineStations.RemoveAt(0);//remove the first line station for its been Taken care allready
+            LineStation prev_lineStation = first_station;//this will be use to set the fild CurrentToNext in the loop
+            foreach (DO.LineStation lst in lineStations)
+            {
+                var temp = adjacentStations.FirstOrDefault(adjs => adjs.StationCode1 == prev_lineStation.StationNumber && adjs.StationCode2 == lst.StationNumber);
+                if (temp == null)
+                {
+                    throw new missAdjacentStations($"miss adjacentStations ({prev_lineStation.StationNumber}, {lst.StationNumber}");
+                }
+                AdjacentStations prev_to_current = (AdjacentStations)temp.CopyPropertiesToNew(typeof(AdjacentStations));//I used temp to shorts the row
+
+                distance_from_start += prev_to_current.Distance;//add the distance from the previus station to distanse from start
+                time_from_start += prev_to_current.Time;//        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                prev_lineStation.CurrentToNext = prev_to_current;//the fild PrevToCurrent of current is CurrentToNext of prev_lineStation
+                result.Add(prev_lineStation);
+                prev_lineStation = new LineStation()
+                {
+                    LineId = lst.LineId,
+                    StationNumber = lst.StationNumber,
+                    LineStationIndex = lst.LineStationIndex,
+                    Address = lst.Address,
+                    Name = lst.Name,
+                    PrevToCurrent = prev_to_current,
+                    Distance_from_start = distance_from_start,
+                    Time_from_start = time_from_start
+                };
+
+            }
+            result.Add(prev_lineStation);
+            return result;
+        }
+        #endregion
+
+        #region simulator
+        SimulationClock clock = SimulationClock.Instance;
+        TravelsExecuter travelsExecuter = TravelsExecuter.Instance;
+        /// <summary>
+        /// start the simulatorClock and the travel executer
+        /// </summary>
+        /// <param name="startTime">the time wich the simolator clock will start from</param>
+        /// <param name="Rate">the rate of the simulator clock relative to real time</param>
+        /// <param name="updateTime">will executet when the simulator time changes</param>
+        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus)
+        {
+            clock.StartClock(startTime, rate, updateTime);
+            travelsExecuter.StartExecute(updateBus);
+        }
+
+        /// <summary>
+        /// stops the simulator clock and the travels executer and all the travels that in progres
+        /// </summary>
+        public void StopSimulator()
+        {
+            clock.StopClock();//this stops the travels executer too
+        }
+
+        /// <summary>
+        /// adds the station to the list of the stations that under truck
+        /// </summary>
+        public void Add_stationPanel(int stationCode)
+        {
+            travelsExecuter.Add_station_to_truck(stationCode);
+        }
+
+        /// <summary>
+        /// removes the station from the list of the stations that under truck
+        /// </summary>
+        public void Remove_stationPanel(int stationCode)
+        {
+            travelsExecuter.Add_station_to_truck(stationCode);
+        }
+
+        public void Change_SimulatorRate(int change)
+        {
+            clock.Change_Rate(change);
+        }
+
+        #endregion
+
         #region not implement
         public void AddManagar(string name, string password)
         {
@@ -437,122 +546,43 @@ namespace BL
         {
             throw new NotImplementedException();
         }
-
-
-        #endregion
-
-        #region private methods
-        /// <summary>
-        /// take a list of DO's LineStation and convert them to BO's LineStation,  
-        /// assuming all the line stations is from the same line!!!
-        /// </summary>
-        List<LineStation> LineStations_Do_Bo(List<DO.LineStation> lineStations, List<DO.AdjacentStations> adjacentStations)//^^^^^^^^^^^^continue from heare^^^^^^^^^^^^
-        {
-            //check that all the stationLines from the same line
-            if (lineStations.Exists(lst => lst.LineId != lineStations[0].LineId))
-            {
-                throw new invalidUseOfFunc("all the LineStations need to be from the same line");
-            }
-
-            List<LineStation> result = new List<LineStation>();
-            lineStations.OrderBy(lst => lst.LineStationIndex);//order by the index of the lineStation in the line
-            double distance_from_start = 0;
-            TimeSpan time_from_start = new TimeSpan(0);
-            LineStation first_station = new LineStation()
-            {
-                LineId = lineStations[0].LineId,
-                StationNumber = lineStations[0].StationNumber,
-                LineStationIndex = lineStations[0].LineStationIndex,
-                PrevToCurrent = null,//ther is no previus station so it's null
-                Address = lineStations[0].Address,
-                Name = lineStations[0].Name,
-                Distance_from_start = distance_from_start,// = 0// because it's the first station
-                Time_from_start = time_from_start// = 0:0:0// because it's the first station
-                //the fild CurrentToNext will be set inside the loop
-            };
-            lineStations.RemoveAt(0);//remove the first line station for its been Taken care allready
-            LineStation prev_lineStation = first_station;//this will be use to set the fild CurrentToNext in the loop
-            foreach (DO.LineStation lst in lineStations)
-            {
-                var temp = adjacentStations.FirstOrDefault(adjs => adjs.StationCode1 == prev_lineStation.StationNumber && adjs.StationCode2 == lst.StationNumber);
-                if (temp == null)
-                {
-                    throw new missAdjacentStations($"miss adjacentStations ({prev_lineStation.StationNumber}, {lst.StationNumber}");
-                }
-                AdjacentStations prev_to_current = (AdjacentStations)temp.CopyPropertiesToNew(typeof(AdjacentStations));//I used temp to shorts the row
-
-                distance_from_start += prev_to_current.Distance;//add the distance from the previus station to distanse from start
-                time_from_start += prev_to_current.Time;//        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-                prev_lineStation.CurrentToNext = prev_to_current;//the fild PrevToCurrent of current is CurrentToNext of prev_lineStation
-                result.Add(prev_lineStation);
-                prev_lineStation = new LineStation()
-                {
-                    LineId = lst.LineId,
-                    StationNumber = lst.StationNumber,
-                    LineStationIndex = lst.LineStationIndex,
-                    Address = lst.Address,
-                    Name = lst.Name,
-                    PrevToCurrent = prev_to_current,
-                    Distance_from_start = distance_from_start,
-                    Time_from_start = time_from_start
-                };
-
-            }
-            result.Add(prev_lineStation);
-            return result;
-        }
-        #endregion
-
-        #region simulator
-        SimulationClock clock = SimulationClock.Instance;
-        TravelsExecuter travelsExecuter = TravelsExecuter.Instance;
-        /// <summary>
-        /// start the simulatorClock and the travel executer
-        /// </summary>
-        /// <param name="startTime">the time wich the simolator clock will start from</param>
-        /// <param name="Rate">the rate of the simulator clock relative to real time</param>
-        /// <param name="updateTime">will executet when the simulator time changes</param>
-        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus)
-        {
-            clock.StartClock(startTime, rate, updateTime);
-            travelsExecuter.StartExecute(updateBus);
-        }
-
-        /// <summary>
-        /// stops the simulator clock and the travels executer and all the travels that in progres
-        /// </summary>
-        public void StopSimulator()
-        {
-            clock.StopClock();//this stops the travels executer too
-        }
-
-        /// <summary>
-        /// adds the station to the list of the stations that under truck
-        /// </summary>
-        public void Add_stationPanel(int stationCode)
-        {
-            travelsExecuter.Add_station_to_truck(stationCode);
-        }
-
-        /// <summary>
-        /// removes the station from the list of the stations that under truck
-        /// </summary>
-        public void Remove_stationPanel(int stationCode)
-        {
-            travelsExecuter.Add_station_to_truck(stationCode);
-        }
-
-        public void Change_SimulatorRate(int change)
-        {
-            clock.Change_Rate(change);
-        }
-
         public List<Ride> GetRides(LineTrip lineTrip)
         {
             throw new NotImplementedException();
         }
 
+        public void AddBusTrip(BusTrip BusTrip)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BusTrip GetBusTrip(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateBusTrip(BusTrip BusTrip)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteBusTrip(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BusTrip> GetAllBusTrips()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BusTrip> GetAllBusTripsBy(Predicate<BusTrip> pred)
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
+
     }
 }

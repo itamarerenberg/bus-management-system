@@ -133,7 +133,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
 
         }
@@ -141,11 +141,13 @@ namespace BL
         {
             try
             {
-                return (Bus)dl.GetBus(licensNum).CopyPropertiesToNew(typeof(Bus));
+                Bus bus = (Bus)dl.GetBus(licensNum).CopyPropertiesToNew(typeof(Bus));// get do bus
+                bus.BusTrips = dl.GetAllBusTripsBy(b => b.Bus_Id == licensNum).Select(bt => (BusTrip)bt.CopyPropertiesToNew(typeof(BusTrip))).ToList();// get list of bo bus trip
+                return bus;
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public void UpdateBus(Bus bus)
@@ -157,7 +159,7 @@ namespace BL
             }
             catch (Exception msg)
             {
-                throw msg.InnerException;
+                throw msg;
             }
         }
         public void DeleteBus(string licensNum)
@@ -173,8 +175,20 @@ namespace BL
         }
         public IEnumerable<Bus> GetAllBuses()
         {
+            List<BusTrip> tempList = GetAllBusTrips().ToList();
             return from BObus in dl.GetAllBuses()
-                   select (Bus)BObus.CopyPropertiesToNew(typeof(Bus));
+                   select new Bus()
+                   {
+                       LicenseNumber = BObus.LicenseNumber,
+                       Stat = (BusStatus)BObus.Stat,
+                       Fuel = BObus.Fuel,
+                       LicenesDate = BObus.LicenesDate,
+                       LastTreatDate = BObus.LastTreatDate,
+                       Kilometraz = BObus.Kilometraz,
+                       KmAfterTreat = BObus.KmAfterTreat,
+                       BusTrips = tempList.Where(bt => bt.Bus_Id == BObus.LicenseNumber).ToList()
+                   };
+                   
         }
         public IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> pred)
         {
@@ -220,6 +234,67 @@ namespace BL
         {
             AddBus(HelpMethods.RandomBus());
         }
+
+        #region bus trip
+        public void AddBusTrip(BusTrip BusTrip)
+        {
+            try
+            {
+                dl.AddBusTrip((DO.BusTrip)BusTrip.CopyPropertiesToNew(typeof(DO.BusTrip)));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+
+        public BusTrip GetBusTrip(int id)
+        {
+            try
+            {
+                return (BusTrip)dl.GetBusTrip(id).CopyPropertiesToNew(typeof(BusTrip));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+
+        public void UpdateBusTrip(BusTrip BusTrip)
+        {
+            try
+            {
+                dl.UpdateBusTrip((DO.BusTrip)BusTrip.CopyPropertiesToNew(typeof(BO.BusTrip)));
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+
+        public void DeleteBusTrip(int id)
+        {
+            try
+            {
+                dl.DeleteBusTrip(id);
+            }
+            catch (Exception msg)
+            {
+                throw msg;
+            }
+        }
+
+        public IEnumerable<BusTrip> GetAllBusTrips()
+        {
+            return from busT in dl.GetAllBusTrips()
+                   select (BusTrip)busT.CopyPropertiesToNew(typeof(BusTrip));
+        }
+
+        public IEnumerable<BusTrip> GetAllBusTripsBy(Predicate<BusTrip> pred)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
         #endregion
 
         #region Line
@@ -982,10 +1057,11 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum, List<LineTrip> lineTrips)
+        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum)
         {
             throw new NotImplementedException();
         }
+       
         #endregion
 
         #endregion
