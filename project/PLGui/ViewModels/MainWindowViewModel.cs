@@ -108,7 +108,7 @@ namespace PLGui.utilities
             window.PasswordIn.GetBindingExpression(PasswordBox.PasswordProperty).UpdateSource();
             if (!this.HasErrors)
             {
-                if (ManegerCheckBox == true)
+                if (ManegerCheckBox == true) //enter as maneger
                 {
                     try
                     {
@@ -123,7 +123,7 @@ namespace PLGui.utilities
                         MessageBox.Show(msg.Message, "the access is denied");
                     }
                 }
-                else
+                else                        //enter as passanger
                 {
                     try
                     {

@@ -169,6 +169,11 @@ namespace DL
                    select l.Clone();
         }
 
+        public int GetLineNum(int id)
+        {
+            return DataSource.Lines.FirstOrDefault(l => l.ID == id).LineNumber;
+        }
+
         #endregion
 
         #region BusOnTrip

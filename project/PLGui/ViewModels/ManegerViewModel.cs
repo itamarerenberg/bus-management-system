@@ -257,7 +257,8 @@ namespace PLGui
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
             LogOut_Command = new RelayCommand<ManegerView>(LogOut);
-            ManegerView_ClosingCommand = new RelayCommand<Window>(manegerView_Closing);
+            ClosingCommand = new RelayCommand(Closing);
+            ExitCommand = new RelayCommand<Window>(Exit);
             WindowLoaded_Command = new RelayCommand<ManegerView>(Window_Loaded);
             LostFocus_Command = new RelayCommand<ManegerView>(LostFocus);
             BackCommand = new RelayCommand<ManegerView>(Back);
@@ -274,12 +275,6 @@ namespace PLGui
 
             InitBackgroundWorkers();
         }
-
-        private void OpenButtonsMenu(Popup popup)
-        {
-            popup.IsOpen = true;
-        }
-
 
         #endregion
 
@@ -479,7 +474,8 @@ namespace PLGui
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand LogOut_Command { get; }
-        public ICommand ManegerView_ClosingCommand { get; }
+        public ICommand ClosingCommand { get; }
+        public ICommand ExitCommand { get; }
         public ICommand WindowLoaded_Command { get; }
         public ICommand LostFocus_Command { get; }
         public ICommand BackCommand { get; }
@@ -678,13 +674,14 @@ namespace PLGui
         }
         private void LogOut(ManegerView window)
         {
-            new MainWindow().Show();
-            if (window.IsActive)
-            {
-                window.Close();
-            }
+            window.Close();
         }
-        private void manegerView_Closing(Window window)
+        private void Closing()
+        {
+            new MainWindow().Show();
+            source.ResetBuses();
+        }
+        private void Exit(Window window)
         {
             window.Close();
             Environment.Exit(Environment.ExitCode);
@@ -722,34 +719,41 @@ namespace PLGui
                 Mview.PlayButton.Content = new PackIcon() { Kind = PackIconKind.Stop, Foreground = System.Windows.Media.Brushes.Red };
                 Mview.PlayButton.ToolTip = "Stop";
                 IsSimulatorOff = false;
-                var worker = Start_simulator(Time.TimeOfDay, Rate);
-                worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+                try
                 {
+                    var worker = Start_simulator(Time.TimeOfDay, Rate);
+                    worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+                    {
                     //(selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation
                     if (e.UserState is TimeSpan updateTime)
-                    {
-                        Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
+                        {
+                            Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
                     }
-                    else if(e.UserState is BO.LineTiming updateLineTiming)
-                    {
-                        Station updateingStation = stations.First(st => st.Code == updateLineTiming.StationCode);
-                        LineTiming temp = updateingStation.LineTimings.FirstOrDefault(lt =>
-                                            lt.LineId == updateLineTiming.LineId
-                                            && lt.StartTime == updateLineTiming.StartTime);
-                        if (updateLineTiming.ArrivalTime <= TimeSpan.Zero)
+                        else if (e.UserState is BO.LineTiming updateLineTiming)
                         {
-                            updateingStation.LineTimings.Remove(temp);
+                            Station updateingStation = stations.First(st => st.Code == updateLineTiming.StationCode);
+                            LineTiming temp = updateingStation.LineTimings.FirstOrDefault(lt =>
+                                                lt.LineId == updateLineTiming.LineId
+                                                && lt.StartTime == updateLineTiming.StartTime);
+                            if (updateLineTiming.ArrivalTime <= TimeSpan.Zero)
+                            {
+                                updateingStation.LineTimings.Remove(temp);
+                            }
+                            else if (temp == null)
+                            {
+                                updateingStation.LineTimings.Add(new LineTiming() { BoLineTiming = updateLineTiming });
+                            }
+                            else
+                            {
+                                temp.BoLineTiming = updateLineTiming;
+                            }
                         }
-                        else if (temp == null)
-                        {
-                            updateingStation.LineTimings.Add(new LineTiming() { BoLineTiming = updateLineTiming });
-                        }
-                        else
-                        {
-                            temp.BoLineTiming = updateLineTiming; 
-                        }
-                    }
-                };
+                    };
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }
             }
             else
             {
@@ -784,15 +788,15 @@ namespace PLGui
             OnPropertyChanged(nameof(StackIsNotEmpty));
 
         }
-        BackgroundWorker tempWorker;
+        BackgroundWorker treatmentWorker;
         private void TreatmentBus()
         {
             if (Mview.Bus_view.IsSelected)//bus
             {
                 if (Mview.BusesList.SelectedItem is Bus bus)
                 {
-                    tempWorker = new BackgroundWorker();
-                    tempWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+                    treatmentWorker = new BackgroundWorker();
+                    treatmentWorker.DoWork += (object sender, DoWorkEventArgs e) =>
                     {
                         try
                         {
@@ -803,18 +807,48 @@ namespace PLGui
                             MessageBox.Show(msg.Message, "ERROR");
                         }
                     };
-                    tempWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+                    treatmentWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
                     {
                         loadBuses();
                     };
-                    tempWorker.RunWorkerAsync();
+                    treatmentWorker.RunWorkerAsync();
+                }
+                else
+                {
+                    MessageBox.Show("Please select a bus for treatment", "ERROR");
                 }
             }
         }
-
+        BackgroundWorker refuleWorker;
         private void RefuleBus()
         {
-            throw new NotImplementedException();
+            if (Mview.Bus_view.IsSelected)//bus
+            {
+                if (Mview.BusesList.SelectedItem is Bus bus)
+                {
+                    refuleWorker = new BackgroundWorker();
+                    refuleWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+                    {
+                        try
+                        {
+                            source.Refuel(bus.BObus);
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
+                        }
+                    };
+                    refuleWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+                    {
+                        loadBuses();
+                    };
+                    refuleWorker.RunWorkerAsync();
+                }
+                else
+                {
+                    MessageBox.Show("Please select a bus for refuling", "ERROR");
+                }
+            }
         }
 
         #region delete
@@ -1116,7 +1150,10 @@ namespace PLGui
                 counter++;
             }
         }
-
+        private void OpenButtonsMenu(Popup popup)
+        {
+            popup.IsOpen = true;
+        }
         #endregion
 
         #region events
@@ -1444,7 +1481,14 @@ namespace PLGui
                         break;
                     }                
                 }
-                source.StopSimulator();
+                try
+                {
+                    source.StopSimulator();
+                }
+                catch ( Exception msg)
+                {
+                    MessageBox.Show(msg.Message, "ERROR");
+                }
             };
             simulatorWorker.RunWorkerAsync();
             return simulatorWorker;

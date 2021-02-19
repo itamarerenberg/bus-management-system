@@ -23,7 +23,7 @@
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
         </y:EventTrigger>
         <y:EventTrigger EventName="Closing">
-            <y:InvokeCommandAction Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=ManegerWindow}"/>
+            <y:InvokeCommandAction Command="{Binding ClosingCommand}"/>
         </y:EventTrigger>
     </y:Interaction.Triggers>
     <Window.DataContext>
@@ -72,7 +72,7 @@
             </MenuItem>
             <MenuItem Header="Exit" Height="25">
                 <MenuItem Header="Log out" Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
-                <MenuItem Header="Exit" Command="{Binding ManegerView_ClosingCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=ManegerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
             </MenuItem>
         </Menu>
         <!--#endregion-->
@@ -164,6 +164,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Button Content="{materialDesign:PackIcon Kind=Delete, Size=25}" ToolTip="Delete" Margin="4,10,0,15" HorizontalAlignment="Left"
                         Command="{Binding DeleteCommand}" 
@@ -173,18 +174,23 @@
                         Command="{Binding UpdateCommand}" 
                         Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
                 
-                <Button Content="{materialDesign:PackIcon Kind=Tools, Size=25}" ToolTip="Treatment" Grid.Row="2" Margin="4,0,0,15" HorizontalAlignment="Left"
+                <Button Content="{materialDesign:PackIcon Kind=GasStation, Size=25}" ToolTip="Reful" Grid.Row="2" Margin="4,0,0,15" HorizontalAlignment="Left"
+                        Command="{Binding RefuleBus_Command}"  Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
+                ConverterParameter={x:Reference Bus_view }, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding BusDisplay,Converter={StaticResource Bool_converter_to_visibility}}"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                
+                <Button Content="{materialDesign:PackIcon Kind=Tools, Size=25}" ToolTip="Treatment" Grid.Row="3" Margin="4,0,0,15" HorizontalAlignment="Left"
                         Command="{Binding TreatmentBus_Command}"  Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
                 ConverterParameter={x:Reference Bus_view }, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding BusDisplay,Converter={StaticResource Bool_converter_to_visibility}}"
                         Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
                 
-                <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a random bus" Grid.Row="3" Margin="4,0,0,15" HorizontalAlignment="Left"
+                <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a random bus" Grid.Row="4" Margin="4,0,0,15" HorizontalAlignment="Left"
                         Command="{Binding RandomBus_Command}" CommandParameter="{Binding ElementName=ManegerWindow}" 
                         Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
                 ConverterParameter={x:Reference Bus_view }, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
 
-                <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a line trip" Grid.Row="4" Margin="4,0,0,15" HorizontalAlignment="Left"
+                <Button Content="{materialDesign:PackIcon Kind=Plus}" ToolTip="Add a line trip" Grid.Row="5" Margin="4,0,0,15" HorizontalAlignment="Left"
                     VerticalAlignment="Bottom" Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
                     ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                         IsEnabled="{Binding LineDisplay, Converter={StaticResource Bool_converter_to_visibility}}"

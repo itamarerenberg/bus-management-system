@@ -32,6 +32,8 @@ namespace BL.simulator
 
         #endregion
 
+        IBL source;
+
         /// <summary>
         /// the time it's take to treat a bus
         /// </summary>
@@ -60,8 +62,8 @@ namespace BL.simulator
                 SimulationClock clock = SimulationClock.Instance;
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
-                IBL source = BLFactory.GetBL("admin");
-                bus.Stat = BusStatus.In_treatment;
+                source = BLFactory.GetBL("admin");
+                bus.Stat = BusStatus.In_refueling;
                 source.UpdateBus(bus);//update the data source that the bus is in refuling now
                 while (!clock.Cancel && stopwatch.Elapsed < Refule_time)
                 {
@@ -114,14 +116,14 @@ namespace BL.simulator
         /// 
         /// </summary>
         /// <param name="bus"></param>
-        public void Treatnent(Bus bus)
+        public void Treatment(Bus bus)
         {
             Thread treatment = new Thread(() => 
             {
                 SimulationClock clock = SimulationClock.Instance;
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
-                IBL source = BLFactory.GetBL("admin");
+                source = BLFactory.GetBL("admin");
                 bus.Stat = BusStatus.In_treatment;
                 source.UpdateBus(bus);//update the data source that the bus is in treatment now
                 while (!clock.Cancel && stopwatch.Elapsed < Refule_time)
@@ -165,6 +167,21 @@ namespace BL.simulator
             });
             treatment.Name = "treatment " + bus.LicenseNumber;
             treatment.Start();
+        }
+        /// <summary>
+        /// reset the buses status(stop from traveling) while closing the propgram
+        /// </summary>
+        public void ResetBuses()
+        {
+            source = BLFactory.GetBL("admin");
+            foreach (Bus bus in source.GetAllBuses())
+            {
+                if (bus.Stat == BusStatus.Traveling)
+                {
+                    bus.Stat = BusStatus.Ready;
+                    source.UpdateBus(bus);
+                }
+            }
         }
     }
 }

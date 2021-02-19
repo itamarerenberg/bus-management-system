@@ -19,7 +19,7 @@
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
         </y:EventTrigger>
         <y:EventTrigger EventName="Closing">
-            <y:InvokeCommandAction Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
+            <y:InvokeCommandAction Command="{Binding ClosingCommand}"/>
         </y:EventTrigger>
     </y:Interaction.Triggers>
     <Window.DataContext>
@@ -105,9 +105,8 @@
                 </Grid.RowDefinitions>
 
                 <ComboBox x:Name="ToComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.Column="1" 
-                          Text="{Binding ToText}" SelectedItem="{Binding ToStation}"
-                           IsEditable="True" 
-                          materialDesign:HintAssist.Hint="To" ItemsSource="{Binding ToStations}" Width="256" />
+                          Text="{Binding ToText}" SelectedItem="{Binding ToStation}" 
+                           materialDesign:HintAssist.Hint="To" ItemsSource="{Binding ToStations}" Width="256" StaysOpenOnEdit="True" IsReadOnly="True" IsTextSearchEnabled="False" />
                 <!--<Style>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=SelectedIndex, ElementName=FromComboBox}" Value="-1">
@@ -123,7 +122,7 @@
 
                 <StackPanel Grid.RowSpan="2" Margin="0,0,30,0">
                     <ComboBox x:Name="FromComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}" StaysOpenOnEdit="True" 
-                          Text="{Binding FromText}" SelectedItem="{Binding FromStation}" IsTextSearchEnabled="False"
+                          Text="{Binding FromText}" SelectedItem="{Binding FromPassengerStation}" IsTextSearchEnabled="False"
                           IsEditable="True" 
                           materialDesign:HintAssist.Hint="From" ItemsSource="{Binding FromStations}" Width="256" >
                         

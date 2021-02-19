@@ -176,6 +176,11 @@ namespace DL
                    select temp;
         }
 
+        public int GetLineNum(int id)
+        {
+            return int.Parse(DataSourceXML.Lines.Elements().FirstOrDefault(l => int.Parse(l.Element("ID").Value) == id).Element("LineNumber").Value);
+        }
+
         #endregion
 
         #region BusTrip

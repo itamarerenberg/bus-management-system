@@ -21,7 +21,15 @@ namespace PLGui.Models.PO
             set => SetProperty(ref lineStations, value);
         }
 
-        public int StationNumber { get; set; }
+        public int StationNumber { get => LineStations.First().StationNumber; }
+
+
+        public PassengerStation(BO.LineStation lineStation = null)
+        {
+            LineStations = new List<BO.LineStation>();
+            LineStations.Add(lineStation);
+        }
+
 
         public override string ToString()
         {

@@ -25,7 +25,7 @@ namespace PLGui
         readonly IBL source;
 
         private PassengerStation fromPassengerStation;
-        private BO.LineStation toStation;
+        private PassengerStation toStation;
         private string fromText;
         private string toText;
         private BO.TimeTrip timeOfTrip;
@@ -51,17 +51,17 @@ namespace PLGui
 
         public BO.LineStation FromStation { get; set; }
 
-        public BO.LineStation ToStation
+        public PassengerStation ToStation
         {
             get => toStation;
             set
             {
-                if (SetProperty(ref toStation, value))//if the another station has selected in the combo box
+                if (SetProperty(ref toStation, value) && value != null)//if the another station has selected in the combo box
                 {
-                    FromStation = FromPassengerStation.LineStations.Find(s => s.LineId == value.LineId);//select the fromStation from the list of passengerStation according the line id
+                    FromStation = FromPassengerStation.LineStations.Find(s => s.LineId == value.LineStations.First().LineId);//select the fromStation from the list of passengerStation according the line id
                     if (TimeOfTrip != null && value != null)
                     {
-                        TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (value.Time_from_start - FromStation.Time_from_start);//FinishTime = start time + the diferent between the stations
+                        TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (value.LineStations.First().Time_from_start - FromStation.Time_from_start);//FinishTime = start time + the diferent between the stations
                     }
                     OnPropertyChanged(nameof(ReadyToGo));
                     OnPropertyChanged(nameof(TimeOfTrip));
@@ -91,7 +91,7 @@ namespace PLGui
                     value = value ?? "";        //preventing from value to be null
                     if (ToStations != null)
                     {
-                        ToStations.Filter = s => ((BO.LineStation)s).Name.Contains(value);
+                        ToStations.Filter = s => ((PassengerStation)s).ToString().Contains(value);
                         ToStations.Refresh(); 
                     }
                 }
@@ -106,7 +106,8 @@ namespace PLGui
                 {
                     if (ToStation != null)
                     {
-                        TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (ToStation.Time_from_start - FromPassengerStation.LineStations.Find(s => s.LineId == ToStation.LineId).Time_from_start);//FinishTime = start time + the diferent between the stations
+                        TimeOfTrip.FinishTime = TimeOfTrip.StartTime + (ToStation.LineStations.First().Time_from_start - 
+                            FromPassengerStation.LineStations.Find(s => s.LineId == ToStation.LineStations.First().LineId).Time_from_start);//FinishTime = start time + the diferent between the stations
                         OnPropertyChanged(nameof(TimeOfTrip));
                     }
                     OnPropertyChanged(nameof(ReadyToGo));
@@ -150,9 +151,9 @@ namespace PLGui
         }
 
 
-        private ObservableCollection<BO.LineStation> _toStations;
+        private ObservableCollection<PassengerStation> _toStations;
 
-        private ObservableCollection<BO.LineStation> toStations
+        private ObservableCollection<PassengerStation> toStations
         {
             get => _toStations;
             set => SetProperty(ref _toStations, value);
@@ -179,7 +180,7 @@ namespace PLGui
                             stations = (ObservableCollection<BO.LineStation>)args.Result;
                             fromStations = new ObservableCollection<PassengerStation>(stations.GroupBy(s => s.StationNumber)//group into <station number, list of line stations>
                                             .Where(p => p.Any(t => t.CurrentToNext != null))// make sure at least 1 line station is not in the end
-                                            .Select(ps => new PassengerStation() { StationNumber = ps.Key, LineStations = ps.ToList() }));//creats passenger station
+                                            .Select(ps => new PassengerStation() { LineStations = ps.ToList() }));//creats passenger station
                         }
                     };//this function will execute in the main thred
 
@@ -270,7 +271,8 @@ namespace PLGui
             //commands initialize
             WindowLoaded_Command = new RelayCommand<PassengerView>(Window_Loaded);
             LogOut_Command = new RelayCommand<PassengerView>(LogOut);
-            ClosingCommand = new RelayCommand<Window>(Close);
+            ClosingCommand = new RelayCommand(Closing);
+            CloseCoammsnd = new RelayCommand<Window>(Close);
             TripCommand = new RelayCommand(GoTrip);
         }
 
@@ -280,6 +282,7 @@ namespace PLGui
         public ICommand WindowLoaded_Command { get; }
         public ICommand LogOut_Command { get; }
         public ICommand ClosingCommand { get; }
+        public ICommand CloseCoammsnd { get; }
         public ICommand TripCommand { get; }
 
         BackgroundWorker AddUserTripWorker;
@@ -296,7 +299,7 @@ namespace PLGui
                 InStationName = FromStation.Name,
                 InTime = DateTime.Today + TimeOfTrip.StartTime,
                 OutStation = ToStation.StationNumber,
-                OutStationName = ToStation.Name,
+                OutStationName = ToStation.LineStations.First().Name,
                 OutTime = DateTime.Today + TimeOfTrip.FinishTime
             };
 
@@ -308,11 +311,11 @@ namespace PLGui
 
         private void LogOut(PassengerView window)
         {
+            window.Close();
+        }
+        private void Closing()
+        {
             new MainWindow().Show();
-            if (window.IsActive)
-            {
-                window.Close();
-            }
         }
         private void Close(Window window)
         {
@@ -349,7 +352,7 @@ namespace PLGui
                 FromStations.Filter = s => true;
                 FromStations.Refresh();
             }
-            else if((sender as ComboBox).Name == "ToComboBox")
+            else if((sender as ComboBox).Name == "ToComboBox" && ToStation != null)
             {
                 ToStations.Filter = s => true;
                 ToStations.Refresh();
@@ -379,9 +382,8 @@ namespace PLGui
                 CalculatesTimeWorker.DoWork +=
                     (object sender, DoWorkEventArgs args) =>
                     {
-                        List<BO.LineStation> lineStation = args.Argument as List<BO.LineStation>;
-                        List<int> lineNum = lineStation.Select(ls => (int)Lines.FirstOrDefault(l => l.ID == ls.LineId).LineNumber).ToList();
-                        args.Result = source.CalculateTimeTrip(lineStation, lineNum);
+                        List<BO.LineStation> lineStations = args.Argument as List<BO.LineStation>;
+                        args.Result = source.CalculateTimeTrip(lineStations);
                     };
             }
             if (!CalculatesTimeWorker.IsBusy)//if the worker is not busy run immediately
@@ -436,12 +438,13 @@ namespace PLGui
         /// show all the available stations that are next in the lines that passed in selected station("FromStation")
         /// </summary>
         /// <returns>List of BO.LineStation</returns>
-        private ObservableCollection<BO.LineStation> GetToStations(List<BO.LineStation> lineStations)
+        private ObservableCollection<PassengerStation> GetToStations(List<BO.LineStation> lineStations)
         {
-            return new ObservableCollection<BO.LineStation>(from ls in lineStations
-                                                            from s in stations
-                                                            where s.LineId == ls.LineId && s.LineStationIndex > ls.LineStationIndex
-                                                            select s);
+            return new ObservableCollection<PassengerStation>(from ls in lineStations
+                                                              from s in stations
+                                                              where s.LineId == ls.LineId && s.LineStationIndex > ls.LineStationIndex
+                                                              let ps = new PassengerStation(s)
+                                                              select ps);
         }
         #endregion
     }

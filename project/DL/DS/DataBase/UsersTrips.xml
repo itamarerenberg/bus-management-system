@@ -91,4 +91,17 @@
     <OutTime>17/02/2021 15:42:40</OutTime>
     <IsActive>True</IsActive>
   </LineTrip>
+  <LineTrip>
+    <TripId>9</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>86</LineId>
+    <LineNum>33</LineNum>
+    <InStation>265</InStation>
+    <InStationName>בית ספר א סכאכיני</InStationName>
+    <InTime>19/02/2021 10:47:24</InTime>
+    <OutStation>319</OutStation>
+    <OutStationName>קלרמון גנו/אהרון קציר</OutStationName>
+    <OutTime>19/02/2021 10:48:25</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
 </UsersTrips>

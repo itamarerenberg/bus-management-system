@@ -24,7 +24,7 @@ namespace BL
         #endregion
 
         IDL dl = DLFactory.GetDL();
-
+        Garage garage = Garage.Instance;
         #region Manager
         public bool GetManagar(string name, string password)
         {
@@ -201,7 +201,13 @@ namespace BL
         {
             AddBus(HelpMethods.RandomBus());
         }
-
+        /// <summary>
+        /// reset the buses status(stop from traveling) while closing the propgram
+        /// </summary>
+        public void ResetBuses()
+        {
+            garage.ResetBuses();
+        }
         #region bus trip
         public void AddBusTrip(BusTrip BusTrip)
         {
@@ -920,7 +926,6 @@ namespace BL
 
         public void Refuel(Bus bus)
         {
-            Garage garage = Garage.Instance;
             try
             {
                 garage.Refule(bus);
@@ -932,10 +937,9 @@ namespace BL
         }
         public void Treatment(Bus bus)
         {
-            Garage garage = Garage.Instance;
             try
             {
-                garage.Treatnent(bus);
+                garage.Treatment(bus);
             }
             catch (Exception ex)
             {
@@ -1049,7 +1053,7 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum)
+        public List<TimeTrip> CalculateTimeTrip(List<LineStation> lineStation)
         {
             throw new NotImplementedException();
         }

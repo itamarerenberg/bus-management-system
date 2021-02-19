@@ -43,6 +43,10 @@ namespace DLApi
         void DeleteLine(int id);
         IEnumerable<Line> GetAllLines();
         IEnumerable<Line> GetAllLinesBy(Predicate<Line> predicate);
+        /// <summary>
+        /// return line number according the line id
+        /// </summary>
+        int GetLineNum(int id);
 
         #endregion
 

@@ -65,7 +65,7 @@ namespace BLApi
         /// <returns>
         /// List of TimeTrips that contains "StartTime" and "Line number"
         /// </returns>
-        List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum);
+        List<TimeTrip> CalculateTimeTrip(List<LineStation> lineStation);
 
         #endregion
 
@@ -83,7 +83,10 @@ namespace BLApi
         void Refuel(Bus bus);
         void Treatment(Bus bus);
         void AddRandomBus();
-
+        /// <summary>
+        /// reset the buses status(stop from traveling) while closing the propgram
+        /// </summary>
+        void ResetBuses();
         #region bus trip
         void AddBusTrip(BusTrip BusTrip);
         BusTrip GetBusTrip(int id);

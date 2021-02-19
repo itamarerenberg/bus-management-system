@@ -93,13 +93,15 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum)
+        public List<TimeTrip> CalculateTimeTrip(List<LineStation> lineStations)
         {
             List<TimeTrip> TimeTrips = new List<TimeTrip>();
-            List<LineTrip> lineTrips = GetAllLineTripBy(lt => lt.LineId == lineStation.LineId).ToList();//gets the relevant line trips
+            List<LineTrip> lineTrips = GetAllLineTripBy(lt => lineStations.Any(ls => ls.LineId == lt.LineId)).ToList();//gets the relevant line trips
             
             foreach (BO.LineTrip LT in lineTrips)
             {
+                LineStation lineStation = lineStations.FirstOrDefault(ls => ls.LineId == LT.LineId); // get line station
+                int lineNum = dl.GetLineNum(LT.LineId);                                              //get line number
                 if (LT.Frequency == TimeSpan.Zero)//if the line trips is only once a day
                 {
                     TimeTrips.Add(new TimeTrip() { LineNum = lineNum, StartTime = LT.StartTime + lineStation.Time_from_start });
@@ -404,7 +406,7 @@ namespace BL
         }
 
         /// <summary>
-        /// stops the simulator clock and the travels executer and all the travels that in progres
+        /// stops the simulator clock and the travels executer and all the travels that in progress
         /// </summary>
         public void StopSimulator()
         {
@@ -550,53 +552,7 @@ namespace BL
         {
             throw new NotImplementedException();
         }
-
-                distance_from_start += prev_to_current.Distance;//add the distance from the previus station to distanse from start
-                time_from_start += prev_to_current.Time;//        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-                prev_lineStation.CurrentToNext = prev_to_current;//the fild PrevToCurrent of current is CurrentToNext of prev_lineStation
-                result.Add(prev_lineStation);
-                prev_lineStation = new LineStation()
-                {
-                    LineId = lst.LineId,
-                    StationNumber = lst.StationNumber,
-                    LineStationIndex = lst.LineStationIndex,
-                    Address = lst.Address,
-                    Name = lst.Name,
-                    PrevToCurrent = prev_to_current,
-                    Distance_from_start = distance_from_start,
-                    Time_from_start = time_from_start
-                };
-
-            }
-            result.Add(prev_lineStation);
-            return result;
-        }
-        #endregion
-
-        #region simulator
-        SimulationClock clock = SimulationClock.Instance;
-        TravelsExecuter travelsExecuter = TravelsExecuter.Instance;
-        /// <summary>
-        /// start the simulatorClock and the travel executer
-        /// </summary>
-        /// <param name="startTime">the time wich the simolator clock will start from</param>
-        /// <param name="Rate">the rate of the simulator clock relative to real time</param>
-        /// <param name="updateTime">will executet when the simulator time changes</param>
-        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver = null)
-        {
-            clock.StartClock(startTime, rate, updateTime);
-            travelsExecuter.StartExecute(updateBus);
-        }
-
-        /// <summary>
-        /// stops the simulator clock and the travels executer and all the travels that in progres
-        /// </summary>
-        public void StopSimulator()
-        {
-            clock.StopClock();//this stops the travels executer too
-        }
-
+      
         public void UpdateBusTrip(BusTrip BusTrip)
         {
             throw new NotImplementedException();
@@ -612,8 +568,22 @@ namespace BL
             throw new NotImplementedException();
         }
 
+        public BusTrip GetBusTrip(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-        public List<Ride> GetRides(LineTrip lineTrip)
+        public IEnumerable<BusTrip> GetAllBusTripsBy(Predicate<BusTrip> pred)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetBuses()
         {
             throw new NotImplementedException();
         }
