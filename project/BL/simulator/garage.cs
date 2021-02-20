@@ -76,7 +76,8 @@ namespace BL.simulator
                             Activity = Activities.Refuling,
                             Progress = (float)(100 * stopwatch.Elapsed.TotalMilliseconds / Refule_time.TotalMilliseconds)//the presentege of the refule that pass allready
                         };
-                        Observer(progress);
+                        if(!clock.Cancel)
+                            Observer(progress);
 
                         int sleep = (int)Math.Min((int)clock.Stime_to_Rtime(1000), (Refule_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
                         sleep = Math.Max(sleep, 0);//if sleep turn out to be less then zero so set sleep to 0
@@ -95,9 +96,11 @@ namespace BL.simulator
                     {
                         BusLicensNum = bus.LicenseNumber,
                         Activity = Activities.Refuling,
-                        Progress = 100//update the observer that the refuling proses has been finished
+                        Progress = 100,//update the observer that the refuling proses has been finished
+                        FinishedFlag = true
                     };
-                    Observer(progress);
+                    if (!clock.Cancel)
+                        Observer(progress);
                     bus.Fuel = Max_fule_in_bus;
                     //set the bus's new status
                     bus.Stat = bus.KmAfterTreat >= Bus.max_km_without_tratment
@@ -137,7 +140,8 @@ namespace BL.simulator
                             Activity = Activities.InTrartment,
                             Progress = (float)(100 * stopwatch.Elapsed.TotalMilliseconds / Treatment_time.TotalMilliseconds)//the presentege of the treatment that pass allready
                         };
-                        Observer(progress);
+                        if (!clock.Cancel)
+                            Observer(progress);
 
                         int sleep = (int)Math.Min((int)clock.Stime_to_Rtime(1000), (Refule_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
                         sleep = Math.Max(sleep, 0);//if sleep turn out to be less then zero so set sleep to 0
@@ -156,9 +160,11 @@ namespace BL.simulator
                     {
                         BusLicensNum = bus.LicenseNumber,
                         Activity = Activities.Refuling,
-                        Progress = 100//update the observer that the refuling proses has been finished
+                        Progress = 100,//update the observer that the refuling proses has been finished
+                        FinishedFlag = true
                     };
-                    Observer(progress);
+                    if (!clock.Cancel)
+                        Observer(progress);
                     bus.KmAfterTreat = 0;
                     bus.LastTreatDate = DateTime.Now - DateTime.Now.TimeOfDay + clock.Time;//the current real world date with the time in the dey = clock.Time
                     bus.Stat = bus.Fuel >= Bus.min_fule_befor_warning ? BusStatus.Ready : BusStatus.Need_refueling;

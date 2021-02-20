@@ -679,7 +679,6 @@ namespace PLGui
         private void Closing()
         {
             new MainWindow().Show();
-            source.ResetBuses();
         }
         private void Exit(Window window)
         {
@@ -1497,7 +1496,11 @@ namespace PLGui
         private void Stop_simulator()
         {
             simulatorWorker.CancelAsync();
-            stationDisplay.LineTimings.Clear();
+            if(stationDisplay != null)
+            {
+                stationDisplay.LineTimings.Clear();
+            }
+            source.ResetBuses();
         }
 
         private void Truck_station_panel(Station st)

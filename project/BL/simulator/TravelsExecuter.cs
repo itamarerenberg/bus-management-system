@@ -225,13 +225,14 @@ namespace BL.simulator
                     }
                     stopwatch.Stop();
                     //update the buss observer that the ride ended
+                    if (!clock.Cancel)
                     {
-                        //this is inside a block so 'progress' won't be recegnised outside of this block(just for convenience)
                         BusProgress progress = new BusProgress()
                         {
                             BusLicensNum = bus.LicenseNumber,
                             Activity = Activities.Traveling,
-                            Progress = 100
+                            Progress = 100,
+                            FinishedFlag = true
                         };
                         BusObserver(progress);
                     }

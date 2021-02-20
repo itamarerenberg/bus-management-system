@@ -588,6 +588,11 @@ namespace BL
             throw new NotImplementedException();
         }
 
+        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum)
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
 
