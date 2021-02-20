@@ -49,6 +49,7 @@ namespace BL.simulator
 
         Action<LineTiming> StationsObserver;
         Action<BusProgress> BusObserver;
+        Action<Exception> ExptionsObserver;
         volatile List<int> stationsInTrack = new List<int>();//list of all the station that in tracking
 
         IBL source;
@@ -58,7 +59,7 @@ namespace BL.simulator
         SimulationClock clock;
 
         Thread travelsExecuterThread;
-        public void StartExecute(Action<LineTiming> _stationsObserver = null, Action<BusProgress> _busObserver = null)
+        public void StartExecute(Action<LineTiming> _stationsObserver = null, Action<BusProgress> _busObserver = null, Action<Exception> _exptionsObserver = null)
         {
             if(source == null)
             {
@@ -68,6 +69,8 @@ namespace BL.simulator
             clock = SimulationClock.Instance;
             StationsObserver = _stationsObserver != null ? _stationsObserver : (LineTiming) => { };//if _observer is null then set observer to be an Action<LineTiming> that do nothing
             BusObserver = _busObserver != null ? _busObserver : (BusProgress) => { };
+            ExptionsObserver = _exptionsObserver != null ? _exptionsObserver : (ex) => { };
+
             //load the lineTrips and lines
             var lineTrips = source.GetAllLineTrips();
 
@@ -94,7 +97,30 @@ namespace BL.simulator
 
                 string lastStationName = source.GetStation(line.LastStation.StationNumber).Name;//get the name of the last station in this line
                 LineStation[] stations = line.Stations.ToArray();
-                Bus bus = Get_bus_for_ride(line.Length);
+                Bus bus;
+                try
+                {
+                    bus = Get_bus_for_ride(line.Length);
+                }
+                catch (NoBusForRide msg)
+                {
+                    ExptionsObserver(msg);
+                    return;
+                }
+                //save the initial state of the bus so if the simulator will stop while the ride runing return the bus to a state as if the ride was never take place
+                Bus backUp = new Bus()
+                {
+                    LicenseNumber = bus.LicenseNumber,
+                    LicenesDate = bus.LicenesDate,
+                    Kilometraz = bus.Kilometraz,
+                    Fuel = bus.Fuel,
+                    Stat = bus.Stat,
+                    KmAfterTreat = bus.KmAfterTreat,
+                    LastTreatDate = bus.LastTreatDate,
+                    TimeUntilReady = bus.TimeUntilReady,
+                    BusTrips = bus.BusTrips,
+                };
+
                 //update the data source that the bus is traveling now
                 bus.Stat = BusStatus.Traveling;
                 source.UpdateBus(bus);
@@ -110,7 +136,8 @@ namespace BL.simulator
                         {
                             BusLicensNum = bus.LicenseNumber,
                             Activity = Activities.Prepering_to_ride,
-                            Progress = (float)(100 * (ride.StartTime - clock.Time).TotalMilliseconds / timeToExcuteTravel.TotalMilliseconds)//the presenteg of the prepering to start the travel pirot
+                            Progress = 100 - (float)(100 * (ride.StartTime - clock.Time).TotalMilliseconds / timeToExcuteTravel.TotalMilliseconds),//the presenteg of the prepering to start the travel pirot
+                            Details = line.LineNumber
                         };
                         BusObserver(progress); 
                     }
@@ -193,7 +220,8 @@ namespace BL.simulator
                             {
                                 BusLicensNum = bus.LicenseNumber,
                                 Activity = Activities.Traveling,
-                                Progress = (float)(100 * (clock.Stime_to_Rtime(stopwatch.Elapsed) + currentStation.Time_from_start).TotalMilliseconds / line.Time.TotalMilliseconds)//the presenteg that the bus pass in the ride
+                                Progress = (float)(100 * (clock.Stime_to_Rtime(stopwatch.Elapsed) + currentStation.Time_from_start).TotalMilliseconds / line.Time.TotalMilliseconds),//the presenteg that the bus pass in the ride
+                                Details = line.LineNumber
                             };
                             BusObserver(progress); 
                         }
@@ -224,46 +252,54 @@ namespace BL.simulator
                         }
                     }
                     stopwatch.Stop();
-                    //update the buss observer that the ride ended
-                    {
-                        //this is inside a block so 'progress' won't be recegnised outside of this block(just for convenience)
-                        BusProgress progress = new BusProgress()
-                        {
-                            BusLicensNum = bus.LicenseNumber,
-                            Activity = Activities.Traveling,
-                            Progress = 100
-                        };
-                        BusObserver(progress);
-                    }
                     #endregion
                 }
                 #endregion
 
                 #region finish ride
-                bus.Fuel -= (float)line.Length;
-                bus.KmAfterTreat += (float)line.Length;
-                bus.Kilometraz += (float)line.Length;
-                //set the bus status
-                if (bus.KmAfterTreat >= Bus.max_km_without_tratment)
-                    bus.Stat = BusStatus.Need_treatment;
 
-                else if (bus.Fuel < Bus.min_fule_befor_warning)
-                    bus.Stat = BusStatus.Need_refueling;
-
-                else
-                    bus.Stat = BusStatus.Ready;
-                source.UpdateBus(bus);
-
-                BusTrip busTrip = new BusTrip()
+                if (!clock.Cancel)//if the ride finished as eccepted
                 {
-                    Date = DateTime.Today,
-                    Bus_Id = bus.LicenseNumber,
-                    LineId = line.ID,
-                    LineNum = line.LineNumber,
-                    StartTime = ride.StartTime,
-                    FinishTime = clock.Time
-                };
-                source.AddBusTrip(busTrip);
+                    bus.Fuel -= (float)line.Length;
+                    bus.KmAfterTreat += (float)line.Length;
+                    bus.Kilometraz += (float)line.Length;
+                    //set the bus status
+                    if (bus.KmAfterTreat >= Bus.max_km_without_tratment)
+                        bus.Stat = BusStatus.Need_treatment;
+
+                    else if (bus.Fuel < Bus.min_fule_befor_warning)
+                        bus.Stat = BusStatus.Need_refueling;
+
+                    else
+                        bus.Stat = BusStatus.Ready;
+                    source.UpdateBus(bus);
+
+                    BusTrip busTrip = new BusTrip()
+                    {
+                        Date = DateTime.Today,
+                        Bus_Id = bus.LicenseNumber,
+                        LineId = line.ID,
+                        LineNum = line.LineNumber,
+                        StartTime = ride.StartTime,
+                        FinishTime = clock.Time
+                    };
+                    source.AddBusTrip(busTrip);
+                    //update the buss observer that the ride ended
+                    BusProgress progress = new BusProgress()
+                    {
+                        BusLicensNum = bus.LicenseNumber,
+                        Activity = Activities.Traveling,
+                        Progress = 100,
+                        Details = line.LineNumber,
+                        FinishedFlag = true
+                    };
+                    if (!clock.Cancel)
+                        BusObserver(progress);
+                }
+                else//if the simulator stoped will the ride was runing
+                {
+                    source.UpdateBus(backUp);
+                }
                 #endregion
             });
             newTravel.Start();

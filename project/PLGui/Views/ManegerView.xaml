@@ -320,9 +320,10 @@
                             <GridView>
                                 <GridViewColumn x:Name="LicensNumber" Header="License Number" Width="auto" DisplayMemberBinding="{Binding LicenseNumber, StringFormat={}{0:###\-##\-###}}"/>
                                 <GridViewColumn x:Name="Stat" Header="Status" Width="auto" DisplayMemberBinding="{Binding Stat}"/>
-                                <GridViewColumn x:Name="Fuel" Header="Fuel" Width="auto" DisplayMemberBinding="{Binding Fuel}"/>
-                                <GridViewColumn x:Name="Kilometraz" Header="Kilometraz" Width="auto" DisplayMemberBinding="{Binding Kilometraz}"/>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TimeUntilReady, StringFormat= ready in:{0}}"/>
+                                <GridViewColumn x:Name="Fuel" Header="Fuel" Width="auto" DisplayMemberBinding="{Binding Fuel, StringFormat=F2}"/>
+                                <GridViewColumn x:Name="Kilometraz" Header="Kilometraz" Width="auto" DisplayMemberBinding="{Binding Kilometraz, StringFormat=F2}"/>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Progress, StringFormat= in prosess :{0:F2}%}">
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -698,7 +699,7 @@
                     </Grid.RowDefinitions>
                     <Border Background="#FFB3EF7C" Padding="15">
                         <Grid Visibility="{Binding Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay}" >
-                            <TextBlock Text="{Binding TimeUntilReady, StringFormat={}Ready in:{0}}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                            <TextBlock Text="{Binding Progress, StringFormat={}in prosess :{0:F2}%}" HorizontalAlignment="Left" VerticalAlignment="Top" />
                             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
                                 <TextBlock Text="{Binding LicenseNumber}" FontSize="20" FontWeight="ExtraBold"/>
                                 <TextBlock Text="{Binding Stat}"/>

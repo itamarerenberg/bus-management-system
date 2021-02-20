@@ -399,7 +399,7 @@ namespace BL
         /// <param name="startTime">the time wich the simolator clock will start from</param>
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
-        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus)
+        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver, Action<Exception> ExptionsObserver)
         {
             clock.StartClock(startTime, rate, updateTime);
             travelsExecuter.StartExecute(updateBus);
@@ -584,6 +584,11 @@ namespace BL
         }
 
         public void ResetBuses()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum)
         {
             throw new NotImplementedException();
         }

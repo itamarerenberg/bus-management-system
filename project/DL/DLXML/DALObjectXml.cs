@@ -195,7 +195,7 @@ namespace DL
                 throw e;
             }
             DataSourceXML.BusTrips.Add(busTrip.to_new_xelement("BusTrip"));//add the busTrip
-            DataSourceXML.Save("BusTrip");
+            DataSourceXML.Save("BusTrips");
         }
 
         public BusTrip GetBusTrip(int id)

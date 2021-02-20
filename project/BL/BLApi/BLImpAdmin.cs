@@ -888,11 +888,11 @@ namespace BL
         /// <param name="startTime">the time wich the simolator clock will start from</param>
         /// <param name="Rate">the rate of the simulator clock relative to real time</param>
         /// <param name="updateTime">will executet when the simulator time changes</param>
-        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver)
+        public void StartSimulator(TimeSpan startTime, int rate, Action<TimeSpan> updateTime, Action<LineTiming> updateBus, Action<BusProgress> busObserver, Action<Exception> ExptionsObserver)
         {
             Garage.Instance.Observer = busObserver;
             clock.StartClock(startTime, rate, updateTime);
-            travelsExecuter.StartExecute(updateBus, busObserver);
+            travelsExecuter.StartExecute(updateBus, busObserver, ExptionsObserver);
         }
 
         /// <summary>
@@ -1057,7 +1057,12 @@ namespace BL
         {
             throw new NotImplementedException();
         }
-       
+
+        public List<TimeTrip> CalculateTimeTrip(LineStation lineStation, int lineNum)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #endregion

@@ -18,5 +18,15 @@ namespace BO
         public string BusLicensNum { get; set; }
         public float Progress { get; set; }
         public Activities Activity { get; set; }
+        /// <summary>
+        /// <br>when the activity is finished this fild will be true</br>
+        /// <br>the defult value is false</br>
+        /// </summary>
+        public bool FinishedFlag { get; set; } = false;
+
+        /// <summary>
+        /// if need to pass more details about the prosess
+        /// </summary>
+        public object Details { get; set; }
     }
 }
