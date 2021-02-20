@@ -186,15 +186,16 @@ namespace DL
         #region BusTrip
         public void AddBusTrip(BusTrip busTrip)
         {
-            if (DataSourceXML.BusTrips.Elements().FirstOrDefault(bot => int.Parse(bot.Element("ID").Value) == busTrip.ID) != null)
+            try
             {
-                throw new DuplicateExeption("the bus is allready in driving");
+                busTrip.ID = SerialNumbers.GetBusTripId;
             }
-            else
+            catch (Exception e)//!
             {
-                DataSourceXML.BusTrips.Add(busTrip.to_new_xelement("BusTrip"));//add the busBusesOnTrip
-                DataSourceXML.Save("BusTrip");
+                throw e;
             }
+            DataSourceXML.BusTrips.Add(busTrip.to_new_xelement("BusTrip"));//add the busTrip
+            DataSourceXML.Save("BusTrip");
         }
 
         public BusTrip GetBusTrip(int id)
@@ -204,21 +205,21 @@ namespace DL
                                   select xebot).FirstOrDefault();
             if (busTrip == null)//if no such busTrip
             {
-                throw new NotExistExeption("the bus is not in driving");
+                throw new NotExistExeption("the bus trip dosen't exist");
             }
             return XMLTools.xelement_to_new_object<BusTrip>(busTrip);
         }
 
-        public void UpdateBusTrip(BusTrip newBusOnTrip)
+        public void UpdateBusTrip(BusTrip newBusTrip)
         {
             XElement oldBusTrip = (from xebot in DataSourceXML.BusTrips.Elements()
-                                     where int.Parse(xebot.Element("ID").Value) == newBusOnTrip.ID
+                                     where int.Parse(xebot.Element("ID").Value) == newBusTrip.ID
                                      select xebot).FirstOrDefault();
             if (oldBusTrip == null)//if ther is no such BusOnTrip
             {
                 throw new NotExistExeption("the bus is not in driving");
             }
-            XMLTools.object_to_xelement(newBusOnTrip, oldBusTrip);
+            XMLTools.object_to_xelement(newBusTrip, oldBusTrip);
             DataSourceXML.Save("BusTrip");
         }
 
@@ -229,7 +230,7 @@ namespace DL
                                   && bool.Parse(xebot.Element("IsActive").Value)
                                   select xebot).FirstOrDefault();
 
-            if (busTrip != null)//if the BusOnTrip found
+            if (busTrip != null)//if the BusTrip found
             {
                 busTrip.Element("IsActive").Value = false.ToString();
                 DataSourceXML.Save("BusTrip");
