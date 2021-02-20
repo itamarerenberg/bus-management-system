@@ -252,7 +252,18 @@ namespace BL.simulator
 
                 else
                     bus.Stat = BusStatus.Ready;
-                source.UpdateBus(bus); 
+                source.UpdateBus(bus);
+
+                BusTrip busTrip = new BusTrip()
+                {
+                    Date = DateTime.Today,
+                    Bus_Id = bus.LicenseNumber,
+                    LineId = line.ID,
+                    LineNum = line.LineNumber,
+                    StartTime = ride.StartTime,
+                    FinishTime = clock.Time
+                };
+                source.AddBusTrip(busTrip);
                 #endregion
             });
             newTravel.Start();

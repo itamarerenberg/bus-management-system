@@ -56,6 +56,7 @@
             <RowDefinition Height="70"/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
         <!--#region Menu -->
@@ -202,7 +203,7 @@
         <!--#endregion-->
 
         <!--#region Tab control -->
-        <materialDesign:Card Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="25,0,25,25" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+        <materialDesign:Card Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="25,0,25,25" materialDesign:ShadowAssist.ShadowDepth="Depth3">
             <TabControl x:Name="mainTab" SelectedItem="{Binding SelectedTabItem}" 
                     SelectedIndex="0" Width="auto" 
                     Style="{StaticResource MaterialDesignNavigatilRailTabControl}" materialDesign:ColorZoneAssist.Mode="PrimaryMid" TabStripPlacement="Left" 
@@ -336,7 +337,7 @@
 
         <!--#region Line Details -->
         
-        <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Margin="50,0,80,30" UniformCornerRadius="6"
+        <materialDesign:Card  x:Name="LineDetails" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1" Margin="50,0,80,30" UniformCornerRadius="6"
                     Visibility="{Binding SelectedTabItem, Converter={StaticResource Type_converter_to_visibility}, 
                     ConverterParameter={x:Reference Lines_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3">
@@ -576,6 +577,42 @@
                 </Grid>
             </materialDesign:Card>
         </materialDesign:Card>
+
+        <!--<materialDesign:Card Margin="50,0,80,15" UniformCornerRadius="6" Grid.Column="1" Grid.Row="4"
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
+                ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:ShadowAssist.ShadowDepth="Depth3">
+            <Canvas>
+                <materialDesign:PackIcon Kind="BusSide" Foreground="#FFB3EF7C"  Height="35" Width="35">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <TranslateTransform x:Name="test" X="0"/>
+                    </materialDesign:PackIcon.RenderTransform>
+                    <materialDesign:PackIcon.Style>
+                        <Style TargetType="materialDesign:PackIcon">
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ArrivalTime.Hours, Mode=OneWay}" Value="0"/>
+                                        <Condition Binding="{Binding ArrivalTime.Minutes, Mode=OneWay}" Value="0"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="Red"/>
+                                </MultiDataTrigger>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="transla"
+                                                                        From="0.3" To="1.0" Duration="0:0:1.0"  RepeatBehavior="Forever" AutoReverse="True"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:PackIcon.Style>
+                </materialDesign:PackIcon>
+            </Canvas>
+        </materialDesign:Card>-->
         <!--#endregion-->
 
 

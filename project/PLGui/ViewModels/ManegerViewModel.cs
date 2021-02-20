@@ -222,7 +222,7 @@ namespace PLGui
             set => SetProperty(ref linesOfStation, value);
         }
 
-        ObservableCollection<LineTiming> lineTimingsList = new ObservableCollection<LineTiming>();
+        private ObservableCollection<LineTiming> lineTimingsList = new ObservableCollection<LineTiming>();
         public ObservableCollection<LineTiming> LineTimingsList 
         {
             get => lineTimingsList;
@@ -697,12 +697,7 @@ namespace PLGui
             manegerView.LineStations_view.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LinePasses_view.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LinesTripList.MouseDoubleClick += List_MouseDoubleClick;
-            manegerView.StationDetails.MouseDoubleClick += List_MouseDoubleClick;
-            manegerView.LineDetails.MouseDoubleClick += List_MouseDoubleClick;
-            manegerView.LineTripDetails.MouseDoubleClick += List_MouseDoubleClick;
-            manegerView.BusDetails.MouseDoubleClick += List_MouseDoubleClick;
-
-
+           
             manegerView.StationList.MouseRightButtonUp += List_MouseRightButtonUp;
             manegerView.LinesList.MouseRightButtonUp += List_MouseRightButtonUp;
             manegerView.LinesTripList.MouseRightButtonUp += List_MouseRightButtonUp;
@@ -710,6 +705,8 @@ namespace PLGui
 
             manegerView.ClockDialog.DialogOpened += ClockDialog_Opened;
             manegerView.ClockDialog.DialogClosing += ClockDialog_Closing;
+
+            //LineTimingsList.CollectionChanged
 
         }
         private void Play()

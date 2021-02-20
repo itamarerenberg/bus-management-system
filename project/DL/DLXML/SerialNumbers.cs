@@ -50,9 +50,21 @@ namespace DLXML
             }
         }
 
+        public static int GetBusTripId
+        {
+            get
+            {
+                LoadData();
+                int id = int.Parse(Root.Element("LineBusId").Value);
+                Root.Element("LineBusId").Value = (id + 1).ToString();
+                Root.Save(SerialIDPath);
+                return id;
+            }
+        }
+
         static SerialNumbers()
         {
-            if (!File.Exists(SerialIDPath))//case ther isn't a file of the serials IDs yet 
+            if (!File.Exists(SerialIDPath))//case there isn't a file of the serials IDs yet 
                     CreateFile();
                 else
                     LoadData();
