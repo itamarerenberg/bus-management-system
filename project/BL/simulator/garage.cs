@@ -63,9 +63,24 @@ namespace BL.simulator
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
                 source = BLFactory.GetBL("admin");
+
+                //save the initial state of the bus so if the simulator will stop while refuling return the bus to a state as if the ride was never take place
+                Bus backUp = new Bus()
+                {
+                    LicenseNumber = bus.LicenseNumber,
+                    LicenesDate = bus.LicenesDate,
+                    Kilometraz = bus.Kilometraz,
+                    Fuel = bus.Fuel,
+                    Stat = bus.Stat,
+                    KmAfterTreat = bus.KmAfterTreat,
+                    LastTreatDate = bus.LastTreatDate,
+                    TimeUntilReady = bus.TimeUntilReady,
+                    BusTrips = bus.BusTrips,
+                };
+
                 bus.Stat = BusStatus.In_refueling;
                 source.UpdateBus(bus);//update the data source that the bus is in refuling now
-                while (!clock.Cancel && stopwatch.Elapsed < Refule_time)
+                while (!clock.Cancel && stopwatch.Elapsed < clock.Rtime_to_Stime(Refule_time))
                 {
                     try
                     {
@@ -74,14 +89,14 @@ namespace BL.simulator
                         {
                             BusLicensNum = bus.LicenseNumber,
                             Activity = Activities.Refuling,
-                            Progress = (float)(100 * stopwatch.Elapsed.TotalMilliseconds / Refule_time.TotalMilliseconds)//the presentege of the refule that pass allready
+                            Progress = (float)(100 * stopwatch.Elapsed.TotalMilliseconds / clock.Rtime_to_Stime(Refule_time).TotalMilliseconds)//the presentege of the refule that pass allready
                         };
                         if(!clock.Cancel)
                             Observer(progress);
 
-                        int sleep = (int)Math.Min((int)clock.Stime_to_Rtime(1000), (Refule_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
+                        int sleep = (int)Math.Min((int)clock.Rtime_to_Stime(1000), (Refule_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
                         sleep = Math.Max(sleep, 0);//if sleep turn out to be less then zero so set sleep to 0
-                        Thread.Sleep((int)clock.Stime_to_Rtime(1000));
+                        Thread.Sleep(sleep);
                     }
                     catch (ThreadInterruptedException)
                     {
@@ -91,6 +106,14 @@ namespace BL.simulator
                 //update the bus Fule state
                 if (!clock.Cancel)
                 {
+                    bus.Fuel = Max_fule_in_bus;
+                    //set the bus's new status
+                    bus.Stat = bus.KmAfterTreat >= Bus.max_km_without_tratment
+                    || bus.LastTreatDate < DateTime.Now - Bus.max_time_without_tratment
+                    ? BusStatus.Need_treatment//if the bus need treatment
+                    : BusStatus.Ready;//else
+
+                    source.UpdateBus(bus);
                     //update observer
                     BusProgress progress = new BusProgress()
                     {
@@ -101,14 +124,10 @@ namespace BL.simulator
                     };
                     if (!clock.Cancel)
                         Observer(progress);
-                    bus.Fuel = Max_fule_in_bus;
-                    //set the bus's new status
-                    bus.Stat = bus.KmAfterTreat >= Bus.max_km_without_tratment
-                    || bus.LastTreatDate < DateTime.Now - Bus.max_time_without_tratment 
-                    ? BusStatus.Need_treatment//if the bus need treatment
-                    : BusStatus.Ready;//else
-
-                    source.UpdateBus(bus);
+                }
+                else
+                {
+                    source.UpdateBus(backUp);
                 }
             });
             refuler.Name = "refuler " + bus.LicenseNumber;
@@ -127,9 +146,24 @@ namespace BL.simulator
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
                 source = BLFactory.GetBL("admin");
+
+                //save the initial state of the bus so if the simulator will stop while treatmenting return the bus to a state as if the ride was never take place
+                Bus backUp = new Bus()
+                {
+                    LicenseNumber = bus.LicenseNumber,
+                    LicenesDate = bus.LicenesDate,
+                    Kilometraz = bus.Kilometraz,
+                    Fuel = bus.Fuel,
+                    Stat = bus.Stat,
+                    KmAfterTreat = bus.KmAfterTreat,
+                    LastTreatDate = bus.LastTreatDate,
+                    TimeUntilReady = bus.TimeUntilReady,
+                    BusTrips = bus.BusTrips,
+                };
+
                 bus.Stat = BusStatus.In_treatment;
                 source.UpdateBus(bus);//update the data source that the bus is in treatment now
-                while (!clock.Cancel && stopwatch.Elapsed < Refule_time)
+                while (!clock.Cancel && stopwatch.Elapsed < clock.Rtime_to_Stime(Treatment_time))
                 {
                     try
                     {
@@ -143,9 +177,9 @@ namespace BL.simulator
                         if (!clock.Cancel)
                             Observer(progress);
 
-                        int sleep = (int)Math.Min((int)clock.Stime_to_Rtime(1000), (Refule_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
+                        int sleep = (int)Math.Min((int)clock.Rtime_to_Stime(1000), (Refule_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
                         sleep = Math.Max(sleep, 0);//if sleep turn out to be less then zero so set sleep to 0
-                        Thread.Sleep((int)clock.Stime_to_Rtime(1000));
+                        Thread.Sleep(sleep);
                     }
                     catch (ThreadInterruptedException)
                     {
@@ -155,6 +189,10 @@ namespace BL.simulator
                 //update the bus Fule state
                 if (!clock.Cancel)
                 {
+                    bus.KmAfterTreat = 0;
+                    bus.LastTreatDate = DateTime.Now - DateTime.Now.TimeOfDay + clock.Time;//the current real world date with the time in the dey = clock.Time
+                    bus.Stat = bus.Fuel >= Bus.min_fule_befor_warning ? BusStatus.Ready : BusStatus.Need_refueling;
+                    source.UpdateBus(bus);
                     //update observer
                     BusProgress progress = new BusProgress()
                     {
@@ -165,10 +203,10 @@ namespace BL.simulator
                     };
                     if (!clock.Cancel)
                         Observer(progress);
-                    bus.KmAfterTreat = 0;
-                    bus.LastTreatDate = DateTime.Now - DateTime.Now.TimeOfDay + clock.Time;//the current real world date with the time in the dey = clock.Time
-                    bus.Stat = bus.Fuel >= Bus.min_fule_befor_warning ? BusStatus.Ready : BusStatus.Need_refueling;
-                    source.UpdateBus(bus);
+                }
+                else//if the simulator stoped will treatmenting
+                {
+                    source.UpdateBus(backUp);
                 }
             });
             treatment.Name = "treatment " + bus.LicenseNumber;
@@ -185,8 +223,38 @@ namespace BL.simulator
                 if (bus.Stat == BusStatus.Traveling)
                 {
                     bus.Stat = BusStatus.Ready;
-                    source.UpdateBus(bus);
                 }
+                else if (bus.Stat == BusStatus.In_treatment)
+                {
+                    if (bus.KmAfterTreat >= Bus.max_KmAfterTreat_befor_warning || bus.LastTreatDate <= DateTime.Now - Bus.max_time_without_tratment)//if the bus need treatment
+                    {
+                        bus.Stat = BusStatus.Need_treatment;
+                    }
+                    else if (bus.Fuel < Bus.min_fule_befor_warning)//if the bus need refueling
+                    {
+                        bus.Stat = BusStatus.Need_refueling;
+                    }
+                    else
+                    {
+                        bus.Stat = BusStatus.Ready;
+                    }
+                }
+                else if (bus.Stat == BusStatus.In_refueling)
+                {
+                    if (bus.KmAfterTreat >= Bus.max_KmAfterTreat_befor_warning || bus.LastTreatDate <= DateTime.Now - Bus.max_time_without_tratment)//if the bus need treatment
+                    {
+                        bus.Stat = BusStatus.Need_treatment;
+                    }
+                    else if (bus.Fuel < Bus.min_fule_befor_warning)//if the bus need refueling
+                    {
+                        bus.Stat = BusStatus.Need_refueling;
+                    }
+                    else
+                    {
+                        bus.Stat = BusStatus.Ready;
+                    }
+                }
+                source.UpdateBus(bus);
             }
         }
     }

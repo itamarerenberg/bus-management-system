@@ -45,6 +45,7 @@ namespace PLGui.Models.PO
                 boBus.LicenseNumber = licenseNumber;
             }
         }
+
         private DateTime licenesDate;
         public DateTime LicenesDate 
         {
@@ -97,6 +98,22 @@ namespace PLGui.Models.PO
             }
         }
         public List<BO.BusTrip> BusTrips{ get => boBus.BusTrips; }
+
+        private float progress;
+
+        public float Progress
+        {
+            get { return progress; }
+            set { SetProperty(ref progress, value); }
+        }
+
+        private int lineNumber;
+
+        public int LineNumber
+        {
+            get { return lineNumber; }
+            set { lineNumber = value; }
+        }
 
     }
 }

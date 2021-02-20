@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace DLXML
 {
+    
     /// <summary>
     /// this class provids a Serials IDs for DL for Line and UserTrip
     /// </summary>
     public class SerialNumbers
     {
+        const int tryAginIn = 10;
+        const int tryNtimes = 10;
+
         static XElement Root;
         static string SerialIDPath = @"SerialNumbers.xml";
         public static int GetLineId { 
@@ -52,6 +57,7 @@ namespace DLXML
 
         public static int GetBusTripId
         {
+            
             get
             {
                 LoadData();
@@ -82,14 +88,51 @@ namespace DLXML
 
         private static void LoadData()
         {
+            /*
+             * string index = "Buses";
+                try
+                {
+                    for (int i = 0; i < tryNtimes; i++)
+                    {
+                        try
+                        {
+                            if (files[index].Root != null)
+                                files[index].Root.Save(files[index].Path);
+                            files[index].Root = XElement.Load(files[index].Path);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(tryAginIn);
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    throw new FileLoadException(files[index].Path);
+                }
+                return files[index].Root;
+             */
             try
             {
-                Root = XElement.Load(SerialIDPath);
+                for (int i = 0; i < tryNtimes; i++)
+                {
+                    try
+                    {
+                        if (Root != null)
+                            Root.Save(SerialIDPath);
+                        Root = XElement.Load(SerialIDPath);
+                    }
+                    catch (IOException)
+                    {
+                        Thread.Sleep(tryAginIn);
+                    }
+                }
             }
             catch
             {
                 throw new Exception("File upload problem");
             }
+
         }
     }
 }

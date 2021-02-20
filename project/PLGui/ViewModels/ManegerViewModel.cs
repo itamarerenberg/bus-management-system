@@ -245,6 +245,7 @@ namespace PLGui
         {
             
             source = BLFactory.GetBL("admin");
+            source.ResetBuses();
             loadData();
 
             //commands initialize
@@ -679,6 +680,7 @@ namespace PLGui
         private void Closing()
         {
             new MainWindow().Show();
+            source.StopSimulator();
         }
         private void Exit(Window window)
         {
@@ -721,10 +723,10 @@ namespace PLGui
                     worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
                     {
                     //(selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation
-                    if (e.UserState is TimeSpan updateTime)
-                        {
-                            Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
-                    }
+                        if (e.UserState is TimeSpan updateTime)
+                            {
+                                Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
+                        }
                         else if (e.UserState is BO.LineTiming updateLineTiming)
                         {
                             Station updateingStation = stations.First(st => st.Code == updateLineTiming.StationCode);
@@ -742,6 +744,35 @@ namespace PLGui
                             else
                             {
                                 temp.BoLineTiming = updateLineTiming;
+                            }
+                        }
+                        else if(e.UserState is BO.BusProgress progress)
+                        {
+                            if(!progress.FinishedFlag)
+                            {
+                                Bus bus = buses.First(bus0 => bus0.BObus.LicenseNumber == progress.BusLicensNum);
+                                switch (progress.Activity)
+                                {
+                                    case BO.Activities.Refuling:
+                                        bus.Stat = BO.BusStatus.In_refueling;
+                                        break;
+                                    case BO.Activities.InTrartment:
+                                        bus.Stat = BO.BusStatus.In_treatment;
+                                        break;
+                                    case BO.Activities.Traveling:
+                                        bus.Stat = BO.BusStatus.Traveling;
+                                        break;
+                                    case BO.Activities.Prepering_to_ride:
+                                        bus.Stat = BO.BusStatus.Traveling;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                bus.Progress = progress.Progress;
+                            }
+                            else
+                            {
+                                loadBuses(); 
                             }
                         }
                     };
@@ -818,9 +849,9 @@ namespace PLGui
         BackgroundWorker refuleWorker;
         private void RefuleBus()
         {
-            if (Mview.Bus_view.IsSelected)//bus
+            if (Mview.Bus_view.IsSelected)
             {
-                if (Mview.BusesList.SelectedItem is Bus bus)
+                if (Mview.BusesList.SelectedItem is Bus bus && !IsSimulatorOff)
                 {
                     refuleWorker = new BackgroundWorker();
                     refuleWorker.DoWork += (object sender, DoWorkEventArgs e) =>
@@ -839,6 +870,10 @@ namespace PLGui
                         loadBuses();
                     };
                     refuleWorker.RunWorkerAsync();
+                }
+                else if (IsSimulatorOff)
+                {
+                    MessageBox.Show("Please start the simulator", "ERROR");
                 }
                 else
                 {
@@ -1465,7 +1500,12 @@ namespace PLGui
                                      (progress) =>//update bus's progress
                                      {
                                          worker.ReportProgress(0, progress);
+                                     },
+                                     (ex) =>
+                                     {
+                                         worker.ReportProgress(0, ex);
                                      });
+                
                 while(!worker.CancellationPending)
                 {
                     try
@@ -1497,7 +1537,6 @@ namespace PLGui
             {
                 stationDisplay.LineTimings.Clear();
             }
-            source.ResetBuses();
         }
 
         private void Truck_station_panel(Station st)

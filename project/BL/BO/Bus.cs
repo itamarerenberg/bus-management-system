@@ -11,7 +11,7 @@ namespace BO
         public readonly static int max_km_without_tratment = 20000;
         public readonly static TimeSpan max_time_without_tratment = new TimeSpan(365, 0, 0, 0);//one year
         public readonly static int min_fule_befor_warning = 100;
-
+        public readonly static int max_KmAfterTreat_befor_warning = max_km_without_tratment - 100;
         public string LicenseNumber { get; set; }
         public DateTime LicenesDate { get; set; }
         public double Kilometraz { get; set; }

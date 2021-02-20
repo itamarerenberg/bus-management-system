@@ -23,5 +23,10 @@ namespace BO
         /// <br>the defult value is false</br>
         /// </summary>
         public bool FinishedFlag { get; set; } = false;
+
+        /// <summary>
+        /// if need to pass more details about the prosess
+        /// </summary>
+        public object Details { get; set; }
     }
 }
