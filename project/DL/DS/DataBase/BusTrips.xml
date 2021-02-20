@@ -520,4 +520,34 @@
     <FinishTime>00:44:25.5574153</FinishTime>
     <IsActive>True</IsActive>
   </BusTrip>
+  <BusTrip>
+    <ID>78</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>20/02/2021 00:00:00</Date>
+    <StartTime>00:20:00</StartTime>
+    <FinishTime>00:20:02.9168965</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>79</ID>
+    <Bus_Id>70909983</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>20/02/2021 00:00:00</Date>
+    <StartTime>00:30:00</StartTime>
+    <FinishTime>00:35:51.6538220</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>80</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>20/02/2021 00:00:00</Date>
+    <StartTime>00:40:00</StartTime>
+    <FinishTime>00:42:20.8942820</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
 </BusTrips>

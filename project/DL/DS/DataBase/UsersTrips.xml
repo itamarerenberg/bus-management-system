@@ -104,4 +104,30 @@
     <OutTime>19/02/2021 10:48:25</OutTime>
     <IsActive>True</IsActive>
   </LineTrip>
+  <LineTrip>
+    <TripId>0</TripId>
+    <UserName>Passenger</UserName>
+    <LineId>68</LineId>
+    <LineNum>78</LineNum>
+    <InStation>111</InStation>
+    <InStationName>יעקובזון/עזרת תורה</InStationName>
+    <InTime>21/02/2021 09:10:00</InTime>
+    <OutStation>170</OutStation>
+    <OutStationName>האדמור מלובאויטש/חזון איש</OutStationName>
+    <OutTime>21/02/2021 09:23:26</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
+  <LineTrip>
+    <TripId>1</TripId>
+    <UserName>itamar</UserName>
+    <LineId>68</LineId>
+    <LineNum>78</LineNum>
+    <InStation>116</InStation>
+    <InStationName>זית רענן/תורת חסד</InStationName>
+    <InTime>21/02/2021 07:00:10</InTime>
+    <OutStation>170</OutStation>
+    <OutStationName>האדמור מלובאויטש/חזון איש</OutStationName>
+    <OutTime>21/02/2021 07:12:13</OutTime>
+    <IsActive>True</IsActive>
+  </LineTrip>
 </UsersTrips>

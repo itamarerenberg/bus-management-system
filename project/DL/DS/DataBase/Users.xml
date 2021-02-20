@@ -12,4 +12,10 @@
     <Admin>False</Admin>
     <IsActive>True</IsActive>
   </User>
+  <User>
+    <Name>itamar</Name>
+    <Password>1234</Password>
+    <Admin>False</Admin>
+    <IsActive>True</IsActive>
+  </User>
 </Users>

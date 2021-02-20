@@ -109,10 +109,13 @@ namespace PLGui.Models.PO
 
         private int lineNumber;
 
+        /// <summary>
+        /// this fild have mining only when Stat = "Traveling"
+        /// </summary>
         public int LineNumber
         {
             get { return lineNumber; }
-            set { lineNumber = value; }
+            set { SetProperty(ref lineNumber, value); }
         }
 
     }

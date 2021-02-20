@@ -37,11 +37,35 @@ namespace DLApi
         #endregion
 
         #region Line
+        /// <summary>
+        /// add DO line
+        /// </summary>
         int AddLine(Line line);
+
+        /// <summary>
+        /// Ged DO Line with Id = 'id'
+        /// </summary>
         Line GetLine(int id);
+
+        /// <summary>
+        /// update DO Line
+        /// </summary>
         void UpdateLine(Line Line);
+
+        /// <summary>
+        /// delete DO line
+        /// </summary>
+        /// <param name="id"></param>
         void DeleteLine(int id);
+
+        /// <summary>
+        /// Get All DO lines
+        /// </summary>
+        /// <returns></returns>
         IEnumerable<Line> GetAllLines();
+        /// <summary>
+        /// Get All the lines that predicate returns true for them
+        /// </summary>
         IEnumerable<Line> GetAllLinesBy(Predicate<Line> predicate);
         /// <summary>
         /// return line number according the line id
@@ -50,12 +74,37 @@ namespace DLApi
 
         #endregion
 
-        #region BusOnTrip
-        void AddBusTrip(BusTrip busOnTrip);
+        #region BusTrip
+        /// <summary>
+        /// add DO BusTrip
+        /// </summary>
+        void AddBusTrip(BusTrip busTrip);
+
+        /// <summary>
+        /// get DO BusTrip
+        /// </summary>
         BusTrip GetBusTrip(int id);
-        void UpdateBusTrip(BusTrip busOnTrip);
+
+        /// <summary>
+        /// Update DO BusTrip
+        /// </summary>
+        void UpdateBusTrip(BusTrip busTrip);
+
+        /// <summary>
+        /// delete busTrip
+        /// </summary>
         void DeleteBusTrip(int id);
+
+        /// <summary>
+        /// returns all LineTrips in the data base
+        /// </summary>
         IEnumerable<BusTrip> GetAllBusTrips();
+
+        /// <summary>
+        /// returns all the busTrips that predicate returns true for them
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         IEnumerable<BusTrip> GetAllBusTripsBy(Predicate<BusTrip> predicate);
         #endregion
 
@@ -229,21 +278,30 @@ namespace DLApi
         #endregion
 
         #region UserTrip
+        /// <summary>
+        /// add new DO UserTrip
+        /// </summary>
         int AddUserTrip(UserTrip userTrip);
-        UserTrip GetUserTrip(int id);
-        void UpdateUserTrip(UserTrip userTrip);
-        IEnumerable<UserTrip> GetAllUserTrips();
-        IEnumerable<UserTrip> GetAllUserTripsBy(Predicate<UserTrip> predicate);
-        #endregion
 
-        #region Generic
-        //void Add<T>(T type);
-        //T Get<T>(string id);
-        //AdjacentStations Get(string id1, string id2);
-        //void Update<T>(T type);
-        //void Delete<T>(int id);
-        //IEnumerable<T> GetAll<T>();
-        //IEnumerable<T> GetAllBy<T>(Predicate<T> predicate);
+        /// <summary>
+        /// Get Do UserTrip
+        /// </summary>
+        UserTrip GetUserTrip(int id);
+
+        /// <summary>
+        /// Update UserTrip
+        /// </summary>
+        void UpdateUserTrip(UserTrip userTrip);
+
+        /// <summary>
+        /// Get all the user trips in the data base
+        /// </summary>
+        IEnumerable<UserTrip> GetAllUserTrips();
+
+        /// <summary>
+        /// get all the userTrips that predicate returns true for them
+        /// </summary>
+        IEnumerable<UserTrip> GetAllUserTripsBy(Predicate<UserTrip> predicate);
         #endregion
     }
 }

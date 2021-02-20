@@ -761,8 +761,10 @@ namespace PLGui
                                         break;
                                     case BO.Activities.Traveling:
                                         bus.Stat = BO.BusStatus.Traveling;
+                                        bus.LineNumber = (int)progress.Details;
                                         break;
                                     case BO.Activities.Prepering_to_ride:
+                                        bus.LineNumber = (int)progress.Details;
                                         bus.Stat = BO.BusStatus.Traveling;
                                         break;
                                     default:
@@ -890,6 +892,11 @@ namespace PLGui
         /// <param name="window"></param>
         private void Delete()
         {
+            if(!isSimulatorOff)
+            {
+                MessageBox.Show("can not delete when the simulator is on", "ERROR");
+                return;
+            }
             if (Mview.Stations_view.IsSelected && Mview.StationList.SelectedItem is Station station)//station
             {
                 StationsForDeletion.Enqueue(station);//insert the bus to the queue of "stations for deletion"
