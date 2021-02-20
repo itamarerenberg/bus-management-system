@@ -10,4 +10,14 @@
     <FinishTime>16:14:00</FinishTime>
     <IsActive>True</IsActive>
   </BusTrip>
+  <BusTrip>
+    <ID>4</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>20/02/2021 00:00:00</Date>
+    <StartTime>00:20:00</StartTime>
+    <FinishTime>00:10:04.1216304</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
 </BusTrips>

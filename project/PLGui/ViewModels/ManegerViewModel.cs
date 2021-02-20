@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using BL.BLApi;
 using BLApi;
 using MaterialDesignThemes.Wpf;
@@ -697,7 +699,7 @@ namespace PLGui
             manegerView.LineStations_view.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LinePasses_view.MouseDoubleClick += List_MouseDoubleClick;
             manegerView.LinesTripList.MouseDoubleClick += List_MouseDoubleClick;
-           
+
             manegerView.StationList.MouseRightButtonUp += List_MouseRightButtonUp;
             manegerView.LinesList.MouseRightButtonUp += List_MouseRightButtonUp;
             manegerView.LinesTripList.MouseRightButtonUp += List_MouseRightButtonUp;
@@ -706,9 +708,46 @@ namespace PLGui
             manegerView.ClockDialog.DialogOpened += ClockDialog_Opened;
             manegerView.ClockDialog.DialogClosing += ClockDialog_Closing;
 
-            //LineTimingsList.CollectionChanged
-
+            LineTimingsList.CollectionChanged += BusAnimation;
         }
+
+        private void BusAnimation(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (LineTiming lineTiming in e.NewItems)
+                {
+                    PackIcon newBus = new PackIcon()
+                    {
+                        Kind = PackIconKind.BusSide,
+                        Width = 35,
+                        Height = 35,
+                        ToolTip = new Grid().Children.Add(new TextBlock() { Text = lineTiming.BoLineTiming.BusLicensNumber.ToString() })
+                    };
+
+                    //Mview.BusProgress.Children.Add()
+
+                    var sb = new Storyboard();
+                    var animation = new DoubleAnimation(0, Mview.BusProgress.Width, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
+                    Storyboard.SetTargetName(animation, "translate");
+                    Storyboard.SetTargetProperty(animation, new PropertyPath(TranslateTransform.XProperty));
+                    sb.Children.Add(animation);
+
+                    //var animation2 = new DoubleAnimation(100, 0, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
+                    //Storyboard.SetTargetName(animation2, "translate");
+                    //Storyboard.SetTargetProperty(animation2, new PropertyPath(TranslateTransform.YProperty));
+                    //sb.Children.Add(animation2);
+
+                    sb.Begin(newBus);
+                }
+            }
+            else if (e.OldItems != null)
+            {
+
+            }
+            
+        }
+
         private void Play()
         {
             if (Mview.PlayButton.ToolTip.ToString() == "Play")
