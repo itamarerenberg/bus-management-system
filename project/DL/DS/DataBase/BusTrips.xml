@@ -1930,4 +1930,24 @@
     <FinishTime>04:55:00.7971091</FinishTime>
     <IsActive>True</IsActive>
   </BusTrip>
+  <BusTrip>
+    <ID>221</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:20:00</StartTime>
+    <FinishTime>00:27:48.7723703</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>222</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:15:00</StartTime>
+    <FinishTime>00:29:44.4251283</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
 </BusTrips>

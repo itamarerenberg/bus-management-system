@@ -3,20 +3,20 @@
   <Bus>
     <LicenseNumber>24069111</LicenseNumber>
     <LicenesDate>06/08/2018 00:00:00</LicenesDate>
-    <Kilometraz>84507.6305385517</Kilometraz>
-    <Fuel>707.4382</Fuel>
-    <Stat>Traveling</Stat>
-    <KmAfterTreat>2870.6305385513</KmAfterTreat>
+    <Kilometraz>84585.7867046284</Kilometraz>
+    <Fuel>629.282</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>2948.78670462796</KmAfterTreat>
     <LastTreatDate>16/07/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>53637067</LicenseNumber>
     <LicenesDate>08/10/2019 00:00:00</LicenesDate>
-    <Kilometraz>57824.276504517</Kilometraz>
-    <Fuel>778.5047</Fuel>
-    <Stat>Traveling</Stat>
-    <KmAfterTreat>10787.2765045168</KmAfterTreat>
+    <Kilometraz>57887.821678162</Kilometraz>
+    <Fuel>714.9595</Fuel>
+    <Stat>Ready</Stat>
+    <KmAfterTreat>10850.8216781618</KmAfterTreat>
     <LastTreatDate>11/07/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
@@ -34,8 +34,8 @@
     <LicenseNumber>34467323</LicenseNumber>
     <LicenesDate>23/05/2018 00:00:00</LicenesDate>
     <Kilometraz>86943.4834594729</Kilometraz>
-    <Fuel>22.61864</Fuel>
-    <Stat>Need_refueling</Stat>
+    <Fuel>1200</Fuel>
+    <Stat>Ready</Stat>
     <KmAfterTreat>5385.48345947268</KmAfterTreat>
     <LastTreatDate>12/10/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
@@ -74,8 +74,8 @@
     <LicenseNumber>49490116</LicenseNumber>
     <LicenesDate>17/06/2019 00:00:00</LicenesDate>
     <Kilometraz>89053.2207908631</Kilometraz>
-    <Fuel>36.77925</Fuel>
-    <Stat>Need_refueling</Stat>
+    <Fuel>1200</Fuel>
+    <Stat>Ready</Stat>
     <KmAfterTreat>9536.22079086305</KmAfterTreat>
     <LastTreatDate>11/06/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
@@ -104,8 +104,8 @@
     <LicenseNumber>23366662</LicenseNumber>
     <LicenesDate>04/05/2018 00:00:00</LicenesDate>
     <Kilometraz>65728.9486312867</Kilometraz>
-    <Fuel>90.05143</Fuel>
-    <Stat>Need_refueling</Stat>
+    <Fuel>1200</Fuel>
+    <Stat>Ready</Stat>
     <KmAfterTreat>6573.94863128663</KmAfterTreat>
     <LastTreatDate>05/06/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
