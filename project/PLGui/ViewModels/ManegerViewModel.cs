@@ -246,13 +246,7 @@ namespace PLGui
         public ObservableCollection<LineTiming> LineTimingsList 
         {
             get => lineTimingsList;
-            set
-            {
-                if(SetProperty(ref lineTimingsList, value))
-                {
-                    BusAnimation(value);
-                }
-            }
+            set => SetProperty(ref lineTimingsList, value);
         }
         private List<BO.Ride> ridesList;
         public List<BO.Ride> RidesList
@@ -748,34 +742,75 @@ namespace PLGui
 
         }
 
-        private void BusAnimation(ObservableCollection<LineTiming> lineTimings)
-        {
-            foreach (LineTiming lineTiming in lineTimings)
-            {
-                PackIcon newBus = new PackIcon()
-                {
-                    Kind = PackIconKind.BusSide,
-                    Width = 35,
-                    Height = 35,
-                    ToolTip = new Grid().Children.Add(new TextBlock() { Text = lineTiming.BoLineTiming.BusLicensNumber.ToString() })
-                };
+        //private void BusAnimation(ObservableCollection<LineTiming> lineTimings)
+        //{
+        //    if (lineTimings.Count() > 0 && lineTimings[0].StationCode != StationDisplay.Code) { return; }
+        //    if (Mview.BusProgress.Children.Count == 0)
+        //    {
+        //        if (lineTimings.Count != 0)
+        //        {
+        //            foreach (LineTiming lineTiming in lineTimings)// creats new ones
+        //            {
+        //                AddNewIcon(lineTiming);
+        //            }
+        //        }
+        //        return;
+        //    }
+        //    if (Mview.BusProgress.Children.Count > 0 && lineTimings.Count > 0)
+        //    {
+        //        if (lineTimings.First().StationCode.ToString() != (Mview.BusProgress.Children[0] as PackIcon).Tag.ToString())//if the station has changed
+        //        {
+        //            Mview.BusProgress.Children.Clear(); //clear all the elements
+        //            foreach (LineTiming lineTiming in lineTimings)// creats new ones
+        //            {
+        //                AddNewIcon(lineTiming);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            for (int i = 0; i < Mview.BusProgress.Children.Count; i++)
+        //            {
+        //                PackIcon icon = Mview.BusProgress.Children[i] as PackIcon;
+        //                if (!lineTimings.Any(lt => lt.StationCode.ToString() == icon.Tag.ToString()))//if the old icon is not in the new collection
+        //                {
+        //                    Mview.BusProgress.Children.Remove(icon);
+        //                }
+        //                //foreach (LineTiming lineTiming in lineTimings)
+        //                //{
 
-                //Mview.BusProgress.Children.Add()
+        //                //}
+        //            }
 
-                var sb = new Storyboard();
-                var animation = new DoubleAnimation(0, Mview.BusProgress.Width, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
-                Storyboard.SetTargetName(animation, "translate");
-                Storyboard.SetTargetProperty(animation, new PropertyPath(TranslateTransform.XProperty));
-                sb.Children.Add(animation);
+        //        }
+        //    }
+        //}
+           
+        //private void AddNewIcon(LineTiming lineTiming)
+        //{
+        //    PackIcon newBus = new PackIcon()
+        //    {
+        //        Tag = lineTiming.StationCode,
+        //        Kind = PackIconKind.BusSide,
+        //        Width = 35,
+        //        Height = 35,
+        //        ToolTip = new Grid().Children.Add(new TextBlock() { Text = lineTiming.BoLineTiming.BusLicensNumber.ToString() })
+        //    };
 
-                //var animation2 = new DoubleAnimation(100, 0, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
-                //Storyboard.SetTargetName(animation2, "translate");
-                //Storyboard.SetTargetProperty(animation2, new PropertyPath(TranslateTransform.YProperty));
-                //sb.Children.Add(animation2);
+        //    Mview.BusProgress.Children.Add(newBus);
 
-                sb.Begin(newBus);
-            }
-        }
+        //    var sb = new Storyboard();
+        //    var animation = new DoubleAnimation(0, 500, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
+        //    Storyboard.SetTarget(animation, newBus);
+        //    Storyboard.SetTargetProperty(animation, new PropertyPath(TranslateTransform.XProperty));
+        //    sb.Children.Add(animation);
+
+        //    //var animation2 = new DoubleAnimation(100, 0, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
+        //    //Storyboard.SetTargetName(animation2, "translate");
+        //    //Storyboard.SetTargetProperty(animation2, new PropertyPath(TranslateTransform.YProperty));
+        //    //sb.Children.Add(animation2);
+
+        //    newBus.BeginStoryboard(sb);
+        //}
 
         private void Play()
         {
@@ -812,6 +847,7 @@ namespace PLGui
                             {
                                 temp.BoLineTiming = updateLineTiming;
                             }
+                            //BusAnimation(updateingStation.LineTimings);
                         }
                         else if(e.UserState is BO.BusProgress progress)
                         {
@@ -889,7 +925,7 @@ namespace PLGui
         {
             if (Mview.Bus_view.IsSelected)//bus
             {
-                if (Mview.BusesList.SelectedItem is Bus bus)
+                if (Mview.BusesList.SelectedItem is Bus bus && !IsSimulatorOff)
                 {
                     treatmentWorker = new BackgroundWorker();
                     treatmentWorker.DoWork += (object sender, DoWorkEventArgs e) =>
@@ -908,6 +944,10 @@ namespace PLGui
                         loadBuses();
                     };
                     treatmentWorker.RunWorkerAsync();
+                }
+                else if (IsSimulatorOff)
+                {
+                    MessageBox.Show("Please start the simulator", "ERROR");
                 }
                 else
                 {

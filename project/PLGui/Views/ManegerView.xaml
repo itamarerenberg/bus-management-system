@@ -730,11 +730,11 @@
                     <TextBlock Text="Buses avalability:" FontSize="20" FontWeight="Bold"/>
                 </materialDesign:Card>
                 <TextBlock Text="{Binding BusesReady, StringFormat={}Ready: {0}}" FontSize="18" Margin="15,0,0,0" />
-                <TextBlock Text="{Binding BusesTraveling, StringFormat={}in Traveling: {0}}" FontSize="18" Margin="15,0,0,0"  />
-                <TextBlock Text="{Binding BusesInRefueling, StringFormat={}in Refueling: {0}}" FontSize="18" Margin="15,0,0,0"  />
-                <TextBlock Text="{Binding BusesInTreatment, StringFormat={}in Teratment: {0}}" FontSize="18" Margin="15,0,0,0"  />
-                <TextBlock Text="{Binding BusesNeedRefueling, StringFormat={}Need Refueling: {0}}" FontSize="18" Margin="15,0,0,0"  />
-                <TextBlock Text="{Binding BusesNeedTreatment, StringFormat={}Need Treatment: {0}}" FontSize="18" Margin="15,0,0,0"  />
+                <TextBlock Text="{Binding BusesTraveling, StringFormat={}in Traveling: {0}}" FontSize="18" Margin="15,5,0,0"  />
+                <TextBlock Text="{Binding BusesInRefueling, StringFormat={}in Refueling: {0}}" FontSize="18" Margin="15,5,0,0"  />
+                <TextBlock Text="{Binding BusesInTreatment, StringFormat={}in Teratment: {0}}" FontSize="18" Margin="15,5,0,0"  />
+                <TextBlock Text="{Binding BusesNeedRefueling, StringFormat={}Need Refueling: {0}}" FontSize="18" Margin="15,5,0,0"  />
+                <TextBlock Text="{Binding BusesNeedTreatment, StringFormat={}Need Treatment: {0}}" FontSize="18" Margin="15,5,0,0"  />
 
             </StackPanel>
         </materialDesign:Card>

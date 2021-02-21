@@ -57,11 +57,19 @@ namespace BL.simulator
         /// <param name="bus">the bus to refule</param>
         public void Refule(Bus bus)
         {
-            if (bus.Stat != BusStatus.Ready ||bus.Stat != BusStatus.Need_refueling)
+            if (bus.Stat != BusStatus.Ready || bus.Stat != BusStatus.Need_refueling || bus.Stat == BusStatus.Need_treatment)
             {
                 if (bus.Stat == BusStatus.In_refueling)
                 {
-                    throw new Exception
+                    throw new InvalidOperationException("The bus is already in rufueling");
+                }
+                if (bus.Stat == BusStatus.In_treatment)
+                {
+                    throw new InvalidOperationException("The bus is in treatment please wait");
+                }
+                if (bus.Stat == BusStatus.Traveling)
+                {
+                    throw new InvalidOperationException("Cannot refeul while driving");
                 }
             }
             Thread refuler = new Thread(() =>
@@ -147,6 +155,21 @@ namespace BL.simulator
         /// <param name="bus"></param>
         public void Treatment(Bus bus)
         {
+            if (bus.Stat != BusStatus.Ready || bus.Stat != BusStatus.Need_refueling || bus.Stat == BusStatus.Need_treatment)
+            {
+                if (bus.Stat == BusStatus.In_treatment)
+                {
+                    throw new InvalidOperationException("The bus is already in treatment");
+                }
+                if (bus.Stat == BusStatus.In_refueling)
+                {
+                    throw new InvalidOperationException("The bus is in refueling please wait");
+                }
+                if (bus.Stat == BusStatus.Traveling)
+                {
+                    throw new InvalidOperationException("Cannot treatment while driving");
+                }
+            }
             Thread treatment = new Thread(() => 
             {
                 SimulationClock clock = SimulationClock.Instance;
