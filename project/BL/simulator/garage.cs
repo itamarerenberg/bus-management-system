@@ -57,6 +57,13 @@ namespace BL.simulator
         /// <param name="bus">the bus to refule</param>
         public void Refule(Bus bus)
         {
+            if (bus.Stat != BusStatus.Ready ||bus.Stat != BusStatus.Need_refueling)
+            {
+                if (bus.Stat == BusStatus.In_refueling)
+                {
+                    throw new Exception
+                }
+            }
             Thread refuler = new Thread(() =>
             {
                 SimulationClock clock = SimulationClock.Instance;

@@ -707,7 +707,7 @@
                         </Grid>
                     </Border>
 
-                <ListView VerticalAlignment="Top" ItemsSource="{Binding BusTrips}" HorizontalAlignment="Stretch" Grid.Row="1" >
+                <ListView VerticalAlignment="Top" ItemsSource="{Binding BusTrips}" HorizontalAlignment="Stretch" Grid.Row="1">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Line Number" Width="auto" DisplayMemberBinding="{Binding LineNum}" />
@@ -719,6 +719,25 @@
                 </ListView>
                 </Grid>
             </materialDesign:Card>
+
+        <materialDesign:Card  Margin="50,20,80,25" UniformCornerRadius="6" Grid.Column="1" Grid.Row="3"  Grid.RowSpan="2" Padding="20"
+                Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
+                ConverterParameter={x:Reference Bus_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource VisibleAnimation}" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+            <StackPanel>
+                <materialDesign:Card Background="#FFB3EF7C" Grid.Row="1" Margin="5" 
+                                     Padding="8" UniformCornerRadius="6">
+                    <TextBlock Text="Buses avalability:" FontSize="20" FontWeight="Bold"/>
+                </materialDesign:Card>
+                <TextBlock Text="{Binding BusesReady, StringFormat={}Ready: {0}}" FontSize="18" Margin="15,0,0,0" />
+                <TextBlock Text="{Binding BusesTraveling, StringFormat={}in Traveling: {0}}" FontSize="18" Margin="15,0,0,0"  />
+                <TextBlock Text="{Binding BusesInRefueling, StringFormat={}in Refueling: {0}}" FontSize="18" Margin="15,0,0,0"  />
+                <TextBlock Text="{Binding BusesInTreatment, StringFormat={}in Teratment: {0}}" FontSize="18" Margin="15,0,0,0"  />
+                <TextBlock Text="{Binding BusesNeedRefueling, StringFormat={}Need Refueling: {0}}" FontSize="18" Margin="15,0,0,0"  />
+                <TextBlock Text="{Binding BusesNeedTreatment, StringFormat={}Need Treatment: {0}}" FontSize="18" Margin="15,0,0,0"  />
+
+            </StackPanel>
+        </materialDesign:Card>
         <!--#endregion-->
 
         <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Foreground="Black" Background="#FFB3EF7C" ActionButtonStyle="{StaticResource ActionButtonStyle}"/>

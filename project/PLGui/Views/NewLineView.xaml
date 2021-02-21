@@ -9,7 +9,7 @@
         xmlns:y="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PLGui.Models.PO"
         mc:Ignorable="d"
-        Title="NewLineView" x:Name="NewLineWindow" Height="600" Width="900"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
+        Title="NewLineView" x:Name="NewLineWindow" Height="800" Width="1100"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
         WindowStyle="None" AllowsTransparency="True" Background="Transparent" TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"

@@ -25,6 +25,9 @@ namespace PLGui.Models.PO
                 OnPropertyChanged(nameof(Stat));
                 OnPropertyChanged(nameof(TimeUntilReady));
                 OnPropertyChanged(nameof(BusTrips));
+                OnPropertyChanged(nameof(LineNumber));
+                OnPropertyChanged(nameof(Progress));
+
             }
         }
 

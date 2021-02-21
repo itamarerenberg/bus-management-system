@@ -47,7 +47,7 @@
             <TextBox x:Name="SLat" Text="{Binding Station.Latitude, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Margin="150,0,0,0"
                         Grid.Row="3" HorizontalAlignment="Left" MinWidth="80"  IsEnabled="{Binding NewStationMode, Mode=OneTime, TargetNullValue='0'}" materialDesign:HintAssist.Hint="Latitude"/>
 
-            <Button x:Name="AddStationButton" Content="{Binding ButtonCaption, Mode=OneTime}" Command="{Binding ButtonCommand}" Grid.Row="3"
+            <Button x:Name="AddStationButton" Content="{Binding ButtonCaption, Mode=OneTime}" Command="{Binding ButtonCommand}" CommandParameter="{Binding ElementName=newStationView}" Grid.Row="3"
                 VerticalAlignment="Bottom" Margin="10,10,40,10" MinWidth="70" Height="30" HorizontalAlignment="Right">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedAccentButton}">

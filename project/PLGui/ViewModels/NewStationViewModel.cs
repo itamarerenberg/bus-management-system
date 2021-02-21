@@ -54,7 +54,7 @@ namespace PLGui.utilities
 
             source = BLFactory.GetBL("admin");
 
-            ButtonCommand = new RelayCommand(Add_Update_Button);
+            ButtonCommand = new RelayCommand<Window>(Add_Update_Button);
             CloseCommand = new RelayCommand<Window>(Close);
         }
 
@@ -64,48 +64,56 @@ namespace PLGui.utilities
         public ICommand ButtonCommand { get; }
         public ICommand CloseCommand { get; }
 
-        private void Add_Update_Button()
+        private void Add_Update_Button(Window window)
         {
             if (NewStationMode == false)//if the view model on "updating mode"
             {
-                UpdateStation();
+                UpdateStation(window);
             }
             else                        //New Station Mode
             {
-                AddStation();
+                AddStation(window);
             }
         }
         #endregion
 
         #region Help methods
         BackgroundWorker addStationWorker;
-        private void AddStation()
+        private void AddStation(Window window)
         {
-            if(addStationWorker == null)
+            if (addStationWorker == null)
             {
                 addStationWorker = new BackgroundWorker();
-            }
-            addStationWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
+                addStationWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        BackgroundWorker worker = (BackgroundWorker)sender;
+                        source.AddStation(station.BOstation);
+                    };//this function will execute in the BackgroundWorker thread
+                addStationWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs arg) =>
                 {
-                    BackgroundWorker worker = (BackgroundWorker)sender;
-                    source.AddStation(station.BOstation);
-                };//this function will execute in the BackgroundWorker thread
+                    window.Close();
+                };
+            }
             addStationWorker.RunWorkerAsync();
         }
 
         BackgroundWorker updateStationWorker;
-        private void UpdateStation()
+        private void UpdateStation(Window window)
         {
             if (updateStationWorker == null)
             {
                 updateStationWorker = new BackgroundWorker();
-            }
-            updateStationWorker.DoWork +=
-                (object sender, DoWorkEventArgs args) =>
+                updateStationWorker.DoWork +=
+                    (object sender, DoWorkEventArgs args) =>
+                    {
+                        source.UpdateStation(station.BOstation);
+                    };//this function will execute in the BackgroundWorker thread
+                updateStationWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs arg) =>
                 {
-                    source.UpdateStation(station.BOstation);
-                };//this function will execute in the BackgroundWorker thread
+                    window.Close();
+                };
+            }
             updateStationWorker.RunWorkerAsync();
         }
         private void Close(Window window)

@@ -133,7 +133,13 @@ namespace BLApi
         /// <param name="station">the station to add</param>
         /// <exception cref="LocationOutOfRange">if the location of the station is not in the allowable range</exception>
         void AddStation(Station station);
+        /// <summary>
+        /// get BO station
+        /// </summary>
         Station GetStation(int code);
+        /// <summary>
+        /// update BO station
+        /// </summary>
         void UpdateStation(Station station);
         /// <summary>
         /// <br>remove the station and all</br>

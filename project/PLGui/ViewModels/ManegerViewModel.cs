@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -52,7 +53,9 @@ namespace PLGui
 
         #endregion
 
-        #region help properties
+        #region properties
+
+        // UI elements
         public TabItem SelectedTabItem 
         {
             get => selectedTabItem;
@@ -65,26 +68,10 @@ namespace PLGui
             }
         }
         public ManegerView Mview { get; set; }
-        public bool IsSelcetdItemList
-        {
-            get
-            {
-                if (SelectedTabItem != null)
-                {
-                    if (SelectedTabItem.Content is ListView currentList)
-                    {
-                        if (currentList.SelectedItem != null)
-                        {
-                            return true;
-                        }
-                    } 
-                }
-                return false;
-            }
-        }
         public Stack<object> MemoryStack { get; set; } = new Stack<object>();
-        public bool StackIsNotEmpty{ get => MemoryStack.Count > 0; }
         public SnackbarMessageQueue MyMessageQueue { get; set; } = new SnackbarMessageQueue( new TimeSpan(0,0,3));
+
+        //Simultor 
         public DateTime Time{
             get => time;
             set => SetProperty(ref time, value); 
@@ -107,24 +94,7 @@ namespace PLGui
             set => SetProperty(ref isSimulatorOff, value);
         }
 
-        public bool FilterStations
-        {
-            get => filterStations;
-            set
-            {
-                SetProperty(ref filterStations, value);
-                if (filterStations)
-                {
-                    Stations.Filter = s => ((Station)s).LinesNums.Count() > 0;
-                }
-                else
-                {
-                    Stations.Filter = s => true;
-                }
-                Stations.Refresh();
-            }
-        }
-
+        //displays
         private Station previousStation;
         public Station StationDisplay
         {
@@ -167,6 +137,54 @@ namespace PLGui
             get => busDisplay;
             set => SetProperty(ref busDisplay, value);
         }
+
+        public int? BusesReady { get => buses?.Where(b => b.Stat == BO.BusStatus.Ready).Count();  }
+        public int? BusesInRefueling { get => buses?.Where(b => b.Stat == BO.BusStatus.In_refueling).Count(); }
+        public int? BusesInTreatment { get => buses?.Where(b => b.Stat == BO.BusStatus.In_treatment).Count(); }
+        public int? BusesNeedRefueling { get => buses?.Where(b => b.Stat == BO.BusStatus.Need_refueling).Count(); }
+        public int? BusesNeedTreatment { get => buses?.Where(b => b.Stat == BO.BusStatus.Need_treatment).Count(); }
+        public int? BusesTraveling { get => buses?.Where(b => b.Stat == BO.BusStatus.Traveling).Count(); }
+
+
+        public bool StackIsNotEmpty { get => MemoryStack.Count > 0; }
+        public bool IsSelcetdItemList
+        {
+            get
+            {
+                if (SelectedTabItem != null)
+                {
+                    if (SelectedTabItem.Content is ListView currentList)
+                    {
+                        if (currentList.SelectedItem != null)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+        /// <summary>
+        /// when it's <see langword="true"/> show only station with line
+        /// </summary>
+        public bool FilterStations
+        {
+            get => filterStations;
+            set
+            {
+                SetProperty(ref filterStations, value);
+                if (filterStations)
+                {
+                    Stations.Filter = s => ((Station)s).LinesNums.Count() > 0;
+                }
+                else
+                {
+                    Stations.Filter = s => true;
+                }
+                Stations.Refresh();
+            }
+        }
+
         #endregion
 
         #region collections
@@ -230,7 +248,10 @@ namespace PLGui
             get => lineTimingsList;
             set
             {
-                SetProperty(ref lineTimingsList, value);
+                if(SetProperty(ref lineTimingsList, value))
+                {
+                    BusAnimation(value);
+                }
             }
         }
         private List<BO.Ride> ridesList;
@@ -288,12 +309,11 @@ namespace PLGui
         BackgroundWorker loadBusesWorker;
         BackgroundWorker loadLineTripesWorker;
 
-        #region flags
+        // flags
         private bool runLoadLinesAgain = false;
         private bool runLoadStationsAgain = false;
         private bool runLoadLineTripsAgain = false;
         private bool runLoadBusesAgain = false;
-        #endregion
         private void loadData()
         {
             loadLines();
@@ -356,6 +376,10 @@ namespace PLGui
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             manegerModel.Stations = (ObservableCollection<Station>)args.Result;
+                            if (StationDisplay != null)
+                            {
+                                StationDisplay = manegerModel.Stations.FirstOrDefault(s => s.Code == StationDisplay.Code);
+                            }
                             OnPropertyChanged(nameof(stations));
                         }
                         if (runLoadStationsAgain)
@@ -396,6 +420,16 @@ namespace PLGui
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             manegerModel.Buses = (ObservableCollection<Bus>)args.Result;
+                            if (BusDisplay != null)
+                            {
+                                BusDisplay = manegerModel.Buses.FirstOrDefault(b => b.LicenseNumber == BusDisplay.LicenseNumber);
+                            }
+                            OnPropertyChanged(nameof(BusesReady));
+                            OnPropertyChanged(nameof(BusesInRefueling));
+                            OnPropertyChanged(nameof(BusesInTreatment));
+                            OnPropertyChanged(nameof(BusesNeedRefueling));
+                            OnPropertyChanged(nameof(BusesNeedTreatment));
+                            OnPropertyChanged(nameof(BusesTraveling));
                             OnPropertyChanged(nameof(Buses));
                         }
                         if (runLoadBusesAgain)
@@ -436,6 +470,10 @@ namespace PLGui
                         if (!((BackgroundWorker)sender).CancellationPending)//if the BackgroundWorker didn't 
                         {                                                   //terminated befor he done execute DoWork
                             manegerModel.LineTrips = (ObservableCollection<LineTrip>)args.Result;
+                            if (LineTripDisplay != null)
+                            {
+                                LineTripDisplay = manegerModel.LineTrips.FirstOrDefault(lt => lt.ID == LineTripDisplay.ID);
+                            }
                             OnPropertyChanged(nameof(LineTrips));
                         }
                         if (runLoadLineTripsAgain)
@@ -655,7 +693,6 @@ namespace PLGui
             {
                 if (Mview.Stations_view.IsSelected && Mview.StationList.SelectedItem is Station station)//station
                 {
-
                     UpdateStation(station);
                 }
                 else if (Mview.Lines_view.IsSelected && Mview.LinesList.SelectedItem is Line line)//line
@@ -709,44 +746,35 @@ namespace PLGui
             manegerView.ClockDialog.DialogOpened += ClockDialog_Opened;
             manegerView.ClockDialog.DialogClosing += ClockDialog_Closing;
 
-            LineTimingsList.CollectionChanged += BusAnimation;
         }
 
-        private void BusAnimation(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void BusAnimation(ObservableCollection<LineTiming> lineTimings)
         {
-            if (e.NewItems != null)
+            foreach (LineTiming lineTiming in lineTimings)
             {
-                foreach (LineTiming lineTiming in e.NewItems)
+                PackIcon newBus = new PackIcon()
                 {
-                    PackIcon newBus = new PackIcon()
-                    {
-                        Kind = PackIconKind.BusSide,
-                        Width = 35,
-                        Height = 35,
-                        ToolTip = new Grid().Children.Add(new TextBlock() { Text = lineTiming.BoLineTiming.BusLicensNumber.ToString() })
-                    };
+                    Kind = PackIconKind.BusSide,
+                    Width = 35,
+                    Height = 35,
+                    ToolTip = new Grid().Children.Add(new TextBlock() { Text = lineTiming.BoLineTiming.BusLicensNumber.ToString() })
+                };
 
-                    //Mview.BusProgress.Children.Add()
+                //Mview.BusProgress.Children.Add()
 
-                    var sb = new Storyboard();
-                    var animation = new DoubleAnimation(0, Mview.BusProgress.Width, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
-                    Storyboard.SetTargetName(animation, "translate");
-                    Storyboard.SetTargetProperty(animation, new PropertyPath(TranslateTransform.XProperty));
-                    sb.Children.Add(animation);
+                var sb = new Storyboard();
+                var animation = new DoubleAnimation(0, Mview.BusProgress.Width, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
+                Storyboard.SetTargetName(animation, "translate");
+                Storyboard.SetTargetProperty(animation, new PropertyPath(TranslateTransform.XProperty));
+                sb.Children.Add(animation);
 
-                    //var animation2 = new DoubleAnimation(100, 0, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
-                    //Storyboard.SetTargetName(animation2, "translate");
-                    //Storyboard.SetTargetProperty(animation2, new PropertyPath(TranslateTransform.YProperty));
-                    //sb.Children.Add(animation2);
+                //var animation2 = new DoubleAnimation(100, 0, new Duration(new TimeSpan(0, 0, 0, 1, 0)));
+                //Storyboard.SetTargetName(animation2, "translate");
+                //Storyboard.SetTargetProperty(animation2, new PropertyPath(TranslateTransform.YProperty));
+                //sb.Children.Add(animation2);
 
-                    sb.Begin(newBus);
-                }
+                sb.Begin(newBus);
             }
-            else if (e.OldItems != null)
-            {
-
-            }
-            
         }
 
         private void Play()
@@ -1327,11 +1355,12 @@ namespace PLGui
                 }
             }
         }
+       
         #endregion
 
         #region private methods
         //------------------------------------------------------------------------------------------------
-        
+
 
         /// <summary>
         /// initialize the BackgroundWorkers that works on deletion, and creates event handelers for them
@@ -1441,13 +1470,18 @@ namespace PLGui
             if (!GetRidesWorker.IsBusy)
                 GetRidesWorker.RunWorkerAsync(lineTrip);
         }
-
+        /// <summary>
+        /// open a new vindow of "update line"
+        /// </summary>
         private void Update_Line(Line line)
         {
             lineToSend = line;
             new NewLineView().ShowDialog();
             loadLines();
         }
+        /// <summary>
+        /// open a new vindow of "Update Station"
+        /// </summary>
         private void UpdateStation(Station station)
         {
             stationToSend = station;
@@ -1455,6 +1489,9 @@ namespace PLGui
             loadStations();
             loadLines();
         }
+        /// <summary>
+        /// open a new vindow of "Update Line Trip"
+        /// </summary>
         private void UpdateLineTrip(LineTrip lineTrip, Line line)
         {
             lineToSend = line;
