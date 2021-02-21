@@ -74,6 +74,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -102,6 +103,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -130,6 +132,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -158,6 +161,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -186,6 +190,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -214,6 +219,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -242,6 +248,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -270,6 +277,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -298,6 +306,7 @@ namespace DLXML
                             if (files[index].Root != null)
                                 files[index].Root.Save(files[index].Path);
                             files[index].Root = XElement.Load(files[index].Path);
+                            break;//if no exeption was throwed then stop try
                         }
                         catch (IOException)
                         {
@@ -333,32 +342,6 @@ namespace DLXML
             }
         }
 
-        /// <summary>
-        /// adding a new object to the DataSource's xml file
-        /// </summary>
-        /// <param name="obj">the object to add</param>
-        /// <param name="lable">the label to add the new object to</param>
-        //public static void SaveObj(object obj, string lable)
-        //{
-        //    if (obj == null)
-        //    {
-        //        return;
-        //    }
-        //    XElement newObj = new XElement(obj.GetType().Name);
-        //    foreach (var prop in obj.GetType().GetProperties())
-        //    {
-        //        object temp = prop.GetValue(obj);
-
-        //        if (temp != null)
-        //        {
-        //            String val = temp != null ? temp.ToString() : "";
-        //            newObj.Add(new XElement(prop.Name, val));//insert new label <prop.Name> prop.GetValue(prop).ToString() </prop.Name>
-        //        }
-        //    }
-        //    dsRoot.Element(lable).Add(newObj);
-        //    dsRoot.Save(FilePath);
-        //}
-
         static public void Save(string fileName)
         {
             if(!files.ContainsKey(fileName))
@@ -372,6 +355,7 @@ namespace DLXML
                     try
                     {
                         files[fileName].Root.Save(files[fileName].Path);
+                        break;//if no exeption was throwed then stop try
                     }
                     catch (IOException)
                     {

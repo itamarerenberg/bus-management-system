@@ -699,10 +699,14 @@
                     </Grid.RowDefinitions>
                     <Border Background="#FFB3EF7C" Padding="15">
                         <Grid Visibility="{Binding Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay}" >
-                            <TextBlock Text="{Binding Progress, StringFormat={}in prosess :{0:F2}%}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                            <TextBlock Visibility="{Binding IsBusy, Converter={StaticResource Bool_converter_to_visibility}}" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                <Run Text="{Binding Stat}"/>
+                                <Run Text="{Binding Progress, StringFormat={}: {0:F2}%}"/>
+                            </TextBlock>
+                            <ProgressBar Visibility="{Binding IsBusy, Converter={StaticResource Bool_converter_to_visibility}}" HorizontalAlignment="Left" Minimum="0" Maximum="100" Width="100" Value="{Binding Progress}"/>
                             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
                                 <TextBlock Text="{Binding LicenseNumber}" FontSize="20" FontWeight="ExtraBold"/>
-                                <TextBlock Text="{Binding Stat}"/>
+                                <TextBlock Text="{Binding Stat}" Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisConverter}}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
