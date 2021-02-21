@@ -326,7 +326,17 @@
                                 <GridViewColumn x:Name="Stat" Header="Status" Width="auto" DisplayMemberBinding="{Binding Stat}"/>
                                 <GridViewColumn x:Name="Fuel" Header="Fuel" Width="auto" DisplayMemberBinding="{Binding Fuel, StringFormat=F2}"/>
                                 <GridViewColumn x:Name="Kilometraz" Header="Kilometraz" Width="auto" DisplayMemberBinding="{Binding Kilometraz, StringFormat=F2}"/>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Progress, StringFormat= in prosess :{0:F2}%}">
+                                <GridViewColumn Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock x:Name="Progress" Text="{Binding Progress, StringFormat= in prosess :{0:F2}%}"/>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=Progress, Path=Text}" Value="in prosess :0.00%">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                             </GridView>
                         </ListView.View>

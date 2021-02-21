@@ -1930,4 +1930,74 @@
     <FinishTime>04:55:00.7971091</FinishTime>
     <IsActive>True</IsActive>
   </BusTrip>
+  <BusTrip>
+    <ID>171</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:15:00</StartTime>
+    <FinishTime>00:15:01.1670345</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>172</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:20:00</StartTime>
+    <FinishTime>00:27:30.4475305</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>173</ID>
+    <Bus_Id>73006589</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:30:00</StartTime>
+    <FinishTime>00:35:41.2353545</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>174</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:40:00</StartTime>
+    <FinishTime>00:40:02.4974025</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>175</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:40:00</StartTime>
+    <FinishTime>00:46:21.4886645</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>176</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>85</LineId>
+    <LineNum>300</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:00:00</StartTime>
+    <FinishTime>01:00:01.7605795</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>177</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:20:00</StartTime>
+    <FinishTime>00:20:00.6548660</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
 </BusTrips>

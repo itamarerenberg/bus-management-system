@@ -178,10 +178,10 @@
 
             <Button x:Name="AddLineButton" Content="{Binding buttonCaption, Mode=OneTime}" 
                     Command="{Binding AddLineButton}" CommandParameter="{Binding ElementName=NewLineWindow}"
-                    Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" Width="70" Height="30" 
+                    Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10,40,10" MinWidth="70" Height="30" 
                     materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Right">
                 <Button.Style>
-                    <Style TargetType="{x:Type Button}">
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
                         <Setter Property="IsEnabled" Value="false" />
                         <Style.Triggers>
                             <MultiDataTrigger>

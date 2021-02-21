@@ -832,63 +832,20 @@ namespace PLGui
                     var worker = Start_simulator(Time.TimeOfDay, Rate);
                     worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
                     {
-                    //(selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation
+                        //(selectedTabItem.Content as ListView).SelectedItem is Station SelectedStation
                         if (e.UserState is TimeSpan updateTime)
-                            {
-                                Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
+                        {
+                            Time += (TimeSpan)e.UserState - Time.TimeOfDay;//Time.TimeOfDay = (TimeSpan)e.UserState;
                         }
                         else if (e.UserState is BO.LineTiming updateLineTiming)
                         {
-                            Station updateingStation = stations.First(st => st.Code == updateLineTiming.StationCode);
-                            LineTiming temp = updateingStation.LineTimings.FirstOrDefault(lt =>
-                                                lt.LineId == updateLineTiming.LineId
-                                                && lt.StartTime == updateLineTiming.StartTime);
-                            if (updateLineTiming.ArrivalTime <= TimeSpan.Zero)
-                            {
-                                updateingStation.LineTimings.Remove(temp);
-                            }
-                            else if (temp == null)
-                            {
-                                updateingStation.LineTimings.Add(new LineTiming() { BoLineTiming = updateLineTiming });
-                            }
-                            else
-                            {
-                                temp.BoLineTiming = updateLineTiming;
-                            }
-                            //BusAnimation(updateingStation.LineTimings);
+                            GetLineTiming(updateLineTiming);
                         }
-                        else if(e.UserState is BO.BusProgress progress)
+                        else if (e.UserState is BO.BusProgress progress)
                         {
-                            if(!progress.FinishedFlag)
-                            {
-                                Bus bus = buses.First(bus0 => bus0.BObus.LicenseNumber == progress.BusLicensNum);
-                                switch (progress.Activity)
-                                {
-                                    case BO.Activities.Refuling:
-                                        bus.Stat = BO.BusStatus.In_refueling;
-                                        break;
-                                    case BO.Activities.InTrartment:
-                                        bus.Stat = BO.BusStatus.In_treatment;
-                                        break;
-                                    case BO.Activities.Traveling:
-                                        bus.Stat = BO.BusStatus.Traveling;
-                                        bus.LineNumber = (int)progress.Details;
-                                        break;
-                                    case BO.Activities.Prepering_to_ride:
-                                        bus.LineNumber = (int)progress.Details;
-                                        bus.Stat = BO.BusStatus.Traveling;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                bus.Progress = progress.Progress;
-                            }
-                            else
-                            {
-                                loadBuses(); 
-                            }
+                            GetProgress(progress);
                         }
-                        else if(e.UserState is Exception ex)
+                        else if (e.UserState is Exception ex)
                         {
                             MessageBox.Show(ex.Message, "ERROR");
                         }
@@ -908,6 +865,7 @@ namespace PLGui
                 canReset = true;
             }
         }
+        
         private void Back(ManegerView Mview)
         {
             object obj = MemoryStack.Pop();
@@ -1607,7 +1565,70 @@ namespace PLGui
             loadLineTrips();
             loadLines();
         }
-        
+        /// <summary>
+        /// Get the progress of bus and update the bus status/progres
+        /// </summary>
+        private void GetProgress(BO.BusProgress progress)
+        {
+            if (!progress.FinishedFlag)
+            {
+                Bus bus = buses.First(bus0 => bus0.BObus.LicenseNumber == progress.BusLicensNum);
+                if (progress.Progress < bus.Progress)
+                {
+
+                }
+                switch (progress.Activity)
+                {
+                    case BO.Activities.Refuling:
+                        bus.Stat = BO.BusStatus.In_refueling;
+                        break;
+                    case BO.Activities.InTrartment:
+                        bus.Stat = BO.BusStatus.In_treatment;
+                        break;
+                    case BO.Activities.Traveling:
+                        bus.Stat = BO.BusStatus.Traveling;
+                        bus.LineNumber = (int)progress.Details;
+                        break;
+                    case BO.Activities.Prepering_to_ride:
+                        bus.LineNumber = (int)progress.Details;
+                        bus.Stat = BO.BusStatus.Traveling;
+                        break;
+                    default:
+                        break;
+                }
+                bus.Progress = progress.Progress;
+            }
+            else
+            {
+                Bus bus = buses.First(bus0 => bus0.BObus.LicenseNumber == progress.BusLicensNum);
+                bus.Progress = 0;
+                loadBuses();
+            }
+        }
+
+        /// <summary>
+        /// Get an updated line timing and updaet the tracked station
+        /// </summary>
+        private void GetLineTiming(BO.LineTiming updateLineTiming)
+        {
+            Station updateingStation = stations.First(st => st.Code == updateLineTiming.StationCode);
+            LineTiming temp = updateingStation.LineTimings.FirstOrDefault(lt =>
+                                lt.LineId == updateLineTiming.LineId
+                                && lt.StartTime == updateLineTiming.StartTime);
+            if (updateLineTiming.ArrivalTime <= TimeSpan.Zero)
+            {
+                updateingStation.LineTimings.Remove(temp);
+            }
+            else if (temp == null)
+            {
+                updateingStation.LineTimings.Add(new LineTiming() { BoLineTiming = updateLineTiming });
+            }
+            else
+            {
+                temp.BoLineTiming = updateLineTiming;
+            }
+        }
+
         #endregion
 
         #region Messenger
