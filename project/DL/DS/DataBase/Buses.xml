@@ -113,20 +113,20 @@
   <Bus>
     <LicenseNumber>40016076</LicenseNumber>
     <LicenesDate>07/08/2018 00:00:00</LicenesDate>
-    <Kilometraz>82852.9598770144</Kilometraz>
-    <Fuel>334.04</Fuel>
+    <Kilometraz>82927.8924102786</Kilometraz>
+    <Fuel>259.1075</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>6759.95987701416</KmAfterTreat>
+    <KmAfterTreat>6834.89241027832</KmAfterTreat>
     <LastTreatDate>28/12/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>17524364</LicenseNumber>
     <LicenesDate>13/06/2018 00:00:00</LicenesDate>
-    <Kilometraz>81893.991092682</Kilometraz>
-    <Fuel>1136.455</Fuel>
+    <Kilometraz>81930.3027458192</Kilometraz>
+    <Fuel>1100.143</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>13728.991092682</KmAfterTreat>
+    <KmAfterTreat>13765.3027458192</KmAfterTreat>
     <LastTreatDate>01/02/2021 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>

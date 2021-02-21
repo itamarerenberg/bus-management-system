@@ -83,9 +83,9 @@
             <materialDesign:Card UniformCornerRadius="6" Background="#FFB3EF7C">
                 <Border BorderThickness="1" Background="White" BorderBrush="#FFB3EF7C" CornerRadius="6">
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <Slider Minimum="1" Maximum="999" Value="{Binding Rate}" IsSelectionRangeEnabled="True" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}" IsEnabled ="{Binding IsSimulatorOff}"/>
+                        <Slider Minimum="1" Maximum="10" Value="{Binding Rate}" IsSelectionRangeEnabled="True" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}" IsEnabled ="{Binding IsSimulatorOff}"/>
                         <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" IsEnabled ="{Binding IsSimulatorOff}" 
-                                 ToolTip="set the rate of the simulator" MaxLength="4" CaretBrush="#FF7CC33B" BorderBrush="#FF96EE46"/>
+                                 ToolTip="set the rate of the simulator" MaxLength="2" CaretBrush="#FF7CC33B" BorderBrush="#FF96EE46"/>
                         <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
                         <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
                         Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom" IsEnabled="{Binding IsSimulatorOff}">
@@ -116,6 +116,10 @@
 
         <!--#region search area -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="0,0,25,0">
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Kind=BackupRestore, Size=25}"
+                    ToolTip="Refresh the bus statuses between simulation" Command="{Binding ResetBuses_Command}"
+                    Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
+                ConverterParameter={x:Reference Bus_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
             <CheckBox Content="Filter" IsChecked="{Binding FilterStations}" Visibility="{Binding Path=SelectedTabItem, Converter={StaticResource Type_converter_to_visibility},
                 ConverterParameter={x:Reference Stations_view}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
                 <CheckBox.ToolTip>
@@ -144,7 +148,7 @@
         <!--#endregion-->
 
         <!--#region buttons -->
-            <Button Content="{materialDesign:PackIcon Kind=BackupRestore, Size=25}" ToolTip="Back" 
+            <Button Content="{materialDesign:PackIcon Kind=Undo, Size=25}" ToolTip="Back" 
                 Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
                 Command="{Binding BackCommand}" CommandParameter="{Binding ElementName=ManegerWindow}"
                 IsEnabled="{Binding StackIsNotEmpty}"
@@ -698,17 +702,23 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Border Background="#FFB3EF7C" Padding="15">
-                        <Grid Visibility="{Binding Converter={StaticResource Bool_converter_to_visibility}, Mode=OneWay}" >
+                        <Grid >
                             <TextBlock Visibility="{Binding IsBusy, Converter={StaticResource Bool_converter_to_visibility}}" HorizontalAlignment="Left" VerticalAlignment="Top" >
                                 <Run Text="{Binding Stat}"/>
                                 <Run Text="{Binding Progress, StringFormat={}: {0:F2}%}"/>
                             </TextBlock>
-                            <ProgressBar Visibility="{Binding IsBusy, Converter={StaticResource Bool_converter_to_visibility}}" HorizontalAlignment="Left" Minimum="0" Maximum="100" Width="100" Value="{Binding Progress}"/>
+                            <ProgressBar Visibility="{Binding IsBusy, Converter={StaticResource Bool_converter_to_visibility}}" 
+                                         HorizontalAlignment="Left" Minimum="0" Maximum="100" Width="100" Value="{Binding Progress}"/>
                             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
                                 <TextBlock Text="{Binding LicenseNumber}" FontSize="20" FontWeight="ExtraBold"/>
                                 <TextBlock Text="{Binding Stat}" Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisConverter}}"/>
                             </StackPanel>
-                        </Grid>
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                            <Run Text="Issued date: "/>
+                            <Run Text="{Binding LicenesDate ,StringFormat=dd-MM-yyyy}" />
+                        </TextBlock>
+
+                    </Grid>
                     </Border>
 
                 <ListView VerticalAlignment="Top" ItemsSource="{Binding BusTrips}" HorizontalAlignment="Stretch" Grid.Row="1">
@@ -731,7 +741,7 @@
             <StackPanel>
                 <materialDesign:Card Background="#FFB3EF7C" Grid.Row="1" Margin="5" 
                                      Padding="8" UniformCornerRadius="6">
-                    <TextBlock Text="Buses avalability:" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Buses availability:" FontSize="20" FontWeight="Bold"/>
                 </materialDesign:Card>
                 <TextBlock Text="{Binding BusesReady, StringFormat={}Ready: {0}}" FontSize="18" Margin="15,0,0,0" />
                 <TextBlock Text="{Binding BusesTraveling, StringFormat={}in Traveling: {0}}" FontSize="18" Margin="15,5,0,0"  />
@@ -744,7 +754,8 @@
         </materialDesign:Card>
         <!--#endregion-->
 
-        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Foreground="Black" Background="#FFB3EF7C" ActionButtonStyle="{StaticResource ActionButtonStyle}"/>
+        <materialDesign:Snackbar MessageQueue="{Binding MyMessageQueue}" Grid.Column="1" Grid.Row="4" Foreground="Black"
+                                 Background="#FFB3EF7C" ActionButtonStyle="{StaticResource ActionButtonStyle}"/>
 
     </Grid>
 

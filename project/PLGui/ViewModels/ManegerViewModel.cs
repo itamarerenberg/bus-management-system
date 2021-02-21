@@ -78,7 +78,12 @@ namespace PLGui
         }
         public int Rate
         {
-            get => rate > 0 ? rate : 1;
+            get
+            {
+                if (rate < 1) return 1;
+                if (rate > 10) return 10;
+                return rate;
+            }
             set
             {
                 int temp = rate;//save the old value
@@ -285,6 +290,7 @@ namespace PLGui
             RefuleBus_Command = new RelayCommand(RefuleBus);
             TreatmentBus_Command = new RelayCommand(TreatmentBus);
             OpenButtonsMenuCommand = new RelayCommand<Popup>(OpenButtonsMenu);
+            ResetBuses_Command = new RelayCommand(ResetBuses);
 
             //messengers initalize
             RequestStationMessege();
@@ -294,6 +300,7 @@ namespace PLGui
             InitBackgroundWorkers();
         }
 
+      
         #endregion
 
         #region load data
@@ -519,7 +526,8 @@ namespace PLGui
         public ICommand RefuleBus_Command { get; }
         public ICommand TreatmentBus_Command { get; }
         public ICommand OpenButtonsMenuCommand { get; }
-        
+        public ICommand ResetBuses_Command { get; }
+
 
         #endregion
 
@@ -897,6 +905,7 @@ namespace PLGui
                 Mview.PlayButton.ToolTip = "Play";
                 IsSimulatorOff = true;
                 Stop_simulator();
+                canReset = true;
             }
         }
         private void Back(ManegerView Mview)
@@ -1303,6 +1312,53 @@ namespace PLGui
         {
             popup.IsOpen = true;
         }
+        BackgroundWorker resetBusesWorker;
+        /// <summary>
+        /// flag that indicate if the bus can refresh (didn't refresh after the last simulation)
+        /// </summary>
+        bool canReset;
+        private void ResetBuses()
+        {
+            if (canReset && IsSimulatorOff)
+            {
+                canReset = false;
+                if (resetBusesWorker == null)
+                {
+                    resetBusesWorker = new BackgroundWorker();
+                    resetBusesWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+                    {
+                        try
+                        {
+                            source.ResetBuses();
+                        }
+                        catch (Exception msg)
+                        {
+                            MessageBox.Show(msg.Message, "ERROR");
+                            e.Cancel = true;
+                        }
+                    };
+                    resetBusesWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+                    {
+                        if (!e.Cancelled)
+                        {
+                            loadBuses();
+                            MyMessageQueue.Enqueue("The buses display had refresh sucsessfuly!");
+                            OnPropertyChanged(nameof(MyMessageQueue)); 
+                        }
+                    }; 
+                }
+                resetBusesWorker.RunWorkerAsync();
+            }
+            else if (!IsSimulatorOff)
+            {
+                MessageBox.Show("Cannot refresh while the simulator is on", "ERROR");
+            }
+            else
+            {
+                MessageBox.Show("The buses display has refreshed already", "ERROR");
+            }
+        }
+
         #endregion
 
         #region events
@@ -1670,7 +1726,6 @@ namespace PLGui
         {
             source.Add_stationPanel(st.Code);
         }
-
         private void Stop_truck_station_panel(int stationCode)
         {
             source.Remove_stationPanel(stationCode);
