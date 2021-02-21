@@ -84,6 +84,7 @@ namespace PLGui.Models.PO
             {
                 SetProperty(ref stat, value);
                 boBus.Stat = stat;
+                OnPropertyChanged("IsBusy");
             }
         }
         private TimeSpan timeUntilReady;
@@ -118,5 +119,14 @@ namespace PLGui.Models.PO
             set { SetProperty(ref lineNumber, value); }
         }
 
+        public bool IsBusy 
+        { 
+            get
+            {
+                return stat == BO.BusStatus.In_refueling
+                    || stat == BO.BusStatus.In_treatment
+                    || stat == BO.BusStatus.Traveling;
+            }
+        }
     }
 }

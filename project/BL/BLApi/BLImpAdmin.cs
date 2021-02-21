@@ -313,7 +313,7 @@ namespace BL
                     IsActive = true
                 };
                 DO.LineStation prev_station = first_station;//this will be use to define the filds PrevStation and NextStation in the loop
-                stations = stations.Skip(1);//remove the first station from stations (its allready take ceared)
+                stations = stations.Skip(1);//skips the first station in stations (its allready take ceared)
                 int index = 1;//this will be use to define the fild LineStationIndex in the loop
                 foreach (Station st in stations)//! I think we shuld add in dl function that add a range of LineStation //I don't think so
                 {

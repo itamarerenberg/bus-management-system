@@ -26,7 +26,7 @@ namespace DLXML
                 LoadData();
                 int id = int.Parse(Root.Element("LineId").Value);
                 Root.Element("LineId").Value = (id + 1).ToString();
-                Root.Save(SerialIDPath);
+                Save();
                 return id;
             }
         }
@@ -38,7 +38,7 @@ namespace DLXML
                 LoadData();
                 int id = int.Parse(Root.Element("UserTripId").Value);
                 Root.Element("UserTripId").Value = (id + 1).ToString();
-                Root.Save(SerialIDPath);
+                Save();
                 return id;
             }
         }
@@ -50,20 +50,19 @@ namespace DLXML
                 LoadData();
                 int id = int.Parse(Root.Element("LineTripId").Value);
                 Root.Element("LineTripId").Value = (id + 1).ToString();
-                Root.Save(SerialIDPath);
+                Save();
                 return id;
             }
         }
 
         public static int GetBusTripId
-        {
-            
+        { 
             get
             {
                 LoadData();
                 int id = int.Parse(Root.Element("LineBusId").Value);
                 Root.Element("LineBusId").Value = (id + 1).ToString();
-                Root.Save(SerialIDPath);
+                Save();
                 return id;
             }
         }
@@ -88,30 +87,6 @@ namespace DLXML
 
         private static void LoadData()
         {
-            /*
-             * string index = "Buses";
-                try
-                {
-                    for (int i = 0; i < tryNtimes; i++)
-                    {
-                        try
-                        {
-                            if (files[index].Root != null)
-                                files[index].Root.Save(files[index].Path);
-                            files[index].Root = XElement.Load(files[index].Path);
-                        }
-                        catch (IOException)
-                        {
-                            Thread.Sleep(tryAginIn);
-                        }
-                    }
-                }
-                catch (IOException)
-                {
-                    throw new FileLoadException(files[index].Path);
-                }
-                return files[index].Root;
-             */
             try
             {
                 for (int i = 0; i < tryNtimes; i++)
@@ -121,6 +96,7 @@ namespace DLXML
                         if (Root != null)
                             Root.Save(SerialIDPath);
                         Root = XElement.Load(SerialIDPath);
+                        break;//if no exeption was throwed then stop try
                     }
                     catch (IOException)
                     {
@@ -133,6 +109,30 @@ namespace DLXML
                 throw new Exception("File upload problem");
             }
 
+        }
+
+        private static void Save()
+        {
+            try
+            {
+                for (int i = 0; i < tryNtimes; i++)
+                {
+                    try
+                    {
+                        if (Root != null)
+                            Root.Save(SerialIDPath);
+                        break;//if no exeption was throwed then stop try
+                    }
+                    catch (IOException)
+                    {
+                        Thread.Sleep(tryAginIn);
+                    }
+                }
+            }
+            catch
+            {
+                throw new Exception("File upload problem");
+            }
         }
     }
 }
