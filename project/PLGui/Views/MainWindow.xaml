@@ -48,7 +48,6 @@
                     <p:PasswordBox x:Name="PasswordIn" Password="{Binding Password, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=LostFocus,Mode=TwoWay}" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Center" VerticalAlignment="top" Width="120" Grid.Row="1"/>
                     <CheckBox Content="Enter as maneger" IsChecked="{Binding ManegerCheckBox}" Grid.Row="1" VerticalAlignment="Bottom" Margin="35" Foreground="Gray"/>
 
-                    <Button Command="{Binding DebugButtonCommand}" CommandParameter="{Binding ElementName=ThisWindow}" Content="Debug" HorizontalAlignment="Left" Height="35" Margin="81,13,0,0" VerticalAlignment="Top" Width="84" Background="#FFDA2517" BorderBrush="{x:Null}"/>
 
                 </Grid>
             </materialDesign:Card>

@@ -78,7 +78,6 @@ namespace PLGui.utilities
             //commands initalize
             SignInCommand = new RelayCommand<MainWindow>(SignIn);
             SignUpCommand = new RelayCommand<MainWindow>(SignUp);
-            DebugButtonCommand = new RelayCommand<Window>(debugButton);
             CloseCommand = new RelayCommand<MainWindow>(MainWindow_Closing);
             RegisterCommand = new RelayCommand<MainWindow>(Register);
             BackToSignInCommand = new RelayCommand<MainWindow>(BackToSignIn);
@@ -92,7 +91,6 @@ namespace PLGui.utilities
 
         public ICommand SignInCommand { get; }
         public ICommand SignUpCommand { get; }
-        public ICommand DebugButtonCommand { get; }//temporery
         public ICommand CloseCommand { get; }
         public ICommand RegisterCommand { get; }
         public ICommand BackToSignInCommand { get; }
@@ -163,20 +161,7 @@ namespace PLGui.utilities
                 MessageBox.Show("the passwords didn't match", "ERROR");
             }
         }
-        private void debugButton(Window window)
-        {
-            try
-            {
-                passenger = passengerBl.GetPassenger("Passenger","1234" );
-                new PassengerView().Show();
-                window.Close();
-            }
-            catch (Exception msg)
-            {
-                MessageBox.Show(msg.Message, "the access is denied");
-            }
-        }
-
+       
         private void MainWindow_Closing(MainWindow window)
         {
             window.Close();

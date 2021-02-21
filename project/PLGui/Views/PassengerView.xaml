@@ -13,7 +13,7 @@
         Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
         TextElement.FontWeight="Medium" 
         TextElement.FontSize="14" Title="{Binding passenger.Name}"
-        FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True" WindowState="Maximized" >
+        FontFamily="{materialDesign:MaterialDesignFont}" ShowInTaskbar="True" >
     <y:Interaction.Triggers>
         <y:EventTrigger EventName="Loaded">
             <y:InvokeCommandAction Command="{Binding WindowLoaded_Command}" CommandParameter="{Binding ElementName=PassengerWindow}"/>
@@ -32,22 +32,13 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
         <!--#region Menu -->
         <Menu VerticalAlignment="Stretch" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="0" Margin="20,0,0,0" >
-            <MenuItem Header="New" Height="25">
-                <MenuItem Header="new line" Command="{Binding NewLine}" Icon="{materialDesign:PackIcon Kind=Plus}"/>
-                <MenuItem Header="new bus" Icon="{materialDesign:PackIcon Kind=Plus}"/>
-                <MenuItem Header="new station" Command="{Binding NewStation}" Icon="{materialDesign:PackIcon Kind=Plus}"/>
-            </MenuItem>
-            <MenuItem Header="Update" Height="25">
-                <MenuItem Header="update line" Command="{Binding UpdateCommand}"/>
-                <MenuItem Header="update bus" />
-                <MenuItem Header="update station" />
-            </MenuItem>
+            
             <MenuItem Header="Exit" Height="25">
                 <MenuItem Header="Log out" Command="{Binding LogOut_Command}" CommandParameter="{Binding ElementName=PassengerWindow}" Icon="{materialDesign:PackIcon Kind=LocationExit}"/>
                 <MenuItem Header="Exit" Command="{Binding ClosingCommand}" CommandParameter="{Binding ElementName=PassengerWindow}" Icon="{materialDesign:PackIcon Kind=Power}"/>
@@ -55,44 +46,10 @@
         </Menu>
         <!--#endregion-->
 
-        <!--#region Clock Dialog -->
-        <materialDesign:DialogHost x:Name="ClockDialog" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15">
-            <materialDesign:Card UniformCornerRadius="6" Background="#FFB3EF7C">
-                <Border BorderThickness="1" Background="White" BorderBrush="#FFB3EF7C" CornerRadius="6">
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <Slider Minimum="1" Maximum="999" Value="{Binding Rate}" IsSelectionRangeEnabled="True" IsEnabled="{Binding IsSimulatorOff}" TickFrequency="1" Style="{StaticResource MaterialDesignDiscreteVerticalSlider}"/>
-                        <TextBox Text="{Binding Rate}" materialDesign:HintAssist.Hint="Rate" Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-                                 ToolTip="set the rate of the simulator" IsEnabled="{Binding IsSimulatorOff}" MaxLength="4" CaretBrush="#FF7CC33B" BorderBrush="#FF96EE46"/>
-                        <TextBlock Text="{Binding Time.TimeOfDay, StringFormat=t}"  VerticalAlignment="Center" FontSize="24" />
-                        <Button Margin="8,0,0,2.8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="set the simulator clock"
-                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Height="22" Width="22" VerticalAlignment="Bottom" IsEnabled="{Binding IsSimulatorOff}">
-                            <Button.CommandParameter>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <materialDesign:Clock DisplayAutomation="ToSeconds" Is24Hours="True" x:Name="Clock" />
-                                    <StackPanel Grid.Row="1"  Margin="8" HorizontalAlignment="Right" Orientation="Horizontal">
-                                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="0"  Content="CANCEL" />
-                                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="1"  Content="OK" />
-                                    </StackPanel>
-                                </Grid>
-                            </Button.CommandParameter>
-                            <materialDesign:PackIcon  Kind="ClockOutline"/>
-                        </Button>
-                        <Button Style="{StaticResource MaterialDesignIconButton}" x:Name="PlayButton" ToolTip="Play" 
-                        Command="{Binding Play_Command}">
-                            <materialDesign:PackIcon Kind="Play" Width="40" Height="40" />
-                        </Button>
-                    </StackPanel>
-                </Border>
-            </materialDesign:Card>
-        </materialDesign:DialogHost>
-        <!--#endregion-->
+       
 
         <!--#region search area -->
-        <materialDesign:Card Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="30" Padding="15" UniformCornerRadius="15">
+        <materialDesign:Card Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="30" Padding="15" UniformCornerRadius="15">
             <Grid Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -141,7 +98,7 @@
         <!--#endregion-->
 
 
-        <materialDesign:Card  Grid.Row="2" Grid.ColumnSpan="2" UniformCornerRadius="6" HorizontalAlignment="Right" Margin="0,0,30,30">
+        <materialDesign:Card  Grid.Row="2" Grid.ColumnSpan="2" UniformCornerRadius="6" HorizontalAlignment="Center" Margin="30,0,30,30">
 
             <Grid>
                 <Grid.RowDefinitions>

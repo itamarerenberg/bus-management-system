@@ -34,7 +34,6 @@ namespace PLGui
         #region properties
 
         public BO.Passenger passenger { get; set; }
-
         public PassengerStation FromPassengerStation
         {
             get => fromPassengerStation;
@@ -48,7 +47,6 @@ namespace PLGui
                 }
             }
         }
-
         public BO.LineStation FromStation { get; set; }
 
         public PassengerStation ToStation
