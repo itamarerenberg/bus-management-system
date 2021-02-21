@@ -1460,4 +1460,474 @@
     <FinishTime>03:51:40.4362859</FinishTime>
     <IsActive>True</IsActive>
   </BusTrip>
+  <BusTrip>
+    <ID>174</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:20:00</StartTime>
+    <FinishTime>00:28:21.2584691</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>175</ID>
+    <Bus_Id>73006589</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:30:00</StartTime>
+    <FinishTime>00:36:40.9147491</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>176</ID>
+    <Bus_Id>38749168</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:40:00</StartTime>
+    <FinishTime>00:40:01.0953791</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>177</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:40:00</StartTime>
+    <FinishTime>00:40:03.5691091</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>178</ID>
+    <Bus_Id>49490116</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:45:00</StartTime>
+    <FinishTime>00:51:40.5075791</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>179</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:00:00</StartTime>
+    <FinishTime>01:00:01.0250391</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>180</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>00:15:00</StartTime>
+    <FinishTime>01:03:24.9254991</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>181</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>85</LineId>
+    <LineNum>300</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:00:00</StartTime>
+    <FinishTime>01:08:20.7888791</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>182</ID>
+    <Bus_Id>38749168</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:15:00</StartTime>
+    <FinishTime>01:15:00.8308591</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>183</ID>
+    <Bus_Id>73006589</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:00:00</StartTime>
+    <FinishTime>01:20:01.2958391</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>184</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:20:00</StartTime>
+    <FinishTime>01:23:20.2631391</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>185</ID>
+    <Bus_Id>49490116</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:20:00</StartTime>
+    <FinishTime>01:35:00.5266591</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>186</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:30:00</StartTime>
+    <FinishTime>01:46:41.1996891</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>187</ID>
+    <Bus_Id>96436101</Bus_Id>
+    <LineId>85</LineId>
+    <LineNum>300</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:00:00</StartTime>
+    <FinishTime>01:59:59.9834791</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>188</ID>
+    <Bus_Id>38749168</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:00:00</StartTime>
+    <FinishTime>02:00:02.2642391</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>189</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:00:00</StartTime>
+    <FinishTime>02:06:41.2593291</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>190</ID>
+    <Bus_Id>73006589</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:45:00</StartTime>
+    <FinishTime>02:18:22.0215091</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>191</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:15:00</StartTime>
+    <FinishTime>02:21:40.8194791</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>192</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>01:40:00</StartTime>
+    <FinishTime>02:36:44.1248591</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>193</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:30:00</StartTime>
+    <FinishTime>02:50:01.7592091</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>194</ID>
+    <Bus_Id>38749168</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:20:00</StartTime>
+    <FinishTime>02:51:41.7257491</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>195</ID>
+    <Bus_Id>73006589</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:40:00</StartTime>
+    <FinishTime>02:53:20.7326891</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>196</ID>
+    <Bus_Id>49490116</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:00:00</StartTime>
+    <FinishTime>02:56:43.0268191</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>197</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:45:00</StartTime>
+    <FinishTime>03:01:42.0142091</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>198</ID>
+    <Bus_Id>16187176</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:00:00</StartTime>
+    <FinishTime>03:06:40.2329191</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>199</ID>
+    <Bus_Id>96436101</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>02:40:00</StartTime>
+    <FinishTime>03:11:41.7269891</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>200</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:20:00</StartTime>
+    <FinishTime>03:28:20.7399891</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>201</ID>
+    <Bus_Id>38749168</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:20:00</StartTime>
+    <FinishTime>03:28:22.8883991</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>202</ID>
+    <Bus_Id>23366662</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:00:00</StartTime>
+    <FinishTime>03:31:41.8541891</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>203</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:30:00</StartTime>
+    <FinishTime>03:36:41.2245391</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>204</ID>
+    <Bus_Id>49490116</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:40:00</StartTime>
+    <FinishTime>03:40:00.7373291</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>205</ID>
+    <Bus_Id>96436101</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:45:00</StartTime>
+    <FinishTime>03:45:02.1425091</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>206</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>85</LineId>
+    <LineNum>300</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:00:00</StartTime>
+    <FinishTime>03:46:47.2829791</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>207</ID>
+    <Bus_Id>49490116</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:00:00</StartTime>
+    <FinishTime>04:00:00.8739391</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>209</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>85</LineId>
+    <LineNum>300</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:00:00</StartTime>
+    <FinishTime>04:00:04.6897291</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>208</ID>
+    <Bus_Id>24069111</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:00:00</StartTime>
+    <FinishTime>04:00:02.3674691</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>210</ID>
+    <Bus_Id>38749168</Bus_Id>
+    <LineId>87</LineId>
+    <LineNum>92</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:00:00</StartTime>
+    <FinishTime>04:08:20.7512791</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>211</ID>
+    <Bus_Id>73006589</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>03:15:00</StartTime>
+    <FinishTime>04:13:27.7119491</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>212</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:20:00</StartTime>
+    <FinishTime>04:20:00.2626591</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>214</ID>
+    <Bus_Id>96436101</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:00:00</StartTime>
+    <FinishTime>04:20:03.8134391</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>213</ID>
+    <Bus_Id>49490116</Bus_Id>
+    <LineId>87</LineId>
+    <LineNum>92</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:20:00</StartTime>
+    <FinishTime>04:20:02.6671991</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>215</ID>
+    <Bus_Id>53637067</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:15:00</StartTime>
+    <FinishTime>04:31:41.6951991</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>216</ID>
+    <Bus_Id>73006589</Bus_Id>
+    <LineId>69</LineId>
+    <LineNum>326</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:40:00</StartTime>
+    <FinishTime>04:43:21.9872891</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>217</ID>
+    <Bus_Id>38749168</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:30:00</StartTime>
+    <FinishTime>04:46:40.8457491</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>218</ID>
+    <Bus_Id>14703080</Bus_Id>
+    <LineId>87</LineId>
+    <LineNum>92</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:40:00</StartTime>
+    <FinishTime>04:51:42.0431191</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>219</ID>
+    <Bus_Id>16187176</Bus_Id>
+    <LineId>70</LineId>
+    <LineNum>99</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:45:00</StartTime>
+    <FinishTime>04:51:43.1378891</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
+  <BusTrip>
+    <ID>220</ID>
+    <Bus_Id>96436101</Bus_Id>
+    <LineId>71</LineId>
+    <LineNum>46</LineNum>
+    <Date>21/02/2021 00:00:00</Date>
+    <StartTime>04:40:00</StartTime>
+    <FinishTime>04:55:00.7971091</FinishTime>
+    <IsActive>True</IsActive>
+  </BusTrip>
 </BusTrips>

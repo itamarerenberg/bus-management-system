@@ -71,23 +71,42 @@ namespace BLApi
         #endregion
 
         #region Bus
+        /// <summary>
+        /// add BO bus
+        /// </summary>
+        /// <param name="bus"></param>
         void AddBus(Bus bus);
-
         /// <summary>
         /// get the bus by the license Number
         /// </summary>
         Bus GetBus(string licensNum);
-        void UpdateBus(Bus bus);
-        void DeleteBus(string licensNum);
-        IEnumerable<Bus> GetAllBuses();
-        IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> pred);
-
         /// <summary>
-        /// 
+        /// update BO bus
         /// </summary>
-        /// <param name="bus"></param>
+        void UpdateBus(Bus bus);
+        /// <summary>
+        /// delete BO bus 
+        /// </summary>
+        void DeleteBus(string licensNum);
+        /// <summary>
+        /// get all the Buses in the data base
+        /// </summary>
+        IEnumerable<Bus> GetAllBuses();
+        /// <summary>
+        /// get all the bus that <see langword="pred"/> returns true for them
+        /// </summary>
+        IEnumerable<Bus> GetAllBusesBy(Predicate<Bus> pred);
+        /// <summary>
+        /// send the bus to refuling
+        /// </summary>
         void Refuel(Bus bus);
+        /// <summary>
+        /// send the bus to treatment
+        /// </summary>
         void Treatment(Bus bus);
+        /// <summary>
+        /// generate a new bus with random values and add it to the data source
+        /// </summary>
         void AddRandomBus();
         /// <summary>
         /// reset the buses status(stop from traveling) while closing the propgram
@@ -106,10 +125,30 @@ namespace BLApi
         #region Line
         /// <returns>the Serial number that given to the new line at the data layer</returns>
         int AddLine(Line line, IEnumerable<Station> stations, List<int?> distances, List<int?> Times);
+        /// <summary>
+        /// returns BO line
+        /// </summary>
         Line GetLine(int id);
+        /// <summary>
+        /// update the line with LineId = <see langword="lineId"/> 
+        /// </summary>
+        /// <param name="lineId">the line id</param>
+        /// <param name="stations">the updated list of the station of the line/param>
+        /// <param name="distances">the distance between the stations</param>
+        /// <param name="times">the times between the stations</param>
         void UpdateLine(int lineId, IEnumerable<Station> stations, List<int?> distances, List<int?> times);
+        /// <summary>
+        /// deletes the line with ID = <see langword="id"/> from the data source
+        /// </summary>
+        /// <param name="id"></param>
         void DeleteLine(int id);
+        /// <summary>
+        /// returns all the lines from the data soource
+        /// </summary>
         IEnumerable<Line> GetAllLines();
+        /// <summary>
+        /// returns all the lines from the data source that <see langword="pred"/> returns true for them
+        /// </summary>
         IEnumerable<Line> GetAllLinesBy(Predicate<Line> pred);
         #endregion
 

@@ -3,20 +3,20 @@
   <Bus>
     <LicenseNumber>24069111</LicenseNumber>
     <LicenesDate>06/08/2018 00:00:00</LicenesDate>
-    <Kilometraz>84093.2250362322</Kilometraz>
-    <Fuel>1121.844</Fuel>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>2456.22503623196</KmAfterTreat>
+    <Kilometraz>84507.6305385517</Kilometraz>
+    <Fuel>707.4382</Fuel>
+    <Stat>Traveling</Stat>
+    <KmAfterTreat>2870.6305385513</KmAfterTreat>
     <LastTreatDate>16/07/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>53637067</LicenseNumber>
     <LicenesDate>08/10/2019 00:00:00</LicenesDate>
-    <Kilometraz>57566.1833343509</Kilometraz>
-    <Fuel>1036.598</Fuel>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>10529.1833343507</KmAfterTreat>
+    <Kilometraz>57824.276504517</Kilometraz>
+    <Fuel>778.5047</Fuel>
+    <Stat>Traveling</Stat>
+    <KmAfterTreat>10787.2765045168</KmAfterTreat>
     <LastTreatDate>11/07/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
@@ -43,70 +43,70 @@
   <Bus>
     <LicenseNumber>73006589</LicenseNumber>
     <LicenesDate>05/05/2018 00:00:00</LicenesDate>
-    <Kilometraz>86418.8075027467</Kilometraz>
-    <Fuel>660.428</Fuel>
+    <Kilometraz>86804.0554733279</Kilometraz>
+    <Fuel>275.18</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>6646.80750274659</KmAfterTreat>
+    <KmAfterTreat>7032.05547332765</KmAfterTreat>
     <LastTreatDate>30/12/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>14703080</LicenseNumber>
     <LicenesDate>10/09/2018 00:00:00</LicenesDate>
-    <Kilometraz>64875.2637939454</Kilometraz>
-    <Fuel>831.0469</Fuel>
+    <Kilometraz>65380.7733955384</Kilometraz>
+    <Fuel>325.5372</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>5307.26379394533</KmAfterTreat>
+    <KmAfterTreat>5812.77339553836</KmAfterTreat>
     <LastTreatDate>09/08/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>38749168</LicenseNumber>
     <LicenesDate>11/09/2018 00:00:00</LicenesDate>
-    <Kilometraz>68027.4682312012</Kilometraz>
-    <Fuel>1200</Fuel>
+    <Kilometraz>68431.1969947815</Kilometraz>
+    <Fuel>796.2706</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>13247.4682312012</KmAfterTreat>
+    <KmAfterTreat>13651.1969947815</KmAfterTreat>
     <LastTreatDate>05/02/2021 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>49490116</LicenseNumber>
     <LicenesDate>17/06/2019 00:00:00</LicenesDate>
-    <Kilometraz>88673.1811523438</Kilometraz>
-    <Fuel>416.819</Fuel>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>9156.18115234376</KmAfterTreat>
+    <Kilometraz>89053.2207908631</Kilometraz>
+    <Fuel>36.77925</Fuel>
+    <Stat>Need_refueling</Stat>
+    <KmAfterTreat>9536.22079086305</KmAfterTreat>
     <LastTreatDate>11/06/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>96436101</LicenseNumber>
     <LicenesDate>25/06/2019 00:00:00</LicenesDate>
-    <Kilometraz>82374.2486572266</Kilometraz>
-    <Fuel>1047.296</Fuel>
+    <Kilometraz>82695.8870010377</Kilometraz>
+    <Fuel>725.6572</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>6700.24865722657</KmAfterTreat>
+    <KmAfterTreat>7021.88700103761</KmAfterTreat>
     <LastTreatDate>02/07/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>16187176</LicenseNumber>
     <LicenesDate>13/03/2018 00:00:00</LicenesDate>
-    <Kilometraz>76439.8575057984</Kilometraz>
-    <Fuel>1136.455</Fuel>
+    <Kilometraz>76596.1698379518</Kilometraz>
+    <Fuel>980.1428</Fuel>
     <Stat>Ready</Stat>
-    <KmAfterTreat>10268.8575057984</KmAfterTreat>
+    <KmAfterTreat>10425.1698379518</KmAfterTreat>
     <LastTreatDate>14/09/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
   <Bus>
     <LicenseNumber>23366662</LicenseNumber>
     <LicenesDate>04/05/2018 00:00:00</LicenesDate>
-    <Kilometraz>65665.4034576417</Kilometraz>
-    <Fuel>153.5966</Fuel>
-    <Stat>Ready</Stat>
-    <KmAfterTreat>6510.40345764161</KmAfterTreat>
+    <Kilometraz>65728.9486312867</Kilometraz>
+    <Fuel>90.05143</Fuel>
+    <Stat>Need_refueling</Stat>
+    <KmAfterTreat>6573.94863128663</KmAfterTreat>
     <LastTreatDate>05/06/2020 00:00:00</LastTreatDate>
     <IsActive>True</IsActive>
   </Bus>
