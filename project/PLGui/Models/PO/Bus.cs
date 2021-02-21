@@ -85,9 +85,12 @@ namespace PLGui.Models.PO
             get => boBus.Stat;
             set
             {
-                SetProperty(ref stat, value);
-                boBus.Stat = stat;
-                OnPropertyChanged("IsBusy");
+                if (SetProperty(ref stat, value))
+                {
+                    boBus.Stat = stat;
+                    OnPropertyChanged(nameof(Stat));
+                }
+                OnPropertyChanged(nameof(IsBusy));
             }
         }
         private TimeSpan timeUntilReady;
@@ -128,7 +131,9 @@ namespace PLGui.Models.PO
             {
                 return stat == BO.BusStatus.In_refueling
                     || stat == BO.BusStatus.In_treatment
-                    || stat == BO.BusStatus.Traveling;
+                    || stat == BO.BusStatus.Traveling
+                    || stat == BO.BusStatus.Preparing;
+                    
             }
         }
     }

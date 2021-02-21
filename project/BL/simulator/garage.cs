@@ -37,7 +37,7 @@ namespace BL.simulator
         /// <summary>
         /// the time it's take to treat a bus
         /// </summary>
-        private readonly TimeSpan Treatment_time = new TimeSpan(0, 30, 0);//30 minuts
+        private readonly TimeSpan Treatment_time = new TimeSpan(0, 5, 0);//30 minuts
 
         /// <summary>
         /// the time it's take to refule a bus
@@ -202,12 +202,12 @@ namespace BL.simulator
                         {
                             BusLicensNum = bus.LicenseNumber,
                             Activity = Activities.InTrartment,
-                            Progress = (float)(100 * stopwatch.Elapsed.TotalMilliseconds / Treatment_time.TotalMilliseconds)//the presentege of the treatment that pass allready
+                            Progress = (float)(100 * stopwatch.Elapsed.TotalMilliseconds / clock.Rtime_to_Stime(Treatment_time).TotalMilliseconds)//the presentege of the treatment that pass allready
                         };
                         if (!clock.Cancel)
                             Observer(progress);
 
-                        int sleep = (int)Math.Min((int)clock.Rtime_to_Stime(1000), (Refule_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
+                        int sleep = (int)Math.Min((int)clock.Rtime_to_Stime(1000), (Treatment_time - stopwatch.Elapsed).TotalMilliseconds);//the minimum between 1 second and the time that rimeins to the refuling prosess
                         sleep = Math.Max(sleep, 0);//if sleep turn out to be less then zero so set sleep to 0
                         Thread.Sleep(sleep);
                     }
@@ -250,7 +250,7 @@ namespace BL.simulator
             source = BLFactory.GetBL("admin");
             foreach (Bus bus in source.GetAllBuses())
             {
-                if (bus.Stat == BusStatus.Traveling)
+                if (bus.Stat == BusStatus.Traveling || bus.Stat == BusStatus.Preparing)
                 {
                     bus.Stat = BusStatus.Ready;
                 }

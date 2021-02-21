@@ -45,7 +45,7 @@ namespace BL.simulator
         /// <br>backgrownd worker of this travel</br>
         /// <br>(in simulator time)</br>
         /// </summary>
-        TimeSpan timeToExcuteTravel = new TimeSpan(0, 20, 0);
+        TimeSpan timeToExcuteTravel = new TimeSpan(0, 5, 0);
 
         Action<LineTiming> StationsObserver;
         Action<BusProgress> BusObserver;
@@ -193,6 +193,7 @@ namespace BL.simulator
                         StationsObserver(timing);//update the observer 
                     } 
                     #endregion
+
                     #region betwen stations 
                     //calculate the sleep time (the time until the next station)
                     long currentToNext_time = (stations[current].CurrentToNext != null ? (long)stations[current].CurrentToNext.Time.TotalMilliseconds : 0L);//if its the last station in the line then the 'CurrentToNext' fild will be null
@@ -305,9 +306,27 @@ namespace BL.simulator
             newTravel.Name = ride.ToString();
             newTravel.Start();
         }
-
+        //while this thread is working the 
+        Thread GetBusForRideThread;
         private Bus Get_bus_for_ride(double RideLength)
         {
+            if(GetBusForRideThread != null)
+            {
+                GetBusForRideThread.Join();//wait untill the privius ride will get its bus
+                Thread.Sleep(50);//insur that the data source is updated before serching for a bus
+            }
+            GetBusForRideThread = new Thread(() =>//this is for insur that if inothe ride is geting it's bus then the function will wait until the other ride is finished to get it's bus
+            {
+                try
+                {
+                    GetBusForRideThread.Join();
+                }
+                catch (ThreadInterruptedException)
+                {
+                    return;
+                }
+            });
+            GetBusForRideThread.Start();
             List<Bus> avilableBuses = source.GetAllBusesBy(bus => !bus.IsBusy).ToList();
             //find qualified bus for this ride
             Bus selectedBus = avilableBuses.FirstOrDefault(bus =>
@@ -319,8 +338,7 @@ namespace BL.simulator
             {
                 throw new NoBusForRide("Ride Length: " + RideLength);
             }
-            //update the selected bus in the data sosurce
-
+            GetBusForRideThread.Interrupt();//cosing to finish the GetBusForRideThread so other ride can now get it's bus
             return selectedBus;
         }
 

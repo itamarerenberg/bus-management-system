@@ -10,6 +10,7 @@ namespace BO
     {
         Ready,
         Traveling, 
+        Preparing,
         In_treatment,
         In_refueling,
         Need_treatment,

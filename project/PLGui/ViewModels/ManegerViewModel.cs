@@ -876,7 +876,7 @@ namespace PLGui
                                         break;
                                     case BO.Activities.Prepering_to_ride:
                                         bus.LineNumber = (int)progress.Details;
-                                        bus.Stat = BO.BusStatus.Traveling;
+                                        bus.Stat = BO.BusStatus.Preparing;
                                         break;
                                     default:
                                         break;

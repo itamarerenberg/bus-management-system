@@ -39,7 +39,7 @@ namespace BL.simulator
         /// <summary>
         /// how much time before the startTime of the ride to execute the ride
         /// </summary>
-        readonly TimeSpan timeToExecute = new TimeSpan(0, 20, 0);
+        readonly TimeSpan timeToExecute = new TimeSpan(0, 5, 0);
 
         PriorityQueue<Ride> Rides { get; set; }
         SimulationClock clock = SimulationClock.Instance;

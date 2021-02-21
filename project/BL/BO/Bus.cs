@@ -25,7 +25,7 @@ namespace BO
         {
             get
             {
-                if (this.Stat == BusStatus.In_refueling || this.Stat == BusStatus.In_treatment || this.Stat == BusStatus.Traveling)
+                if (this.Stat == BusStatus.In_refueling || this.Stat == BusStatus.In_treatment || this.Stat == BusStatus.Traveling || this.Stat == BusStatus.Preparing)
                     return true;
                 return false;
             }
