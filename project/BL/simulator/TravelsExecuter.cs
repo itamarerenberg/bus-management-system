@@ -302,6 +302,7 @@ namespace BL.simulator
                 }
                 #endregion
             });
+            newTravel.Name = ride.ToString();
             newTravel.Start();
         }
 

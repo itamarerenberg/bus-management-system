@@ -888,6 +888,10 @@ namespace PLGui
                                 loadBuses(); 
                             }
                         }
+                        else if(e.UserState is Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "ERROR");
+                        }
                     };
                 }
                 catch (Exception msg)
